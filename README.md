@@ -58,3 +58,12 @@ source ./env/export.sh #每次都要执行export
     ./tools/build.sh /project/<your_project_name>
     ./tools/flash.sh /project/<your_project_name>
     ```
+## 常见问题
+
+1. 串口没有权限
+    将当前用户加入 dialout 用户组：
+    ```
+    sudo usermod -aG dialout $USER
+    newgrp dialout
+    ```
+
