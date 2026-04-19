@@ -61,6 +61,7 @@ source ./env/export.sh #每次都要执行export
 ## 常见问题
 
 1. 串口没有权限
+
     将当前用户加入 dialout 用户组：
     ```
     sudo usermod -aG dialout $USER
