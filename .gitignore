@@ -73,7 +73,6 @@ dependencies.lock
 .python-version
 .espressif/
 idf-env/
-export.sh
 export.ps1
 
 # =========================================================
