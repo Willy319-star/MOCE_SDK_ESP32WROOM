@@ -125,3 +125,5 @@ site/
 !sdkconfig.defaults.*
 !project/**/sdkconfig.defaults
 !project/**/sdkconfig.defaults.*
+
+.codex
