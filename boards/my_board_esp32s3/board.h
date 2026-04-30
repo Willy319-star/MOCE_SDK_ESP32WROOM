@@ -2,6 +2,13 @@
 
 #include "driver/ledc.h"
 
+/*
+ * Default ESP32-S3 board profile.
+ *
+ * Many ESP32-S3 dev boards use a WS2812 RGB LED instead of a plain GPIO LED.
+ * If your board has that kind of LED, replace the LED BSP with an RMT/led_strip
+ * implementation or connect an external LED to BOARD_LED_GPIO.
+ */
 #define BOARD_LED_GPIO               2
 
 #define BOARD_LED_PWM_MODE           LEDC_LOW_SPEED_MODE

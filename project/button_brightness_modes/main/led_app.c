@@ -1,6 +1,7 @@
 #include "led_app.h"
 
 #include <stdbool.h>
+#include <stddef.h>
 #include <stdint.h>
 
 #include "freertos/FreeRTOS.h"
@@ -10,31 +11,36 @@
 #include "bsp_button.h"
 #include "bsp_led.h"
 
-#define LED_APP_SLOW_BLINK_HALF_PERIOD_MS  500U
-#define LED_APP_FAST_BLINK_HALF_PERIOD_MS  100U
-#define LED_APP_BREATH_STEP_MS             25U
-#define LED_APP_BREATH_STEP_PERCENT        2U
-
 static const char *TAG = "button_brightness";
+
+#define SLOW_BLINK_HALF_PERIOD_MS   500U
+#define FAST_BLINK_HALF_PERIOD_MS   100U
+#define BREATHE_STEP_INTERVAL_MS    20U
+#define BREATHE_PHASE_MAX           100U
 
 typedef struct {
     led_app_mode_t mode;
     led_app_brightness_t brightness;
     bool blink_on;
-    uint8_t breath_value;
-    int8_t breath_delta;
+    uint8_t breathe_phase;
+    int8_t breathe_direction;
     TickType_t last_update_tick;
 } led_app_state_t;
 
-static led_app_state_t s_app;
+typedef struct {
+    led_app_brightness_t level;
+    uint8_t percent;
+} brightness_config_t;
 
-static const uint8_t s_brightness_percent[LED_APP_BRIGHTNESS_MAX] = {
-    [LED_APP_BRIGHTNESS_20] = 20,
-    [LED_APP_BRIGHTNESS_50] = 50,
-    [LED_APP_BRIGHTNESS_100] = 100,
+static const brightness_config_t s_brightness_configs[] = {
+    { LED_APP_BRIGHTNESS_20, 20U },
+    { LED_APP_BRIGHTNESS_50, 50U },
+    { LED_APP_BRIGHTNESS_100, 100U },
 };
 
-static const char *led_app_mode_name(led_app_mode_t mode)
+static led_app_state_t s_app;
+
+static const char *mode_to_string(led_app_mode_t mode)
 {
     switch (mode) {
     case LED_APP_MODE_SOLID_ON:
@@ -43,144 +49,185 @@ static const char *led_app_mode_name(led_app_mode_t mode)
         return "SLOW_BLINK";
     case LED_APP_MODE_FAST_BLINK:
         return "FAST_BLINK";
-    case LED_APP_MODE_BREATH:
-        return "BREATH";
+    case LED_APP_MODE_BREATHE:
+        return "BREATHE";
     default:
         return "UNKNOWN";
     }
 }
 
-static uint8_t led_app_current_brightness_percent(void)
+static const char *brightness_to_string(led_app_brightness_t brightness)
 {
-    if (s_app.brightness >= LED_APP_BRIGHTNESS_MAX) {
-        return 50;
+    switch (brightness) {
+    case LED_APP_BRIGHTNESS_20:
+        return "20%";
+    case LED_APP_BRIGHTNESS_50:
+        return "50%";
+    case LED_APP_BRIGHTNESS_100:
+        return "100%";
+    default:
+        return "UNKNOWN";
+    }
+}
+
+static uint8_t current_brightness_percent(void)
+{
+    for (size_t i = 0; i < (sizeof(s_brightness_configs) / sizeof(s_brightness_configs[0])); i++) {
+        if (s_brightness_configs[i].level == s_app.brightness) {
+            return s_brightness_configs[i].percent;
+        }
     }
 
-    return s_brightness_percent[s_app.brightness];
+    return 50U;
 }
 
-static void led_app_set_output(bool on)
+static uint8_t eased_breathe_percent(uint8_t phase)
 {
-    bsp_led_set_brightness(on ? led_app_current_brightness_percent() : 0);
+    uint32_t t = phase;
+    uint32_t eased = 3U * t * t - (2U * t * t * t) / BREATHE_PHASE_MAX;
+
+    return (uint8_t)((eased + (BREATHE_PHASE_MAX / 2U)) / BREATHE_PHASE_MAX);
 }
 
-static void led_app_reset_timing(void)
+static void set_led_output(bool on)
 {
+    bsp_led_set_brightness(on ? current_brightness_percent() : 0U);
+}
+
+static void reset_dynamic_state(void)
+{
+    s_app.blink_on = false;
+    s_app.breathe_phase = 0;
+    s_app.breathe_direction = 1;
     s_app.last_update_tick = xTaskGetTickCount();
 }
 
-static void led_app_apply_mode_immediate(void)
+static void apply_mode_start_state(void)
 {
-    s_app.blink_on = false;
-    s_app.breath_value = 0;
-    s_app.breath_delta = LED_APP_BREATH_STEP_PERCENT;
-    led_app_reset_timing();
+    reset_dynamic_state();
 
     switch (s_app.mode) {
     case LED_APP_MODE_SOLID_ON:
-        bsp_led_set_brightness(led_app_current_brightness_percent());
+        bsp_led_set_brightness(current_brightness_percent());
         break;
+
     case LED_APP_MODE_SLOW_BLINK:
     case LED_APP_MODE_FAST_BLINK:
-    case LED_APP_MODE_BREATH:
-        bsp_led_set_brightness(0);
+    case LED_APP_MODE_BREATHE:
+        bsp_led_set_brightness(0U);
         break;
+
     default:
         break;
     }
 }
 
-static void led_app_next_mode(void)
+static void log_state(const char *reason)
 {
-    s_app.mode = (led_app_mode_t)((s_app.mode + 1) % LED_APP_MODE_MAX);
-    led_app_apply_mode_immediate();
-    ESP_LOGI(TAG, "mode -> %s, brightness -> %u%%",
-             led_app_mode_name(s_app.mode),
-             led_app_current_brightness_percent());
+    ESP_LOGI(TAG, "%s: mode=%s, brightness=%s",
+             reason,
+             mode_to_string(s_app.mode),
+             brightness_to_string(s_app.brightness));
 }
 
-static void led_app_next_brightness(void)
+static void next_mode(void)
+{
+    s_app.mode = (led_app_mode_t)((s_app.mode + 1) % LED_APP_MODE_MAX);
+    apply_mode_start_state();
+    log_state("mode changed");
+}
+
+static void next_brightness(void)
 {
     s_app.brightness = (led_app_brightness_t)((s_app.brightness + 1) % LED_APP_BRIGHTNESS_MAX);
 
     if (s_app.mode == LED_APP_MODE_SOLID_ON || s_app.blink_on) {
-        bsp_led_set_brightness(led_app_current_brightness_percent());
+        bsp_led_set_brightness(current_brightness_percent());
     }
 
-    ESP_LOGI(TAG, "brightness -> %u%%, mode -> %s",
-             led_app_current_brightness_percent(),
-             led_app_mode_name(s_app.mode));
+    log_state("brightness changed");
 }
 
-static void led_app_process_button(void)
+static void process_button(void)
 {
     bsp_button_process();
 
-    bsp_button_event_t event = bsp_button_get_event();
-    switch (event) {
+    switch (bsp_button_get_event()) {
     case BSP_BUTTON_EVENT_SHORT_PRESS:
-        led_app_next_mode();
+        next_mode();
         break;
+
     case BSP_BUTTON_EVENT_LONG_PRESS:
-        led_app_next_brightness();
+        next_brightness();
         break;
+
     default:
         break;
     }
 }
 
-static void led_app_process_blink(uint32_t half_period_ms)
+static void process_blink(uint32_t half_period_ms)
 {
     TickType_t now = xTaskGetTickCount();
-    TickType_t half_period_ticks = pdMS_TO_TICKS(half_period_ms);
 
-    if ((now - s_app.last_update_tick) < half_period_ticks) {
+    if ((now - s_app.last_update_tick) < pdMS_TO_TICKS(half_period_ms)) {
         return;
     }
 
     s_app.last_update_tick = now;
     s_app.blink_on = !s_app.blink_on;
-    led_app_set_output(s_app.blink_on);
+    set_led_output(s_app.blink_on);
 }
 
-static void led_app_process_breath(void)
+static void process_breathe(void)
 {
     TickType_t now = xTaskGetTickCount();
-    uint8_t max_brightness = led_app_current_brightness_percent();
+    uint8_t max_brightness = current_brightness_percent();
 
-    if ((now - s_app.last_update_tick) < pdMS_TO_TICKS(LED_APP_BREATH_STEP_MS)) {
+    if ((now - s_app.last_update_tick) < pdMS_TO_TICKS(BREATHE_STEP_INTERVAL_MS)) {
         return;
     }
 
     s_app.last_update_tick = now;
 
-    int next = (int)s_app.breath_value + s_app.breath_delta;
-    if (next >= max_brightness) {
-        next = max_brightness;
-        s_app.breath_delta = -(int8_t)LED_APP_BREATH_STEP_PERCENT;
-    } else if (next <= 0) {
-        next = 0;
-        s_app.breath_delta = LED_APP_BREATH_STEP_PERCENT;
+    if (s_app.breathe_direction > 0) {
+        if (s_app.breathe_phase < BREATHE_PHASE_MAX) {
+            s_app.breathe_phase++;
+        } else {
+            s_app.breathe_direction = -1;
+            s_app.breathe_phase--;
+        }
+    } else {
+        if (s_app.breathe_phase > 0) {
+            s_app.breathe_phase--;
+        } else {
+            s_app.breathe_direction = 1;
+            s_app.breathe_phase++;
+        }
     }
 
-    s_app.breath_value = (uint8_t)next;
-    bsp_led_set_brightness(s_app.breath_value);
+    uint32_t brightness = eased_breathe_percent(s_app.breathe_phase) * max_brightness;
+    bsp_led_set_brightness((uint8_t)((brightness + 50U) / 100U));
 }
 
-static void led_app_process_led(void)
+static void process_led(void)
 {
     switch (s_app.mode) {
     case LED_APP_MODE_SOLID_ON:
         break;
+
     case LED_APP_MODE_SLOW_BLINK:
-        led_app_process_blink(LED_APP_SLOW_BLINK_HALF_PERIOD_MS);
+        process_blink(SLOW_BLINK_HALF_PERIOD_MS);
         break;
+
     case LED_APP_MODE_FAST_BLINK:
-        led_app_process_blink(LED_APP_FAST_BLINK_HALF_PERIOD_MS);
+        process_blink(FAST_BLINK_HALF_PERIOD_MS);
         break;
-    case LED_APP_MODE_BREATH:
-        led_app_process_breath();
+
+    case LED_APP_MODE_BREATHE:
+        process_breathe();
         break;
+
     default:
         break;
     }
@@ -188,19 +235,14 @@ static void led_app_process_led(void)
 
 void led_app_init(void)
 {
-    bsp_button_init();
-
     s_app.mode = LED_APP_MODE_SOLID_ON;
     s_app.brightness = LED_APP_BRIGHTNESS_50;
-    led_app_apply_mode_immediate();
-
-    ESP_LOGI(TAG, "initial mode -> %s, brightness -> %u%%",
-             led_app_mode_name(s_app.mode),
-             led_app_current_brightness_percent());
+    apply_mode_start_state();
+    log_state("initial state");
 }
 
 void led_app_process(void)
 {
-    led_app_process_button();
-    led_app_process_led();
+    process_button();
+    process_led();
 }

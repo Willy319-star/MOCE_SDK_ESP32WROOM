@@ -8,7 +8,7 @@ typedef enum {
     LED_APP_MODE_SOLID_ON = 0,
     LED_APP_MODE_SLOW_BLINK,
     LED_APP_MODE_FAST_BLINK,
-    LED_APP_MODE_BREATH,
+    LED_APP_MODE_BREATHE,
     LED_APP_MODE_MAX,
 } led_app_mode_t;
 
