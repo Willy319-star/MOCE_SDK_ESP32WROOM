@@ -6,8 +6,8 @@
 #include "esp_log.h"
 
 #include "service_device.h"
-#include "bsp_led.h"
-#include "bsp_button.h"
+#include "driver_led.h"
+#include "driver_button.h"
 
 static const char *TAG = "button_led_demo";
 
@@ -46,12 +46,12 @@ static void led_mode_apply_immediate(led_mode_t mode)
 {
     switch (mode) {
     case LED_MODE_OFF:
-        bsp_led_set(0);
+        driver_led_set(0);
         s_led_on = false;
         break;
 
     case LED_MODE_ON:
-        bsp_led_set(1);
+        driver_led_set(1);
         s_led_on = true;
         break;
 
@@ -59,7 +59,7 @@ static void led_mode_apply_immediate(led_mode_t mode)
     case LED_MODE_BLINK_2HZ:
     case LED_MODE_BLINK_5HZ:
         s_led_on = false;
-        bsp_led_set(0);
+        driver_led_set(0);
         s_last_toggle_tick = xTaskGetTickCount();
         break;
 
@@ -107,16 +107,16 @@ static void led_mode_process(void)
     if ((now - s_last_toggle_tick) >= interval_ticks) {
         s_last_toggle_tick = now;
         s_led_on = !s_led_on;
-        bsp_led_set(s_led_on ? 1 : 0);
+        driver_led_set(s_led_on ? 1 : 0);
     }
 }
 
 static void button_process(void)
 {
-    bsp_button_process();
+    driver_button_process();
 
-    bsp_button_event_t ev = bsp_button_get_event();
-    if (ev == BSP_BUTTON_EVENT_SHORT_PRESS) {
+    driver_button_event_t ev = driver_button_get_event();
+    if (ev == DRIVER_BUTTON_EVENT_SHORT_PRESS) {
         led_mode_next();
     }
 }

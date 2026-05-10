@@ -1,0 +1,36 @@
+menu "WiFi TCP UDP Demo"
+
+    choice WIFI_TCP_UDP_DEMO_MODE
+        prompt "Demo mode"
+        default WIFI_TCP_UDP_DEMO_TCP_CLIENT
+
+        config WIFI_TCP_UDP_DEMO_TCP_CLIENT
+            bool "TCP client"
+
+        config WIFI_TCP_UDP_DEMO_TCP_SERVER
+            bool "TCP server"
+
+        config WIFI_TCP_UDP_DEMO_UDP_CLIENT
+            bool "UDP client"
+
+        config WIFI_TCP_UDP_DEMO_UDP_SERVER
+            bool "UDP server"
+    endchoice
+
+    config WIFI_TCP_UDP_DEMO_REMOTE_HOST
+        string "Remote host"
+        default "192.168.1.100"
+
+    config WIFI_TCP_UDP_DEMO_REMOTE_PORT
+        int "Remote port"
+        default 9000
+
+    config WIFI_TCP_UDP_DEMO_LOCAL_PORT
+        int "Local listen port"
+        default 9000
+
+    config WIFI_TCP_UDP_DEMO_MESSAGE
+        string "Message"
+        default "hello from moce esp32 sdk"
+
+endmenu

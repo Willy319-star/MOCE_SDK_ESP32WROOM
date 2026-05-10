@@ -1,13 +1,14 @@
 #include "led_effects.h"
 
 #include <stdbool.h>
+#include <stddef.h>
 #include <stdint.h>
 
 #include "freertos/FreeRTOS.h"
 #include "freertos/task.h"
 #include "esp_log.h"
 
-#include "bsp_led.h"
+#include "driver_led.h"
 
 static const char *TAG = "led_effects";
 
@@ -70,7 +71,7 @@ static uint8_t smooth_brightness_percent(uint8_t phase)
     uint32_t t = phase;
 
     /* Smoothstep easing: 3t^2 - 2t^3, scaled to 0..100. */
-    return (uint8_t)((3U * t * t - 2U * t * t * t / BREATHE_PHASE_MAX + 50U) /
+    return (uint8_t)((3U * t * t - (2U * t * t * t) / BREATHE_PHASE_MAX + 50U) /
                      BREATHE_PHASE_MAX);
 }
 
@@ -81,25 +82,25 @@ static void apply_effect_start_state(led_effect_t effect)
     switch (effect) {
     case LED_EFFECT_OFF:
         s_led_on = false;
-        bsp_led_set(0);
+        driver_led_set(0);
         break;
 
     case LED_EFFECT_ON:
         s_led_on = true;
-        bsp_led_set(1);
+        driver_led_set(1);
         break;
 
     case LED_EFFECT_BLINK_1HZ:
     case LED_EFFECT_BLINK_2HZ:
     case LED_EFFECT_BLINK_5HZ:
         s_led_on = false;
-        bsp_led_set(0);
+        driver_led_set(0);
         break;
 
     case LED_EFFECT_BREATHE:
         s_breathe_phase = 0;
         s_breathe_direction = 1;
-        bsp_led_set_brightness(0);
+        driver_led_set_brightness(0);
         break;
 
     default:
@@ -118,7 +119,7 @@ static void process_blink(TickType_t now)
     if ((now - s_last_update_tick) >= pdMS_TO_TICKS(half_period_ms)) {
         s_last_update_tick = now;
         s_led_on = !s_led_on;
-        bsp_led_set(s_led_on ? 1 : 0);
+        driver_led_set(s_led_on ? 1 : 0);
     }
 }
 
@@ -146,7 +147,7 @@ static void process_breathe(TickType_t now)
         }
     }
 
-    bsp_led_set_brightness(smooth_brightness_percent(s_breathe_phase));
+    driver_led_set_brightness(smooth_brightness_percent(s_breathe_phase));
 }
 
 void led_effects_init(void)

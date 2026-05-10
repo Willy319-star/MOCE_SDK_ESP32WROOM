@@ -1,5 +1,6 @@
 #pragma once
 
+#include "driver/i2c_types.h"
 #include "driver/ledc.h"
 
 #define BOARD_LED_GPIO               2
@@ -37,3 +38,23 @@
 #define BOARD_SERVO_MAX_PULSE_US     2500
 #define BOARD_SERVO_MIN_ANGLE_DEG    0
 #define BOARD_SERVO_MAX_ANGLE_DEG    180
+
+/* I2C master bus for displays, IMUs, and other sensors */
+#define BOARD_I2C_PORT                       I2C_NUM_0
+#define BOARD_I2C_SDA_GPIO                   21
+#define BOARD_I2C_SCL_GPIO                   22
+#define BOARD_I2C_FREQUENCY_HZ               400000
+#define BOARD_I2C_TIMEOUT_MS                 1000
+#define BOARD_I2C_GLITCH_IGNORE_CNT          7
+#define BOARD_I2C_TRANS_QUEUE_DEPTH          0
+#define BOARD_I2C_ENABLE_INTERNAL_PULLUP     1
+#define BOARD_I2C_MAX_REGISTER_WRITE_LEN     32
+
+/* UART for external serial modules such as TW-TTS */
+#define BOARD_UART_PORT                      1
+#define BOARD_UART_TX_GPIO                   17
+#define BOARD_UART_RX_GPIO                   16
+#define BOARD_UART_BAUD_RATE                 9600
+#define BOARD_UART_RX_BUFFER_SIZE            256
+#define BOARD_UART_TX_BUFFER_SIZE            0
+#define BOARD_UART_EVENT_QUEUE_SIZE          0

@@ -20,7 +20,7 @@ project/led_effects_demo/
 - 尽量复用已有 BSP LED PWM 亮度控制能力
 
 【实现要求】
-- 基于当前 SDK 已有的 bsp_led 和相关现有接口实现
+- 基于当前 SDK 已有的 driver_led 和相关现有接口实现
 - 不允许修改 SDK 中任何已有组件
 - 只能在 project/led_effects_demo/ 下创建和修改文件
 - 可以参考 examples/ 中已有示例的工程组织方式

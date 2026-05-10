@@ -1,4 +1,4 @@
 idf_component_register(
     SRCS "main.c"
-    REQUIRES service_device bsp_led
+    REQUIRES service_device driver_led
 )

@@ -1,5 +1,6 @@
 #pragma once
 
+#include "driver/i2c_types.h"
 #include "driver/ledc.h"
 
 /*
@@ -8,6 +9,11 @@
  * Many ESP32-S3 dev boards use a WS2812 RGB LED instead of a plain GPIO LED.
  * If your board has that kind of LED, replace the LED BSP with an RMT/led_strip
  * implementation or connect an external LED to BOARD_LED_GPIO.
+ *
+ * ESP32-S3-CAM camera connector reservation:
+ * GPIO4/5/6/7/8/9/10/11/12/13/15/16/17/18 are used by the camera module.
+ * GPIO19/20 are the native USB D+/D- pins. Keep SDK peripheral defaults away
+ * from these pins so the camera and USB Serial/JTAG can coexist.
  */
 #define BOARD_LED_GPIO               2
 
@@ -29,8 +35,8 @@
 
 /* Servo */
 #define BOARD_SERVO_COUNT            2
-#define BOARD_SERVO_GPIO_0           4
-#define BOARD_SERVO_GPIO_1           5
+#define BOARD_SERVO_GPIO_0           1
+#define BOARD_SERVO_GPIO_1           14
 
 #define BOARD_SERVO_PWM_MODE         LEDC_LOW_SPEED_MODE
 #define BOARD_SERVO_PWM_TIMER        LEDC_TIMER_1
@@ -44,3 +50,23 @@
 #define BOARD_SERVO_MAX_PULSE_US     2500
 #define BOARD_SERVO_MIN_ANGLE_DEG    0
 #define BOARD_SERVO_MAX_ANGLE_DEG    180
+
+/* I2C master bus for displays, IMUs, and other sensors */
+#define BOARD_I2C_PORT                       I2C_NUM_0
+#define BOARD_I2C_SDA_GPIO                   47
+#define BOARD_I2C_SCL_GPIO                   21
+#define BOARD_I2C_FREQUENCY_HZ               400000
+#define BOARD_I2C_TIMEOUT_MS                 1000
+#define BOARD_I2C_GLITCH_IGNORE_CNT          7
+#define BOARD_I2C_TRANS_QUEUE_DEPTH          0
+#define BOARD_I2C_ENABLE_INTERNAL_PULLUP     1
+#define BOARD_I2C_MAX_REGISTER_WRITE_LEN     32
+
+/* UART for external serial modules such as TW-TTS */
+#define BOARD_UART_PORT                      1
+#define BOARD_UART_TX_GPIO                   38
+#define BOARD_UART_RX_GPIO                   39
+#define BOARD_UART_BAUD_RATE                 9600
+#define BOARD_UART_RX_BUFFER_SIZE            256
+#define BOARD_UART_TX_BUFFER_SIZE            0
+#define BOARD_UART_EVENT_QUEUE_SIZE          0

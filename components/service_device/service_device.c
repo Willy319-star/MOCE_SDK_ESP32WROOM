@@ -1,9 +1,9 @@
 #include "service_device.h"
-#include "bsp_led.h"
-#include "bsp_button.h"
+#include "driver_led.h"
+#include "driver_button.h"
 
 void service_device_init(void)
 {
-    bsp_led_init();
-    bsp_button_init();
+    driver_led_init();
+    driver_button_init();
 }

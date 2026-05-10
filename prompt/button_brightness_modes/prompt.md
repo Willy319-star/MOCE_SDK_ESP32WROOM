@@ -30,7 +30,7 @@ project/button_brightness_modes/
 - 每次模式变化或亮度变化后都打印日志
 
 【实现要求】
-- 基于当前 SDK 已有的 bsp_button 和 bsp_led 接口实现
+- 基于当前 SDK 已有的 driver_button 和 driver_led 接口实现
 - 不允许修改 SDK 中任何已有组件
 - 只能在 project/button_brightness_modes/ 下创建和修改文件
 - 可以参考 examples/ 中已有示例的工程组织方式

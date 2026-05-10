@@ -7,7 +7,10 @@
 
 ```text
 .
+├── bsp/                     # 板级与 GPIO/I2C/PWM 等硬件资源封装
 ├── components/              # SDK 公共组件
+│   ├── driver_*             # LED/Button/Servo/OLED 等外设驱动
+│   └── service_*            # 面向应用的能力服务
 ├── boards/                  # 板级支持包
 ├── examples/                # 官方示例工程
 ├── project/                 # 用户应用工程
@@ -67,4 +70,3 @@ source ./env/export.sh #每次都要执行export
     sudo usermod -aG dialout $USER
     newgrp dialout
     ```
-
