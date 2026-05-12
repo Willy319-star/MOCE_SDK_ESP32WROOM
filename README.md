@@ -67,6 +67,22 @@ npm.cmd --prefix agent start
 http://127.0.0.1:4173
 ```
 
+如果是在前台终端启动的服务，按 `Ctrl + C` 即可停止。如果需要终止后台运行的 Agent，可以先查找监听 4173 端口的进程：
+
+PowerShell：
+
+```powershell
+netstat -ano | Select-String ':4173'
+Stop-Process -Id <PID>
+```
+
+cmd：
+
+```cmd
+netstat -ano | findstr :4173
+taskkill /PID <PID> /F
+```
+
 Agent 默认只会把生成的应用工程写入 `project/` 目录，不会修改 `components/`、`boards/`、`examples/` 等 SDK 目录。大模型 API 可以在 Web 界面中配置；未配置 API Key 时，Agent 会使用本地 fallback 流程生成规划和代码脚手架。
 
 ## 用户工作流
