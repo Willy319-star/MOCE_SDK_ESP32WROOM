@@ -14,6 +14,7 @@
 ├── boards/                  # 板级支持包
 ├── examples/                # 官方示例工程
 ├── project/                 # 用户应用工程
+├── agent/                   # 本地 Web 智能硬件开发 Agent
 ├── third_party/             # 第三方依赖
 │   └── esp-idf/             # ESP-IDF submodule
 ├── tools/                   # 构建、烧写、辅助脚本
@@ -49,6 +50,24 @@ git submodule update --init --recursive
 ./env/install.sh
 source ./env/export.sh #每次都要执行export
 ```
+
+### 使用 Agent 工作台
+
+仓库内置了一个本地 Web 版智能硬件开发 Agent，可用于需求整理、任务拆解、器件选型、硬件资源规划、代码草稿生成，以及调用构建/烧录工具。
+
+启动方式：
+
+```powershell
+npm.cmd --prefix agent start
+```
+
+然后在浏览器打开：
+
+```text
+http://127.0.0.1:4173
+```
+
+Agent 默认只会把生成的应用工程写入 `project/` 目录，不会修改 `components/`、`boards/`、`examples/` 等 SDK 目录。大模型 API 可以在 Web 界面中配置；未配置 API Key 时，Agent 会使用本地 fallback 流程生成规划和代码脚手架。
 
 ## 用户工作流
 
