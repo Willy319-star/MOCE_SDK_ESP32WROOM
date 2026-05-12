@@ -1,0 +1,15 @@
+{
+  "name": "moce-hardware-agent",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Local Web agent for Moce SDK robot and smart hardware development workflows.",
+  "type": "module",
+  "scripts": {
+    "start": "node server/index.js",
+    "dev": "node server/index.js",
+    "check": "node --check server/index.js"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}

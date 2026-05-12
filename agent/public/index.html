@@ -1,0 +1,150 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Moce Hardware Agent</title>
+    <link rel="stylesheet" href="/styles.css" />
+  </head>
+  <body>
+    <div class="shell">
+      <aside class="sidebar">
+        <div class="brand">
+          <div class="brand-mark">M</div>
+          <div>
+            <h1>Moce Agent</h1>
+            <p>Robot & Smart Hardware</p>
+          </div>
+        </div>
+
+        <nav class="steps" id="steps"></nav>
+
+        <section class="provider-panel">
+          <h2>Model</h2>
+          <label>
+            Provider
+            <select id="providerName"></select>
+          </label>
+          <label>
+            Model
+            <input id="modelName" autocomplete="off" />
+          </label>
+          <label>
+            Base URL
+            <input id="baseUrl" autocomplete="off" />
+          </label>
+          <label>
+            API Key
+            <input id="apiKey" type="password" autocomplete="off" placeholder="optional / env" />
+          </label>
+          <label class="inline">
+            <input id="useLlm" type="checkbox" />
+            Use LLM
+          </label>
+        </section>
+      </aside>
+
+      <main class="workspace">
+        <header class="topbar">
+          <div>
+            <h2>智能硬件开发工作台</h2>
+            <p id="healthLine">正在连接本地 agent...</p>
+          </div>
+          <div class="top-actions">
+            <button id="scanBtn">扫描 SDK</button>
+            <button id="saveBtn">保存会话</button>
+          </div>
+        </header>
+
+        <section class="input-band">
+          <div class="requirement-card">
+            <div class="section-head">
+              <h3>产品需求</h3>
+              <span>从需求到任务、器件、资源、代码</span>
+            </div>
+            <textarea id="requirement" spellcheck="false" placeholder="例如：做一个 ESP32-S3 桌面避障小车，支持 ToF 测距、舵机扫描、OLED 显示状态，并通过 WiFi 接入上位机测试。"></textarea>
+            <div class="form-row">
+              <label>
+                工程名
+                <input id="projectName" value="robot_agent_app" />
+              </label>
+              <label>
+                Target
+                <input id="targetName" value="esp32s3" />
+              </label>
+              <label>
+                Board
+                <input id="boardName" value="my_board_esp32s3" />
+              </label>
+              <label>
+                Port
+                <input id="portName" value="/dev/ttyUSB0" />
+              </label>
+            </div>
+            <div class="actions">
+              <button class="primary" id="planBtn">生成规划</button>
+              <button id="codeBtn">生成固件草稿</button>
+              <button id="writeBtn" disabled>写入 project/</button>
+              <button id="buildBtn" disabled>Build</button>
+            </div>
+          </div>
+        </section>
+
+        <section class="tabs">
+          <button class="tab active" data-tab="plan">规划</button>
+          <button class="tab" data-tab="diagram">框图</button>
+          <button class="tab" data-tab="sdk">SDK</button>
+          <button class="tab" data-tab="code">代码</button>
+          <button class="tab" data-tab="qa">Q&A</button>
+          <button class="tab" data-tab="tools">工具</button>
+        </section>
+
+        <section class="panel active" id="tab-plan">
+          <pre id="planOutput">等待生成规划。</pre>
+        </section>
+
+        <section class="panel" id="tab-diagram">
+          <div class="diagram-grid" id="diagramGrid"></div>
+          <pre id="diagramOutput"></pre>
+        </section>
+
+        <section class="panel" id="tab-sdk">
+          <div class="sdk-grid" id="sdkGrid"></div>
+        </section>
+
+        <section class="panel" id="tab-code">
+          <div class="code-toolbar">
+            <span id="codeStatus">尚未生成代码。</span>
+          </div>
+          <div id="filesOutput" class="files"></div>
+        </section>
+
+        <section class="panel" id="tab-qa">
+          <div class="chat-log" id="chatLog"></div>
+          <div class="chat-box">
+            <input id="question" placeholder="询问资源规划、接口、测试步骤或原理图注意事项..." />
+            <button id="askBtn">发送</button>
+          </div>
+        </section>
+
+        <section class="panel" id="tab-tools">
+          <div class="tool-grid">
+            <div class="tool-block">
+              <h3>Build / Flash</h3>
+              <p>调用仓库 `tools/*.sh`。需要本机具备 bash、ESP-IDF 和串口环境。</p>
+              <button id="flashBtn" disabled>Flash</button>
+              <button id="monitorBtn" disabled>Monitor 15s</button>
+            </div>
+            <div class="tool-block">
+              <h3>Physical Agent</h3>
+              <pre id="physicalOutput"></pre>
+            </div>
+          </div>
+          <pre id="toolOutput"></pre>
+        </section>
+      </main>
+    </div>
+
+    <script src="/app.js" type="module"></script>
+  </body>
+</html>
