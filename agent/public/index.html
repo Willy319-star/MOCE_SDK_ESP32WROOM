@@ -7,142 +7,284 @@
     <link rel="stylesheet" href="/styles.css" />
   </head>
   <body>
-    <div class="shell">
-      <aside class="sidebar">
+    <div class="app-shell">
+      <aside class="left-rail">
         <div class="brand">
           <div class="brand-mark">M</div>
           <div>
             <h1>Moce Agent</h1>
-            <p>Robot & Smart Hardware</p>
+            <p>硬件产品开发工作台</p>
           </div>
         </div>
 
-        <nav class="steps" id="steps"></nav>
-
-        <section class="provider-panel">
-          <h2>Model</h2>
-          <label>
-            Provider
-            <select id="providerName"></select>
-          </label>
-          <label>
-            Model
-            <input id="modelName" autocomplete="off" />
-          </label>
-          <label>
-            Base URL
-            <input id="baseUrl" autocomplete="off" />
-          </label>
-          <label>
-            API Key
-            <input id="apiKey" type="password" autocomplete="off" placeholder="optional / env" />
-          </label>
-          <label class="inline">
-            <input id="useLlm" type="checkbox" />
-            Use LLM
-          </label>
+        <section class="rail-section">
+          <div class="rail-head">
+            <h2>流程</h2>
+            <span id="flowSummary">0 / 12</span>
+          </div>
+          <nav class="step-list" id="steps"></nav>
         </section>
-      </aside>
 
-      <main class="workspace">
-        <header class="topbar">
-          <div>
-            <h2>智能硬件开发工作台</h2>
-            <p id="healthLine">正在连接本地 agent...</p>
+        <section class="rail-section">
+          <div class="rail-head">
+            <h2>项目</h2>
           </div>
-          <div class="top-actions">
-            <button id="scanBtn">扫描 SDK</button>
-            <button id="saveBtn">保存会话</button>
-          </div>
-        </header>
-
-        <section class="input-band">
-          <div class="requirement-card">
-            <div class="section-head">
-              <h3>产品需求</h3>
-              <span>从需求到任务、器件、资源、代码</span>
-            </div>
-            <textarea id="requirement" spellcheck="false" placeholder="例如：做一个 ESP32-S3 桌面避障小车，支持 ToF 测距、舵机扫描、OLED 显示状态，并通过 WiFi 接入上位机测试。"></textarea>
-            <div class="form-row">
-              <label>
-                工程名
-                <input id="projectName" value="robot_agent_app" />
-              </label>
+          <div class="field-stack compact">
+            <label>
+              工程名
+              <input id="projectName" value="robot_agent_app" />
+            </label>
+            <div class="two-col">
               <label>
                 Target
                 <input id="targetName" value="esp32s3" />
-              </label>
-              <label>
-                Board
-                <input id="boardName" value="my_board_esp32s3" />
               </label>
               <label>
                 Port
                 <input id="portName" value="/dev/ttyUSB0" />
               </label>
             </div>
-            <div class="actions">
-              <button class="primary" id="planBtn">生成规划</button>
-              <button id="codeBtn">生成固件草稿</button>
-              <button id="writeBtn" disabled>写入 project/</button>
-              <button id="buildBtn" disabled>Build</button>
+            <label>
+              Board
+              <input id="boardName" value="my_board_esp32s3" />
+            </label>
+          </div>
+        </section>
+      </aside>
+
+      <main class="main-stage">
+        <header class="topbar">
+          <div>
+            <h2>机器人 / 智能硬件设计</h2>
+            <p id="healthLine">正在连接本地 agent...</p>
+          </div>
+          <div class="top-actions">
+            <span class="model-chip" id="modelChip">Model: 未连接</span>
+            <button id="scanBtn">扫描 SDK</button>
+            <button id="saveBtn">保存会话</button>
+          </div>
+        </header>
+
+        <section class="requirement-band">
+          <div class="section-title">
+            <div>
+              <h3>产品需求</h3>
+              <p>描述产品形态、硬件模块、交互、测试和量产约束。</p>
             </div>
           </div>
-        </section>
-
-        <section class="tabs">
-          <button class="tab active" data-tab="plan">规划</button>
-          <button class="tab" data-tab="diagram">框图</button>
-          <button class="tab" data-tab="sdk">SDK</button>
-          <button class="tab" data-tab="code">代码</button>
-          <button class="tab" data-tab="qa">Q&A</button>
-          <button class="tab" data-tab="tools">工具</button>
-        </section>
-
-        <section class="panel active" id="tab-plan">
-          <pre id="planOutput">等待生成规划。</pre>
-        </section>
-
-        <section class="panel" id="tab-diagram">
-          <div class="diagram-grid" id="diagramGrid"></div>
-          <pre id="diagramOutput"></pre>
-        </section>
-
-        <section class="panel" id="tab-sdk">
-          <div class="sdk-grid" id="sdkGrid"></div>
-        </section>
-
-        <section class="panel" id="tab-code">
-          <div class="code-toolbar">
-            <span id="codeStatus">尚未生成代码。</span>
+          <textarea id="requirement" spellcheck="false" placeholder="例如：做一个 ESP32-S3 桌面避障小车，支持 VL53L0X ToF 测距、两个舵机、OLED 显示状态、按键切换模式，并通过 WiFi 接入上位机测试。"></textarea>
+          <div class="action-row">
+            <button class="primary" id="planBtn">生成规划</button>
+            <button id="codeBtn">生成固件草稿</button>
+            <button id="writeBtn" disabled>写入 project/</button>
+            <button id="buildBtn" disabled>Build</button>
+            <button id="flashBtn" disabled>Flash</button>
+            <button id="monitorBtn" disabled>Monitor 15s</button>
           </div>
-          <div id="filesOutput" class="files"></div>
         </section>
 
-        <section class="panel" id="tab-qa">
+        <nav class="view-tabs">
+          <button class="tab active" data-tab="overview">总览</button>
+          <button class="tab" data-tab="plan">规划文档</button>
+          <button class="tab" data-tab="diagram">框图</button>
+          <button class="tab" data-tab="resources">资源表</button>
+          <button class="tab" data-tab="code">代码</button>
+          <button class="tab" data-tab="sdk">SDK / 工具</button>
+        </nav>
+
+        <section class="view active" id="tab-overview">
+          <div class="summary-grid">
+            <article class="summary-card">
+              <h4>规划状态</h4>
+              <p id="planSummary">尚未生成规划。</p>
+            </article>
+            <article class="summary-card">
+              <h4>硬件覆盖</h4>
+              <div id="hardwareCoverage" class="pill-row"></div>
+            </article>
+            <article class="summary-card">
+              <h4>代码状态</h4>
+              <p id="codeSummary">尚未生成代码。</p>
+            </article>
+          </div>
+          <div class="section-grid">
+            <section class="work-card">
+              <div class="card-head">
+                <h3>结构化规划</h3>
+                <span>自动拆分 Markdown</span>
+              </div>
+              <div id="planCards" class="plan-cards empty">等待生成规划。</div>
+            </section>
+            <section class="work-card">
+              <div class="card-head">
+                <h3>硬件框图预览</h3>
+                <span>从 Mermaid 提取节点</span>
+              </div>
+              <div id="diagramPreview" class="diagram-canvas empty">等待生成框图。</div>
+            </section>
+          </div>
+        </section>
+
+        <section class="view" id="tab-plan">
+          <section class="work-card">
+            <div class="card-head">
+              <h3>规划文档</h3>
+              <span id="planMeta">Markdown</span>
+            </div>
+            <pre id="planOutput">等待生成规划。</pre>
+          </section>
+        </section>
+
+        <section class="view" id="tab-diagram">
+          <div class="section-grid">
+            <section class="work-card">
+              <div class="card-head">
+                <h3>框图节点</h3>
+                <span>可视化预览</span>
+              </div>
+              <div id="diagramGrid" class="diagram-canvas empty">等待生成框图。</div>
+            </section>
+            <section class="work-card">
+              <div class="card-head">
+                <h3>Mermaid 源码</h3>
+                <span>可复制到 Mermaid 工具</span>
+              </div>
+              <pre id="diagramOutput">等待生成框图。</pre>
+            </section>
+          </div>
+        </section>
+
+        <section class="view" id="tab-resources">
+          <section class="work-card">
+            <div class="card-head">
+              <h3>硬件资源规划</h3>
+              <span id="resourceMeta">来自规划或板级定义</span>
+            </div>
+            <div id="resourceTable" class="resource-table empty">等待生成资源表。</div>
+          </section>
+        </section>
+
+        <section class="view" id="tab-code">
+          <section class="work-card">
+            <div class="card-head">
+              <h3>生成文件</h3>
+              <span id="codeStatus">尚未生成代码。</span>
+            </div>
+            <div class="code-layout">
+              <div id="fileTree" class="file-tree empty">等待生成文件。</div>
+              <article class="code-preview">
+                <h4 id="selectedFileTitle">未选择文件</h4>
+                <pre id="selectedFileContent">生成代码后，在左侧选择文件查看。</pre>
+              </article>
+            </div>
+          </section>
+        </section>
+
+        <section class="view" id="tab-sdk">
+          <div class="section-grid">
+            <section class="work-card">
+              <div class="card-head">
+                <h3>SDK 摘要</h3>
+                <span>当前仓库扫描结果</span>
+              </div>
+              <div class="sdk-grid" id="sdkGrid"></div>
+            </section>
+            <section class="work-card">
+              <div class="card-head">
+                <h3>工具输出</h3>
+                <span>Build / Flash / Monitor</span>
+              </div>
+              <pre id="toolOutput">尚未运行工具。</pre>
+              <div class="exec-panel">
+                <div class="exec-grid">
+                  <label>
+                    Program / file
+                    <input id="execCommand" value="node" autocomplete="off" />
+                  </label>
+                  <label>
+                    Arguments
+                    <input id="execArgs" value="--version" autocomplete="off" />
+                  </label>
+                  <label>
+                    CWD
+                    <input id="execCwd" value="." autocomplete="off" />
+                  </label>
+                </div>
+                <div class="action-row compact-actions">
+                  <button id="execBtn">Run</button>
+                </div>
+              </div>
+            </section>
+          </div>
+        </section>
+      </main>
+
+      <aside class="right-rail">
+        <section class="side-card">
+          <div class="card-head">
+            <h3>模型设置</h3>
+            <span id="providerStatus">未连接</span>
+          </div>
+          <div class="field-stack">
+            <label>
+              Provider
+              <select id="providerName"></select>
+            </label>
+            <label>
+              Model
+              <input id="modelName" autocomplete="off" />
+            </label>
+            <label>
+              Base URL
+              <input id="baseUrl" autocomplete="off" />
+            </label>
+            <label>
+              API Key
+              <input id="apiKey" type="password" autocomplete="off" placeholder="optional / env" />
+            </label>
+            <label class="inline">
+              <input id="useLlm" type="checkbox" checked />
+              Use LLM
+            </label>
+          </div>
+        </section>
+
+        <section class="side-card">
+          <div class="card-head">
+            <h3>代码校验</h3>
+            <span id="validationBadge">未生成</span>
+          </div>
+          <div id="validationPanel" class="validation-list empty">等待代码生成。</div>
+        </section>
+
+        <section class="side-card chat-card">
+          <div class="card-head">
+            <h3>Q&A</h3>
+            <span>基于当前规划</span>
+          </div>
           <div class="chat-log" id="chatLog"></div>
           <div class="chat-box">
-            <input id="question" placeholder="询问资源规划、接口、测试步骤或原理图注意事项..." />
+            <input id="question" placeholder="询问资源、接口、测试..." />
             <button id="askBtn">发送</button>
           </div>
         </section>
 
-        <section class="panel" id="tab-tools">
-          <div class="tool-grid">
-            <div class="tool-block">
-              <h3>Build / Flash</h3>
-              <p>调用仓库 `tools/*.sh`。需要本机具备 bash、ESP-IDF 和串口环境。</p>
-              <button id="flashBtn" disabled>Flash</button>
-              <button id="monitorBtn" disabled>Monitor 15s</button>
-            </div>
-            <div class="tool-block">
-              <h3>Physical Agent</h3>
-              <pre id="physicalOutput"></pre>
-            </div>
+        <section class="side-card">
+          <div class="card-head">
+            <h3>活动日志</h3>
+            <span id="logCount">0</span>
           </div>
-          <pre id="toolOutput"></pre>
+          <div id="activityLog" class="activity-log"></div>
         </section>
-      </main>
+
+        <section class="side-card">
+          <div class="card-head">
+            <h3>Physical</h3>
+            <span>占位接口</span>
+          </div>
+          <pre id="physicalOutput">等待连接。</pre>
+        </section>
+      </aside>
     </div>
 
     <script src="/app.js" type="module"></script>

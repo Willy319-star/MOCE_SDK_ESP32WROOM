@@ -24,7 +24,15 @@ function availableApiText(sdkSummary) {
   return (sdkSummary.components || [])
     .map((component) => {
       const apis = component.api
-        .map((api) => `${api.header}: ${api.functions.join(', ')}`)
+        .map((api) => {
+          const declarations = (api.declarations && api.declarations.length > 0)
+            ? `Declarations:\n${api.declarations.join('\n\n')}\n`
+            : '';
+          const signatures = (api.prototypes && api.prototypes.length > 0)
+            ? api.prototypes.join('\n')
+            : api.functions.join(', ');
+          return `${api.header}:\n${declarations}Functions:\n${signatures}`;
+        })
         .join('\n');
       return `${component.name}\n${apis}`;
     })
@@ -76,8 +84,10 @@ function detectCapabilities(requirement, sdkSummary) {
   };
 }
 
-function boardResourceLines(sdkSummary) {
-  const board = (sdkSummary.boards || []).find((item) => item.name.includes('esp32s3')) || (sdkSummary.boards || [])[0];
+function boardResourceLines(sdkSummary, boardName = '') {
+  const board = (sdkSummary.boards || []).find((item) => item.name === boardName)
+    || (sdkSummary.boards || []).find((item) => item.name.includes('esp32s3'))
+    || (sdkSummary.boards || [])[0];
   if (!board) {
     return ['当前未扫描到 boards/ 下的板级定义。'];
   }
@@ -160,22 +170,39 @@ export function parseGeneratedFiles(text) {
   return files;
 }
 
-export function buildPlanningPrompt({ requirement, sdkSummary, skillFocus }) {
+function selectedComponentText(capabilities) {
+  if (capabilities.components.length === 0) {
+    return '未命中具体组件，请根据需求继续判断。';
+  }
+  return capabilities.components.join(', ');
+}
+
+export function buildPlanningPrompt({ requirement, sdkSummary, skillFocus, boardName }) {
+  const capabilities = detectCapabilities(requirement, sdkSummary);
   return {
     messages: [
       {
         role: 'system',
-        content: `你是 Moce SDK 的机器人/智能硬件开发 agent。${sdkBoundary}\n${skillsetSummary}\n输出必须结构化、具体、可执行。`
+        content: [
+          `你是 Moce SDK 的机器人/智能硬件开发 agent。${sdkBoundary}`,
+          skillsetSummary,
+          '输出必须结构化、具体、可执行。',
+          '用户需求中出现的每个硬件模块都必须逐项覆盖；如果当前 SDK 不支持，必须明确标为缺口，不要遗漏。',
+          '硬件资源规划必须以提供的目标板卡资源为准，不要猜 GPIO。'
+        ].join('\n')
       },
       {
         role: 'user',
         content: [
           `当前聚焦：${skillFocus}`,
+          `目标板卡：${boardName || '未指定'}`,
           `用户需求：\n${requirement || '(空)'}`,
+          `根据需求初步命中的 SDK 组件：${selectedComponentText(capabilities)}`,
           `当前 SDK 组件：${componentNames(sdkSummary).join(', ')}`,
           `BSP：${(sdkSummary.bsp || []).join(', ')}`,
           `Boards：${(sdkSummary.boards || []).map((board) => board.name).join(', ')}`,
           `Examples：${(sdkSummary.examples || []).join(', ')}`,
+          `目标板卡资源：\n${boardResourceLines(sdkSummary, boardName).join('\n')}`,
           '请输出：需求澄清问题、任务拆解、器件选型、硬件资源规划、Mermaid 框图、嵌入式开发计划、测试调试计划、风险和下一步。'
         ].join('\n\n')
       }
@@ -212,7 +239,17 @@ export function buildCodegenPrompt({ requirement, projectName, plan, sdkSummary 
           '你是 Moce SDK 的嵌入式应用代码生成 agent。',
           sdkBoundary,
           '生成完整可编译 ESP-IDF 应用工程。必须包含 project/<name>/CMakeLists.txt、project/<name>/main/CMakeLists.txt、project/<name>/main/main.c。',
-          '只输出文件路径和完整文件内容，不输出 SDK 目录下文件。'
+          '根 CMakeLists.txt 必须设置 EXTRA_COMPONENT_DIRS 到 ../../bsp 和 ../../components，并 include $ENV{IDF_PATH}/tools/cmake/project.cmake。',
+          'main/CMakeLists.txt 必须使用 idf_component_register(SRCS "main.c" REQUIRES ...)，禁止使用 register_component()、COMPONENT_SRCS、COMPONENT_REQUIRES 等旧式写法。',
+          '必须严格使用下方提供的 C 函数原型、结构体字段、类型名和枚举名；不要改名，不要臆造 wrapper，不要把 void 返回值当成 esp_err_t。',
+          '输出格式必须严格使用文件块，不要输出解释文字：',
+          '===== FILE: project/<name>/CMakeLists.txt =====',
+          '<完整文件内容>',
+          '===== FILE: project/<name>/main/CMakeLists.txt =====',
+          '<完整文件内容>',
+          '===== FILE: project/<name>/main/main.c =====',
+          '<完整文件内容>',
+          '只输出 project/ 下文件，不输出 SDK 目录下文件。'
         ].join('\n')
       },
       {
@@ -332,6 +369,7 @@ function makeMainCmake(requires) {
 
 function makeMainC(requirement, capabilities) {
   const includes = [
+    '#include <stdio.h>',
     '#include "freertos/FreeRTOS.h"',
     '#include "freertos/task.h"',
     '#include "esp_log.h"',
@@ -347,10 +385,22 @@ function makeMainC(requirement, capabilities) {
   const setup = ['    service_device_init();'];
   if (capabilities.components.includes('driver_led')) setup.push('    driver_led_set_brightness(50);', '    driver_led_set(1);');
   if (capabilities.components.includes('driver_oled')) setup.push('    driver_oled_init_profile(DRIVER_OLED_PROFILE_096_SSD1306);', '    driver_oled_clear_screen();');
+  if (capabilities.components.includes('driver_servo')) setup.push('    driver_servo_init();', '    driver_servo_set_angle(DRIVER_SERVO_0, 90);');
   if (capabilities.components.includes('driver_mpu6050')) setup.push('    driver_mpu6050_init_default();');
   if (capabilities.components.includes('driver_tof2000c_vl53l0x')) setup.push('    driver_tof2000c_vl53l0x_init_default();');
 
   const loop = [];
+  if (capabilities.components.includes('driver_servo')) {
+    loop.push(
+      '        static uint16_t servo_angle = 60;',
+      '        static int servo_step = 20;',
+      '        driver_servo_set_angle(DRIVER_SERVO_0, servo_angle);',
+      '        servo_angle = (uint16_t)((int)servo_angle + servo_step);',
+      '        if (servo_angle >= 120 || servo_angle <= 60) {',
+      '            servo_step = -servo_step;',
+      '        }'
+    );
+  }
   if (capabilities.components.includes('driver_button')) {
     loop.push(
       '        driver_button_process();',
@@ -370,12 +420,18 @@ function makeMainC(requirement, capabilities) {
     );
   }
   if (capabilities.components.includes('driver_tof2000c_vl53l0x')) {
-    loop.push(
+    loop.push(...[
       '        driver_tof2000c_vl53l0x_result_t range;',
       '        if (driver_tof2000c_vl53l0x_read_single(&range) == ESP_OK) {',
       '            ESP_LOGI(TAG, "distance=%u mm", range.distance_mm);',
+      capabilities.components.includes('driver_oled') ? '            char line[32];' : '',
+      capabilities.components.includes('driver_oled') ? '            snprintf(line, sizeof(line), "Dist: %u mm", range.distance_mm);' : '',
+      capabilities.components.includes('driver_oled') ? '            driver_oled_clear();' : '',
+      capabilities.components.includes('driver_oled') ? '            driver_oled_draw_string(0, 0, "Moce Agent");' : '',
+      capabilities.components.includes('driver_oled') ? '            driver_oled_draw_string(0, 16, line);' : '',
+      capabilities.components.includes('driver_oled') ? '            driver_oled_flush();' : '',
       '        }'
-    );
+    ].filter(Boolean));
   }
   if (loop.length === 0) {
     loop.push('        ESP_LOGI(TAG, "agent scaffold heartbeat");');
@@ -425,4 +481,73 @@ export function fallbackCodegen(requirement, projectName, sdkSummary) {
       }
     ]
   };
+}
+
+export function validateGeneratedFiles(files) {
+  const errors = [];
+  const warnings = [];
+  const main = (files || []).find((file) => /\/main\/main\.c$/.test(file.path));
+  const rootCmake = (files || []).find((file) => /\/CMakeLists\.txt$/.test(file.path) && !/\/main\/CMakeLists\.txt$/.test(file.path));
+  const mainCmake = (files || []).find((file) => /\/main\/CMakeLists\.txt$/.test(file.path));
+  const content = main?.content || '';
+
+  if (!main) {
+    errors.push('missing project/<name>/main/main.c');
+  }
+
+  if (!rootCmake || !/EXTRA_COMPONENT_DIRS/.test(rootCmake.content || '') || !/project\.cmake/.test(rootCmake.content || '')) {
+    errors.push('root CMakeLists.txt must define EXTRA_COMPONENT_DIRS and include ESP-IDF project.cmake');
+  }
+
+  if (!mainCmake || !/idf_component_register\s*\(/.test(mainCmake.content || '')) {
+    errors.push('main/CMakeLists.txt must use idf_component_register');
+  }
+
+  if (/register_component\s*\(|COMPONENT_SRCS|COMPONENT_REQUIRES|COMPONENT_ADD_INCLUDEDIRS/.test(mainCmake?.content || '')) {
+    errors.push('old ESP-IDF component CMake style is not allowed; use idf_component_register');
+  }
+
+  if (/esp_err_t\s+\w+\s*=\s*service_device_init\s*\(/.test(content)) {
+    errors.push('service_device_init returns void, not esp_err_t');
+  }
+
+  if (/driver_oled_init_profile\s*\(\s*\)/.test(content)) {
+    errors.push('driver_oled_init_profile requires a driver_oled_profile_t argument');
+  }
+
+  if (/\bbutton_event_t\b/.test(content) || /\bBUTTON_(?:PRESSED|RELEASED|LONG_PRESS|SHORT_PRESS)\b/.test(content)) {
+    errors.push('button driver uses driver_button_event_t and DRIVER_BUTTON_EVENT_* enum names');
+  }
+
+  if (/\bDRIVER_BUTTON_EVENT_(?:PRESSED|RELEASED)\b/.test(content)) {
+    errors.push('button enum values are DRIVER_BUTTON_EVENT_PRESS and DRIVER_BUTTON_EVENT_RELEASE');
+  }
+
+  if (/\bDRIVER_OLED_PROFILE_128X64\b/.test(content)) {
+    errors.push('OLED profile enum must be DRIVER_OLED_PROFILE_096_SSD1306 or DRIVER_OLED_PROFILE_13_SH1106');
+  }
+
+  if (/\bDRIVER_SERVO_ID_/.test(content)) {
+    errors.push('servo enum values are DRIVER_SERVO_0 and DRIVER_SERVO_1');
+  }
+
+  if (/driver_tof2000c_vl53l0x_read_single\s*\(\s*&\s*(?:distance|dist|range_mm)\b/.test(content)) {
+    errors.push('driver_tof2000c_vl53l0x_read_single expects driver_tof2000c_vl53l0x_result_t *');
+  }
+
+  if (/\btof_result\.status\b|\brange\.status\b/.test(content)) {
+    errors.push('ToF result field is range_status, not status');
+  }
+
+  for (const file of files || []) {
+    if (!String(file.path || '').startsWith('project/')) {
+      errors.push(`refusing non-project output path: ${file.path}`);
+    }
+  }
+
+  if (content.includes('service_wifi') && !content.includes('service_wifi_init_sta')) {
+    warnings.push('WiFi appears in code; verify credentials/config flow before flashing');
+  }
+
+  return { ok: errors.length === 0, errors, warnings };
 }

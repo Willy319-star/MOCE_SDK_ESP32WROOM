@@ -42,7 +42,7 @@ async function listFiles(root, predicate = () => true) {
 }
 
 function parseFunctions(headerText) {
-  const functionPattern = /(?:^|\n)\s*(?:esp_err_t|void|bool|int|uint8_t|uint16_t|uint32_t|size_t)\s+([a-zA-Z_][a-zA-Z0-9_]*)\s*\([^;{}]*\)\s*;/g;
+  const functionPattern = /^\s*(?!typedef\b|#)(?:[A-Za-z_][A-Za-z0-9_]*\s+)*(?:const\s+)?(?:[A-Za-z_][A-Za-z0-9_]*|\*)[\s*]+([A-Za-z_][A-Za-z0-9_]*)\s*\([^;{}]*\)\s*;/gm;
   const names = [];
   let match = functionPattern.exec(headerText);
   while (match) {
@@ -50,6 +50,33 @@ function parseFunctions(headerText) {
     match = functionPattern.exec(headerText);
   }
   return names;
+}
+
+function parseFunctionPrototypes(headerText) {
+  const functionPattern = /^\s*((?!typedef\b|#)(?:[A-Za-z_][A-Za-z0-9_]*\s+)*(?:const\s+)?(?:[A-Za-z_][A-Za-z0-9_]*|\*)[\s*]+([A-Za-z_][A-Za-z0-9_]*)\s*\([^;{}]*\)\s*;)/gm;
+  const prototypes = [];
+  let match = functionPattern.exec(headerText);
+  while (match) {
+    prototypes.push(match[1].replace(/\s+/g, ' ').trim());
+    match = functionPattern.exec(headerText);
+  }
+  return prototypes;
+}
+
+function parseTypeDeclarations(headerText) {
+  const declarations = [];
+  const enumPattern = /typedef\s+enum\s*(?:[A-Za-z_][A-Za-z0-9_]*)?\s*\{[\s\S]*?\}\s*[A-Za-z_][A-Za-z0-9_]*\s*;/g;
+  const structPattern = /typedef\s+struct\s*(?:[A-Za-z_][A-Za-z0-9_]*)?\s*\{[\s\S]*?\}\s*[A-Za-z_][A-Za-z0-9_]*\s*;/g;
+  const definePattern = /^\s*#define\s+(DRIVER_[A-Z0-9_]+|SERVICE_[A-Z0-9_]+)\b.*$/gm;
+
+  for (const pattern of [enumPattern, structPattern, definePattern]) {
+    let match = pattern.exec(headerText);
+    while (match) {
+      declarations.push(match[0].replace(/\s+\n/g, '\n').trim());
+      match = pattern.exec(headerText);
+    }
+  }
+  return declarations;
 }
 
 function parseBoardDefines(boardText) {
@@ -71,7 +98,9 @@ async function scanComponent(root, name) {
     const text = await fs.readFile(header, 'utf8');
     api.push({
       header: path.relative(root, header).replaceAll('\\', '/'),
-      functions: parseFunctions(text)
+      functions: parseFunctions(text),
+      prototypes: parseFunctionPrototypes(text),
+      declarations: parseTypeDeclarations(text)
     });
   }
   return { name, api };

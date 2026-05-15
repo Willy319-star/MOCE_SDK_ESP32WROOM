@@ -2,6 +2,27 @@
   "host": "127.0.0.1",
   "port": 4173,
   "defaultProvider": "openai",
+  "execution": {
+    "enabled": true,
+    "defaultCwd": ".",
+    "timeoutMs": 30000,
+    "maxTimeoutMs": 300000,
+    "maxOutputBytes": 200000,
+    "allowedPrograms": [
+      "bash",
+      "cmd",
+      "node",
+      "npm",
+      "npx",
+      "powershell",
+      "pwsh",
+      "python",
+      "python3",
+      "py",
+      "idf.py",
+      "git"
+    ]
+  },
   "providers": {
     "openai": {
       "kind": "openai-compatible",

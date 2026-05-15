@@ -15,7 +15,8 @@ import {
   fallbackCodegen,
   fallbackPlanning,
   normalizeAgentText,
-  parseGeneratedFiles
+  parseGeneratedFiles,
+  validateGeneratedFiles
 } from './lib/workflows.js';
 import { getPhysicalStatus } from './lib/physical.js';
 import { loadSessions, saveSession } from './lib/storage.js';
@@ -104,6 +105,23 @@ function safeOutputFile(filePath) {
   return { normalized, absolute };
 }
 
+function isInsidePath(parent, child) {
+  const relative = path.relative(parent, child);
+  return relative === '' || (!!relative && !relative.startsWith('..') && !path.isAbsolute(relative));
+}
+
+function safeWorkspacePath(workspacePath = '.') {
+  const raw = String(workspacePath || '.').trim() || '.';
+  const absolute = path.isAbsolute(raw)
+    ? path.resolve(raw)
+    : path.resolve(sdkRoot, raw);
+
+  if (!isInsidePath(sdkRoot, absolute)) {
+    throw new Error('cwd must stay under SDK root');
+  }
+  return absolute;
+}
+
 async function getSdkSummary() {
   if (!sdkSummaryCache) {
     sdkSummaryCache = await scanSdk(sdkRoot);
@@ -146,10 +164,11 @@ async function handlePlan(req, res) {
   const body = await readJson(req);
   const sdkSummary = await getSdkSummary();
   const prompt = buildPlanningPrompt({
-    requirement: body.requirement || '',
-    sdkSummary,
-    skillFocus: body.skillFocus || 'skillset-1'
-  });
+      requirement: body.requirement || '',
+      sdkSummary,
+      skillFocus: body.skillFocus || 'skillset-1',
+      boardName: body.board || body.boardName || 'my_board_esp32s3'
+    });
 
   if (body.useLlm) {
     try {
@@ -249,15 +268,20 @@ async function handleCodegen(req, res) {
       });
       const fallback = fallbackCodegen(body.requirement || '', body.projectName || '', sdkSummary);
       const parsedFiles = parseGeneratedFiles(text);
+      const validation = validateGeneratedFiles(parsedFiles);
+      const useParsedFiles = parsedFiles.length > 0 && validation.errors.length === 0;
       sendJson(res, 200, {
         ok: true,
         mode: 'llm',
         projectName: fallback.projectName,
         result: normalizeAgentText(text),
-        files: parsedFiles.length > 0 ? parsedFiles : fallback.files,
-        note: parsedFiles.length > 0
+        files: useParsedFiles ? parsedFiles : fallback.files,
+        validation: useParsedFiles ? validation : validateGeneratedFiles(fallback.files),
+        note: useParsedFiles
           ? 'LLM file blocks were parsed into editable files.'
-          : 'No parsable LLM file blocks were found. Fallback files are included as a safe editable scaffold.'
+          : parsedFiles.length > 0
+            ? 'LLM file blocks were parsed, but static validation found SDK API risks. Fallback files are included as a safe editable scaffold.'
+            : 'No parsable LLM file blocks were found. Fallback files are included as a safe editable scaffold.'
       });
       return;
     } catch (error) {
@@ -266,6 +290,7 @@ async function handleCodegen(req, res) {
         ok: true,
         mode: 'fallback',
         warning: error.message,
+        validation: validateGeneratedFiles(fallback.files),
         ...fallback
       });
       return;
@@ -275,6 +300,7 @@ async function handleCodegen(req, res) {
   sendJson(res, 200, {
     ok: true,
     mode: 'fallback',
+    validation: validateGeneratedFiles(fallbackCodegen(body.requirement || '', body.projectName || '', sdkSummary).files),
     ...fallbackCodegen(body.requirement || '', body.projectName || '', sdkSummary)
   });
 }
@@ -303,13 +329,40 @@ async function handleProjectWrite(req, res) {
   sendJson(res, 200, { ok: true, written });
 }
 
-function runTool(tool, args, cwd, timeoutMs = 0) {
+function appendOutput(current, chunk, tracker) {
+  if (!tracker.maxBytes || tracker.maxBytes <= 0) {
+    return current + chunk.toString();
+  }
+
+  const remaining = tracker.maxBytes - tracker.bytes;
+  if (remaining <= 0) {
+    tracker.truncated = true;
+    return current;
+  }
+
+  if (chunk.length > remaining) {
+    tracker.truncated = true;
+    tracker.bytes = tracker.maxBytes;
+    return current + chunk.subarray(0, remaining).toString();
+  }
+
+  tracker.bytes += chunk.length;
+  return current + chunk.toString();
+}
+
+function runTool(tool, args, cwd, timeoutMs = 0, options = {}) {
   return new Promise((resolve) => {
     const startedAt = new Date().toISOString();
+    const outputTracker = {
+      bytes: 0,
+      maxBytes: Number(options.maxOutputBytes || 0),
+      truncated: false
+    };
     const child = spawn(tool, args, {
       cwd,
       shell: false,
-      env: process.env
+      env: process.env,
+      ...(options.spawnOptions || {})
     });
 
     let stdout = '';
@@ -323,24 +376,343 @@ function runTool(tool, args, cwd, timeoutMs = 0) {
       }, timeoutMs);
     }
     child.stdout?.on('data', (chunk) => {
-      stdout += chunk.toString();
+      stdout = appendOutput(stdout, chunk, outputTracker);
     });
     child.stderr?.on('data', (chunk) => {
-      stderr += chunk.toString();
+      stderr = appendOutput(stderr, chunk, outputTracker);
     });
     child.on('error', (error) => {
       if (timer) clearTimeout(timer);
-      resolve({ ok: false, code: -1, startedAt, stdout, stderr, error: error.message });
+      resolve({ ok: false, code: -1, startedAt, stdout, stderr, truncated: outputTracker.truncated, error: error.message });
     });
     child.on('close', (code) => {
       if (timer) clearTimeout(timer);
-      resolve({ ok: code === 0 || timedOut, code, timedOut, startedAt, finishedAt: new Date().toISOString(), stdout, stderr });
+      const ok = code === 0 || (timedOut && options.okOnTimeout === true);
+      resolve({ ok, code, timedOut, truncated: outputTracker.truncated, startedAt, finishedAt: new Date().toISOString(), stdout, stderr });
     });
   });
 }
 
 function bashPath(filePath) {
   return filePath.replaceAll('\\', '/');
+}
+
+function splitArgs(argsText) {
+  const text = String(argsText || '');
+  const args = [];
+  let current = '';
+  let quote = '';
+  let escaped = false;
+
+  for (const char of text) {
+    if (escaped) {
+      current += char;
+      escaped = false;
+      continue;
+    }
+    if (quote === '"' && char === '\\') {
+      escaped = true;
+      continue;
+    }
+    if (quote) {
+      if (char === quote) {
+        quote = '';
+      } else {
+        current += char;
+      }
+      continue;
+    }
+    if (char === '"' || char === "'") {
+      quote = char;
+      continue;
+    }
+    if (/\s/.test(char)) {
+      if (current) {
+        args.push(current);
+        current = '';
+      }
+      continue;
+    }
+    current += char;
+  }
+
+  if (escaped) {
+    current += '\\';
+  }
+  if (quote) {
+    throw new Error('unterminated quote in arguments');
+  }
+  if (current) {
+    args.push(current);
+  }
+  return args;
+}
+
+function execArgsFromBody(body) {
+  if (Array.isArray(body.args)) {
+    return body.args.map((arg) => String(arg));
+  }
+  if (typeof body.argsText === 'string') {
+    return splitArgs(body.argsText);
+  }
+  if (typeof body.args === 'string') {
+    return splitArgs(body.args);
+  }
+  return [];
+}
+
+function normalizedProgramName(program) {
+  return path.basename(String(program || '')).toLowerCase().replace(/\.(exe|cmd|bat)$/, '');
+}
+
+function allowedProgramSet() {
+  const allowed = Array.isArray(config.execution?.allowedPrograms)
+    ? config.execution.allowedPrograms
+    : [];
+  return new Set(allowed.map((program) => String(program).toLowerCase()));
+}
+
+function isAllowedProgram(program) {
+  const allowed = allowedProgramSet();
+  const raw = String(program || '').toLowerCase();
+  const base = normalizedProgramName(program);
+  return allowed.has(raw) || allowed.has(base);
+}
+
+function assertAllowedProgram(program) {
+  if (!isAllowedProgram(program)) {
+    throw new Error(`program is not allowed by agent execution config: ${program}`);
+  }
+}
+
+function assertNoInlineShell(program, args) {
+  const base = normalizedProgramName(program);
+  const shellPrograms = new Set(['bash', 'sh', 'zsh', 'fish', 'cmd', 'powershell', 'pwsh']);
+  if (!shellPrograms.has(base)) {
+    return;
+  }
+
+  const hasInlineFlag = args.some((arg) => {
+    const flag = String(arg).toLowerCase();
+    if (base === 'cmd') {
+      return flag === '/c';
+    }
+    if (base === 'powershell' || base === 'pwsh') {
+      return flag === '-command' || flag === '-encodedcommand' || flag === '-c';
+    }
+    return /^-[a-z]*c[a-z]*$/.test(flag);
+  });
+
+  if (hasInlineFlag) {
+    throw new Error('inline shell commands are disabled; run a script file instead');
+  }
+}
+
+function pathList() {
+  const rawPath = process.env.PATH || process.env.Path || process.env.path || '';
+  return rawPath.split(path.delimiter).filter(Boolean);
+}
+
+function windowsPathExts() {
+  const rawExts = process.env.PATHEXT || '.COM;.EXE;.BAT;.CMD;.PS1';
+  return rawExts
+    .split(';')
+    .map((ext) => ext.trim().toLowerCase())
+    .filter(Boolean);
+}
+
+async function isFile(filePath) {
+  try {
+    return (await fs.stat(filePath)).isFile();
+  } catch {
+    return false;
+  }
+}
+
+async function findProgramOnPath(program) {
+  const raw = String(program || '').trim();
+  if (!raw || raw.includes('/') || raw.includes('\\') || path.isAbsolute(raw)) {
+    return null;
+  }
+
+  const hasExt = path.extname(raw) !== '';
+  const candidates = [];
+  for (const dir of pathList()) {
+    if (process.platform === 'win32' && !hasExt) {
+      for (const ext of windowsPathExts()) {
+        candidates.push(path.join(dir, `${raw}${ext}`));
+      }
+      candidates.push(path.join(dir, raw));
+    } else {
+      candidates.push(path.join(dir, raw));
+    }
+  }
+
+  const seen = new Set();
+  for (const candidate of candidates) {
+    const key = process.platform === 'win32' ? candidate.toLowerCase() : candidate;
+    if (seen.has(key)) {
+      continue;
+    }
+    seen.add(key);
+    if (await isFile(candidate)) {
+      return candidate;
+    }
+  }
+  return null;
+}
+
+function cmdScriptArg(value) {
+  const text = String(value);
+  if (/[\0\r\n"]/.test(text)) {
+    throw new Error('cmd script arguments cannot contain control characters or double quotes');
+  }
+  return `"${text.replaceAll('%', '%%')}"`;
+}
+
+function wrapWindowsCommandScript(filePath, args, commandParts) {
+  const commandLine = `call ${[filePath, ...args].map(cmdScriptArg).join(' ')}`;
+  return {
+    tool: process.env.ComSpec || 'cmd.exe',
+    args: ['/d', '/c', commandLine],
+    spawnOptions: { windowsVerbatimArguments: true },
+    commandParts
+  };
+}
+
+function formatCommandPart(part) {
+  const text = String(part);
+  return /\s/.test(text) ? JSON.stringify(text) : text;
+}
+
+function formatCommand(parts) {
+  return parts.map(formatCommandPart).join(' ');
+}
+
+function execTimeoutMs(input) {
+  const defaultTimeoutMs = Number(config.execution?.timeoutMs || 30000);
+  const maxTimeoutMs = Number(config.execution?.maxTimeoutMs || 300000);
+  const requested = Number(input || defaultTimeoutMs);
+  const timeoutMs = Number.isFinite(requested) && requested > 0 ? requested : defaultTimeoutMs;
+  return Math.min(Math.max(timeoutMs, 1000), maxTimeoutMs);
+}
+
+async function resolveExecutableFile(absolute, args, displayPath = absolute) {
+  const stat = await fs.stat(absolute);
+  if (!stat.isFile()) {
+    throw new Error(`executable path is not a file: ${displayPath}`);
+  }
+
+  const ext = path.extname(absolute).toLowerCase();
+  if (ext === '.sh') {
+    assertAllowedProgram('bash');
+    return {
+      tool: 'bash',
+      args: [bashPath(absolute), ...args],
+      commandParts: ['bash', bashPath(displayPath), ...args]
+    };
+  }
+  if (ext === '.py') {
+    const python = process.env.PYTHON || 'python';
+    assertAllowedProgram(python);
+    return {
+      tool: python,
+      args: [absolute, ...args],
+      commandParts: [python, displayPath, ...args]
+    };
+  }
+  if (ext === '.js' || ext === '.mjs' || ext === '.cjs') {
+    assertAllowedProgram('node');
+    return {
+      tool: process.execPath,
+      args: [absolute, ...args],
+      commandParts: ['node', displayPath, ...args]
+    };
+  }
+  if (ext === '.ps1') {
+    const powershell = process.env.PWSH || process.env.POWERSHELL || (process.platform === 'win32' ? 'powershell' : 'pwsh');
+    assertAllowedProgram(powershell);
+    return {
+      tool: powershell,
+      args: ['-NoProfile', '-ExecutionPolicy', 'Bypass', '-File', absolute, ...args],
+      commandParts: [powershell, '-NoProfile', '-File', displayPath, ...args]
+    };
+  }
+  if (process.platform === 'win32' && (ext === '.cmd' || ext === '.bat')) {
+    return wrapWindowsCommandScript(absolute, args, [displayPath, ...args]);
+  }
+
+  return { tool: absolute, args, commandParts: [displayPath, ...args] };
+}
+
+async function resolveExecutable(command, cwd, args) {
+  const raw = String(command || '').trim();
+  if (!raw) {
+    throw new Error('command is required');
+  }
+  if (/[\0\r\n]/.test(raw)) {
+    throw new Error('command contains invalid control characters');
+  }
+
+  const isPathCommand = raw.startsWith('.') || raw.includes('/') || raw.includes('\\') || path.isAbsolute(raw);
+  if (!isPathCommand) {
+    assertAllowedProgram(raw);
+    assertNoInlineShell(raw, args);
+    const resolvedProgram = await findProgramOnPath(raw);
+    if (resolvedProgram) {
+      return resolveExecutableFile(resolvedProgram, args, raw);
+    }
+    return { tool: raw, args, commandParts: [raw, ...args] };
+  }
+
+  const absolute = path.isAbsolute(raw) ? path.resolve(raw) : path.resolve(cwd, raw);
+  if (!isInsidePath(sdkRoot, absolute)) {
+    throw new Error('executable path must stay under SDK root');
+  }
+
+  return resolveExecutableFile(absolute, args);
+}
+
+function publicExecutionConfig() {
+  return {
+    enabled: config.execution?.enabled !== false,
+    defaultCwd: config.execution?.defaultCwd || '.',
+    timeoutMs: Number(config.execution?.timeoutMs || 30000),
+    maxTimeoutMs: Number(config.execution?.maxTimeoutMs || 300000),
+    maxOutputBytes: Number(config.execution?.maxOutputBytes || 200000),
+    allowedPrograms: Array.isArray(config.execution?.allowedPrograms) ? config.execution.allowedPrograms : []
+  };
+}
+
+async function handleExec(req, res) {
+  if (config.execution?.enabled === false) {
+    sendError(res, 403, 'agent execution is disabled');
+    return;
+  }
+
+  const body = await readJson(req);
+  try {
+    const cwd = safeWorkspacePath(body.cwd || config.execution?.defaultCwd || '.');
+    const args = execArgsFromBody(body);
+    const resolved = await resolveExecutable(body.command || body.file, cwd, args);
+    const timeoutMs = execTimeoutMs(body.timeoutMs);
+    const result = await runTool(resolved.tool, resolved.args, cwd, timeoutMs, {
+      maxOutputBytes: Number(config.execution?.maxOutputBytes || 200000),
+      okOnTimeout: false,
+      spawnOptions: resolved.spawnOptions
+    });
+    const relativeCwd = path.relative(sdkRoot, cwd) || '.';
+    sendJson(res, 200, {
+      ok: result.ok,
+      tool: 'exec',
+      cwd: relativeCwd,
+      command: formatCommand(resolved.commandParts),
+      timeoutMs,
+      result
+    });
+  } catch (error) {
+    sendError(res, 400, error.message);
+  }
 }
 
 async function handleTool(req, res, kind) {
@@ -359,7 +731,9 @@ async function handleTool(req, res, kind) {
   }
 
   const timeoutMs = kind === 'monitor' ? Number(body.timeoutMs || 15000) : 0;
-  const result = await runTool('bash', args, sdkRoot, timeoutMs);
+  const result = await runTool('bash', args, sdkRoot, timeoutMs, {
+    okOnTimeout: kind === 'monitor'
+  });
   sendJson(res, 200, {
     ok: result.ok,
     tool: kind,
@@ -377,6 +751,7 @@ async function handleApi(req, res, pathname) {
         sdkRoot,
         agentRoot,
         providers: listProviderTemplates(config),
+        execution: publicExecutionConfig(),
         physical: getPhysicalStatus()
       });
       return;
@@ -437,6 +812,11 @@ async function handleApi(req, res, pathname) {
 
     if (req.method === 'POST' && pathname === '/api/tools/monitor') {
       await handleTool(req, res, 'monitor');
+      return;
+    }
+
+    if (req.method === 'POST' && pathname === '/api/tools/exec') {
+      await handleExec(req, res);
       return;
     }
 
