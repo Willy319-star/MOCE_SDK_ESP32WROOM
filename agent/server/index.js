@@ -39,6 +39,8 @@ const contentTypes = {
 };
 
 let sdkSummaryCache = null;
+let globalPromptCache = null;
+const promptRoot = path.join(sdkRoot, 'prompt');
 
 function sendJson(res, status, payload) {
   const body = JSON.stringify(payload, null, 2);
@@ -122,6 +124,114 @@ function safeWorkspacePath(workspacePath = '.') {
   return absolute;
 }
 
+function isPromptDocument(filePath) {
+  const ext = path.extname(filePath).toLowerCase();
+  return ['.md', '.markdown', '.txt'].includes(ext);
+}
+
+function safePromptPath(promptPath) {
+  if (typeof promptPath !== 'string' || promptPath.trim() === '') {
+    throw new Error('promptPath is required');
+  }
+
+  const normalized = promptPath.replaceAll('\\', '/').replace(/^\/+/, '');
+  const absolute = path.resolve(promptRoot, normalized);
+  if (absolute !== promptRoot && !absolute.startsWith(promptRoot + path.sep)) {
+    throw new Error('promptPath escapes prompt/');
+  }
+  if (!isPromptDocument(absolute)) {
+    throw new Error('promptPath must be a markdown or text file');
+  }
+  return { normalized, absolute };
+}
+
+async function listPromptDocuments() {
+  const files = [];
+  async function walk(current) {
+    let entries = [];
+    try {
+      entries = await fs.readdir(current, { withFileTypes: true });
+    } catch (error) {
+      if (error.code === 'ENOENT') {
+        return;
+      }
+      throw error;
+    }
+
+    for (const entry of entries) {
+      const absolute = path.join(current, entry.name);
+      if (entry.isDirectory()) {
+        await walk(absolute);
+        continue;
+      }
+      if (!entry.isFile() || !isPromptDocument(absolute)) {
+        continue;
+      }
+      const relative = path.relative(promptRoot, absolute).replaceAll('\\', '/');
+      if (relative === 'prompt0.md') {
+        continue;
+      }
+      const stat = await fs.stat(absolute);
+      files.push({
+        path: relative,
+        name: path.basename(relative),
+        directory: path.dirname(relative) === '.' ? '' : path.dirname(relative),
+        size: stat.size,
+        updatedAt: stat.mtime.toISOString()
+      });
+    }
+  }
+
+  await walk(promptRoot);
+  return files.sort((a, b) => a.path.localeCompare(b.path));
+}
+
+async function readPromptDocument(promptPath) {
+  const { normalized, absolute } = safePromptPath(promptPath);
+  const content = await fs.readFile(absolute, 'utf8');
+  return { path: normalized, content };
+}
+
+async function requirementFromBody(body) {
+  const typed = String(body.requirement || '').trim();
+  if (typed || !body.promptPath) {
+    return typed;
+  }
+  return (await readPromptDocument(body.promptPath)).content.trim();
+}
+
+async function getGlobalPrompt() {
+  if (globalPromptCache !== null) {
+    return globalPromptCache;
+  }
+
+  try {
+    globalPromptCache = (await fs.readFile(path.join(promptRoot, 'prompt0.md'), 'utf8')).trim();
+  } catch (error) {
+    if (error.code !== 'ENOENT') {
+      throw error;
+    }
+    globalPromptCache = '';
+  }
+  return globalPromptCache;
+}
+
+function applyGlobalPrompt(messages, globalPrompt) {
+  if (!globalPrompt) {
+    return messages;
+  }
+  return [
+    {
+      role: 'system',
+      content: [
+        '以下是 ./prompt/prompt0.md 中的全局开发约束，所有规划、问答和代码生成都必须默认遵守，用户无需主动选择：',
+        globalPrompt
+      ].join('\n\n')
+    },
+    ...messages
+  ];
+}
+
 async function getSdkSummary() {
   if (!sdkSummaryCache) {
     sdkSummaryCache = await scanSdk(sdkRoot);
@@ -162,20 +272,22 @@ async function serveStatic(req, res, pathname) {
 
 async function handlePlan(req, res) {
   const body = await readJson(req);
+  const requirement = await requirementFromBody(body);
   const sdkSummary = await getSdkSummary();
   const prompt = buildPlanningPrompt({
-      requirement: body.requirement || '',
+      requirement,
       sdkSummary,
       skillFocus: body.skillFocus || 'skillset-1',
       boardName: body.board || body.boardName || 'my_board_esp32s3'
     });
+  const messages = applyGlobalPrompt(prompt.messages, await getGlobalPrompt());
 
   if (body.useLlm) {
     try {
       const text = await callLlm({
         config,
         providerRequest: body.provider || {},
-        messages: prompt.messages,
+        messages,
         temperature: body.temperature ?? 0.2
       });
       sendJson(res, 200, {
@@ -186,7 +298,7 @@ async function handlePlan(req, res) {
       });
       return;
     } catch (error) {
-      const fallback = fallbackPlanning(body.requirement || '', sdkSummary);
+      const fallback = fallbackPlanning(requirement, sdkSummary);
       sendJson(res, 200, {
         ok: true,
         mode: 'fallback',
@@ -201,27 +313,29 @@ async function handlePlan(req, res) {
   sendJson(res, 200, {
     ok: true,
     mode: 'fallback',
-    result: fallbackPlanning(body.requirement || '', sdkSummary),
+    result: fallbackPlanning(requirement, sdkSummary),
     sdkSummary
   });
 }
 
 async function handleChat(req, res) {
   const body = await readJson(req);
+  const requirement = await requirementFromBody(body);
   const sdkSummary = await getSdkSummary();
   const prompt = buildChatPrompt({
     question: body.question || '',
-    requirement: body.requirement || '',
+    requirement,
     currentPlan: body.currentPlan || '',
     sdkSummary
   });
+  const messages = applyGlobalPrompt(prompt.messages, await getGlobalPrompt());
 
   if (body.useLlm) {
     try {
       const text = await callLlm({
         config,
         providerRequest: body.provider || {},
-        messages: prompt.messages,
+        messages,
         temperature: body.temperature ?? 0.2
       });
       sendJson(res, 200, {
@@ -250,23 +364,25 @@ async function handleChat(req, res) {
 
 async function handleCodegen(req, res) {
   const body = await readJson(req);
+  const requirement = await requirementFromBody(body);
   const sdkSummary = await getSdkSummary();
   const prompt = buildCodegenPrompt({
-    requirement: body.requirement || '',
+    requirement,
     projectName: body.projectName || '',
     plan: body.plan || '',
     sdkSummary
   });
+  const messages = applyGlobalPrompt(prompt.messages, await getGlobalPrompt());
 
   if (body.useLlm) {
     try {
       const text = await callLlm({
         config,
         providerRequest: body.provider || {},
-        messages: prompt.messages,
+        messages,
         temperature: body.temperature ?? 0.15
       });
-      const fallback = fallbackCodegen(body.requirement || '', body.projectName || '', sdkSummary);
+      const fallback = fallbackCodegen(requirement, body.projectName || '', sdkSummary);
       const parsedFiles = parseGeneratedFiles(text);
       const validation = validateGeneratedFiles(parsedFiles);
       const useParsedFiles = parsedFiles.length > 0 && validation.errors.length === 0;
@@ -285,7 +401,7 @@ async function handleCodegen(req, res) {
       });
       return;
     } catch (error) {
-      const fallback = fallbackCodegen(body.requirement || '', body.projectName || '', sdkSummary);
+      const fallback = fallbackCodegen(requirement, body.projectName || '', sdkSummary);
       sendJson(res, 200, {
         ok: true,
         mode: 'fallback',
@@ -300,8 +416,8 @@ async function handleCodegen(req, res) {
   sendJson(res, 200, {
     ok: true,
     mode: 'fallback',
-    validation: validateGeneratedFiles(fallbackCodegen(body.requirement || '', body.projectName || '', sdkSummary).files),
-    ...fallbackCodegen(body.requirement || '', body.projectName || '', sdkSummary)
+    validation: validateGeneratedFiles(fallbackCodegen(requirement, body.projectName || '', sdkSummary).files),
+    ...fallbackCodegen(requirement, body.projectName || '', sdkSummary)
   });
 }
 
@@ -759,6 +875,17 @@ async function handleApi(req, res, pathname) {
 
     if (req.method === 'GET' && pathname === '/api/sdk/summary') {
       sendJson(res, 200, { ok: true, summary: await getSdkSummary() });
+      return;
+    }
+
+    if (req.method === 'GET' && pathname === '/api/prompts') {
+      sendJson(res, 200, { ok: true, prompts: await listPromptDocuments() });
+      return;
+    }
+
+    if (req.method === 'POST' && pathname === '/api/prompts/read') {
+      const body = await readJson(req);
+      sendJson(res, 200, { ok: true, prompt: await readPromptDocument(body.promptPath) });
       return;
     }
 

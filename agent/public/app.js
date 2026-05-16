@@ -6,7 +6,8 @@ const state = {
   validation: null,
   selectedFilePath: '',
   currentSessionId: null,
-  activity: []
+  activity: [],
+  prompts: []
 };
 
 const steps = [
@@ -39,7 +40,137 @@ function escapeHtml(value) {
   return String(value || '')
     .replace(/&/g, '&amp;')
     .replace(/</g, '&lt;')
-    .replace(/>/g, '&gt;');
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;');
+}
+
+function escapeAttr(value) {
+  return escapeHtml(value);
+}
+
+function renderInlineMarkdown(value) {
+  return escapeHtml(value)
+    .replace(/`([^`]+)`/g, '<code>$1</code>')
+    .replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>')
+    .replace(/__([^_]+)__/g, '<strong>$1</strong>')
+    .replace(/\*([^*\n]+)\*/g, '<em>$1</em>')
+    .replace(/_([^_\n]+)_/g, '<em>$1</em>')
+    .replace(/\[([^\]]+)\]\((https?:\/\/[^)\s]+)\)/g, '<a href="$2" target="_blank" rel="noreferrer">$1</a>');
+}
+
+function isMarkdownTableStart(lines, index) {
+  return index + 1 < lines.length
+    && lines[index].includes('|')
+    && /^\s*\|?\s*:?-{3,}/.test(lines[index + 1]);
+}
+
+function renderMarkdownTable(tableLines) {
+  const rows = tableLines
+    .filter((line, index) => index !== 1)
+    .map((line) => line.trim().replace(/^\|/, '').replace(/\|$/, '').split('|').map((cell) => cell.trim()));
+  if (rows.length === 0) return '';
+  const head = rows[0];
+  const body = rows.slice(1);
+  return `
+    <table>
+      <thead><tr>${head.map((cell) => `<th>${renderInlineMarkdown(cell)}</th>`).join('')}</tr></thead>
+      <tbody>${body.map((row) => `<tr>${row.map((cell) => `<td>${renderInlineMarkdown(cell)}</td>`).join('')}</tr>`).join('')}</tbody>
+    </table>
+  `;
+}
+
+function markdownToHtml(markdown) {
+  const lines = String(markdown || '').replace(/\r\n/g, '\n').split('\n');
+  const html = [];
+  let index = 0;
+
+  function isBlockStart(line, cursor) {
+    return !line.trim()
+      || /^#{1,6}\s+/.test(line)
+      || /^```/.test(line)
+      || /^>\s?/.test(line)
+      || /^\s*[-*+]\s+/.test(line)
+      || /^\s*\d+\.\s+/.test(line)
+      || isMarkdownTableStart(lines, cursor);
+  }
+
+  while (index < lines.length) {
+    const line = lines[index];
+    if (!line.trim()) {
+      index += 1;
+      continue;
+    }
+
+    const fence = line.match(/^```\s*([A-Za-z0-9_-]*)\s*$/);
+    if (fence) {
+      const language = fence[1] || 'text';
+      const codeLines = [];
+      index += 1;
+      while (index < lines.length && !/^```\s*$/.test(lines[index])) {
+        codeLines.push(lines[index]);
+        index += 1;
+      }
+      if (index < lines.length) index += 1;
+      html.push(`<pre class="code-block language-${escapeAttr(language)}"><code>${escapeHtml(codeLines.join('\n'))}</code></pre>`);
+      continue;
+    }
+
+    if (isMarkdownTableStart(lines, index)) {
+      const tableLines = [lines[index], lines[index + 1]];
+      index += 2;
+      while (index < lines.length && lines[index].includes('|')) {
+        tableLines.push(lines[index]);
+        index += 1;
+      }
+      html.push(renderMarkdownTable(tableLines));
+      continue;
+    }
+
+    const heading = line.match(/^(#{1,6})\s+(.+)$/);
+    if (heading) {
+      const level = Math.min(heading[1].length, 6);
+      html.push(`<h${level}>${renderInlineMarkdown(heading[2].trim())}</h${level}>`);
+      index += 1;
+      continue;
+    }
+
+    if (/^>\s?/.test(line)) {
+      const quoteLines = [];
+      while (index < lines.length && /^>\s?/.test(lines[index])) {
+        quoteLines.push(lines[index].replace(/^>\s?/, ''));
+        index += 1;
+      }
+      html.push(`<blockquote>${markdownToHtml(quoteLines.join('\n'))}</blockquote>`);
+      continue;
+    }
+
+    const unordered = line.match(/^\s*[-*+]\s+(.+)$/);
+    const ordered = line.match(/^\s*\d+\.\s+(.+)$/);
+    if (unordered || ordered) {
+      const tag = unordered ? 'ul' : 'ol';
+      const items = [];
+      const itemPattern = unordered ? /^\s*[-*+]\s+(.+)$/ : /^\s*\d+\.\s+(.+)$/;
+      while (index < lines.length) {
+        const item = lines[index].match(itemPattern);
+        if (!item) break;
+        items.push(`<li>${renderInlineMarkdown(item[1].trim())}</li>`);
+        index += 1;
+      }
+      html.push(`<${tag}>${items.join('')}</${tag}>`);
+      continue;
+    }
+
+    const paragraph = [line.trim()];
+    index += 1;
+    while (index < lines.length && !isBlockStart(lines[index], index)) {
+      paragraph.push(lines[index].trim());
+      index += 1;
+    }
+    html.push(`<p>${renderInlineMarkdown(paragraph.join(' '))}</p>`);
+  }
+
+  return html.join('');
 }
 
 function setStatus(text, kind = '') {
@@ -90,6 +221,7 @@ function providerRequest() {
 function currentPayload() {
   return {
     requirement: $('#requirement').value.trim(),
+    promptPath: $('#promptPath')?.value || '',
     projectName: $('#projectName').value.trim(),
     target: $('#targetName').value.trim(),
     board: $('#boardName').value.trim(),
@@ -130,6 +262,28 @@ function renderProviders() {
     $('#baseUrl').value = preferred.baseUrl || '';
     updateModelChip();
   }
+}
+
+function renderPromptOptions() {
+  const select = $('#promptPath');
+  if (!select) return;
+
+  if (state.prompts.length === 0) {
+    select.innerHTML = '<option value="">prompt/ 中暂无需求文档</option>';
+    $('#loadPromptBtn').disabled = true;
+    $('#promptStatus').textContent = 'prompt0 默认生效';
+    return;
+  }
+
+  select.innerHTML = [
+    '<option value="">手动输入</option>',
+    ...state.prompts.map((prompt) => {
+      const label = prompt.directory ? `${prompt.directory}/${prompt.name}` : prompt.name;
+      return `<option value="${escapeAttr(prompt.path)}">${escapeHtml(label)}</option>`;
+    })
+  ].join('');
+  $('#loadPromptBtn').disabled = false;
+  $('#promptStatus').textContent = `${state.prompts.length} docs, prompt0 默认生效`;
 }
 
 function updateModelChip() {
@@ -194,7 +348,8 @@ function parsePlanSections(markdown) {
 
 function renderPlan() {
   const planText = state.plan || '';
-  $('#planOutput').textContent = planText || '等待生成规划。';
+  $('#planOutput').className = planText ? 'markdown-body' : 'markdown-body empty';
+  $('#planOutput').innerHTML = planText ? markdownToHtml(planText) : '等待生成规划。';
   $('#planMeta').textContent = planText ? `${planText.length} chars` : 'Markdown';
   $('#planSummary').textContent = planText ? '已生成规划，可查看结构化拆分、框图和资源表。' : '尚未生成规划。';
 
@@ -207,7 +362,7 @@ function renderPlan() {
     $('#planCards').innerHTML = sections.slice(0, 6).map((section) => `
       <article class="plan-card">
         <h4>${escapeHtml(section.title)}</h4>
-        <pre>${escapeHtml(section.body.slice(0, 1400))}</pre>
+        <div class="markdown-body compact">${markdownToHtml(section.body.slice(0, 1400))}</div>
       </article>
     `).join('');
   }
@@ -437,8 +592,30 @@ async function scanSdk(refresh = false) {
   logActivity(`SDK scanned: ${state.sdk.components.length} components`, 'ok');
 }
 
+async function loadPromptDocuments() {
+  const data = await api('/api/prompts');
+  state.prompts = data.prompts || [];
+  renderPromptOptions();
+  logActivity(`Prompt docs scanned: ${state.prompts.length}`, state.prompts.length ? 'ok' : 'warn');
+}
+
+async function loadSelectedPrompt() {
+  const promptPath = $('#promptPath').value;
+  if (!promptPath) return;
+  $('#promptStatus').textContent = '读取中...';
+  const data = await api('/api/prompts/read', {
+    method: 'POST',
+    body: { promptPath }
+  });
+  $('#requirement').value = data.prompt.content || '';
+  $('#promptStatus').textContent = data.prompt.path;
+  renderHardwareCoverage();
+  logActivity(`Loaded prompt/${data.prompt.path}`, 'ok');
+}
+
 async function generatePlan() {
   const payload = currentPayload();
+  $('#planOutput').className = 'markdown-body empty';
   $('#planOutput').textContent = '正在生成规划...';
   switchTab('overview');
   logActivity('Generating planning artifacts...', 'warn');
@@ -555,7 +732,7 @@ async function askQuestion() {
       currentPlan: state.plan
     }
   });
-  log.insertAdjacentHTML('beforeend', `<div class="message"><strong>Agent</strong><pre>${escapeHtml(data.answer)}</pre></div>`);
+  log.insertAdjacentHTML('beforeend', `<div class="message"><strong>Agent</strong><div class="markdown-body compact">${markdownToHtml(data.answer)}</div></div>`);
   log.scrollTop = log.scrollHeight;
   logActivity('Q&A answered', data.warning ? 'warn' : 'ok');
 }
@@ -590,6 +767,11 @@ function bindEvents() {
   $('#modelName').addEventListener('input', updateModelChip);
   $('#useLlm').addEventListener('change', updateModelChip);
   $('#requirement').addEventListener('input', renderHardwareCoverage);
+  $('#loadPromptBtn').addEventListener('click', () => loadSelectedPrompt().catch(showError));
+  $('#promptPath').addEventListener('change', () => {
+    const selected = $('#promptPath').value;
+    $('#promptStatus').textContent = selected || 'manual';
+  });
   $('#fileTree').addEventListener('click', (event) => {
     const button = event.target.closest('.file-item');
     if (!button) return;
@@ -626,6 +808,7 @@ async function boot() {
   renderFiles();
   bindEvents();
   await loadHealth();
+  await loadPromptDocuments();
   await scanSdk();
 }
 

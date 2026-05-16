@@ -69,8 +69,18 @@
           <div class="section-title">
             <div>
               <h3>产品需求</h3>
-              <p>描述产品形态、硬件模块、交互、测试和量产约束。</p>
+              <p>手动描述产品形态，或从 prompt/ 读取开发需求；prompt0.md 默认全局生效。</p>
             </div>
+          </div>
+          <div class="prompt-source">
+            <label>
+              需求文档
+              <select id="promptPath">
+                <option value="">扫描 prompt/ 中...</option>
+              </select>
+            </label>
+            <button id="loadPromptBtn" type="button">读取文档</button>
+            <span id="promptStatus">prompt/</span>
           </div>
           <textarea id="requirement" spellcheck="false" placeholder="例如：做一个 ESP32-S3 桌面避障小车，支持 VL53L0X ToF 测距、两个舵机、OLED 显示状态、按键切换模式，并通过 WiFi 接入上位机测试。"></textarea>
           <div class="action-row">
@@ -131,7 +141,7 @@
               <h3>规划文档</h3>
               <span id="planMeta">Markdown</span>
             </div>
-            <pre id="planOutput">等待生成规划。</pre>
+            <div id="planOutput" class="markdown-body empty">等待生成规划。</div>
           </section>
         </section>
 

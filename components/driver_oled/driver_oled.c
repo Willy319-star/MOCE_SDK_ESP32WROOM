@@ -97,6 +97,9 @@ static driver_oled_config_t oled_profile_config(driver_oled_profile_t profile)
     if (profile == DRIVER_OLED_PROFILE_13_SH1106) {
         config.controller = DRIVER_OLED_CONTROLLER_SH1106;
         config.contrast = 0x80;
+    } else if (profile == DRIVER_OLED_PROFILE_242_SSD1309) {
+        config.controller = DRIVER_OLED_CONTROLLER_SSD1309;
+        config.contrast = 0x7F;
     }
 
     return config;
@@ -104,31 +107,49 @@ static driver_oled_config_t oled_profile_config(driver_oled_profile_t profile)
 
 static esp_err_t oled_init_controller(void)
 {
-    const uint8_t common_init[] = {
+    const uint8_t base_init[] = {
         0xae,
         0xd5, 0x80,
         0xa8, 0x3f,
         0xd3, 0x00,
         0x40,
         0x8d, 0x14,
-        0xda, 0x12,
-        0x81, s_config.contrast,
-        0xd9, 0xf1,
-        0xdb, 0x40,
         0xa4,
         0xa6,
-        0xaf,
-    };
-    const uint8_t ssd1306_mode[] = {
-        0x20, 0x02,
-        0x21, 0x00, 0x7f,
-        0x22, 0x00, 0x07,
     };
 
-    ESP_RETURN_ON_ERROR(oled_write_cmds(common_init, sizeof(common_init)), TAG, "common init failed");
+    ESP_RETURN_ON_ERROR(oled_write_cmds(base_init, sizeof(base_init)), TAG, "base init failed");
 
-    if (s_config.controller == DRIVER_OLED_CONTROLLER_SSD1306) {
-        ESP_RETURN_ON_ERROR(oled_write_cmds(ssd1306_mode, sizeof(ssd1306_mode)), TAG, "ssd1306 mode failed");
+    if (s_config.controller == DRIVER_OLED_CONTROLLER_SSD1309) {
+        const uint8_t ssd1309_init[] = {
+            0xda, 0x02,     // sequential COM pins
+            0x81, s_config.contrast,
+            0xd9, 0x22,     // pre-charge
+            0xdb, 0x30,     // VCOMH deselect
+            0x20, 0x00,     // horizontal addressing
+            0x21, 0x00, 0x7f,
+            0x22, 0x00, 0x07,
+            0xaf,           // display ON
+        };
+        ESP_RETURN_ON_ERROR(oled_write_cmds(ssd1309_init, sizeof(ssd1309_init)), TAG, "ssd1309 init failed");
+    } else {
+        const uint8_t ssd1306_init[] = {
+            0xda, 0x12,     // alternative COM pins
+            0x81, s_config.contrast,
+            0xd9, 0xf1,     // pre-charge
+            0xdb, 0x40,     // VCOMH deselect
+            0xaf,           // display ON
+        };
+        ESP_RETURN_ON_ERROR(oled_write_cmds(ssd1306_init, sizeof(ssd1306_init)), TAG, "controller init failed");
+
+        if (s_config.controller == DRIVER_OLED_CONTROLLER_SSD1306) {
+            const uint8_t ssd1306_mode[] = {
+                0x20, 0x02,
+                0x21, 0x00, 0x7f,
+                0x22, 0x00, 0x07,
+            };
+            ESP_RETURN_ON_ERROR(oled_write_cmds(ssd1306_mode, sizeof(ssd1306_mode)), TAG, "ssd1306 mode failed");
+        }
     }
 
     ESP_RETURN_ON_ERROR(oled_write_cmd(s_config.flip_x ? 0xa0 : 0xa1), TAG, "set segment remap failed");
@@ -167,14 +188,16 @@ esp_err_t driver_oled_init(const driver_oled_config_t *config)
     ESP_RETURN_ON_ERROR(driver_oled_flush(), TAG, "clear oled failed");
 
     ESP_LOGI(TAG, "OLED initialized: %s, addr 0x%02x",
-             s_config.controller == DRIVER_OLED_CONTROLLER_SH1106 ? "SH1106 1.3" : "SSD1306 0.96",
+             s_config.controller == DRIVER_OLED_CONTROLLER_SH1106 ? "SH1106 1.3\"" :
+             s_config.controller == DRIVER_OLED_CONTROLLER_SSD1309 ? "SSD1309 2.42\"" :
+             "SSD1306 0.96\"",
              s_config.i2c_address);
     return ESP_OK;
 }
 
 esp_err_t driver_oled_init_profile(driver_oled_profile_t profile)
 {
-    if (profile != DRIVER_OLED_PROFILE_096_SSD1306 && profile != DRIVER_OLED_PROFILE_13_SH1106) {
+    if (profile != DRIVER_OLED_PROFILE_096_SSD1306 && profile != DRIVER_OLED_PROFILE_13_SH1106 && profile != DRIVER_OLED_PROFILE_242_SSD1309) {
         return ESP_ERR_INVALID_ARG;
     }
 
@@ -335,7 +358,8 @@ esp_err_t driver_oled_flush(void)
     }
 
     for (uint8_t page = 0; page < OLED_PAGES; page++) {
-        uint8_t column_offset = s_config.controller == DRIVER_OLED_CONTROLLER_SH1106 ? OLED_SH1106_COLUMN_OFFSET : 0;
+        uint8_t column_offset = (s_config.controller == DRIVER_OLED_CONTROLLER_SH1106 ||
+                                 s_config.controller == DRIVER_OLED_CONTROLLER_SSD1309) ? OLED_SH1106_COLUMN_OFFSET : 0;
         uint8_t page_cmds[] = {
             (uint8_t)(0xb0 | page),
             (uint8_t)(0x00 | (column_offset & 0x0f)),

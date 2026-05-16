@@ -52,6 +52,8 @@
 #define BOARD_SERVO_MAX_ANGLE_DEG    180
 
 /* I2C master bus for displays, IMUs, and other sensors */
+#define BOARD_OLED_I2C_ADDRESS                0x3C
+
 #define BOARD_I2C_PORT                       I2C_NUM_0
 #define BOARD_I2C_SDA_GPIO                   47
 #define BOARD_I2C_SCL_GPIO                   21
@@ -70,3 +72,42 @@
 #define BOARD_UART_RX_BUFFER_SIZE            256
 #define BOARD_UART_TX_BUFFER_SIZE            0
 #define BOARD_UART_EVENT_QUEUE_SIZE          0
+
+
+/* =========================
+ * TB6612 Motor Driver
+ * ========================= */
+
+/* Left motor */
+#define BOARD_MOTOR_LEFT_PWM_GPIO        40
+#define BOARD_MOTOR_LEFT_IN1_GPIO        41
+#define BOARD_MOTOR_LEFT_IN2_GPIO        42
+
+/* Right motor */
+#define BOARD_MOTOR_RIGHT_PWM_GPIO       45
+#define BOARD_MOTOR_RIGHT_IN1_GPIO       46
+#define BOARD_MOTOR_RIGHT_IN2_GPIO       48
+
+
+/* Motor PWM */
+#define BOARD_MOTOR_PWM_MODE             LEDC_LOW_SPEED_MODE
+#define BOARD_MOTOR_PWM_TIMER            LEDC_TIMER_2
+
+#define BOARD_MOTOR_LEFT_PWM_CHANNEL     LEDC_CHANNEL_3
+#define BOARD_MOTOR_RIGHT_PWM_CHANNEL    LEDC_CHANNEL_4
+
+#define BOARD_MOTOR_PWM_DUTY_RES         LEDC_TIMER_10_BIT
+#define BOARD_MOTOR_PWM_FREQUENCY_HZ     20000
+
+
+/* =========================
+ * Encoder
+ * ========================= */
+
+/* Left encoder */
+#define BOARD_ENCODER_LEFT_A_GPIO        35
+#define BOARD_ENCODER_LEFT_B_GPIO        36
+
+/* Right encoder */
+#define BOARD_ENCODER_RIGHT_A_GPIO       37
+#define BOARD_ENCODER_RIGHT_B_GPIO       43

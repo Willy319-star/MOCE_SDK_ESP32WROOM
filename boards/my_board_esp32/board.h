@@ -40,6 +40,8 @@
 #define BOARD_SERVO_MAX_ANGLE_DEG    180
 
 /* I2C master bus for displays, IMUs, and other sensors */
+#define BOARD_OLED_I2C_ADDRESS                0x3C
+
 #define BOARD_I2C_PORT                       I2C_NUM_0
 #define BOARD_I2C_SDA_GPIO                   21
 #define BOARD_I2C_SCL_GPIO                   22

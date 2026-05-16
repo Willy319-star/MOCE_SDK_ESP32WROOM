@@ -17,11 +17,13 @@ extern "C" {
 typedef enum {
     DRIVER_OLED_CONTROLLER_SSD1306 = 0,
     DRIVER_OLED_CONTROLLER_SH1106,
+    DRIVER_OLED_CONTROLLER_SSD1309,
 } driver_oled_controller_t;
 
 typedef enum {
     DRIVER_OLED_PROFILE_096_SSD1306 = 0,
     DRIVER_OLED_PROFILE_13_SH1106,
+    DRIVER_OLED_PROFILE_242_SSD1309,
 } driver_oled_profile_t;
 
 typedef struct {
