@@ -4,7 +4,7 @@ import { promises as fs } from 'node:fs';
 const defaultConfig = {
   host: process.env.MOCE_AGENT_HOST || '127.0.0.1',
   port: Number(process.env.MOCE_AGENT_PORT || 4173),
-  defaultProvider: 'openai',
+  defaultProvider: 'custom',
   execution: {
     enabled: process.env.MOCE_AGENT_EXEC_ENABLED !== '0',
     defaultCwd: process.env.MOCE_AGENT_EXEC_CWD || '.',
@@ -64,9 +64,9 @@ const defaultConfig = {
     },
     custom: {
       kind: 'openai-compatible',
-      baseUrl: process.env.CUSTOM_LLM_BASE_URL || 'http://127.0.0.1:8000/v1',
+      baseUrl: process.env.CUSTOM_LLM_BASE_URL || 'https://api.ofox.ai/v1',
       apiKeyEnv: 'CUSTOM_LLM_API_KEY',
-      model: process.env.CUSTOM_LLM_MODEL || 'local-model'
+      model: process.env.CUSTOM_LLM_MODEL || 'openai/gpt-5.4-mini'
     }
   }
 };

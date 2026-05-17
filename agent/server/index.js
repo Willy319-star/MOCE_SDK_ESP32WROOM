@@ -10,10 +10,16 @@ import { scanSdk } from './lib/sdkScanner.js';
 import {
   buildChatPrompt,
   buildCodegenPrompt,
-  buildPlanningPrompt,
+  buildComponentSelectionPrompt,
+  buildHardwareBuildPrompt,
+  buildHardwareResourcePlanningPrompt,
+  buildRequirementAnalysisPrompt,
   fallbackChat,
   fallbackCodegen,
-  fallbackPlanning,
+  fallbackComponentSelection,
+  fallbackHardwareBuild,
+  fallbackHardwareResourcePlanning,
+  fallbackRequirementAnalysis,
   normalizeAgentText,
   parseGeneratedFiles,
   validateGeneratedFiles
@@ -40,7 +46,12 @@ const contentTypes = {
 
 let sdkSummaryCache = null;
 let globalPromptCache = null;
+const skillCache = new Map();
 const promptRoot = path.join(sdkRoot, 'prompt');
+const skillsRoot = path.join(agentRoot, 'skills');
+const planningSkillFile = 'requirement-analysis-hardware-breakdown.md';
+const componentSelectionSkillFile = 'component-selection.md';
+const hardwareResourcePlanningSkillFile = 'hardware-resource-planning.md';
 
 function sendJson(res, status, payload) {
   const body = JSON.stringify(payload, null, 2);
@@ -232,6 +243,57 @@ function applyGlobalPrompt(messages, globalPrompt) {
   ];
 }
 
+function safeSkillPath(skillFile) {
+  if (typeof skillFile !== 'string' || skillFile.trim() === '') {
+    throw new Error('skill file is required');
+  }
+
+  const normalized = skillFile.replaceAll('\\', '/').replace(/^\/+/, '');
+  const absolute = path.resolve(skillsRoot, normalized);
+  if (absolute !== skillsRoot && !absolute.startsWith(skillsRoot + path.sep)) {
+    throw new Error('skill file escapes agent/skills/');
+  }
+  if (path.extname(absolute).toLowerCase() !== '.md') {
+    throw new Error('skill file must be markdown');
+  }
+  return { normalized, absolute };
+}
+
+async function getSkillText(skillFile) {
+  const { normalized, absolute } = safeSkillPath(skillFile);
+  if (skillCache.has(normalized)) {
+    return skillCache.get(normalized);
+  }
+
+  try {
+    const text = (await fs.readFile(absolute, 'utf8')).trim();
+    skillCache.set(normalized, text);
+    return text;
+  } catch (error) {
+    if (error.code !== 'ENOENT') {
+      throw error;
+    }
+    skillCache.set(normalized, '');
+    return '';
+  }
+}
+
+function applySkillPrompt(messages, skillName, skillText) {
+  if (!skillText) {
+    return messages;
+  }
+  return [
+    {
+      role: 'system',
+      content: [
+        `以下是 agent/skills/${skillName}，本轮必须使用该 skill：`,
+        skillText
+      ].join('\n\n')
+    },
+    ...messages
+  ];
+}
+
 async function getSdkSummary() {
   if (!sdkSummaryCache) {
     sdkSummaryCache = await scanSdk(sdkRoot);
@@ -270,15 +332,17 @@ async function serveStatic(req, res, pathname) {
   }
 }
 
-async function handlePlan(req, res) {
+async function handleHardwareBuild(req, res) {
   const body = await readJson(req);
   const requirement = await requirementFromBody(body);
   const sdkSummary = await getSdkSummary();
-  const prompt = buildPlanningPrompt({
+  const prompt = buildHardwareBuildPrompt({
       requirement,
       sdkSummary,
-      skillFocus: body.skillFocus || 'skillset-1',
-      boardName: body.board || body.boardName || 'my_board_esp32s3'
+      boardName: body.board || body.boardName || 'my_board_esp32s3',
+      analysis: body.analysis || '',
+      componentSelection: body.componentSelection || '',
+      resourcePlan: body.resourcePlan || ''
     });
   const messages = applyGlobalPrompt(prompt.messages, await getGlobalPrompt());
 
@@ -298,7 +362,7 @@ async function handlePlan(req, res) {
       });
       return;
     } catch (error) {
-      const fallback = fallbackPlanning(requirement, sdkSummary);
+      const fallback = fallbackHardwareBuild(requirement, body.analysis || '', body.componentSelection || '', body.resourcePlan || '', sdkSummary);
       sendJson(res, 200, {
         ok: true,
         mode: 'fallback',
@@ -313,7 +377,159 @@ async function handlePlan(req, res) {
   sendJson(res, 200, {
     ok: true,
     mode: 'fallback',
-    result: fallbackPlanning(requirement, sdkSummary),
+    result: fallbackHardwareBuild(requirement, body.analysis || '', body.componentSelection || '', body.resourcePlan || '', sdkSummary),
+    sdkSummary
+  });
+}
+
+async function handleAnalyze(req, res) {
+  const body = await readJson(req);
+  const requirement = await requirementFromBody(body);
+  const sdkSummary = await getSdkSummary();
+  const prompt = buildRequirementAnalysisPrompt({
+    requirement,
+    sdkSummary,
+    boardName: body.board || body.boardName || 'my_board_esp32s3'
+  });
+  const messages = applyGlobalPrompt(
+    applySkillPrompt(prompt.messages, planningSkillFile, await getSkillText(planningSkillFile)),
+    await getGlobalPrompt()
+  );
+
+  if (body.useLlm) {
+    try {
+      const text = await callLlm({
+        config,
+        providerRequest: body.provider || {},
+        messages,
+        temperature: body.temperature ?? 0.15
+      });
+      sendJson(res, 200, {
+        ok: true,
+        mode: 'llm',
+        result: normalizeAgentText(text),
+        sdkSummary
+      });
+      return;
+    } catch (error) {
+      sendJson(res, 200, {
+        ok: true,
+        mode: 'fallback',
+        warning: error.message,
+        result: fallbackRequirementAnalysis(requirement, sdkSummary),
+        sdkSummary
+      });
+      return;
+    }
+  }
+
+  sendJson(res, 200, {
+    ok: true,
+    mode: 'fallback',
+    result: fallbackRequirementAnalysis(requirement, sdkSummary),
+    sdkSummary
+  });
+}
+
+async function handleComponentSelection(req, res) {
+  const body = await readJson(req);
+  const requirement = await requirementFromBody(body);
+  const sdkSummary = await getSdkSummary();
+  const prompt = buildComponentSelectionPrompt({
+    requirement,
+    analysis: body.analysis || '',
+    selectionNotes: body.selectionNotes || '',
+    sdkSummary,
+    boardName: body.board || body.boardName || 'my_board_esp32s3'
+  });
+  const messages = applyGlobalPrompt(
+    applySkillPrompt(prompt.messages, componentSelectionSkillFile, await getSkillText(componentSelectionSkillFile)),
+    await getGlobalPrompt()
+  );
+
+  if (body.useLlm) {
+    try {
+      const text = await callLlm({
+        config,
+        providerRequest: body.provider || {},
+        messages,
+        temperature: body.temperature ?? 0.15
+      });
+      sendJson(res, 200, {
+        ok: true,
+        mode: 'llm',
+        result: normalizeAgentText(text),
+        sdkSummary
+      });
+      return;
+    } catch (error) {
+      sendJson(res, 200, {
+        ok: true,
+        mode: 'fallback',
+        warning: error.message,
+        result: fallbackComponentSelection(requirement, body.analysis || '', body.selectionNotes || '', sdkSummary),
+        sdkSummary
+      });
+      return;
+    }
+  }
+
+  sendJson(res, 200, {
+    ok: true,
+    mode: 'fallback',
+    result: fallbackComponentSelection(requirement, body.analysis || '', body.selectionNotes || '', sdkSummary),
+    sdkSummary
+  });
+}
+
+async function handleHardwareResourcePlanning(req, res) {
+  const body = await readJson(req);
+  const requirement = await requirementFromBody(body);
+  const sdkSummary = await getSdkSummary();
+  const prompt = buildHardwareResourcePlanningPrompt({
+    requirement,
+    analysis: body.analysis || '',
+    componentSelection: body.componentSelection || '',
+    resourceNotes: body.resourceNotes || '',
+    sdkSummary,
+    boardName: body.board || body.boardName || 'my_board_esp32s3'
+  });
+  const messages = applyGlobalPrompt(
+    applySkillPrompt(prompt.messages, hardwareResourcePlanningSkillFile, await getSkillText(hardwareResourcePlanningSkillFile)),
+    await getGlobalPrompt()
+  );
+
+  if (body.useLlm) {
+    try {
+      const text = await callLlm({
+        config,
+        providerRequest: body.provider || {},
+        messages,
+        temperature: body.temperature ?? 0.12
+      });
+      sendJson(res, 200, {
+        ok: true,
+        mode: 'llm',
+        result: normalizeAgentText(text),
+        sdkSummary
+      });
+      return;
+    } catch (error) {
+      sendJson(res, 200, {
+        ok: true,
+        mode: 'fallback',
+        warning: error.message,
+        result: fallbackHardwareResourcePlanning(requirement, body.analysis || '', body.componentSelection || '', body.resourceNotes || '', sdkSummary),
+        sdkSummary
+      });
+      return;
+    }
+  }
+
+  sendJson(res, 200, {
+    ok: true,
+    mode: 'fallback',
+    result: fallbackHardwareResourcePlanning(requirement, body.analysis || '', body.componentSelection || '', body.resourceNotes || '', sdkSummary),
     sdkSummary
   });
 }
@@ -366,13 +582,15 @@ async function handleCodegen(req, res) {
   const body = await readJson(req);
   const requirement = await requirementFromBody(body);
   const sdkSummary = await getSdkSummary();
+  const globalPrompt = await getGlobalPrompt();
   const prompt = buildCodegenPrompt({
     requirement,
     projectName: body.projectName || '',
     plan: body.plan || '',
-    sdkSummary
+    sdkSummary,
+    globalPrompt
   });
-  const messages = applyGlobalPrompt(prompt.messages, await getGlobalPrompt());
+  const messages = applyGlobalPrompt(prompt.messages, globalPrompt);
 
   if (body.useLlm) {
     try {
@@ -433,9 +651,18 @@ async function handleProjectWrite(req, res) {
   try {
     for (const file of files) {
       const { normalized, absolute } = safeOutputFile(file.path);
+      const content = String(file.content ?? '');
       await fs.mkdir(path.dirname(absolute), { recursive: true });
-      await fs.writeFile(absolute, String(file.content ?? ''), 'utf8');
-      written.push(normalized);
+      await fs.writeFile(absolute, content, 'utf8');
+      const stat = await fs.stat(absolute);
+      const saved = await fs.readFile(absolute, 'utf8');
+      if (saved !== content) {
+        throw new Error(`write verification failed: ${normalized}`);
+      }
+      written.push({
+        path: normalized,
+        bytes: stat.size
+      });
     }
   } catch (error) {
     sendError(res, 400, error.message);
@@ -819,8 +1046,9 @@ async function handleExec(req, res) {
     });
     const relativeCwd = path.relative(sdkRoot, cwd) || '.';
     sendJson(res, 200, {
-      ok: result.ok,
+      ok: true,
       tool: 'exec',
+      toolOk: result.ok,
       cwd: relativeCwd,
       command: formatCommand(resolved.commandParts),
       timeoutMs,
@@ -848,11 +1076,13 @@ async function handleTool(req, res, kind) {
 
   const timeoutMs = kind === 'monitor' ? Number(body.timeoutMs || 15000) : 0;
   const result = await runTool('bash', args, sdkRoot, timeoutMs, {
-    okOnTimeout: kind === 'monitor'
+    okOnTimeout: kind === 'monitor',
+    maxOutputBytes: Number(config.execution?.maxOutputBytes || 200000)
   });
   sendJson(res, 200, {
-    ok: result.ok,
+    ok: true,
     tool: kind,
+    toolOk: result.ok,
     command: ['bash', ...args].join(' '),
     result
   });
@@ -907,8 +1137,23 @@ async function handleApi(req, res, pathname) {
       return;
     }
 
-    if (req.method === 'POST' && pathname === '/api/agent/plan') {
-      await handlePlan(req, res);
+    if (req.method === 'POST' && pathname === '/api/agent/hardware-build') {
+      await handleHardwareBuild(req, res);
+      return;
+    }
+
+    if (req.method === 'POST' && pathname === '/api/agent/analyze') {
+      await handleAnalyze(req, res);
+      return;
+    }
+
+    if (req.method === 'POST' && pathname === '/api/agent/component-selection') {
+      await handleComponentSelection(req, res);
+      return;
+    }
+
+    if (req.method === 'POST' && pathname === '/api/agent/hardware-resource-planning') {
+      await handleHardwareResourcePlanning(req, res);
       return;
     }
 

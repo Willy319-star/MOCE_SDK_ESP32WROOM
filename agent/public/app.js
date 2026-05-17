@@ -1,23 +1,40 @@
 const state = {
   health: null,
   sdk: null,
+  analysis: '',
+  analysisAccepted: false,
+  analysisRefinementDirty: false,
+  componentSelection: '',
+  componentSelectionAccepted: false,
+  componentSelectionDirty: false,
+  resourcePlan: '',
+  resourcePlanAccepted: false,
+  resourcePlanDirty: false,
   plan: '',
   files: [],
   validation: null,
   selectedFilePath: '',
   currentSessionId: null,
   activity: [],
-  prompts: []
+  prompts: [],
+  tools: {
+    build: null,
+    flash: null,
+    monitor: null
+  }
 };
 
 const steps = [
   '提出产品需求',
-  '拆解任务',
+  '功能分析',
   '器件选型',
   '硬件资源规划',
   '硬件搭建',
   '嵌入式开发',
-  '测试调试',
+  '测试调试'
+];
+
+const reservedSteps = [
   '接入 physical',
   '结构设计装配',
   '整机联调',
@@ -31,7 +48,7 @@ const hardwareKeywords = [
   ['Servo', /servo|舵机|steer|scan/i],
   ['Button', /button|按键|按钮/i],
   ['WiFi', /wifi|tcp|udp|上位机|host/i],
-  ['LED', /led|灯/i]
+  ['LED', /(^|[^a-z])led([^a-z]|$)|灯/i]
 ];
 
 const $ = (selector) => document.querySelector(selector);
@@ -51,6 +68,8 @@ function escapeAttr(value) {
 
 function renderInlineMarkdown(value) {
   return escapeHtml(value)
+    .replace(/&lt;u&gt;([^<]+)&lt;\/u&gt;/gi, '<u>$1</u>')
+    .replace(/&lt;ins&gt;([^<]+)&lt;\/ins&gt;/gi, '<ins>$1</ins>')
     .replace(/`([^`]+)`/g, '<code>$1</code>')
     .replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>')
     .replace(/__([^_]+)__/g, '<strong>$1</strong>')
@@ -231,10 +250,73 @@ function currentPayload() {
   };
 }
 
+function refinedRequirementText() {
+  const base = $('#requirement').value.trim();
+  const refinement = $('#analysisRefinement')?.value.trim() || '';
+  if (!refinement) {
+    return base;
+  }
+  return [
+    base,
+    '',
+    '【进一步细化需求】',
+    refinement
+  ].filter(Boolean).join('\n');
+}
+
+function updateWorkflowControls() {
+  const analysisReady = state.analysisAccepted && !!state.analysis && !state.analysisRefinementDirty;
+  const selectionReady = state.componentSelectionAccepted && !!state.componentSelection && !state.componentSelectionDirty;
+  const resourceReady = state.resourcePlanAccepted && !!state.resourcePlan && !state.resourcePlanDirty;
+  $('#componentSelectionBtn').disabled = !analysisReady;
+  $('#resourcePlanBtn').disabled = !selectionReady;
+  $('#hardwareBuildBtn').disabled = !resourceReady;
+  $('#codeBtn').disabled = !resourceReady || !state.plan;
+  const decision = $('#analysisDecision');
+  if (decision) {
+    decision.classList.toggle('hidden', !state.analysis || state.analysisAccepted);
+  }
+  const refinement = $('#analysisRefinementPanel');
+  if (refinement) {
+    refinement.classList.toggle('hidden', !state.analysis || state.analysisAccepted);
+  }
+  const selectionDecision = $('#componentSelectionDecision');
+  if (selectionDecision) {
+    selectionDecision.classList.toggle('hidden', !state.componentSelection || state.componentSelectionAccepted);
+  }
+  const selectionRefinement = $('#componentSelectionRefinementPanel');
+  if (selectionRefinement) {
+    selectionRefinement.classList.toggle('hidden', !state.componentSelection || state.componentSelectionAccepted);
+  }
+  const resourceDecision = $('#resourcePlanDecision');
+  if (resourceDecision) {
+    resourceDecision.classList.toggle('hidden', !state.resourcePlan || state.resourcePlanAccepted);
+  }
+  const resourceRefinement = $('#resourcePlanRefinementPanel');
+  if (resourceRefinement) {
+    resourceRefinement.classList.toggle('hidden', !state.resourcePlan || state.resourcePlanAccepted);
+  }
+}
+
+function clearTestTools() {
+  state.tools = {
+    build: null,
+    flash: null,
+    monitor: null
+  };
+}
+
 function renderSteps() {
-  const completed = state.files.length > 0 ? 7 : state.plan ? 4 : 0;
+  let completed = 0;
+  if ($('#requirement')?.value.trim()) completed = 1;
+  if (state.analysisAccepted) completed = 2;
+  if (state.componentSelectionAccepted) completed = 3;
+  if (state.resourcePlanAccepted) completed = 4;
+  if (state.plan) completed = 5;
+  if (state.files.length > 0) completed = 6;
+  if (state.tools.build?.ok && state.tools.flash?.ok && state.tools.monitor?.ok) completed = 7;
   $('#flowSummary').textContent = `${completed} / ${steps.length}`;
-  $('#steps').innerHTML = steps.map((step, index) => {
+  const activeSteps = steps.map((step, index) => {
     const done = index < completed;
     const active = index === completed || (completed === steps.length && index === steps.length - 1);
     const stateText = done ? 'done' : active ? 'now' : 'todo';
@@ -245,7 +327,15 @@ function renderSteps() {
         <em class="step-state">${stateText}</em>
       </div>
     `;
-  }).join('');
+  });
+  const futureSteps = reservedSteps.map((step, index) => `
+    <div class="step reserved">
+      <strong>${steps.length + index + 1}</strong>
+      <span>${step}</span>
+      <em class="step-state">reserved</em>
+    </div>
+  `);
+  $('#steps').innerHTML = [...activeSteps, ...futureSteps].join('');
 }
 
 function renderProviders() {
@@ -324,8 +414,21 @@ function renderSdk() {
 }
 
 function extractMermaid(markdown) {
-  const match = String(markdown || '').match(/```mermaid\s*([\s\S]*?)```/);
-  return match ? match[1].trim() : '';
+  const text = String(markdown || '').replace(/\r\n/g, '\n');
+  const match = text.match(/```\s*mermaid\s*([\s\S]*?)```/i);
+  if (match) return match[1].trim();
+
+  const lines = text.split('\n');
+  const start = lines.findIndex((line) => /^\s*(flowchart|graph)\s+(TB|TD|BT|RL|LR)\b/i.test(line));
+  if (start < 0) return '';
+  const collected = [];
+  for (let index = start; index < lines.length; index += 1) {
+    const line = lines[index];
+    if (index > start && /^#{1,6}\s+/.test(line)) break;
+    if (index > start && line.trim() === '' && collected.length > 1) break;
+    collected.push(line);
+  }
+  return collected.join('\n').trim();
 }
 
 function parsePlanSections(markdown) {
@@ -346,17 +449,34 @@ function parsePlanSections(markdown) {
   }).filter((section) => section.body);
 }
 
+function markdownPreview(markdown, maxLength = 1200) {
+  const text = String(markdown || '').trim();
+  if (!text) return '';
+  if (text.length <= maxLength) return text;
+  const sliced = text.slice(0, maxLength);
+  const lastBreak = Math.max(sliced.lastIndexOf('\n## '), sliced.lastIndexOf('\n\n'));
+  return `${sliced.slice(0, lastBreak > 320 ? lastBreak : maxLength).trim()}\n\n...`;
+}
+
+function updateOutput(target, markdown, emptyText, options = {}) {
+  const element = $(target);
+  if (!element) return;
+  const text = options.preview ? markdownPreview(markdown, options.maxLength) : String(markdown || '');
+  element.className = options.className || (text ? 'markdown-body' : 'markdown-body empty');
+  element.innerHTML = text ? markdownToHtml(text) : emptyText;
+}
+
 function renderPlan() {
   const planText = state.plan || '';
   $('#planOutput').className = planText ? 'markdown-body' : 'markdown-body empty';
-  $('#planOutput').innerHTML = planText ? markdownToHtml(planText) : '等待生成规划。';
+  $('#planOutput').innerHTML = planText ? markdownToHtml(planText) : '等待生成硬件搭建文档。';
   $('#planMeta').textContent = planText ? `${planText.length} chars` : 'Markdown';
-  $('#planSummary').textContent = planText ? '已生成规划，可查看结构化拆分、框图和资源表。' : '尚未生成规划。';
+  $('#planSummary').textContent = planText ? '已生成硬件搭建文档，可查看模块连接框图和接线清单。' : '尚未生成硬件搭建文档。';
 
   const sections = parsePlanSections(planText);
   if (sections.length === 0) {
     $('#planCards').className = 'plan-cards empty';
-    $('#planCards').textContent = '等待生成规划。';
+    $('#planCards').textContent = '等待生成硬件搭建文档。';
   } else {
     $('#planCards').className = 'plan-cards';
     $('#planCards').innerHTML = sections.slice(0, 6).map((section) => `
@@ -369,6 +489,52 @@ function renderPlan() {
 
   renderHardwareCoverage();
   renderSteps();
+  updateWorkflowControls();
+}
+
+function renderAnalysis() {
+  const analysisText = state.analysis || '';
+  updateOutput('#analysisPreview', analysisText, '等待功能分析。', {
+    preview: true,
+    maxLength: 1100,
+    className: analysisText ? 'markdown-body compact-preview' : 'markdown-body compact-preview empty'
+  });
+  updateOutput('#analysisOutput', analysisText, '等待功能分析。', {
+    className: analysisText ? 'markdown-body reading-body' : 'markdown-body reading-body empty'
+  });
+  const meta = analysisText
+    ? state.analysisAccepted ? '已接受' : state.analysisRefinementDirty ? '已补充，待重新分析' : '待确认'
+    : '等待确认';
+  $('#analysisMeta').textContent = meta;
+  $('#analysisFullMeta').textContent = analysisText ? `${analysisText.length} chars / ${meta}` : meta;
+  $('#analysisSummary').textContent = analysisText
+    ? state.analysisAccepted ? '功能分析已接受，可进入器件选型。' : state.analysisRefinementDirty ? '需求已补充，请再次功能分析。' : '功能分析完成，可接受或继续细化需求。'
+    : '尚未进行功能分析。';
+  renderHardwareCoverage();
+  renderSteps();
+  updateWorkflowControls();
+}
+
+function renderComponentSelection() {
+  const selectionText = state.componentSelection || '';
+  updateOutput('#componentSelectionPreview', selectionText, '等待器件选型。', {
+    preview: true,
+    maxLength: 1100,
+    className: selectionText ? 'markdown-body compact-preview' : 'markdown-body compact-preview empty'
+  });
+  updateOutput('#componentSelectionOutput', selectionText, '等待器件选型。', {
+    className: selectionText ? 'markdown-body reading-body' : 'markdown-body reading-body empty'
+  });
+  const meta = selectionText
+    ? state.componentSelectionAccepted ? '已接受' : state.componentSelectionDirty ? '已调整，待再次检索' : '待确认'
+    : '等待确认';
+  $('#componentSelectionMeta').textContent = meta;
+  $('#componentSelectionFullMeta').textContent = selectionText ? `${selectionText.length} chars / ${meta}` : meta;
+  $('#componentSelectionSummary').textContent = selectionText
+    ? state.componentSelectionAccepted ? '器件选型已接受，可进入硬件资源规划。' : state.componentSelectionDirty ? '选型要求已调整，请再次检索。' : '器件选型完成，可接受或继续调整。'
+    : '尚未进行器件选型。';
+  renderSteps();
+  updateWorkflowControls();
 }
 
 function classifyNode(label) {
@@ -390,7 +556,7 @@ function parseMermaidNodes(source) {
 
 function renderDiagram() {
   const diagram = extractMermaid(state.plan);
-  $('#diagramOutput').textContent = diagram || '规划中暂无 Mermaid 框图。';
+  $('#diagramOutput').textContent = diagram || '硬件搭建文档中暂无 Mermaid 框图。';
 
   const nodes = parseMermaidNodes(diagram);
   const html = nodes.length > 0
@@ -469,24 +635,39 @@ function boardResourceRows() {
 }
 
 function renderResources() {
-  const tables = parseMarkdownTables(state.plan);
+  const resourceText = state.resourcePlan || '';
+  updateOutput('#resourcePlanOutput', resourceText, '等待硬件资源规划。', {
+    className: resourceText ? 'markdown-body reading-body' : 'markdown-body reading-body empty'
+  });
+  const resourceMeta = resourceText
+    ? state.resourcePlanAccepted ? '已接受' : state.resourcePlanDirty ? '已调整，待再次规划' : '待确认'
+    : '等待确认';
+  $('#resourceMeta').textContent = resourceText ? `${resourceText.length} chars / ${resourceMeta}` : '来自规划或板级定义';
+  $('#resourcePlanSummary').textContent = resourceText
+    ? state.resourcePlanAccepted ? '硬件资源规划已接受，可进入硬件搭建。' : state.resourcePlanDirty ? '资源要求已调整，请再次规划。' : '硬件资源规划完成，可接受或继续调整。'
+    : '尚未进行硬件资源规划。';
+
+  const tables = parseMarkdownTables(resourceText || state.plan);
   const resourceTable = tables.find((table) => /GPIO|I2C|PWM|UART|接口|引脚|资源|ESP32|Servo|OLED|VL53/i.test(table.join('\n')));
   if (resourceTable) {
-    $('#resourceMeta').textContent = '来自 LLM 规划';
     $('#resourceTable').className = 'resource-table';
     $('#resourceTable').innerHTML = tableToHtml(resourceTable);
   } else if (state.sdk) {
-    $('#resourceMeta').textContent = '来自 boards/ 定义';
+    if (!resourceText) {
+      $('#resourceMeta').textContent = '来自 boards/ 定义';
+    }
     $('#resourceTable').className = 'resource-table';
     $('#resourceTable').innerHTML = boardResourceRows();
   } else {
     $('#resourceTable').className = 'resource-table empty';
     $('#resourceTable').textContent = '等待生成资源表。';
   }
+  renderSteps();
+  updateWorkflowControls();
 }
 
 function renderHardwareCoverage() {
-  const text = `${$('#requirement')?.value || ''}\n${state.plan || ''}`;
+  const text = `${$('#requirement')?.value || ''}\n${$('#analysisRefinement')?.value || ''}\n${$('#componentSelectionNotes')?.value || ''}\n${$('#resourcePlanNotes')?.value || ''}\n${state.analysis || ''}\n${state.componentSelection || ''}\n${state.resourcePlan || ''}\n${state.plan || ''}`;
   const hits = hardwareKeywords.map(([name, pattern]) => ({ name, hit: pattern.test(text) }));
   $('#hardwareCoverage').innerHTML = hits.map((item) => `
     <span class="pill ${item.hit ? '' : 'warn'}">${item.hit ? 'OK' : 'MISS'} ${item.name}</span>
@@ -528,6 +709,7 @@ function renderFiles() {
     $('#monitorBtn').disabled = true;
     renderValidation();
     renderSteps();
+    updateWorkflowControls();
     return;
   }
 
@@ -556,6 +738,7 @@ function renderFiles() {
   $('#selectedFileContent').textContent = selected?.content || '';
   renderValidation();
   renderSteps();
+  updateWorkflowControls();
 }
 
 function switchTab(name) {
@@ -609,19 +792,249 @@ async function loadSelectedPrompt() {
   });
   $('#requirement').value = data.prompt.content || '';
   $('#promptStatus').textContent = data.prompt.path;
+  state.analysis = '';
+  state.analysisRefinementDirty = false;
+  state.componentSelection = '';
+  state.componentSelectionAccepted = false;
+  state.componentSelectionDirty = false;
+  if ($('#analysisRefinement')) {
+    $('#analysisRefinement').value = '';
+  }
+  if ($('#componentSelectionNotes')) {
+    $('#componentSelectionNotes').value = '';
+  }
+  invalidateAnalysis();
   renderHardwareCoverage();
   logActivity(`Loaded prompt/${data.prompt.path}`, 'ok');
 }
 
-async function generatePlan() {
-  const payload = currentPayload();
-  $('#planOutput').className = 'markdown-body empty';
-  $('#planOutput').textContent = '正在生成规划...';
-  switchTab('overview');
-  logActivity('Generating planning artifacts...', 'warn');
-  const data = await api('/api/agent/plan', {
+function invalidateAnalysis() {
+  state.analysisAccepted = false;
+  state.analysisRefinementDirty = false;
+  state.componentSelection = '';
+  state.componentSelectionAccepted = false;
+  state.componentSelectionDirty = false;
+  clearResourcePlan();
+  if ($('#componentSelectionNotes')) {
+    $('#componentSelectionNotes').value = '';
+  }
+  state.plan = '';
+  state.files = [];
+  state.validation = null;
+  clearTestTools();
+  renderAnalysis();
+  renderComponentSelection();
+  renderPlan();
+  renderDiagram();
+  renderResources();
+  renderFiles();
+}
+
+function clearResourcePlan() {
+  state.resourcePlan = '';
+  state.resourcePlanAccepted = false;
+  state.resourcePlanDirty = false;
+  if ($('#resourcePlanNotes')) {
+    $('#resourcePlanNotes').value = '';
+  }
+}
+
+async function generateAnalysis() {
+  const payload = {
+    ...currentPayload(),
+    requirement: refinedRequirementText()
+  };
+  $('#analysisOutput').className = 'markdown-body empty';
+  $('#analysisOutput').textContent = '正在进行功能分析...';
+  state.analysisAccepted = false;
+  state.analysisRefinementDirty = false;
+  switchTab('analysis');
+  logActivity('Analyzing hardware functions...', 'warn');
+  const data = await api('/api/agent/analyze', {
     method: 'POST',
     body: payload
+  });
+  state.analysis = data.warning ? `${data.result}\n\n[Fallback reason] ${data.warning}` : data.result;
+  state.plan = '';
+  state.componentSelection = '';
+  state.componentSelectionAccepted = false;
+  state.componentSelectionDirty = false;
+  clearResourcePlan();
+  if ($('#componentSelectionNotes')) {
+    $('#componentSelectionNotes').value = '';
+  }
+  state.files = [];
+  state.validation = null;
+  clearTestTools();
+  if (data.sdkSummary) {
+    state.sdk = data.sdkSummary;
+    renderSdk();
+  }
+  renderAnalysis();
+  renderComponentSelection();
+  renderPlan();
+  renderDiagram();
+  renderResources();
+  renderFiles();
+  logActivity(data.mode === 'llm' ? 'Function analysis complete' : 'Fallback analysis complete', data.warning ? 'warn' : 'ok');
+}
+
+function acceptAnalysis() {
+  if (!state.analysis) return;
+  if (state.analysisRefinementDirty) {
+    setStatus('需求已补充，请先点击“再次功能分析”。', 'warn');
+    return;
+  }
+  state.analysisAccepted = true;
+  state.componentSelection = '';
+  state.componentSelectionAccepted = false;
+  state.componentSelectionDirty = false;
+  clearResourcePlan();
+  state.plan = '';
+  state.files = [];
+  state.validation = null;
+  clearTestTools();
+  if ($('#componentSelectionNotes')) {
+    $('#componentSelectionNotes').value = '';
+  }
+  renderAnalysis();
+  renderComponentSelection();
+  renderPlan();
+  renderFiles();
+  logActivity('Function analysis accepted', 'ok');
+}
+
+function componentSelectionNotesText() {
+  return $('#componentSelectionNotes')?.value.trim() || '';
+}
+
+async function generateComponentSelection() {
+  if (!state.analysisAccepted) {
+    setStatus('请先完成并接受功能分析。', 'warn');
+    switchTab('overview');
+    return;
+  }
+  const payload = {
+    ...currentPayload(),
+    requirement: refinedRequirementText(),
+    analysis: state.analysis,
+    selectionNotes: componentSelectionNotesText()
+  };
+  $('#componentSelectionOutput').className = 'markdown-body empty';
+  $('#componentSelectionOutput').textContent = '正在检索并生成器件选型...';
+  state.componentSelectionAccepted = false;
+  state.componentSelectionDirty = false;
+  switchTab('selection');
+  logActivity('Selecting components...', 'warn');
+  const data = await api('/api/agent/component-selection', {
+    method: 'POST',
+    body: payload
+  });
+  state.componentSelection = data.warning ? `${data.result}\n\n[Fallback reason] ${data.warning}` : data.result;
+  clearResourcePlan();
+  state.plan = '';
+  state.files = [];
+  state.validation = null;
+  clearTestTools();
+  if (data.sdkSummary) {
+    state.sdk = data.sdkSummary;
+    renderSdk();
+  }
+  renderComponentSelection();
+  renderPlan();
+  renderDiagram();
+  renderResources();
+  renderFiles();
+  logActivity(data.mode === 'llm' ? 'Component selection complete' : 'Fallback component selection complete', data.warning ? 'warn' : 'ok');
+}
+
+function acceptComponentSelection() {
+  if (!state.componentSelection) return;
+  if (state.componentSelectionDirty) {
+    setStatus('选型要求已调整，请先点击“再次检索”。', 'warn');
+    return;
+  }
+  state.componentSelectionAccepted = true;
+  clearResourcePlan();
+  renderComponentSelection();
+  renderResources();
+  logActivity('Component selection accepted', 'ok');
+}
+
+function resourcePlanNotesText() {
+  return $('#resourcePlanNotes')?.value.trim() || '';
+}
+
+async function generateResourcePlan() {
+  if (!state.componentSelectionAccepted) {
+    setStatus('请先完成并接受器件选型。', 'warn');
+    switchTab('overview');
+    return;
+  }
+  const payload = {
+    ...currentPayload(),
+    requirement: refinedRequirementText(),
+    analysis: state.analysis,
+    componentSelection: state.componentSelection,
+    resourceNotes: resourcePlanNotesText()
+  };
+  $('#resourcePlanOutput').className = 'markdown-body reading-body empty';
+  $('#resourcePlanOutput').textContent = '正在进行硬件资源规划...';
+  state.resourcePlanAccepted = false;
+  state.resourcePlanDirty = false;
+  switchTab('resources');
+  logActivity('Planning hardware resources...', 'warn');
+  const data = await api('/api/agent/hardware-resource-planning', {
+    method: 'POST',
+    body: payload
+  });
+  state.resourcePlan = data.warning ? `${data.result}\n\n[Fallback reason] ${data.warning}` : data.result;
+  state.plan = '';
+  state.files = [];
+  state.validation = null;
+  clearTestTools();
+  if (data.sdkSummary) {
+    state.sdk = data.sdkSummary;
+    renderSdk();
+  }
+  renderResources();
+  renderPlan();
+  renderDiagram();
+  renderFiles();
+  logActivity(data.mode === 'llm' ? 'Hardware resource planning complete' : 'Fallback resource planning complete', data.warning ? 'warn' : 'ok');
+}
+
+function acceptResourcePlan() {
+  if (!state.resourcePlan) return;
+  if (state.resourcePlanDirty) {
+    setStatus('资源规划要求已调整，请先点击“再次规划”。', 'warn');
+    return;
+  }
+  state.resourcePlanAccepted = true;
+  renderResources();
+  logActivity('Hardware resource plan accepted', 'ok');
+}
+
+async function generateHardwareBuild() {
+  if (!state.resourcePlanAccepted) {
+    setStatus('请先完成并接受硬件资源规划。', 'warn');
+    switchTab('overview');
+    return;
+  }
+  const payload = currentPayload();
+  $('#planOutput').className = 'markdown-body empty';
+  $('#planOutput').textContent = '正在生成硬件搭建文档...';
+  switchTab('plan');
+  logActivity('Generating hardware build diagram...', 'warn');
+  const data = await api('/api/agent/hardware-build', {
+    method: 'POST',
+    body: {
+      ...payload,
+      requirement: refinedRequirementText(),
+      analysis: state.analysis,
+      componentSelection: state.componentSelection,
+      resourcePlan: state.resourcePlan
+    }
   });
   state.plan = data.warning ? `${data.result}\n\n[Fallback reason] ${data.warning}` : data.result;
   if (data.sdkSummary) {
@@ -631,10 +1044,20 @@ async function generatePlan() {
   renderPlan();
   renderDiagram();
   renderResources();
-  logActivity(data.mode === 'llm' ? 'LLM planning complete' : 'Fallback planning complete', data.warning ? 'warn' : 'ok');
+  logActivity(data.mode === 'llm' ? 'Hardware build complete' : 'Fallback hardware build complete', data.warning ? 'warn' : 'ok');
 }
 
 async function generateCode() {
+  if (!state.resourcePlanAccepted) {
+    setStatus('请先完成并接受硬件资源规划。', 'warn');
+    switchTab('overview');
+    return;
+  }
+  if (!state.plan) {
+    setStatus('请先完成硬件搭建，生成模块连接框图。', 'warn');
+    switchTab('overview');
+    return;
+  }
   const payload = currentPayload();
   $('#codeStatus').textContent = '正在生成固件草稿...';
   switchTab('code');
@@ -643,38 +1066,100 @@ async function generateCode() {
     method: 'POST',
     body: {
       ...payload,
+      requirement: refinedRequirementText(),
+      analysis: state.analysis,
+      componentSelection: state.componentSelection,
+      resourcePlan: state.resourcePlan,
       plan: state.plan
     }
   });
   state.validation = data.validation || null;
   state.files = data.files || [];
   state.selectedFilePath = '';
+  clearTestTools();
   renderFiles();
   logActivity(data.note || 'Code generation complete', state.validation?.ok === false ? 'warn' : 'ok');
 }
 
 async function writeProject() {
   const files = state.files.filter((file) => file.path.startsWith('project/'));
-  const data = await api('/api/project/write', {
-    method: 'POST',
-    body: { files }
-  });
-  $('#codeStatus').textContent = `已写入 ${data.written.length} 个文件`;
-  logActivity(`Wrote ${data.written.length} files to project/`, 'ok');
+  if (files.length === 0) {
+    throw new Error('没有可写入的 project/ 文件，请先生成固件草稿。');
+  }
+  $('#writeBtn').disabled = true;
+  $('#codeStatus').textContent = `正在写入 ${files.length} 个文件...`;
+  try {
+    const data = await api('/api/project/write', {
+      method: 'POST',
+      body: { files }
+    });
+    const written = data.written || [];
+    $('#codeStatus').textContent = `已写入并校验 ${written.length} 个文件`;
+    logActivity(`Wrote and verified ${written.length} files to project/`, 'ok');
+  } finally {
+    renderFiles();
+  }
 }
 
 function renderToolResult(data) {
+  const result = data.result || {};
+  const summary = summarizeToolOutput(result);
   $('#toolOutput').textContent = [
     data.cwd ? `cwd: ${data.cwd}` : '',
     `$ ${data.command}`,
     '',
-    data.result.stdout || '',
-    data.result.stderr || '',
-    data.result.error ? `ERROR: ${data.result.error}` : '',
-    data.result.timedOut ? 'timed out: true' : '',
-    data.result.truncated ? 'output truncated: true' : '',
-    `exit code: ${data.result.code}`
+    summary,
+    result.timedOut ? 'timed out: true' : '',
+    result.truncated ? 'output truncated: true' : '',
+    `exit code: ${result.code}`
   ].filter(Boolean).join('\n');
+}
+
+function summarizeToolOutput(result) {
+  const lines = [
+    ...String(result.stdout || '').split(/\r?\n/),
+    ...String(result.stderr || '').split(/\r?\n/)
+  ];
+  const picked = [];
+  const seen = new Set();
+
+  function push(line) {
+    const text = String(line || '').trimEnd();
+    if (!text.trim() || seen.has(text)) return;
+    seen.add(text);
+    picked.push(text);
+  }
+
+  if (result.error) {
+    push(`ERROR: ${result.error}`);
+  }
+
+  for (let index = 0; index < lines.length; index += 1) {
+    const line = lines[index];
+    const text = line.trim();
+    if (!text) continue;
+
+    if (/Build directory exists but is not a valid CMake build directory|Moving it aside:/.test(text)) {
+      push(text);
+      continue;
+    }
+
+    if (/^(FAILED:|ninja:|CMake Error|error:|fatal error:)/i.test(text) || /\bfatal error:/i.test(text)) {
+      push(text);
+      continue;
+    }
+
+    if (/ninja failed with exit code|output of the command is in/i.test(text)) {
+      push(text);
+    }
+  }
+
+  if (picked.length === 0) {
+    const tail = lines.map((line) => line.trimEnd()).filter((line) => line.trim()).slice(-24);
+    return tail.join('\n') || '工具没有输出。';
+  }
+
+  return picked.slice(0, 80).join('\n');
 }
 
 async function runTool(kind) {
@@ -694,7 +1179,15 @@ async function runTool(kind) {
     }
   });
   renderToolResult(data);
-  logActivity(`${kind} finished with code ${data.result.code}`, data.result.ok ? 'ok' : 'error');
+  const ok = data.result?.ok === true;
+  state.tools[kind] = {
+    ok,
+    code: data.result?.code ?? null,
+    ranAt: new Date().toISOString()
+  };
+  renderSteps();
+  setStatus(`${kind} finished with code ${data.result?.code}`, ok ? 'ok' : 'error');
+  logActivity(`${kind} finished with code ${data.result?.code}`, ok ? 'ok' : 'error');
 }
 
 async function runExec() {
@@ -713,7 +1206,9 @@ async function runExec() {
     }
   });
   renderToolResult(data);
-  logActivity(`exec finished with code ${data.result.code}`, data.result.ok ? 'ok' : 'error');
+  const ok = data.result?.ok === true;
+  setStatus(`exec finished with code ${data.result?.code}`, ok ? 'ok' : 'error');
+  logActivity(`exec finished with code ${data.result?.code}`, ok ? 'ok' : 'error');
 }
 
 async function askQuestion() {
@@ -745,6 +1240,15 @@ async function saveSession() {
       id: state.currentSessionId,
       title,
       requirement: $('#requirement').value,
+      refinement: $('#analysisRefinement')?.value || '',
+      componentSelectionNotes: $('#componentSelectionNotes')?.value || '',
+      resourcePlanNotes: $('#resourcePlanNotes')?.value || '',
+      analysis: state.analysis,
+      analysisAccepted: state.analysisAccepted,
+      componentSelection: state.componentSelection,
+      componentSelectionAccepted: state.componentSelectionAccepted,
+      resourcePlan: state.resourcePlan,
+      resourcePlanAccepted: state.resourcePlanAccepted,
       plan: state.plan,
       files: state.files
     }
@@ -758,6 +1262,9 @@ function bindEvents() {
   document.querySelectorAll('.tab').forEach((tab) => {
     tab.addEventListener('click', () => switchTab(tab.dataset.tab));
   });
+  document.querySelectorAll('[data-jump-tab]').forEach((button) => {
+    button.addEventListener('click', () => switchTab(button.dataset.jumpTab));
+  });
   $('#providerName').addEventListener('change', () => {
     const provider = state.health.providers.find((item) => item.name === $('#providerName').value);
     $('#modelName').value = provider?.name === 'deepseek' ? 'deepseek-reasoner' : (provider?.model || '');
@@ -766,7 +1273,64 @@ function bindEvents() {
   });
   $('#modelName').addEventListener('input', updateModelChip);
   $('#useLlm').addEventListener('change', updateModelChip);
-  $('#requirement').addEventListener('input', renderHardwareCoverage);
+  $('#requirement').addEventListener('input', () => {
+    state.analysis = '';
+    state.analysisRefinementDirty = false;
+    if ($('#analysisRefinement')) {
+      $('#analysisRefinement').value = '';
+    }
+    invalidateAnalysis();
+  });
+  $('#analysisRefinement').addEventListener('input', () => {
+    if (!state.analysis) return;
+    state.analysisAccepted = false;
+    state.analysisRefinementDirty = $('#analysisRefinement').value.trim().length > 0;
+    state.componentSelection = '';
+    state.componentSelectionAccepted = false;
+    state.componentSelectionDirty = false;
+    clearResourcePlan();
+    if ($('#componentSelectionNotes')) {
+      $('#componentSelectionNotes').value = '';
+    }
+    state.plan = '';
+    state.files = [];
+    state.validation = null;
+    clearTestTools();
+    renderAnalysis();
+    renderComponentSelection();
+    renderPlan();
+    renderDiagram();
+    renderResources();
+    renderFiles();
+  });
+  $('#componentSelectionNotes').addEventListener('input', () => {
+    if (!state.componentSelection) return;
+    state.componentSelectionAccepted = false;
+    state.componentSelectionDirty = $('#componentSelectionNotes').value.trim().length > 0;
+    clearResourcePlan();
+    state.plan = '';
+    state.files = [];
+    state.validation = null;
+    clearTestTools();
+    renderComponentSelection();
+    renderPlan();
+    renderDiagram();
+    renderResources();
+    renderFiles();
+  });
+  $('#resourcePlanNotes').addEventListener('input', () => {
+    if (!state.resourcePlan) return;
+    state.resourcePlanAccepted = false;
+    state.resourcePlanDirty = $('#resourcePlanNotes').value.trim().length > 0;
+    state.plan = '';
+    state.files = [];
+    state.validation = null;
+    clearTestTools();
+    renderResources();
+    renderPlan();
+    renderDiagram();
+    renderFiles();
+  });
   $('#loadPromptBtn').addEventListener('click', () => loadSelectedPrompt().catch(showError));
   $('#promptPath').addEventListener('change', () => {
     const selected = $('#promptPath').value;
@@ -779,7 +1343,16 @@ function bindEvents() {
     renderFiles();
   });
   $('#scanBtn').addEventListener('click', () => scanSdk(true).catch(showError));
-  $('#planBtn').addEventListener('click', () => generatePlan().catch(showError));
+  $('#analysisBtn').addEventListener('click', () => generateAnalysis().catch(showError));
+  $('#rerunAnalysisBtn').addEventListener('click', () => generateAnalysis().catch(showError));
+  $('#acceptAnalysisBtn').addEventListener('click', acceptAnalysis);
+  $('#componentSelectionBtn').addEventListener('click', () => generateComponentSelection().catch(showError));
+  $('#rerunComponentSelectionBtn').addEventListener('click', () => generateComponentSelection().catch(showError));
+  $('#acceptComponentSelectionBtn').addEventListener('click', acceptComponentSelection);
+  $('#resourcePlanBtn').addEventListener('click', () => generateResourcePlan().catch(showError));
+  $('#rerunResourcePlanBtn').addEventListener('click', () => generateResourcePlan().catch(showError));
+  $('#acceptResourcePlanBtn').addEventListener('click', acceptResourcePlan);
+  $('#hardwareBuildBtn').addEventListener('click', () => generateHardwareBuild().catch(showError));
   $('#codeBtn').addEventListener('click', () => generateCode().catch(showError));
   $('#writeBtn').addEventListener('click', () => writeProject().catch(showError));
   $('#buildBtn').addEventListener('click', () => runTool('build').catch(showError));
@@ -802,6 +1375,8 @@ function showError(error) {
 async function boot() {
   renderSteps();
   renderSdk();
+  renderAnalysis();
+  renderComponentSelection();
   renderPlan();
   renderDiagram();
   renderResources();

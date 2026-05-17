@@ -1,7 +1,7 @@
 #pragma once
 
-#include "driver/i2c_types.h"
-#include "driver/ledc.h"
+#include "hal/i2c_types.h"
+#include "hal/ledc_types.h"
 
 /*
  * Default ESP32-S3 board profile.

@@ -83,7 +83,7 @@ netstat -ano | findstr :4173
 taskkill /PID <PID> /F
 ```
 
-Agent 默认只会把生成的应用工程写入 `project/` 目录，不会修改 `components/`、`boards/`、`examples/` 等 SDK 目录。大模型 API 可以在 Web 界面中配置；未配置 API Key 时，Agent 会使用本地 fallback 流程生成规划和代码脚手架。
+Agent 默认只会把生成的应用工程写入 `project/` 目录，不会修改 `components/`、`boards/`、`examples/` 等 SDK 目录。大模型 API 可以在 Web 界面中配置；未配置 API Key 时，Agent 会使用本地 fallback 流程生成功能分析、器件选型、硬件资源规划、硬件搭建框图和代码脚手架。
 
 ## 用户工作流
 

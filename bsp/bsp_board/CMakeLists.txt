@@ -10,5 +10,5 @@ endif()
 
 idf_component_register(
     INCLUDE_DIRS "${MOCE_BOARD_DIR}" "include"
-    REQUIRES driver
+    REQUIRES esp_hal_i2c esp_hal_ledc
 )
