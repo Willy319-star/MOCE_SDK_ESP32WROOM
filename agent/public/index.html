@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Moce Hardware Agent</title>
+    <title>MOCE Designer</title>
     <link rel="stylesheet" href="/styles.css" />
   </head>
   <body>
@@ -12,7 +12,7 @@
         <div class="brand">
           <div class="brand-mark">M</div>
           <div>
-            <h1>Moce Agent</h1>
+            <h1>MOCE Designer</h1>
             <p>硬件产品开发工作台</p>
           </div>
         </div>
@@ -292,6 +292,13 @@
                 <span>Build / Flash / Monitor</span>
               </div>
               <pre id="toolOutput">尚未运行工具。</pre>
+              <div class="debug-fix-panel">
+                <div class="card-head">
+                  <h3>Agent 自动修复</h3>
+                  <button id="debugFixBtn" type="button" disabled>自动诊断修复</button>
+                </div>
+                <div id="debugFixOutput" class="validation-list empty">等待 Build / Flash / Monitor 失败输出。</div>
+              </div>
               <div class="exec-panel">
                 <div class="exec-grid">
                   <label>
@@ -352,6 +359,30 @@
             <span id="validationBadge">未生成</span>
           </div>
           <div id="validationPanel" class="validation-list empty">等待代码生成。</div>
+        </section>
+
+        <section class="side-card memory-card">
+          <div class="card-head">
+            <h3>记忆 / 历史</h3>
+            <span id="memoryMeta">未保存</span>
+          </div>
+          <label class="inline memory-toggle">
+            <input id="autosaveToggle" type="checkbox" checked />
+            自动保存
+          </label>
+          <div class="memory-actions">
+            <button id="refreshSessionsBtn" type="button">刷新</button>
+            <button id="deleteSessionBtn" type="button" disabled>删除会话</button>
+            <button id="clearTimelineBtn" type="button" disabled>清空历史</button>
+          </div>
+          <div class="memory-section">
+            <h4>会话</h4>
+            <div id="sessionList" class="memory-list empty">暂无会话。</div>
+          </div>
+          <div class="memory-section">
+            <h4>时间线</h4>
+            <div id="timelineList" class="memory-list empty">暂无历史事件。</div>
+          </div>
         </section>
 
         <section class="side-card chat-card">

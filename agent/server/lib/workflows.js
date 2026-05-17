@@ -21,7 +21,7 @@ function componentNames(sdkSummary) {
 }
 
 function availableApiText(sdkSummary) {
-  return (sdkSummary.components || [])
+  const componentApis = (sdkSummary.components || [])
     .map((component) => {
       const apis = component.api
         .map((api) => {
@@ -37,6 +37,15 @@ function availableApiText(sdkSummary) {
       return `${component.name}\n${apis}`;
     })
     .join('\n\n');
+  const bspHeaders = (sdkSummary.bsp || []).map((name) => `${name}/include/${name}.h`).join('\n');
+  const boardNames = (sdkSummary.boards || []).map((board) => board.name).join(', ') || 'unknown';
+  return [
+    componentApis,
+    'BSP 公共头文件：',
+    'bsp_board/include/board.h',
+    bspHeaders,
+    `可选板卡：${boardNames}`
+  ].filter(Boolean).join('\n\n');
 }
 
 function detectCapabilities(requirement, sdkSummary) {
@@ -412,6 +421,9 @@ export function buildCodegenPrompt({ requirement, projectName, plan, sdkSummary,
           '根 CMakeLists.txt 必须设置 EXTRA_COMPONENT_DIRS 到 ../../bsp 和 ../../components，并 include $ENV{IDF_PATH}/tools/cmake/project.cmake。',
           'main/CMakeLists.txt 必须使用 idf_component_register(SRCS "main.c" REQUIRES ...)，禁止使用 register_component()、COMPONENT_SRCS、COMPONENT_REQUIRES 等旧式写法。',
           '必须严格使用下方提供的 C 函数原型、结构体字段、类型名和枚举名；不要改名，不要臆造 wrapper，不要把 void 返回值当成 esp_err_t。',
+          '只能 #include 下方“可用 API”和“BSP 公共头文件”中真实存在的头文件，或者 ESP-IDF 标准头。板级宏头文件名是 "board.h"，不是 "bsp_board.h"。',
+          '如果 main.c 调用了某个组件函数，必须 #include 对应公共头，并在 project/<name>/main/CMakeLists.txt 的 REQUIRES 中加入对应组件名。',
+          '不要为了使用板级默认引脚而在应用层臆造 BSP 头文件；优先调用 driver_*_init_default() 或已提供的默认配置函数。',
           '输出格式必须严格使用文件块，不要输出解释文字：',
           '===== FILE: project/<name>/CMakeLists.txt =====',
           '<完整文件内容>',
@@ -428,6 +440,47 @@ export function buildCodegenPrompt({ requirement, projectName, plan, sdkSummary,
           `工程名：project/${slugifyProjectName(projectName || 'robot_agent_app')}/`,
           `用户需求：${requirement || '(未填写)'}`,
           `当前硬件搭建文档：${plan || '(暂无)'}`,
+          `可用 API：\n${availableApiText(sdkSummary)}`
+        ].join('\n\n')
+      }
+    ]
+  };
+}
+
+export function buildDebugFixPrompt({ requirement, projectName, plan, sdkSummary, toolContext, projectFiles, globalPrompt = '' }) {
+  const globalConstraint = String(globalPrompt || '').trim();
+  const projectText = (projectFiles || [])
+    .map((file) => `===== CURRENT FILE: ${file.path} =====\n${file.content}`)
+    .join('\n\n');
+  return {
+    messages: [
+      {
+        role: 'system',
+        content: [
+          '你是 Moce SDK 的测试调试自动修复 agent。',
+          sdkBoundary,
+          globalConstraint
+            ? `以下是 ./prompt/prompt0.md，本轮调试修复必须逐条遵守：\n${globalConstraint}`
+            : '本轮调试修复必须遵守 ./prompt/prompt0.md 的全局开发约束。',
+          '目标：根据 Build/Flash/Monitor 的关键错误，最小化修复 project/<name>/ 下的应用工程。',
+          '只允许输出需要更新的 project/ 文件块。不要输出解释文字，不要输出 SDK、BSP、components、boards、tools 下文件。',
+          '优先修改 project/<name>/main/main.c、project/<name>/main/CMakeLists.txt、project/<name>/CMakeLists.txt。',
+          '只能 #include 下方“可用 API”和“BSP 公共头文件”中真实存在的头文件，或者 ESP-IDF 标准头。板级宏头文件名是 "board.h"，不是 "bsp_board.h"。',
+          '如果 main.c 调用了某个组件函数，必须 #include 对应公共头，并在 main/CMakeLists.txt 的 REQUIRES 中加入对应组件名。',
+          '不要为了绕过编译而删除核心需求逻辑；如果必须降级，只做最小可编译降级并保留 TODO 注释。',
+          '输出格式必须严格使用文件块：',
+          '===== FILE: project/<name>/path =====',
+          '<完整文件内容>'
+        ].join('\n')
+      },
+      {
+        role: 'user',
+        content: [
+          `工程名：project/${slugifyProjectName(projectName || 'robot_agent_app')}/`,
+          `用户需求：${requirement || '(未填写)'}`,
+          `当前硬件搭建文档：${plan || '(暂无)'}`,
+          `工具错误上下文：\n${toolContext || '(无)'}`,
+          `当前 project 文件：\n${projectText || '(无)'}`,
           `可用 API：\n${availableApiText(sdkSummary)}`
         ].join('\n\n')
       }
@@ -957,6 +1010,39 @@ export function fallbackCodegen(requirement, projectName, sdkSummary) {
   };
 }
 
+export function fallbackDebugFix(projectFiles) {
+  const files = (projectFiles || []).map((file) => ({ ...file }));
+  const main = files.find((file) => /\/main\/main\.c$/.test(file.path));
+  const mainCmake = files.find((file) => /\/main\/CMakeLists\.txt$/.test(file.path));
+  let changed = false;
+
+  if (main?.content.includes('#include "bsp_board.h"')) {
+    main.content = main.content.replace(/\s*#include\s+"bsp_board\.h"\s*/g, '\n');
+    changed = true;
+  }
+
+  if (main && /\bservice_device_init\s*\(/.test(main.content) && !/#include\s+"service_device\.h"/.test(main.content)) {
+    const includeMatch = [...main.content.matchAll(/^#include\s+"[^"]+"\s*$/gm)].pop();
+    if (includeMatch) {
+      const insertAt = includeMatch.index + includeMatch[0].length;
+      main.content = `${main.content.slice(0, insertAt)}\n#include "service_device.h"${main.content.slice(insertAt)}`;
+    } else {
+      main.content = `#include "service_device.h"\n${main.content}`;
+    }
+    changed = true;
+  }
+
+  if (mainCmake && main && /\bservice_device_init\s*\(/.test(main.content) && !/\bservice_device\b/.test(mainCmake.content)) {
+    mainCmake.content = mainCmake.content.replace(/REQUIRES\s+([^\n)]+)/, (match, deps) => {
+      const parts = deps.trim().split(/\s+/);
+      return `REQUIRES service_device ${parts.join(' ')}`;
+    });
+    changed = true;
+  }
+
+  return changed ? files : [];
+}
+
 export function validateGeneratedFiles(files) {
   const errors = [];
   const warnings = [];
@@ -979,6 +1065,41 @@ export function validateGeneratedFiles(files) {
 
   if (/register_component\s*\(|COMPONENT_SRCS|COMPONENT_REQUIRES|COMPONENT_ADD_INCLUDEDIRS/.test(mainCmake?.content || '')) {
     errors.push('old ESP-IDF component CMake style is not allowed; use idf_component_register');
+  }
+
+  if (/#include\s+"bsp_board\.h"/.test(content)) {
+    errors.push('bsp_board.h does not exist; use board.h only when BOARD_* macros are needed');
+  }
+
+  if (/#include\s+"board\.h"/.test(content) && !/\bbsp_board\b/.test(mainCmake?.content || '')) {
+    errors.push('including board.h requires bsp_board in main/CMakeLists.txt REQUIRES');
+  }
+
+  const componentHeaders = [
+    ['driver_led.h', 'driver_led'],
+    ['driver_button.h', 'driver_button'],
+    ['driver_oled.h', 'driver_oled'],
+    ['driver_servo.h', 'driver_servo'],
+    ['driver_mpu6050.h', 'driver_mpu6050'],
+    ['driver_tof2000c_vl53l0x.h', 'driver_tof2000c_vl53l0x'],
+    ['driver_tw_tts.h', 'driver_tw_tts'],
+    ['service_device.h', 'service_device'],
+    ['service_pid.h', 'service_pid'],
+    ['service_wifi.h', 'service_wifi']
+  ];
+  for (const [header, component] of componentHeaders) {
+    if (new RegExp(`#include\\s+"${header.replace('.', '\\.')}"`).test(content)
+      && !new RegExp(`\\b${component}\\b`).test(mainCmake?.content || '')) {
+      errors.push(`including ${header} requires ${component} in main/CMakeLists.txt REQUIRES`);
+    }
+  }
+
+  if (/\bservice_device_init\s*\(/.test(content) && !/#include\s+"service_device\.h"/.test(content)) {
+    errors.push('service_device_init requires #include "service_device.h"');
+  }
+
+  if (/\bservice_device_init\s*\(/.test(content) && !/\bservice_device\b/.test(mainCmake?.content || '')) {
+    errors.push('service_device_init requires service_device in main/CMakeLists.txt REQUIRES');
   }
 
   if (/esp_err_t\s+\w+\s*=\s*service_device_init\s*\(/.test(content)) {

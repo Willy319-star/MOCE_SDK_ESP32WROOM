@@ -21,7 +21,12 @@ const state = {
     build: null,
     flash: null,
     monitor: null
-  }
+  },
+  lastToolResult: null,
+  debugFix: null,
+  sessions: [],
+  timeline: [],
+  autosave: true
 };
 
 const steps = [
@@ -250,6 +255,93 @@ function currentPayload() {
   };
 }
 
+function projectNameFromRequirement(text) {
+  const match = String(text || '').match(/\bproject\/([A-Za-z0-9_-]+)\//);
+  return match?.[1] || '';
+}
+
+function preferredProjectName() {
+  return projectNameFromRequirement($('#requirement')?.value || '') || $('#projectName').value.trim();
+}
+
+function sessionTitle() {
+  return preferredProjectName() || 'Moce hardware session';
+}
+
+function currentStage() {
+  if (state.tools.build?.ok && state.tools.flash?.ok && state.tools.monitor?.ok) return '测试调试';
+  if (state.files.length > 0) return '嵌入式开发';
+  if (state.plan) return '硬件搭建';
+  if (state.resourcePlanAccepted) return '硬件资源规划';
+  if (state.componentSelectionAccepted) return '器件选型';
+  if (state.analysisAccepted) return '功能分析';
+  return $('#requirement')?.value.trim() ? '提出产品需求' : '未开始';
+}
+
+function snapshotState() {
+  const payload = currentPayload();
+  return {
+    ...payload,
+    requirement: $('#requirement')?.value || '',
+    refinement: $('#analysisRefinement')?.value || '',
+    componentSelectionNotes: $('#componentSelectionNotes')?.value || '',
+    resourcePlanNotes: $('#resourcePlanNotes')?.value || '',
+    stage: currentStage(),
+    analysis: state.analysis,
+    analysisAccepted: state.analysisAccepted,
+    analysisRefinementDirty: state.analysisRefinementDirty,
+    componentSelection: state.componentSelection,
+    componentSelectionAccepted: state.componentSelectionAccepted,
+    componentSelectionDirty: state.componentSelectionDirty,
+    resourcePlan: state.resourcePlan,
+    resourcePlanAccepted: state.resourcePlanAccepted,
+    resourcePlanDirty: state.resourcePlanDirty,
+    plan: state.plan,
+    files: state.files,
+    validation: state.validation,
+    selectedFilePath: state.selectedFilePath,
+    tools: state.tools,
+    lastToolResult: state.lastToolResult,
+    debugFix: state.debugFix
+  };
+}
+
+function restoreSnapshot(snapshot = {}) {
+  $('#projectName').value = snapshot.projectName || 'robot_agent_app';
+  $('#targetName').value = snapshot.target || 'esp32s3';
+  $('#boardName').value = snapshot.board || 'my_board_esp32s3';
+  $('#portName').value = snapshot.port || '/dev/ttyUSB0';
+  $('#requirement').value = snapshot.requirement || '';
+  if ($('#analysisRefinement')) $('#analysisRefinement').value = snapshot.refinement || '';
+  if ($('#componentSelectionNotes')) $('#componentSelectionNotes').value = snapshot.componentSelectionNotes || '';
+  if ($('#resourcePlanNotes')) $('#resourcePlanNotes').value = snapshot.resourcePlanNotes || '';
+  state.analysis = snapshot.analysis || '';
+  state.analysisAccepted = !!snapshot.analysisAccepted;
+  state.analysisRefinementDirty = !!snapshot.analysisRefinementDirty;
+  state.componentSelection = snapshot.componentSelection || '';
+  state.componentSelectionAccepted = !!snapshot.componentSelectionAccepted;
+  state.componentSelectionDirty = !!snapshot.componentSelectionDirty;
+  state.resourcePlan = snapshot.resourcePlan || '';
+  state.resourcePlanAccepted = !!snapshot.resourcePlanAccepted;
+  state.resourcePlanDirty = !!snapshot.resourcePlanDirty;
+  state.plan = snapshot.plan || '';
+  state.files = Array.isArray(snapshot.files) ? snapshot.files : [];
+  state.validation = snapshot.validation || null;
+  state.selectedFilePath = snapshot.selectedFilePath || '';
+  state.tools = snapshot.tools || { build: null, flash: null, monitor: null };
+  state.lastToolResult = snapshot.lastToolResult || null;
+  state.debugFix = snapshot.debugFix || null;
+  renderAnalysis();
+  renderComponentSelection();
+  renderResources();
+  renderPlan();
+  renderDiagram();
+  renderFiles();
+  renderDebugFix();
+  renderSteps();
+  updateWorkflowControls();
+}
+
 function refinedRequirementText() {
   const base = $('#requirement').value.trim();
   const refinement = $('#analysisRefinement')?.value.trim() || '';
@@ -304,6 +396,9 @@ function clearTestTools() {
     flash: null,
     monitor: null
   };
+  state.lastToolResult = null;
+  state.debugFix = null;
+  renderDebugFix();
 }
 
 function renderSteps() {
@@ -792,6 +887,10 @@ async function loadSelectedPrompt() {
   });
   $('#requirement').value = data.prompt.content || '';
   $('#promptStatus').textContent = data.prompt.path;
+  const promptProjectName = projectNameFromRequirement(data.prompt.content || '');
+  if (promptProjectName) {
+    $('#projectName').value = promptProjectName;
+  }
   state.analysis = '';
   state.analysisRefinementDirty = false;
   state.componentSelection = '';
@@ -877,6 +976,7 @@ async function generateAnalysis() {
   renderResources();
   renderFiles();
   logActivity(data.mode === 'llm' ? 'Function analysis complete' : 'Fallback analysis complete', data.warning ? 'warn' : 'ok');
+  await recordMemoryEvent('analysis_generated', '生成功能分析', state.analysis.slice(0, 120), { mode: data.mode });
 }
 
 function acceptAnalysis() {
@@ -902,6 +1002,7 @@ function acceptAnalysis() {
   renderPlan();
   renderFiles();
   logActivity('Function analysis accepted', 'ok');
+  recordMemoryEvent('analysis_accepted', '接受功能分析', '功能分析已确认').catch(showError);
 }
 
 function componentSelectionNotesText() {
@@ -946,6 +1047,7 @@ async function generateComponentSelection() {
   renderResources();
   renderFiles();
   logActivity(data.mode === 'llm' ? 'Component selection complete' : 'Fallback component selection complete', data.warning ? 'warn' : 'ok');
+  await recordMemoryEvent('component_selection_generated', '生成器件选型', state.componentSelection.slice(0, 120), { mode: data.mode });
 }
 
 function acceptComponentSelection() {
@@ -959,6 +1061,7 @@ function acceptComponentSelection() {
   renderComponentSelection();
   renderResources();
   logActivity('Component selection accepted', 'ok');
+  recordMemoryEvent('component_selection_accepted', '接受器件选型', '器件选型已确认').catch(showError);
 }
 
 function resourcePlanNotesText() {
@@ -1002,6 +1105,7 @@ async function generateResourcePlan() {
   renderDiagram();
   renderFiles();
   logActivity(data.mode === 'llm' ? 'Hardware resource planning complete' : 'Fallback resource planning complete', data.warning ? 'warn' : 'ok');
+  await recordMemoryEvent('resource_plan_generated', '生成硬件资源规划', state.resourcePlan.slice(0, 120), { mode: data.mode });
 }
 
 function acceptResourcePlan() {
@@ -1013,6 +1117,7 @@ function acceptResourcePlan() {
   state.resourcePlanAccepted = true;
   renderResources();
   logActivity('Hardware resource plan accepted', 'ok');
+  recordMemoryEvent('resource_plan_accepted', '接受硬件资源规划', '硬件资源规划已确认').catch(showError);
 }
 
 async function generateHardwareBuild() {
@@ -1045,6 +1150,7 @@ async function generateHardwareBuild() {
   renderDiagram();
   renderResources();
   logActivity(data.mode === 'llm' ? 'Hardware build complete' : 'Fallback hardware build complete', data.warning ? 'warn' : 'ok');
+  await recordMemoryEvent('hardware_build_generated', '生成硬件搭建', state.plan.slice(0, 120), { mode: data.mode });
 }
 
 async function generateCode() {
@@ -1079,6 +1185,7 @@ async function generateCode() {
   clearTestTools();
   renderFiles();
   logActivity(data.note || 'Code generation complete', state.validation?.ok === false ? 'warn' : 'ok');
+  await recordMemoryEvent('firmware_draft_generated', '生成固件草稿', data.note || '', { validation: state.validation });
 }
 
 async function writeProject() {
@@ -1096,6 +1203,7 @@ async function writeProject() {
     const written = data.written || [];
     $('#codeStatus').textContent = `已写入并校验 ${written.length} 个文件`;
     logActivity(`Wrote and verified ${written.length} files to project/`, 'ok');
+    await recordMemoryEvent('project_written', '写入 project/', `已写入并校验 ${written.length} 个文件`, { written });
   } finally {
     renderFiles();
   }
@@ -1113,6 +1221,75 @@ function renderToolResult(data) {
     result.truncated ? 'output truncated: true' : '',
     `exit code: ${result.code}`
   ].filter(Boolean).join('\n');
+}
+
+function renderDebugFix() {
+  const panel = $('#debugFixOutput');
+  const button = $('#debugFixBtn');
+  if (!panel || !button) return;
+  button.disabled = !state.lastToolResult || state.lastToolResult.result?.ok === true;
+  const fix = state.debugFix;
+  if (!fix) {
+    panel.className = 'validation-list empty';
+    panel.textContent = state.lastToolResult
+      ? '检测到最近一次工具失败，可发给 agent 自动诊断修复。'
+      : '等待 Build / Flash / Monitor 失败输出。';
+    return;
+  }
+  const items = [];
+  items.push({ kind: fix.validation?.ok === false ? 'warn' : 'ok', text: fix.note || '已生成调试修复结果。' });
+  if (fix.warning) items.push({ kind: 'warn', text: fix.warning });
+  for (const error of fix.validation?.errors || []) items.push({ kind: 'error', text: error });
+  for (const warning of fix.validation?.warnings || []) items.push({ kind: 'warn', text: warning });
+  if ((fix.files || []).length > 0) {
+    items.push({ kind: 'ok', text: `已生成 ${fix.files.length} 个候选 project/ 文件，确认后点击“写入 project/”。` });
+  }
+  panel.className = 'validation-list';
+  panel.innerHTML = items.map((item) => `
+    <div class="validation-item ${item.kind}">${escapeHtml(item.text)}</div>
+  `).join('');
+}
+
+function renderMemory() {
+  const sessionList = $('#sessionList');
+  const timeline = $('#timelineList');
+  const memoryMeta = $('#memoryMeta');
+  if (!sessionList || !timeline || !memoryMeta) return;
+  memoryMeta.textContent = state.currentSessionId ? `当前 ${state.timeline.length}` : '未保存';
+  $('#deleteSessionBtn').disabled = !state.currentSessionId;
+  $('#clearTimelineBtn').disabled = !state.currentSessionId || state.timeline.length === 0;
+  if (state.sessions.length === 0) {
+    sessionList.className = 'memory-list empty';
+    sessionList.textContent = '暂无会话。';
+  } else {
+    sessionList.className = 'memory-list';
+    sessionList.innerHTML = state.sessions.slice(0, 8).map((session) => `
+      <div class="memory-item ${session.id === state.currentSessionId ? 'active' : ''}" data-session-id="${escapeAttr(session.id)}">
+        <button type="button" class="memory-open" data-memory-action="open-session">
+          <strong>${escapeHtml(session.title)}</strong>
+          <span>${escapeHtml(session.stage || '未记录')} / ${new Date(session.updatedAt).toLocaleString()}</span>
+        </button>
+        <button type="button" class="memory-mini" data-memory-action="delete-session">删除</button>
+      </div>
+    `).join('');
+  }
+
+  if (state.timeline.length === 0) {
+    timeline.className = 'memory-list empty';
+    timeline.textContent = '暂无历史事件。';
+  } else {
+    timeline.className = 'memory-list';
+    timeline.innerHTML = state.timeline.slice(0, 12).map((event) => `
+      <div class="memory-item" data-event-id="${escapeAttr(event.id)}">
+        <button type="button" class="memory-open" data-memory-action="restore-event">
+          <strong>${escapeHtml(event.title || event.type)}</strong>
+          <span>${escapeHtml(event.stage || '')} / ${new Date(event.time).toLocaleString()}</span>
+          ${event.summary ? `<em>${escapeHtml(event.summary)}</em>` : ''}
+        </button>
+        <button type="button" class="memory-mini" data-memory-action="delete-event">删除</button>
+      </div>
+    `).join('');
+  }
 }
 
 function summarizeToolOutput(result) {
@@ -1180,14 +1357,77 @@ async function runTool(kind) {
   });
   renderToolResult(data);
   const ok = data.result?.ok === true;
+  state.lastToolResult = {
+    tool: kind,
+    command: data.command,
+    result: data.result,
+    summary: summarizeToolOutput(data.result || {})
+  };
+  state.debugFix = null;
   state.tools[kind] = {
     ok,
     code: data.result?.code ?? null,
     ranAt: new Date().toISOString()
   };
+  renderDebugFix();
   renderSteps();
   setStatus(`${kind} finished with code ${data.result?.code}`, ok ? 'ok' : 'error');
   logActivity(`${kind} finished with code ${data.result?.code}`, ok ? 'ok' : 'error');
+  await recordMemoryEvent(`${kind}_${ok ? 'passed' : 'failed'}`, `${kind} ${ok ? '通过' : '失败'}`, state.lastToolResult.summary, {
+    tool: kind,
+    code: data.result?.code
+  });
+}
+
+async function debugFixLastTool() {
+  if (!state.lastToolResult) {
+    setStatus('请先运行 Build / Flash / Monitor 并获得失败输出。', 'warn');
+    return;
+  }
+  const payload = currentPayload();
+  const projectPath = `project/${payload.projectName || 'robot_agent_app'}`;
+  $('#debugFixOutput').className = 'validation-list empty';
+  $('#debugFixOutput').textContent = '正在发给 agent 诊断并生成修复...';
+  $('#debugFixBtn').disabled = true;
+  switchTab('sdk');
+  logActivity('Debug fix requested', 'warn');
+  try {
+    const data = await api('/api/agent/debug-fix', {
+      method: 'POST',
+      body: {
+        ...payload,
+        projectPath,
+        requirement: refinedRequirementText(),
+        analysis: state.analysis,
+        componentSelection: state.componentSelection,
+        resourcePlan: state.resourcePlan,
+        plan: state.plan,
+        files: state.files,
+        lastTool: state.lastToolResult,
+        tool: state.lastToolResult.tool,
+        command: state.lastToolResult.command,
+        result: state.lastToolResult.result,
+        summary: state.lastToolResult.summary
+      }
+    });
+    state.debugFix = data;
+    if ((data.files || []).length > 0) {
+      state.files = data.files;
+      state.validation = data.validation || null;
+      state.selectedFilePath = '';
+      renderFiles();
+      switchTab('code');
+    }
+    renderDebugFix();
+    setStatus(data.note || '调试修复完成', data.validation?.ok === false ? 'warn' : 'ok');
+    logActivity(data.note || 'Debug fix complete', data.validation?.ok === false ? 'warn' : 'ok');
+    await recordMemoryEvent('debug_fix_generated', 'Agent 自动修复', data.note || '', {
+      validation: data.validation,
+      fileCount: (data.files || []).length
+    });
+  } finally {
+    renderDebugFix();
+  }
 }
 
 async function runExec() {
@@ -1232,30 +1472,88 @@ async function askQuestion() {
   logActivity('Q&A answered', data.warning ? 'warn' : 'ok');
 }
 
-async function saveSession() {
-  const title = $('#projectName').value.trim() || 'Moce hardware session';
+async function loadSessions() {
+  const data = await api('/api/sessions');
+  state.sessions = data.sessions || [];
+  renderMemory();
+}
+
+async function loadSession(sessionId) {
+  const data = await api(`/api/sessions/${encodeURIComponent(sessionId)}`);
+  const session = data.session;
+  state.currentSessionId = session.id;
+  state.timeline = session.timeline || [];
+  restoreSnapshot(session.snapshot || {});
+  await loadSessions();
+  setStatus(`已恢复会话：${session.title}`, 'ok');
+  logActivity(`Session restored: ${session.title}`, 'ok');
+}
+
+async function deleteCurrentSession(sessionId = state.currentSessionId) {
+  if (!sessionId) return;
+  await api(`/api/sessions/${encodeURIComponent(sessionId)}`, { method: 'DELETE' });
+  if (sessionId === state.currentSessionId) {
+    state.currentSessionId = null;
+    state.timeline = [];
+  }
+  await loadSessions();
+  renderMemory();
+  setStatus('会话已删除', 'ok');
+  logActivity('Session deleted', 'ok');
+}
+
+async function clearCurrentTimeline() {
+  if (!state.currentSessionId) return;
+  const data = await api(`/api/sessions/${encodeURIComponent(state.currentSessionId)}/events`, { method: 'DELETE' });
+  state.timeline = data.session?.timeline || [];
+  await loadSessions();
+  renderMemory();
+  setStatus('历史已清空', 'ok');
+  logActivity('Timeline cleared', 'ok');
+}
+
+async function deleteTimelineEvent(eventId) {
+  if (!state.currentSessionId || !eventId) return;
+  const data = await api(`/api/sessions/${encodeURIComponent(state.currentSessionId)}/events/${encodeURIComponent(eventId)}`, { method: 'DELETE' });
+  state.timeline = data.session?.timeline || [];
+  await loadSessions();
+  renderMemory();
+  setStatus('历史事件已删除', 'ok');
+}
+
+async function saveSession(event = null, options = {}) {
+  const derivedProjectName = preferredProjectName();
+  if (derivedProjectName && $('#projectName').value.trim() !== derivedProjectName) {
+    $('#projectName').value = derivedProjectName;
+  }
+  const title = sessionTitle();
   const data = await api('/api/sessions', {
     method: 'POST',
     body: {
       id: state.currentSessionId,
       title,
-      requirement: $('#requirement').value,
-      refinement: $('#analysisRefinement')?.value || '',
-      componentSelectionNotes: $('#componentSelectionNotes')?.value || '',
-      resourcePlanNotes: $('#resourcePlanNotes')?.value || '',
-      analysis: state.analysis,
-      analysisAccepted: state.analysisAccepted,
-      componentSelection: state.componentSelection,
-      componentSelectionAccepted: state.componentSelectionAccepted,
-      resourcePlan: state.resourcePlan,
-      resourcePlanAccepted: state.resourcePlanAccepted,
-      plan: state.plan,
-      files: state.files
+      snapshot: snapshotState(),
+      event
     }
   });
   state.currentSessionId = data.session.id;
-  setStatus(`会话已保存：${data.session.title}`, 'ok');
-  logActivity(`Session saved: ${data.session.title}`, 'ok');
+  state.timeline = data.session.timeline || [];
+  await loadSessions();
+  if (!options.silent) {
+    setStatus(`会话已保存：${data.session.title}`, 'ok');
+    logActivity(`Session saved: ${data.session.title}`, 'ok');
+  }
+}
+
+async function recordMemoryEvent(type, title, summary = '', payload = {}) {
+  if (!state.autosave) return;
+  await saveSession({
+    type,
+    stage: currentStage(),
+    title,
+    summary,
+    payload
+  }, { silent: true });
 }
 
 function bindEvents() {
@@ -1273,6 +1571,37 @@ function bindEvents() {
   });
   $('#modelName').addEventListener('input', updateModelChip);
   $('#useLlm').addEventListener('change', updateModelChip);
+  $('#autosaveToggle').addEventListener('change', () => {
+    state.autosave = $('#autosaveToggle').checked;
+    renderMemory();
+  });
+  $('#refreshSessionsBtn').addEventListener('click', () => loadSessions().catch(showError));
+  $('#deleteSessionBtn').addEventListener('click', () => deleteCurrentSession().catch(showError));
+  $('#clearTimelineBtn').addEventListener('click', () => clearCurrentTimeline().catch(showError));
+  $('#sessionList').addEventListener('click', (event) => {
+    const item = event.target.closest('[data-session-id]');
+    const action = event.target.closest('[data-memory-action]')?.dataset.memoryAction;
+    if (!item || !action) return;
+    if (action === 'delete-session') {
+      deleteCurrentSession(item.dataset.sessionId).catch(showError);
+      return;
+    }
+    loadSession(item.dataset.sessionId).catch(showError);
+  });
+  $('#timelineList').addEventListener('click', (event) => {
+    const itemElement = event.target.closest('[data-event-id]');
+    const action = event.target.closest('[data-memory-action]')?.dataset.memoryAction;
+    if (!itemElement || !action) return;
+    if (action === 'delete-event') {
+      deleteTimelineEvent(itemElement.dataset.eventId).catch(showError);
+      return;
+    }
+    const item = state.timeline.find((entry) => entry.id === itemElement.dataset.eventId);
+    if (!item?.snapshot) return;
+    restoreSnapshot(item.snapshot);
+    setStatus(`已恢复到历史节点：${item.title}`, 'ok');
+    logActivity(`Restored event: ${item.title}`, 'ok');
+  });
   $('#requirement').addEventListener('input', () => {
     state.analysis = '';
     state.analysisRefinementDirty = false;
@@ -1358,12 +1687,18 @@ function bindEvents() {
   $('#buildBtn').addEventListener('click', () => runTool('build').catch(showError));
   $('#flashBtn').addEventListener('click', () => runTool('flash').catch(showError));
   $('#monitorBtn').addEventListener('click', () => runTool('monitor').catch(showError));
+  $('#debugFixBtn').addEventListener('click', () => debugFixLastTool().catch(showError));
   $('#execBtn').addEventListener('click', () => runExec().catch(showError));
   $('#askBtn').addEventListener('click', () => askQuestion().catch(showError));
   $('#question').addEventListener('keydown', (event) => {
     if (event.key === 'Enter') askQuestion().catch(showError);
   });
-  $('#saveBtn').addEventListener('click', () => saveSession().catch(showError));
+  $('#saveBtn').addEventListener('click', () => saveSession({
+    type: 'manual_save',
+    stage: currentStage(),
+    title: '手动保存进度',
+    summary: currentStage()
+  }).catch(showError));
 }
 
 function showError(error) {
@@ -1381,7 +1716,10 @@ async function boot() {
   renderDiagram();
   renderResources();
   renderFiles();
+  renderDebugFix();
+  renderMemory();
   bindEvents();
+  await loadSessions();
   await loadHealth();
   await loadPromptDocuments();
   await scanSdk();

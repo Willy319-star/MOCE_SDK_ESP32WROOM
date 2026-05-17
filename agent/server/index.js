@@ -11,12 +11,14 @@ import {
   buildChatPrompt,
   buildCodegenPrompt,
   buildComponentSelectionPrompt,
+  buildDebugFixPrompt,
   buildHardwareBuildPrompt,
   buildHardwareResourcePlanningPrompt,
   buildRequirementAnalysisPrompt,
   fallbackChat,
   fallbackCodegen,
   fallbackComponentSelection,
+  fallbackDebugFix,
   fallbackHardwareBuild,
   fallbackHardwareResourcePlanning,
   fallbackRequirementAnalysis,
@@ -25,7 +27,15 @@ import {
   validateGeneratedFiles
 } from './lib/workflows.js';
 import { getPhysicalStatus } from './lib/physical.js';
-import { loadSessions, saveSession } from './lib/storage.js';
+import {
+  appendSessionEvent,
+  clearSessionTimeline,
+  deleteSession,
+  deleteSessionEvent,
+  loadSession,
+  loadSessions,
+  saveSession
+} from './lib/storage.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -201,6 +211,100 @@ async function readPromptDocument(promptPath) {
   const { normalized, absolute } = safePromptPath(promptPath);
   const content = await fs.readFile(absolute, 'utf8');
   return { path: normalized, content };
+}
+
+async function readProjectFiles(projectPath) {
+  const { normalized, absolute } = safeProjectPath(projectPath);
+  const files = [];
+  async function walk(current) {
+    let entries = [];
+    try {
+      entries = await fs.readdir(current, { withFileTypes: true });
+    } catch (error) {
+      if (error.code === 'ENOENT') return;
+      throw error;
+    }
+    for (const entry of entries) {
+      const fullPath = path.join(current, entry.name);
+      const relative = path.relative(sdkRoot, fullPath).replaceAll('\\', '/');
+      if (entry.isDirectory()) {
+        if (entry.name === 'build' || entry.name.startsWith('build.') || entry.name.startsWith('.')) continue;
+        await walk(fullPath);
+        continue;
+      }
+      if (!entry.isFile()) continue;
+      if (!/\.(c|h|cpp|hpp|txt)$/.test(entry.name) && entry.name !== 'CMakeLists.txt') continue;
+      const stat = await fs.stat(fullPath);
+      if (stat.size > 120000) continue;
+      files.push({ path: relative, content: await fs.readFile(fullPath, 'utf8') });
+    }
+  }
+  await walk(absolute);
+  return files.sort((a, b) => a.path.localeCompare(b.path));
+}
+
+function mergeProjectFiles(diskFiles, draftFiles) {
+  const byPath = new Map();
+  for (const file of diskFiles || []) {
+    if (file?.path?.startsWith('project/')) byPath.set(file.path, file);
+  }
+  for (const file of draftFiles || []) {
+    if (file?.path?.startsWith('project/') && typeof file.content === 'string') {
+      byPath.set(file.path, { path: file.path, content: file.content });
+    }
+  }
+  return [...byPath.values()].sort((a, b) => a.path.localeCompare(b.path));
+}
+
+function extractToolErrors(toolResult = {}) {
+  const text = [
+    String(toolResult.stdout || ''),
+    String(toolResult.stderr || ''),
+    String(toolResult.error || '')
+  ].join('\n');
+  const lines = text.split(/\r?\n/);
+  const picked = [];
+  const seen = new Set();
+
+  function push(line) {
+    const clean = String(line || '').trim();
+    if (!clean || seen.has(clean)) return;
+    seen.add(clean);
+    picked.push(clean);
+  }
+
+  for (let index = 0; index < lines.length; index += 1) {
+    const line = lines[index];
+    const textLine = line.trim();
+    if (!textLine) continue;
+    if (/^(FAILED:|ninja:|CMake Error|error:|fatal error:)/i.test(textLine)
+      || /\bfatal error:|\berror:/i.test(textLine)
+      || /ninja failed with exit code|output of the command is in/i.test(textLine)) {
+      push(textLine);
+      const next = lines[index + 1]?.trim();
+      if (next && /compilation terminated|from .*:|note:|warning:/i.test(next)) push(next);
+    }
+  }
+
+  return picked.slice(0, 80);
+}
+
+function toolContextText(body) {
+  const tool = body.tool || body.lastTool?.tool || 'unknown';
+  const command = body.command || body.lastTool?.command || '';
+  const result = body.result || body.lastTool?.result || {};
+  const errors = extractToolErrors(result);
+  const summary = String(body.summary || '').trim();
+  return [
+    `tool: ${tool}`,
+    command ? `command: ${command}` : '',
+    `exitCode: ${result.code ?? 'unknown'}`,
+    result.timedOut ? 'timedOut: true' : '',
+    result.truncated ? 'outputTruncated: true' : '',
+    'keyErrors:',
+    errors.length ? errors.map((line) => `- ${line}`).join('\n') : '- 未提取到关键错误',
+    summary ? `frontendSummary:\n${summary}` : ''
+  ].filter(Boolean).join('\n');
 }
 
 async function requirementFromBody(body) {
@@ -636,6 +740,87 @@ async function handleCodegen(req, res) {
     mode: 'fallback',
     validation: validateGeneratedFiles(fallbackCodegen(requirement, body.projectName || '', sdkSummary).files),
     ...fallbackCodegen(requirement, body.projectName || '', sdkSummary)
+  });
+}
+
+async function handleDebugFix(req, res) {
+  const body = await readJson(req);
+  const requirement = await requirementFromBody(body);
+  const sdkSummary = await getSdkSummary();
+  const globalPrompt = await getGlobalPrompt();
+  const projectName = body.projectName || '';
+  const projectPath = body.projectPath || `project/${projectName || 'robot_agent_app'}`;
+  const projectFiles = mergeProjectFiles(await readProjectFiles(projectPath), body.files || []);
+  const toolContext = toolContextText(body);
+  const prompt = buildDebugFixPrompt({
+    requirement,
+    projectName,
+    plan: body.plan || '',
+    sdkSummary,
+    toolContext,
+    projectFiles,
+    globalPrompt
+  });
+  const messages = applyGlobalPrompt(prompt.messages, globalPrompt);
+
+  if (body.useLlm) {
+    try {
+      const text = await callLlm({
+        config,
+        providerRequest: body.provider || {},
+        messages,
+        temperature: body.temperature ?? 0.1
+      });
+      const parsedFiles = parseGeneratedFiles(text);
+      const validation = validateGeneratedFiles(mergeProjectFiles(projectFiles, parsedFiles));
+      const useParsedFiles = parsedFiles.length > 0 && validation.errors.length === 0;
+      const fallbackFiles = fallbackDebugFix(projectFiles);
+      const fallbackValidation = validateGeneratedFiles(mergeProjectFiles(projectFiles, fallbackFiles));
+      sendJson(res, 200, {
+        ok: true,
+        mode: 'llm',
+        result: normalizeAgentText(text),
+        toolContext,
+        files: useParsedFiles ? parsedFiles : fallbackFiles,
+        validation: useParsedFiles ? validation : fallbackValidation,
+        note: useParsedFiles
+          ? '调试修复已生成 project/ 文件，可确认写入后重新 Build。'
+          : parsedFiles.length > 0
+            ? 'LLM 修复未通过静态校验，已尝试提供安全 fallback。'
+            : 'LLM 未输出可解析文件块，已尝试提供安全 fallback。'
+      });
+      return;
+    } catch (error) {
+      const fallbackFiles = fallbackDebugFix(projectFiles);
+      const validation = validateGeneratedFiles(mergeProjectFiles(projectFiles, fallbackFiles));
+      sendJson(res, 200, {
+        ok: true,
+        mode: 'fallback',
+        warning: error.message,
+        result: toolContext,
+        toolContext,
+        files: fallbackFiles,
+        validation,
+        note: fallbackFiles.length > 0
+          ? 'LLM 不可用，已应用内置规则生成候选修复。'
+          : 'LLM 不可用，内置规则无法确定安全修复，请查看关键错误。'
+      });
+      return;
+    }
+  }
+
+  const fallbackFiles = fallbackDebugFix(projectFiles);
+  const validation = validateGeneratedFiles(mergeProjectFiles(projectFiles, fallbackFiles));
+  sendJson(res, 200, {
+    ok: true,
+    mode: 'fallback',
+    result: toolContext,
+    toolContext,
+    files: fallbackFiles,
+    validation,
+    note: fallbackFiles.length > 0
+      ? '已应用内置规则生成候选修复。'
+      : '内置规则无法确定安全修复，请开启 LLM 或查看关键错误。'
   });
 }
 
@@ -1130,9 +1315,63 @@ async function handleApi(req, res, pathname) {
       return;
     }
 
+    const sessionMatch = pathname.match(/^\/api\/sessions\/([^/]+)\/?$/);
+    if (req.method === 'GET' && sessionMatch) {
+      const session = await loadSession(agentRoot, sessionMatch[1]);
+      if (!session) {
+        sendError(res, 404, 'session not found');
+        return;
+      }
+      sendJson(res, 200, { ok: true, session });
+      return;
+    }
+
+    if (req.method === 'DELETE' && sessionMatch) {
+      const deleted = await deleteSession(agentRoot, sessionMatch[1]);
+      if (!deleted) {
+        sendError(res, 404, 'session not found');
+        return;
+      }
+      sendJson(res, 200, { ok: true });
+      return;
+    }
+
     if (req.method === 'POST' && pathname === '/api/sessions') {
       const body = await readJson(req);
       const session = await saveSession(agentRoot, body);
+      sendJson(res, 200, { ok: true, session });
+      return;
+    }
+
+    const eventMatch = pathname.match(/^\/api\/sessions\/([^/]+)\/events\/?$/);
+    if (req.method === 'POST' && eventMatch) {
+      const body = await readJson(req);
+      const session = await appendSessionEvent(agentRoot, eventMatch[1], body);
+      if (!session) {
+        sendError(res, 404, 'session not found');
+        return;
+      }
+      sendJson(res, 200, { ok: true, session });
+      return;
+    }
+
+    if (req.method === 'DELETE' && eventMatch) {
+      const session = await clearSessionTimeline(agentRoot, eventMatch[1]);
+      if (!session) {
+        sendError(res, 404, 'session not found');
+        return;
+      }
+      sendJson(res, 200, { ok: true, session });
+      return;
+    }
+
+    const singleEventMatch = pathname.match(/^\/api\/sessions\/([^/]+)\/events\/([^/]+)\/?$/);
+    if (req.method === 'DELETE' && singleEventMatch) {
+      const session = await deleteSessionEvent(agentRoot, singleEventMatch[1], singleEventMatch[2]);
+      if (!session) {
+        sendError(res, 404, 'session not found');
+        return;
+      }
       sendJson(res, 200, { ok: true, session });
       return;
     }
@@ -1164,6 +1403,11 @@ async function handleApi(req, res, pathname) {
 
     if (req.method === 'POST' && pathname === '/api/agent/codegen') {
       await handleCodegen(req, res);
+      return;
+    }
+
+    if (req.method === 'POST' && pathname === '/api/agent/debug-fix') {
+      await handleDebugFix(req, res);
       return;
     }
 
