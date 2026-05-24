@@ -186,6 +186,10 @@ function selectedComponentText(capabilities) {
   return capabilities.components.join(', ');
 }
 
+function mentionedSdkComponents(text) {
+  return [...new Set(String(text || '').match(/\b(?:driver|service)_[a-z0-9_]+\b/g) || [])];
+}
+
 export function buildHardwareBuildPrompt({ requirement, sdkSummary, boardName, analysis = '', componentSelection = '', resourcePlan = '' }) {
   return {
     messages: [
@@ -196,7 +200,8 @@ export function buildHardwareBuildPrompt({ requirement, sdkSummary, boardName, a
           skillsetSummary,
           '本阶段只做硬件搭建：根据已接受的硬件资源规划、器件接口和目标板卡资源，生成模块连接框图、接线清单和上电检查。',
           '不要重新做完整开发规划，不要覆盖或重新分配硬件资源规划中的引脚、接口和地址。',
-          'Mermaid 框图必须体现 ESP32/目标板、模块、接口类型、GPIO/通道/地址、电源和共地关系。',
+          'Mermaid 框图必须体现 ESP32/目标板、模块、接口类型和关键引脚/地址；连线标注必须简短，只写 SDA=47、SCL=21、TX=38、RX=39、A=0x3C、PWM=2/CH0 这类信息，不要在框图中写 BOARD_* 宏全称。',
+          '框图只绘制信号连接。电源与共地使用一个独立说明节点汇总为“供电 / 共地：统一连接，详见接线清单”，不要从电源或 GND 节点向每个模块扇出连线。',
           '如果模块接口或电源参数不确定，必须标为待确认。'
         ].join('\n')
       },
@@ -219,7 +224,8 @@ export function buildHardwareBuildPrompt({ requirement, sdkSummary, boardName, a
             '## 模块连接框图',
             '```mermaid',
             'flowchart LR',
-            '  MCU[目标板/ESP32] -- 接口/引脚/地址 --> MODULE[模块]',
+            '  MCU[目标板/ESP32] -- "I2C SDA=47 SCL=21 A=0x3C" --> MODULE[模块]',
+            '  POWER["供电 / 共地：统一连接，详见接线清单"]',
             '```',
             '## 模块接线清单',
             '| 模块 | 模块接口/管脚 | 目标板接口/宏 | GPIO/通道/地址 | 供电 | 共地 | 状态 | 备注 |',
@@ -407,6 +413,14 @@ export function buildChatPrompt({ question, requirement, currentPlan, sdkSummary
 
 export function buildCodegenPrompt({ requirement, projectName, plan, sdkSummary, globalPrompt = '' }) {
   const globalConstraint = String(globalPrompt || '').trim();
+  const capabilities = detectCapabilities(`${requirement}\n${plan}`, sdkSummary);
+  const availableComponents = new Set(componentNames(sdkSummary));
+  const requestedComponents = [...new Set([
+    ...capabilities.components,
+    ...mentionedSdkComponents(`${requirement}\n${plan}`)
+  ])];
+  const matchedComponents = requestedComponents.filter((name) => availableComponents.has(name));
+  const missingComponents = requestedComponents.filter((name) => !availableComponents.has(name));
   return {
     messages: [
       {
@@ -418,9 +432,15 @@ export function buildCodegenPrompt({ requirement, projectName, plan, sdkSummary,
             ? `以下是 ./prompt/prompt0.md，本轮生成固件草稿必须逐条遵守，优先级高于用户需求中的冲突内容：\n${globalConstraint}`
             : '本轮生成固件草稿必须遵守 ./prompt/prompt0.md 的全局开发约束；如果文件缺失，也必须只输出 project/ 下应用工程。',
           '生成完整可编译 ESP-IDF 应用工程。必须包含 project/<name>/CMakeLists.txt、project/<name>/main/CMakeLists.txt、project/<name>/main/main.c。',
-          '根 CMakeLists.txt 必须设置 EXTRA_COMPONENT_DIRS 到 ../../bsp 和 ../../components，并 include $ENV{IDF_PATH}/tools/cmake/project.cmake。',
+          '根 CMakeLists.txt 必须是 ESP-IDF 工程入口：包含 cmake_minimum_required(VERSION 3.16)、EXTRA_COMPONENT_DIRS、include($ENV{IDF_PATH}/tools/cmake/project.cmake) 和 project(<name>)。',
+          '根 CMakeLists.txt 禁止出现 idf_component_register、register_component、SRCS、REQUIRES 等组件级写法。',
           'main/CMakeLists.txt 必须使用 idf_component_register(SRCS "main.c" REQUIRES ...)，禁止使用 register_component()、COMPONENT_SRCS、COMPONENT_REQUIRES 等旧式写法。',
+          'main/CMakeLists.txt 的 REQUIRES 只能包含当前 SDK 扫描到的 components/BSP 组件名和确实需要的 ESP-IDF 组件；不要因为 include 了 ESP-IDF/FreeRTOS 标准头就加入 esp_log、esp_err、sdkconfig、FreeRTOS、task 等伪组件。',
+          '包含 "esp_log.h" 不需要也不允许写 REQUIRES esp_log；包含 "freertos/FreeRTOS.h" 或 "freertos/task.h" 不要写 REQUIRES FreeRTOS 或 task。',
           '必须严格使用下方提供的 C 函数原型、结构体字段、类型名和枚举名；不要改名，不要臆造 wrapper，不要把 void 返回值当成 esp_err_t。',
+          '生成代码前必须先对照当前 SDK 扫描摘要检查 components/ 是否存在相应组件；只允许引用已扫描到的组件头文件和函数。',
+          '如果某个需求模块在 components/ 中没有对应组件，只能生成 TODO、日志或最小可编译占位，不要 include 或调用不存在的 driver/service。',
+          '优先调用 components/ 中已有 driver_* 和 service_* 的公共函数；不要在应用层绕过组件直接访问 I2C/UART/PWM/GPIO 等底层 BSP，除非没有上层组件且可用 API 明确允许。',
           '只能 #include 下方“可用 API”和“BSP 公共头文件”中真实存在的头文件，或者 ESP-IDF 标准头。板级宏头文件名是 "board.h"，不是 "bsp_board.h"。',
           '如果 main.c 调用了某个组件函数，必须 #include 对应公共头，并在 project/<name>/main/CMakeLists.txt 的 REQUIRES 中加入对应组件名。',
           '不要为了使用板级默认引脚而在应用层臆造 BSP 头文件；优先调用 driver_*_init_default() 或已提供的默认配置函数。',
@@ -440,6 +460,9 @@ export function buildCodegenPrompt({ requirement, projectName, plan, sdkSummary,
           `工程名：project/${slugifyProjectName(projectName || 'robot_agent_app')}/`,
           `用户需求：${requirement || '(未填写)'}`,
           `当前硬件搭建文档：${plan || '(暂无)'}`,
+          `根据需求和硬件搭建文档初步命中的组件：${matchedComponents.join(', ') || '(未命中)'}`,
+          `缺失组件（禁止 include 或调用，只能 TODO/降级）：${missingComponents.join(', ') || '(无)'}`,
+          `当前 components/ 扫描结果：${componentNames(sdkSummary).join(', ') || '(无)'}`,
           `可用 API：\n${availableApiText(sdkSummary)}`
         ].join('\n\n')
       }
@@ -465,8 +488,10 @@ export function buildDebugFixPrompt({ requirement, projectName, plan, sdkSummary
           '目标：根据 Build/Flash/Monitor 的关键错误，最小化修复 project/<name>/ 下的应用工程。',
           '只允许输出需要更新的 project/ 文件块。不要输出解释文字，不要输出 SDK、BSP、components、boards、tools 下文件。',
           '优先修改 project/<name>/main/main.c、project/<name>/main/CMakeLists.txt、project/<name>/CMakeLists.txt。',
+          '根 CMakeLists.txt 必须是工程入口，包含 cmake_minimum_required(VERSION 3.16)、EXTRA_COMPONENT_DIRS、include(project.cmake) 和 project(<name>)；组件依赖只写在 main/CMakeLists.txt。',
           '只能 #include 下方“可用 API”和“BSP 公共头文件”中真实存在的头文件，或者 ESP-IDF 标准头。板级宏头文件名是 "board.h"，不是 "bsp_board.h"。',
           '如果 main.c 调用了某个组件函数，必须 #include 对应公共头，并在 main/CMakeLists.txt 的 REQUIRES 中加入对应组件名。',
+          '不要因为 include 了 "esp_log.h"、"freertos/FreeRTOS.h"、"freertos/task.h" 等标准头就把 esp_log、FreeRTOS、task 写进 REQUIRES。',
           '不要为了绕过编译而删除核心需求逻辑；如果必须降级，只做最小可编译降级并保留 TODO 注释。',
           '输出格式必须严格使用文件块：',
           '===== FILE: project/<name>/path =====',
@@ -643,6 +668,37 @@ function componentResourcePins(component, sdkSummary) {
   return resource;
 }
 
+function compactConnectionPins(text) {
+  return String(text || '')
+    .replaceAll('BOARD_I2C_SDA_GPIO', 'SDA')
+    .replaceAll('BOARD_I2C_SCL_GPIO', 'SCL')
+    .replaceAll('BOARD_I2C_FREQUENCY_HZ', 'FREQ')
+    .replaceAll('BOARD_OLED_I2C_ADDRESS', 'A')
+    .replaceAll('BOARD_UART_TX_GPIO', 'TX')
+    .replaceAll('BOARD_UART_RX_GPIO', 'RX')
+    .replaceAll('BOARD_UART_BAUD_RATE', 'BAUD')
+    .replaceAll('BOARD_BUTTON_GPIO', 'BTN')
+    .replaceAll('BOARD_BUTTON_ACTIVE_LEVEL', 'LEVEL')
+    .replaceAll('BOARD_LED_GPIO', 'GPIO')
+    .replaceAll('BOARD_LED_PWM_CHANNEL', 'CH')
+    .replaceAll('BOARD_LED_PWM_FREQUENCY_HZ', 'FREQ')
+    .replaceAll('BOARD_SERVO_GPIO_0', 'S0')
+    .replaceAll('BOARD_SERVO_GPIO_1', 'S1')
+    .replaceAll('BOARD_SERVO_PWM_CHANNEL_0', 'CH0')
+    .replaceAll('BOARD_SERVO_PWM_CHANNEL_1', 'CH1')
+    .replaceAll('BOARD_SERVO_PWM_FREQUENCY_HZ', 'FREQ')
+    .replaceAll('DRIVER_TOF2000C_VL53L0X_I2C_ADDR_DEFAULT', 'A')
+    .replace(/\bI2C address\s+/g, 'A=')
+    .replace(/\bBOARD_MOTOR_/g, 'M_')
+    .replace(/\bBOARD_ENCODER_/g, 'ENC_')
+    .replace(/\bI2C:\s*/g, '')
+    .replace(/\bUART:\s*/g, '')
+    .replace(/\bLED:\s*/g, '')
+    .replace(/\bServo:\s*/g, '')
+    .replace(/,\s*FREQ=[^;"]+/g, '')
+    .replace(/,\s*BAUD=([^;"]+)/g, ' @ $1');
+}
+
 export function fallbackHardwareResourcePlanning(requirement, analysis, componentSelection, resourceNotes, sdkSummary) {
   const { selected } = hardwareAnalysisRows(`${requirement}\n${analysis}\n${componentSelection}`, sdkSummary);
   const rows = selected.map((component) => ({
@@ -791,19 +847,12 @@ export function fallbackHardwareBuild(requirement, analysis, componentSelection,
   }));
   const edgeRows = rows
     .filter((row) => row.component !== 'service_wifi')
-    .map((row, index) => `  MCU -- "${row.iface} / ${row.pins.replaceAll('"', "'")}" --> M${index}[${row.candidate}]`);
+    .map((row, index) => `  MCU -- "${row.iface} / ${compactConnectionPins(row.pins).replaceAll('"', "'")}" --> M${index}[${row.candidate}]`);
   const diagram = [
     'flowchart LR',
     '  MCU[ESP32 / 目标板]',
     ...edgeRows,
-    rows.some((row) => row.component !== 'service_wifi') ? '  PWR[电源] --> MCU' : '',
-    ...rows
-      .filter((row) => row.component !== 'service_wifi')
-      .map((row, index) => `  PWR --> M${index}`),
-    rows.some((row) => row.component !== 'service_wifi') ? '  GND[共地] --- MCU' : '',
-    ...rows
-      .filter((row) => row.component !== 'service_wifi')
-      .map((row, index) => `  GND --- M${index}`)
+    rows.some((row) => row.component !== 'service_wifi') ? '  POWER["供电 / 共地：统一连接，详见接线清单"]' : ''
   ].filter(Boolean).join('\n');
   const i2cRows = rows.filter((row) => row.iface === 'I2C');
   const uartRows = rows.filter((row) => row.iface === 'UART');
@@ -1043,13 +1092,32 @@ export function fallbackDebugFix(projectFiles) {
   return changed ? files : [];
 }
 
-export function validateGeneratedFiles(files) {
+function cmakeRequires(content) {
+  const match = String(content || '').match(/idf_component_register\s*\(([\s\S]*?)\)/);
+  if (!match) return [];
+  const body = match[1].replace(/#[^\n]*/g, ' ');
+  const requiresMatch = body.match(/\bREQUIRES\b([\s\S]*?)(?:\bPRIV_REQUIRES\b|\bSRCS\b|\bINCLUDE_DIRS\b|\bPRIV_INCLUDE_DIRS\b|$)/);
+  if (!requiresMatch) return [];
+  return requiresMatch[1]
+    .split(/\s+/)
+    .map((item) => item.trim())
+    .filter(Boolean)
+    .filter((item) => !/^["')]+$/.test(item));
+}
+
+export function validateGeneratedFiles(files, sdkSummary = null) {
   const errors = [];
   const warnings = [];
   const main = (files || []).find((file) => /\/main\/main\.c$/.test(file.path));
   const rootCmake = (files || []).find((file) => /\/CMakeLists\.txt$/.test(file.path) && !/\/main\/CMakeLists\.txt$/.test(file.path));
   const mainCmake = (files || []).find((file) => /\/main\/CMakeLists\.txt$/.test(file.path));
   const content = main?.content || '';
+  const generatedHeaderNames = new Set((files || [])
+    .filter((file) => /\.h$/.test(file.path || ''))
+    .flatMap((file) => {
+      const normalized = String(file.path || '').replaceAll('\\', '/');
+      return [normalized.split('/').pop(), normalized.replace(/^project\/[^/]+\/main\//, '')].filter(Boolean);
+    }));
 
   if (!main) {
     errors.push('missing project/<name>/main/main.c');
@@ -1057,6 +1125,18 @@ export function validateGeneratedFiles(files) {
 
   if (!rootCmake || !/EXTRA_COMPONENT_DIRS/.test(rootCmake.content || '') || !/project\.cmake/.test(rootCmake.content || '')) {
     errors.push('root CMakeLists.txt must define EXTRA_COMPONENT_DIRS and include ESP-IDF project.cmake');
+  }
+
+  if (rootCmake && !/cmake_minimum_required\s*\(/.test(rootCmake.content || '')) {
+    errors.push('root CMakeLists.txt must start with cmake_minimum_required(VERSION 3.16) or a compatible ESP-IDF CMake version');
+  }
+
+  if (rootCmake && !/\bproject\s*\(/.test(rootCmake.content || '')) {
+    errors.push('root CMakeLists.txt must call project(<name>) after including ESP-IDF project.cmake');
+  }
+
+  if (/idf_component_register\s*\(|register_component\s*\(|\bREQUIRES\b|\bSRCS\b/.test(rootCmake?.content || '')) {
+    errors.push('root CMakeLists.txt must be the project entry file, not a component CMakeLists; put idf_component_register/SRCS/REQUIRES only in main/CMakeLists.txt');
   }
 
   if (!mainCmake || !/idf_component_register\s*\(/.test(mainCmake.content || '')) {
@@ -1067,8 +1147,91 @@ export function validateGeneratedFiles(files) {
     errors.push('old ESP-IDF component CMake style is not allowed; use idf_component_register');
   }
 
+  const requires = cmakeRequires(mainCmake?.content || '');
+  const forbiddenRequires = new Set([
+    'esp_log',
+    'esp_err',
+    'sdkconfig',
+    'FreeRTOS',
+    'freertos/FreeRTOS.h',
+    'task',
+    'freertos/task.h',
+    'queue',
+    'semphr'
+  ]);
+  const duplicateRequires = requires.filter((item, index) => requires.indexOf(item) !== index);
+  for (const dep of duplicateRequires) {
+    warnings.push(`duplicate dependency in main/CMakeLists.txt REQUIRES: ${dep}`);
+  }
+  for (const dep of requires) {
+    if (forbiddenRequires.has(dep)) {
+      errors.push(`main/CMakeLists.txt REQUIRES must not contain ${dep}; ESP-IDF/FreeRTOS standard headers are includes, not SDK component dependencies`);
+    }
+  }
+
+  if (sdkSummary) {
+    const knownProjectDeps = new Set([
+      ...(sdkSummary.components || []).map((component) => component.name),
+      ...(sdkSummary.bsp || [])
+    ]);
+    const knownIdfDeps = new Set([
+      'freertos',
+      'esp_timer',
+      'esp_wifi',
+      'esp_event',
+      'esp_netif',
+      'nvs_flash',
+      'driver',
+      'esp_driver_gpio',
+      'esp_driver_i2c',
+      'esp_driver_uart',
+      'esp_driver_ledc',
+      'esp_driver_pcnt',
+      'esp_hal_i2c',
+      'esp_hal_ledc'
+    ]);
+    for (const dep of requires) {
+      if (!knownProjectDeps.has(dep) && !knownIdfDeps.has(dep) && !forbiddenRequires.has(dep)) {
+        errors.push(`main/CMakeLists.txt REQUIRES contains unknown component ${dep}; use scanned components/BSP names, not header names`);
+      }
+    }
+  }
+
   if (/#include\s+"bsp_board\.h"/.test(content)) {
     errors.push('bsp_board.h does not exist; use board.h only when BOARD_* macros are needed');
+  }
+
+  if (sdkSummary) {
+    const standardQuotedHeaders = [
+      'esp_err.h',
+      'esp_log.h',
+      'esp_system.h',
+      'esp_timer.h',
+      'esp_wifi.h',
+      'nvs_flash.h',
+      'sdkconfig.h',
+      'freertos/FreeRTOS.h',
+      'freertos/task.h',
+      'freertos/queue.h',
+      'freertos/event_groups.h',
+      'freertos/semphr.h'
+    ];
+    const allowedQuotedHeaders = new Set([
+      'board.h',
+      ...standardQuotedHeaders,
+      ...(sdkSummary.bsp || []).map((name) => `${name}.h`),
+      ...(sdkSummary.components || []).flatMap((component) => (component.api || [])
+        .map((api) => String(api.header || '').split('/').pop())
+        .filter(Boolean)),
+      ...generatedHeaderNames
+    ]);
+    const quotedIncludes = [...content.matchAll(/#include\s+"([^"]+)"/g)].map((match) => match[1]);
+    for (const includePath of quotedIncludes) {
+      const candidates = [includePath, includePath.split('/').pop()].filter(Boolean);
+      if (!candidates.some((header) => allowedQuotedHeaders.has(header))) {
+        errors.push(`quoted include ${includePath} was not found in scanned components/BSP headers, ESP-IDF standard headers, or generated project headers`);
+      }
+    }
   }
 
   if (/#include\s+"board\.h"/.test(content) && !/\bbsp_board\b/.test(mainCmake?.content || '')) {
@@ -1091,6 +1254,25 @@ export function validateGeneratedFiles(files) {
     if (new RegExp(`#include\\s+"${header.replace('.', '\\.')}"`).test(content)
       && !new RegExp(`\\b${component}\\b`).test(mainCmake?.content || '')) {
       errors.push(`including ${header} requires ${component} in main/CMakeLists.txt REQUIRES`);
+    }
+  }
+
+  if (sdkSummary) {
+    for (const component of sdkSummary.components || []) {
+      const functions = [...new Set((component.api || []).flatMap((api) => api.functions || []))];
+      const componentUsed = functions.some((name) => new RegExp(`\\b${name}\\s*\\(`).test(content));
+      if (!componentUsed) {
+        continue;
+      }
+      if (!new RegExp(`\\b${component.name}\\b`).test(mainCmake?.content || '')) {
+        errors.push(`calling ${component.name} API requires ${component.name} in main/CMakeLists.txt REQUIRES`);
+      }
+      const publicHeaders = (component.api || [])
+        .map((api) => String(api.header || '').split('/').pop())
+        .filter(Boolean);
+      if (publicHeaders.length > 0 && !publicHeaders.some((header) => new RegExp(`#include\\s+"${header.replace('.', '\\.')}"`).test(content))) {
+        errors.push(`calling ${component.name} API requires including one of: ${publicHeaders.join(', ')}`);
+      }
     }
   }
 

@@ -30,14 +30,20 @@ export function listProviderTemplates(config) {
 }
 
 async function postJson(url, headers, body) {
-  const response = await fetch(url, {
-    method: 'POST',
-    headers: {
-      'content-type': 'application/json',
-      ...headers
-    },
-    body: JSON.stringify(body)
-  });
+  let response;
+  try {
+    response = await fetch(url, {
+      method: 'POST',
+      headers: {
+        'content-type': 'application/json',
+        ...headers
+      },
+      body: JSON.stringify(body)
+    });
+  } catch (error) {
+    const reason = error.cause?.code || error.cause?.message || error.message;
+    throw new Error(`LLM transport failed: ${reason}`);
+  }
 
   const text = await response.text();
   let data = null;

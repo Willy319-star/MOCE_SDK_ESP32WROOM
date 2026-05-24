@@ -555,28 +555,8 @@ pre {
   gap: 12px;
 }
 
-.plan-cards {
-  display: grid;
-  gap: 10px;
+.hardware-details {
   margin-top: 12px;
-}
-
-.plan-card {
-  border: 1px solid var(--line);
-  border-radius: 8px;
-  padding: 12px;
-  background: var(--panel-soft);
-}
-
-.plan-card h4 {
-  margin: 0 0 8px;
-}
-
-.plan-card pre {
-  border: 0;
-  padding: 0;
-  background: transparent;
-  max-height: 260px;
 }
 
 .diagram-canvas {
@@ -589,20 +569,36 @@ pre {
   gap: 10px;
 }
 
-.diagram-layer {
-  border: 1px solid var(--line);
-  border-radius: 8px;
-  padding: 10px;
+.diagram-canvas.mermaid-diagram {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: auto;
   background: #fff;
 }
 
-.diagram-layer h4 {
-  margin: 0 0 8px;
-  font-size: 13px;
-  color: var(--muted);
+.diagram-canvas.mermaid-diagram svg {
+  display: block;
+  width: 100%;
+  height: auto;
+  max-height: 560px;
 }
 
-.diagram-nodes,
+.diagram-canvas.rendering {
+  place-items: center;
+}
+
+.diagram-canvas.diagram-error {
+  align-content: center;
+  background: var(--amber-soft);
+  color: var(--amber);
+}
+
+.diagram-canvas.diagram-error p {
+  margin: 6px 0 0;
+  font-size: 12px;
+}
+
 .pill-row,
 .sdk-list {
   display: flex;
@@ -610,7 +606,6 @@ pre {
   gap: 6px;
 }
 
-.diagram-node,
 .pill {
   border-radius: 999px;
   background: #eef2f7;
@@ -619,17 +614,6 @@ pre {
   font-size: 12px;
 }
 
-.diagram-node.hardware {
-  background: var(--green-soft);
-  color: var(--green);
-}
-
-.diagram-node.sdk {
-  background: var(--blue-soft);
-  color: var(--blue);
-}
-
-.diagram-node.warn,
 .pill.warn {
   background: var(--amber-soft);
   color: var(--amber);

@@ -42,12 +42,14 @@ const __dirname = path.dirname(__filename);
 const agentRoot = path.resolve(__dirname, '..');
 const sdkRoot = path.resolve(agentRoot, '..');
 const publicRoot = path.join(agentRoot, 'public');
+const mermaidRoot = path.join(agentRoot, 'node_modules', 'mermaid', 'dist');
 const config = await loadConfig(agentRoot);
 
 const contentTypes = {
   '.html': 'text/html; charset=utf-8',
   '.css': 'text/css; charset=utf-8',
   '.js': 'application/javascript; charset=utf-8',
+  '.mjs': 'application/javascript; charset=utf-8',
   '.json': 'application/json; charset=utf-8',
   '.svg': 'image/svg+xml',
   '.png': 'image/png',
@@ -62,6 +64,7 @@ const skillsRoot = path.join(agentRoot, 'skills');
 const planningSkillFile = 'requirement-analysis-hardware-breakdown.md';
 const componentSelectionSkillFile = 'component-selection.md';
 const hardwareResourcePlanningSkillFile = 'hardware-resource-planning.md';
+const firmwareDraftSkillFile = 'firmware-draft-generation.md';
 
 function sendJson(res, status, payload) {
   const body = JSON.stringify(payload, null, 2);
@@ -405,11 +408,10 @@ async function getSdkSummary() {
   return sdkSummaryCache;
 }
 
-async function serveStatic(req, res, pathname) {
-  const requested = pathname === '/' ? '/index.html' : pathname;
-  const absolute = path.resolve(publicRoot, requested.slice(1));
+async function serveStaticFromRoot(res, root, requested) {
+  const absolute = path.resolve(root, requested.replace(/^\/+/, ''));
 
-  if (absolute !== publicRoot && !absolute.startsWith(publicRoot + path.sep)) {
+  if (absolute !== root && !absolute.startsWith(root + path.sep)) {
     sendError(res, 403, 'forbidden');
     return;
   }
@@ -434,6 +436,11 @@ async function serveStatic(req, res, pathname) {
     }
     sendError(res, 500, 'failed to serve asset', error.message);
   }
+}
+
+async function serveStatic(req, res, pathname) {
+  const requested = pathname === '/' ? '/index.html' : pathname;
+  await serveStaticFromRoot(res, publicRoot, requested);
 }
 
 async function handleHardwareBuild(req, res) {
@@ -694,7 +701,10 @@ async function handleCodegen(req, res) {
     sdkSummary,
     globalPrompt
   });
-  const messages = applyGlobalPrompt(prompt.messages, globalPrompt);
+  const messages = applyGlobalPrompt(
+    applySkillPrompt(prompt.messages, firmwareDraftSkillFile, await getSkillText(firmwareDraftSkillFile)),
+    globalPrompt
+  );
 
   if (body.useLlm) {
     try {
@@ -706,7 +716,7 @@ async function handleCodegen(req, res) {
       });
       const fallback = fallbackCodegen(requirement, body.projectName || '', sdkSummary);
       const parsedFiles = parseGeneratedFiles(text);
-      const validation = validateGeneratedFiles(parsedFiles);
+      const validation = validateGeneratedFiles(parsedFiles, sdkSummary);
       const useParsedFiles = parsedFiles.length > 0 && validation.errors.length === 0;
       sendJson(res, 200, {
         ok: true,
@@ -714,7 +724,7 @@ async function handleCodegen(req, res) {
         projectName: fallback.projectName,
         result: normalizeAgentText(text),
         files: useParsedFiles ? parsedFiles : fallback.files,
-        validation: useParsedFiles ? validation : validateGeneratedFiles(fallback.files),
+        validation: useParsedFiles ? validation : validateGeneratedFiles(fallback.files, sdkSummary),
         note: useParsedFiles
           ? 'LLM file blocks were parsed into editable files.'
           : parsedFiles.length > 0
@@ -728,7 +738,7 @@ async function handleCodegen(req, res) {
         ok: true,
         mode: 'fallback',
         warning: error.message,
-        validation: validateGeneratedFiles(fallback.files),
+        validation: validateGeneratedFiles(fallback.files, sdkSummary),
         ...fallback
       });
       return;
@@ -738,7 +748,7 @@ async function handleCodegen(req, res) {
   sendJson(res, 200, {
     ok: true,
     mode: 'fallback',
-    validation: validateGeneratedFiles(fallbackCodegen(requirement, body.projectName || '', sdkSummary).files),
+    validation: validateGeneratedFiles(fallbackCodegen(requirement, body.projectName || '', sdkSummary).files, sdkSummary),
     ...fallbackCodegen(requirement, body.projectName || '', sdkSummary)
   });
 }
@@ -772,10 +782,10 @@ async function handleDebugFix(req, res) {
         temperature: body.temperature ?? 0.1
       });
       const parsedFiles = parseGeneratedFiles(text);
-      const validation = validateGeneratedFiles(mergeProjectFiles(projectFiles, parsedFiles));
+      const validation = validateGeneratedFiles(mergeProjectFiles(projectFiles, parsedFiles), sdkSummary);
       const useParsedFiles = parsedFiles.length > 0 && validation.errors.length === 0;
       const fallbackFiles = fallbackDebugFix(projectFiles);
-      const fallbackValidation = validateGeneratedFiles(mergeProjectFiles(projectFiles, fallbackFiles));
+      const fallbackValidation = validateGeneratedFiles(mergeProjectFiles(projectFiles, fallbackFiles), sdkSummary);
       sendJson(res, 200, {
         ok: true,
         mode: 'llm',
@@ -792,7 +802,7 @@ async function handleDebugFix(req, res) {
       return;
     } catch (error) {
       const fallbackFiles = fallbackDebugFix(projectFiles);
-      const validation = validateGeneratedFiles(mergeProjectFiles(projectFiles, fallbackFiles));
+      const validation = validateGeneratedFiles(mergeProjectFiles(projectFiles, fallbackFiles), sdkSummary);
       sendJson(res, 200, {
         ok: true,
         mode: 'fallback',
@@ -810,7 +820,7 @@ async function handleDebugFix(req, res) {
   }
 
   const fallbackFiles = fallbackDebugFix(projectFiles);
-  const validation = validateGeneratedFiles(mergeProjectFiles(projectFiles, fallbackFiles));
+  const validation = validateGeneratedFiles(mergeProjectFiles(projectFiles, fallbackFiles), sdkSummary);
   sendJson(res, 200, {
     ok: true,
     mode: 'fallback',
@@ -1281,6 +1291,7 @@ async function handleApi(req, res, pathname) {
         version: '0.1.0',
         sdkRoot,
         agentRoot,
+        defaultProvider: config.defaultProvider,
         providers: listProviderTemplates(config),
         execution: publicExecutionConfig(),
         physical: getPhysicalStatus()
@@ -1453,6 +1464,11 @@ const server = http.createServer(async (req, res) => {
 
   if (pathname.startsWith('/api/')) {
     await handleApi(req, res, pathname);
+    return;
+  }
+
+  if (pathname.startsWith('/vendor/mermaid/')) {
+    await serveStaticFromRoot(res, mermaidRoot, pathname.slice('/vendor/mermaid/'.length));
     return;
   }
 

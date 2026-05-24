@@ -1,0 +1,99 @@
+# 固件草稿生成 Skill
+
+运行时调用：`/api/agent/codegen` 在“嵌入式开发：固件草稿”阶段会自动读取本文件，并将其注入到 LLM 的 system messages 中。用户无需在界面中手动选择该 skill。
+
+目标：基于已接受的需求分析、器件选型、硬件资源规划和硬件搭建文档，生成只位于 `project/` 下的 ESP-IDF 应用工程草稿。代码必须优先复用当前 SDK 已存在的 `components/`、`bsp/`、`boards/` 能力，参考`examples/`中的例程,避免臆造头文件、函数、组件或底层硬件访问。
+
+适用场景：
+
+- 已完成硬件搭建，需要生成 `project/<project_name>/` 下的固件草稿。
+- 需要把硬件资源规划中的模块、接口、地址和板级宏落实到应用初始化与业务状态机。
+- 需要在不修改 SDK 的前提下组合已有 driver/service 组件。
+- 需要确保生成代码可被当前构建系统解析，并能进入后续 Build / Flash / Monitor 测试调试步骤。
+
+输入：
+
+- 用户原始需求和补充需求。
+- 已接受的硬件搭建文档，包括模块连接框图、接线清单、接口分组和待确认项。
+- `./prompt/prompt0.md` 全局开发约束。
+- 当前 SDK 扫描摘要，包括 `components/`、`bsp/`、`boards/`、`examples/`。
+- 目标板卡名称和 `boards/<board>/board.h` 中的 `BOARD_*` 资源定义。
+- 可用 API 清单，包括真实存在的公共头文件、函数原型、类型、结构体字段、枚举和宏。
+
+核心原则：
+
+1. **先检查组件存在性**
+   - 生成任何 `#include "driver_xxx.h"` 或 `#include "service_xxx.h"` 前，必须确认 `components/` 扫描结果中存在对应组件。
+   - 如果硬件搭建文档提到某个模块，但 `components/` 中没有对应 driver/service，只能在 `project/` 里降级为 TODO、日志或状态占位，不要引用不存在的组件。
+   - 不允许臆造组件名、头文件名、函数名、类型名、枚举名或结构体字段。
+
+2. **优先调用 components 的公共接口**
+   - 已有 `driver_*` 或 `service_*` 能力时，优先调用组件公共 API。
+   - 不要绕过组件直接操作 I2C/UART/PWM/GPIO 底层 BSP，除非当前 SDK 没有上层组件且可用 API 明确提供了 BSP 公共接口。
+   - 优先使用 `*_init_default()`、`*_get_default_config()`、`*_init_profile()` 等组件提供的默认初始化路径。
+
+3. **头文件必须真实且依赖匹配**
+   - 只能引用“可用 API”和“BSP 公共头文件”中列出的真实公共头文件，或 ESP-IDF/FreeRTOS 标准头。
+   - ESP-IDF/FreeRTOS 标准头可以使用尖括号或双引号，例如 `<stdio.h>`、`"esp_log.h"`、`"freertos/FreeRTOS.h"`、`"freertos/task.h"`。
+   - 板级宏头文件是 `board.h`，不是 `bsp_board.h`。
+   - 引用组件头文件时，`project/<name>/main/CMakeLists.txt` 的 `REQUIRES` 必须包含对应组件名。
+   - 引用 `board.h` 时，`REQUIRES` 必须包含 `bsp_board`。
+   - 不要因为包含 ESP-IDF/FreeRTOS 标准头而把头文件名加入 `REQUIRES`。例如包含 `"esp_log.h"` 不代表可以写 `REQUIRES esp_log`，包含 `"freertos/task.h"` 也不代表要写 `REQUIRES task`。
+   - `REQUIRES` 只能写当前 SDK 扫描到的 `components/`、`bsp/` 组件名，以及确实存在且被调用的 ESP-IDF 组件；禁止加入 `esp_log`、`esp_err`、`sdkconfig`、`FreeRTOS`、`task` 等头文件名。
+
+4. **只生成 project/ 应用工程**
+   - 严格遵守 `./prompt/prompt0.md`：只允许创建、修改或覆盖 `project/` 下文件。
+   - 禁止输出或建议修改 `components/`、`boards/`、`bsp/`、`tools/`、`env/`、`third_party/`、`examples/`。
+   - 如发现 SDK 能力不足，只能在应用代码中保留 TODO 或最小可编译降级，不要修改 SDK。
+
+5. **CMake 必须符合当前 ESP-IDF 写法**
+   - 根 `project/<name>/CMakeLists.txt` 必须是 ESP-IDF 工程入口，不是组件入口。
+   - 根 `CMakeLists.txt` 第一条有效 CMake 命令必须包含 `cmake_minimum_required(VERSION 3.16)` 或更高兼容版本。
+   - 根 `CMakeLists.txt` 必须设置 `EXTRA_COMPONENT_DIRS` 到 `../../bsp` 和 `../../components`，也可以使用 `${CMAKE_CURRENT_LIST_DIR}/../../bsp` 和 `${CMAKE_CURRENT_LIST_DIR}/../../components`。
+   - 根 `CMakeLists.txt` 必须 `include($ENV{IDF_PATH}/tools/cmake/project.cmake)` 并调用 `project(<name>)`。
+   - 根 `CMakeLists.txt` 禁止出现 `idf_component_register()`、`register_component()`、`SRCS`、`REQUIRES` 等组件级写法。
+   - `project/<name>/main/CMakeLists.txt` 才能使用 `idf_component_register(SRCS "main.c" REQUIRES ...)`。
+   - `REQUIRES` 中不要重复写同一个组件。
+   - `REQUIRES` 中不要加入仅由标准头文件带来的伪组件，例如 `esp_log`、`esp_err`、`task`。
+   - 禁止使用 `register_component()`、`COMPONENT_SRCS`、`COMPONENT_REQUIRES`、`COMPONENT_ADD_INCLUDEDIRS` 等旧式写法。
+
+6. **代码行为保守可编译**
+   - 不把 `void` 返回值当成 `esp_err_t`。
+   - 对返回 `esp_err_t` 的函数检查错误；对 `void` 函数直接调用。
+   - 未确认的硬件参数、地址、阈值或业务策略使用清晰的 `TODO` 注释或保守默认值。
+   - FreeRTOS 循环必须包含合理 `vTaskDelay()`，避免忙等。
+
+生成前自检：
+
+1. 从硬件搭建文档提取需要用到的 SDK 组件。
+2. 对照当前 `components/` 扫描结果，列出“可用组件”和“缺失组件”。
+3. 只为可用组件生成 `#include`、函数调用和 `REQUIRES`。
+4. 对照可用 API 原型检查每个函数调用的参数、返回值、类型和枚举。
+5. 确认每个引用的头文件都真实存在，且 CMake 依赖完整。
+6. 确认输出文件全部在 `project/<project_name>/` 下。
+7. 确认 `main/CMakeLists.txt` 的 `REQUIRES` 没有把 ESP-IDF/FreeRTOS 标准头误写成组件名。
+8. 确认根 `CMakeLists.txt` 和 `main/CMakeLists.txt` 没有写反：根文件必须包含 `cmake_minimum_required()`、`include(project.cmake)`、`project()`；组件文件必须包含 `idf_component_register()`。
+
+输出格式：
+
+```text
+===== FILE: project/<project_name>/CMakeLists.txt =====
+<完整文件内容>
+
+===== FILE: project/<project_name>/main/CMakeLists.txt =====
+<完整文件内容>
+
+===== FILE: project/<project_name>/main/main.c =====
+<完整文件内容>
+```
+
+如有额外源文件或头文件，继续使用相同 `===== FILE:` 文件块格式。不要输出解释文字、Markdown 包裹、diff 或 SDK 目录文件。
+
+质量检查：
+
+- 是否严格遵守 `prompt/prompt0.md` 的目录边界。
+- 是否先检查 `components/` 中存在相应组件。
+- 是否只引用真实公共头文件。
+- 是否优先调用 driver/service 组件接口，而不是直接访问底层 BSP。
+- 是否为每个组件头文件配置了对应 `REQUIRES`。
+- 是否避免 `bsp_board.h`、不存在的 include、旧式 CMake 和错误返回值处理。

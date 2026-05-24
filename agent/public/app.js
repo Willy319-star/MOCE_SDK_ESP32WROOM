@@ -1,3 +1,17 @@
+import mermaid from '/vendor/mermaid/mermaid.esm.mjs';
+
+mermaid.initialize({
+  startOnLoad: false,
+  securityLevel: 'strict',
+  theme: 'neutral',
+  flowchart: {
+    htmlLabels: false,
+    curve: 'basis'
+  }
+});
+
+let diagramRenderSequence = 0;
+
 const state = {
   health: null,
   sdk: null,
@@ -438,12 +452,11 @@ function renderProviders() {
   $('#providerName').innerHTML = providers.map((provider) => `
     <option value="${provider.name}">${provider.name}</option>
   `).join('');
-  const preferred = providers.find((provider) => provider.name === 'deepseek')
-    || providers.find((provider) => provider.name === 'openai')
+  const preferred = providers.find((provider) => provider.name === state.health?.defaultProvider)
     || providers[0];
   if (preferred) {
     $('#providerName').value = preferred.name;
-    $('#modelName').value = preferred.name === 'deepseek' ? 'deepseek-reasoner' : (preferred.model || '');
+    $('#modelName').value = preferred.model || '';
     $('#baseUrl').value = preferred.baseUrl || '';
     updateModelChip();
   }
@@ -526,22 +539,74 @@ function extractMermaid(markdown) {
   return collected.join('\n').trim();
 }
 
-function parsePlanSections(markdown) {
-  const text = String(markdown || '').replace(/\r\n/g, '\n');
-  if (!text.trim()) return [];
-  const headingPattern = /^(#{2,4})\s+(.+)$/gm;
-  const matches = [...text.matchAll(headingPattern)];
-  if (matches.length === 0) {
-    return [{ title: '规划全文', body: text.trim() }];
+function hardwareBuildDetails(markdown) {
+  return String(markdown || '')
+    .replace(/\r\n/g, '\n')
+    .replace(/(?:^|\n)#{2,4}\s+模块连接框图\s*\n+(?:```\s*mermaid\s*\n[\s\S]*?\n```\s*)?/i, '\n')
+    .trim();
+}
+
+function compactMermaidLabels(source) {
+  return String(source || '')
+    .replaceAll('BOARD_I2C_SDA_GPIO', 'SDA')
+    .replaceAll('BOARD_I2C_SCL_GPIO', 'SCL')
+    .replaceAll('BOARD_I2C_FREQUENCY_HZ', 'FREQ')
+    .replaceAll('BOARD_OLED_I2C_ADDRESS', 'A')
+    .replaceAll('BOARD_UART_TX_GPIO', 'TX')
+    .replaceAll('BOARD_UART_RX_GPIO', 'RX')
+    .replaceAll('BOARD_UART_BAUD_RATE', 'BAUD')
+    .replaceAll('BOARD_BUTTON_GPIO', 'BTN')
+    .replaceAll('BOARD_BUTTON_ACTIVE_LEVEL', 'LEVEL')
+    .replaceAll('BOARD_LED_GPIO', 'LED')
+    .replaceAll('BOARD_LED_PWM_CHANNEL', 'CH')
+    .replaceAll('BOARD_LED_PWM_FREQUENCY_HZ', 'FREQ')
+    .replaceAll('BOARD_SERVO_GPIO_0', 'S0')
+    .replaceAll('BOARD_SERVO_GPIO_1', 'S1')
+    .replaceAll('BOARD_SERVO_PWM_CHANNEL_0', 'CH0')
+    .replaceAll('BOARD_SERVO_PWM_CHANNEL_1', 'CH1')
+    .replaceAll('BOARD_SERVO_PWM_FREQUENCY_HZ', 'FREQ')
+    .replaceAll('DRIVER_TOF2000C_VL53L0X_I2C_ADDR_DEFAULT', 'A')
+    .replace(/\bI2C address\s+/g, 'A=')
+    .replace(/\bBOARD_MOTOR_/g, 'M_')
+    .replace(/\bBOARD_ENCODER_/g, 'ENC_')
+    .replace(/\bI2C:\s*/g, '')
+    .replace(/\bUART:\s*/g, '')
+    .replace(/\bLED:\s*/g, '')
+    .replace(/\bServo:\s*/g, '')
+    .replace(/\/(?:3\.3V|5V|VCC|供电)\/GND/g, '')
+    .replace(/,\s*FREQ=[^;"]+/g, '')
+    .replace(/,\s*BAUD=([^;"]+)/g, ' @ $1');
+}
+
+function simplifyDiagramPowerNetwork(source) {
+  const text = String(source || '');
+  const powerNodeIds = new Set();
+  const nodePattern = /([A-Za-z][A-Za-z0-9_]*)\s*\[([^\]]+)\]/g;
+  let match = nodePattern.exec(text);
+  while (match) {
+    if (/^\s*(?:GND\b|VCC\b|VDD\b|3\.3V\b|5V\b|电源|供电|共地)/i.test(match[2])) {
+      powerNodeIds.add(match[1]);
+    }
+    match = nodePattern.exec(text);
   }
-  return matches.slice(0, 12).map((match, index) => {
-    const start = match.index + match[0].length;
-    const end = matches[index + 1]?.index ?? text.length;
-    return {
-      title: match[2].replace(/\*/g, '').trim(),
-      body: text.slice(start, end).trim()
-    };
-  }).filter((section) => section.body);
+
+  if (powerNodeIds.size === 0) return text;
+  let removedConnection = false;
+  const kept = text.split('\n').filter((line) => {
+    const linkText = line.replace(/\[[^\]]*\]/g, '').replace(/"[^"]*"/g, '');
+    const mentionsPowerNode = [...powerNodeIds].some((id) => new RegExp(`(?<![A-Za-z0-9_/])${id}(?![A-Za-z0-9_/])`).test(linkText));
+    const isConnection = /-->|---|-.->|==>/.test(line);
+    const isDefinition = [...powerNodeIds].some((id) => new RegExp(`^\\s*${id}\\s*\\[`).test(line));
+    if (mentionsPowerNode && (isConnection || isDefinition)) {
+      removedConnection ||= isConnection;
+      return false;
+    }
+    return true;
+  });
+
+  if (!removedConnection) return text;
+  kept.push('  MOCE_POWER["供电 / 共地：统一连接，详见接线清单"]');
+  return kept.join('\n');
 }
 
 function markdownPreview(markdown, maxLength = 1200) {
@@ -563,24 +628,11 @@ function updateOutput(target, markdown, emptyText, options = {}) {
 
 function renderPlan() {
   const planText = state.plan || '';
-  $('#planOutput').className = planText ? 'markdown-body' : 'markdown-body empty';
-  $('#planOutput').innerHTML = planText ? markdownToHtml(planText) : '等待生成硬件搭建文档。';
-  $('#planMeta').textContent = planText ? `${planText.length} chars` : 'Markdown';
+  const detailText = hardwareBuildDetails(planText);
+  $('#planOutput').className = detailText ? 'markdown-body' : 'markdown-body empty';
+  $('#planOutput').innerHTML = detailText ? markdownToHtml(detailText) : '等待生成硬件搭建文档。';
+  $('#planMeta').textContent = planText ? '已生成' : '等待生成';
   $('#planSummary').textContent = planText ? '已生成硬件搭建文档，可查看模块连接框图和接线清单。' : '尚未生成硬件搭建文档。';
-
-  const sections = parsePlanSections(planText);
-  if (sections.length === 0) {
-    $('#planCards').className = 'plan-cards empty';
-    $('#planCards').textContent = '等待生成硬件搭建文档。';
-  } else {
-    $('#planCards').className = 'plan-cards';
-    $('#planCards').innerHTML = sections.slice(0, 6).map((section) => `
-      <article class="plan-card">
-        <h4>${escapeHtml(section.title)}</h4>
-        <div class="markdown-body compact">${markdownToHtml(section.body.slice(0, 1400))}</div>
-      </article>
-    `).join('');
-  }
 
   renderHardwareCoverage();
   renderSteps();
@@ -632,47 +684,41 @@ function renderComponentSelection() {
   updateWorkflowControls();
 }
 
-function classifyNode(label) {
-  if (/driver|service|SDK|BSP|应用|Application|Layer/i.test(label)) return 'sdk';
-  if (/GPIO|I2C|UART|PWM|ESP32|OLED|VL53|ToF|Servo|Button|LED|WiFi|Motor|舵机|按键|传感器|主控/i.test(label)) return 'hardware';
-  return '';
-}
+async function renderDiagram() {
+  const diagram = simplifyDiagramPowerNetwork(compactMermaidLabels(extractMermaid(state.plan)));
 
-function parseMermaidNodes(source) {
-  const nodes = new Map();
-  const nodePattern = /([A-Za-z0-9_]+)\[([^\]]+)\]/g;
-  let match = nodePattern.exec(source);
-  while (match) {
-    nodes.set(match[1], match[2]);
-    match = nodePattern.exec(source);
+  const sequence = ++diagramRenderSequence;
+  const targets = ['#diagramGrid', '#diagramPreview'].map((selector) => $(selector)).filter(Boolean);
+  if (!diagram) {
+    for (const el of targets) {
+      el.className = 'diagram-canvas empty';
+      el.textContent = '等待生成框图。';
+    }
+    return;
   }
-  return [...nodes.entries()].map(([id, label]) => ({ id, label, type: classifyNode(label) }));
-}
 
-function renderDiagram() {
-  const diagram = extractMermaid(state.plan);
-  $('#diagramOutput').textContent = diagram || '硬件搭建文档中暂无 Mermaid 框图。';
+  for (const el of targets) {
+    el.className = 'diagram-canvas rendering';
+    el.textContent = '正在渲染框图...';
+  }
 
-  const nodes = parseMermaidNodes(diagram);
-  const html = nodes.length > 0
-    ? `
-      <div class="diagram-layer">
-        <h4>硬件 / SDK 节点</h4>
-        <div class="diagram-nodes">
-          ${nodes.map((node) => `<span class="diagram-node ${node.type}">${escapeHtml(node.label)}</span>`).join('')}
-        </div>
-      </div>
-      <div class="diagram-layer">
-        <h4>连接关系</h4>
-        <pre>${escapeHtml(diagram.split('\n').filter((line) => /-->|---|<-->|==>/.test(line)).slice(0, 16).join('\n') || '未提取到连接关系。')}</pre>
-      </div>
-    `
-    : '等待生成框图。';
-
-  for (const selector of ['#diagramGrid', '#diagramPreview']) {
-    const el = $(selector);
-    el.className = nodes.length > 0 ? 'diagram-canvas' : 'diagram-canvas empty';
-    el.innerHTML = html;
+  try {
+    await mermaid.parse(diagram);
+    const rendered = await Promise.all(targets.map((el, index) => mermaid.render(`moceDiagram${sequence}_${index}`, diagram, el)));
+    if (sequence !== diagramRenderSequence) return;
+    rendered.forEach(({ svg, bindFunctions }, index) => {
+      const el = targets[index];
+      el.className = 'diagram-canvas mermaid-diagram';
+      el.innerHTML = svg;
+      bindFunctions?.(el);
+    });
+  } catch (error) {
+    if (sequence !== diagramRenderSequence) return;
+    const message = error?.message?.split('\n')[0] || 'Mermaid 语法无法解析。';
+    for (const el of targets) {
+      el.className = 'diagram-canvas diagram-error';
+      el.innerHTML = `<strong>框图渲染失败</strong><p>${escapeHtml(message)}</p>`;
+    }
   }
 }
 
@@ -1565,7 +1611,7 @@ function bindEvents() {
   });
   $('#providerName').addEventListener('change', () => {
     const provider = state.health.providers.find((item) => item.name === $('#providerName').value);
-    $('#modelName').value = provider?.name === 'deepseek' ? 'deepseek-reasoner' : (provider?.model || '');
+    $('#modelName').value = provider?.model || '';
     $('#baseUrl').value = provider?.baseUrl || '';
     updateModelChip();
   });
