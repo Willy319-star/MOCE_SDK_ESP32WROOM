@@ -960,6 +960,21 @@ function renderFiles() {
   updateWorkflowControls();
 }
 
+function mergeProjectFileList(baseFiles, updatedFiles) {
+  const byPath = new Map();
+  for (const file of baseFiles || []) {
+    if (file?.path && typeof file.content === 'string') {
+      byPath.set(file.path, file);
+    }
+  }
+  for (const file of updatedFiles || []) {
+    if (file?.path && typeof file.content === 'string') {
+      byPath.set(file.path, file);
+    }
+  }
+  return [...byPath.values()].sort((a, b) => a.path.localeCompare(b.path));
+}
+
 function switchTab(name) {
   document.querySelectorAll('.tab').forEach((tab) => {
     tab.classList.toggle('active', tab.dataset.tab === name);
@@ -1339,12 +1354,12 @@ async function writeProject() {
 
 function renderToolResult(data) {
   const result = data.result || {};
-  const summary = summarizeToolOutput(result);
+  const summary = data.diagnostics?.text || summarizeToolOutput(result);
   $('#toolOutput').textContent = [
     data.cwd ? `cwd: ${data.cwd}` : '',
     `$ ${data.command}`,
     '',
-    summary,
+    summary || '未提取到错误信息。',
     result.timedOut ? 'timed out: true' : '',
     result.truncated ? 'output truncated: true' : '',
     `exit code: ${result.code}`
@@ -1421,6 +1436,10 @@ function renderMemory() {
 }
 
 function summarizeToolOutput(result) {
+  if (Array.isArray(result.diagnostics?.keyLines) && result.diagnostics.keyLines.length > 0) {
+    return result.diagnostics.keyLines.join('\n');
+  }
+
   const lines = [
     ...String(result.stdout || '').split(/\r?\n/),
     ...String(result.stderr || '').split(/\r?\n/)
@@ -1473,7 +1492,8 @@ async function runTool(kind) {
   $('#toolOutput').textContent = `正在运行 ${kind}...`;
   switchTab('sdk');
   logActivity(`Running ${kind}...`, 'warn');
-  const data = await api(`/api/tools/${kind}`, {
+  const endpoint = kind === 'monitor' ? '/api/tools/monitor-diagnose' : `/api/tools/${kind}`;
+  const data = await api(endpoint, {
     method: 'POST',
     body: {
       projectPath,
@@ -1483,28 +1503,98 @@ async function runTool(kind) {
       timeoutMs: kind === 'monitor' ? 15000 : 0
     }
   });
-  renderToolResult(data);
-  const ok = data.result?.ok === true;
+  const diagnostics = data.diagnostics || null;
+  const effectiveResult = diagnostics
+    ? { ...(data.result || {}), ok: !diagnostics.hasErrors, diagnostics }
+    : (data.result || {});
+  renderToolResult({ ...data, result: effectiveResult, diagnostics });
+  const ok = effectiveResult.ok === true;
   state.lastToolResult = {
     tool: kind,
     command: data.command,
-    result: data.result,
-    summary: summarizeToolOutput(data.result || {})
+    result: effectiveResult,
+    summary: diagnostics?.text || summarizeToolOutput(effectiveResult)
   };
   state.debugFix = null;
   state.tools[kind] = {
     ok,
-    code: data.result?.code ?? null,
+    code: effectiveResult.code ?? null,
     ranAt: new Date().toISOString()
   };
   renderDebugFix();
   renderSteps();
-  setStatus(`${kind} finished with code ${data.result?.code}`, ok ? 'ok' : 'error');
-  logActivity(`${kind} finished with code ${data.result?.code}`, ok ? 'ok' : 'error');
+  setStatus(`${kind} finished with code ${effectiveResult.code}`, ok ? 'ok' : 'error');
+  logActivity(`${kind} finished with code ${effectiveResult.code}`, ok ? 'ok' : 'error');
   await recordMemoryEvent(`${kind}_${ok ? 'passed' : 'failed'}`, `${kind} ${ok ? '通过' : '失败'}`, state.lastToolResult.summary, {
     tool: kind,
-    code: data.result?.code
+    code: effectiveResult.code
   });
+
+  if (kind === 'flash' && ok) {
+    await runMonitorDiagnosisAfterFlash(payload, projectPath);
+  }
+}
+
+async function runMonitorDiagnosisAfterFlash(payload, projectPath) {
+  $('#toolOutput').textContent = 'Flash 完成，正在监听 monitor 并提取错误信息...';
+  switchTab('sdk');
+  logActivity('Running monitor diagnostics after flash...', 'warn');
+  const data = await api('/api/tools/monitor-diagnose', {
+    method: 'POST',
+    body: {
+      projectPath,
+      target: payload.target,
+      board: payload.board,
+      port: payload.port,
+      timeoutMs: 15000
+    }
+  });
+
+  const diagnostics = data.diagnostics || { hasErrors: false, keyLines: [], text: '' };
+  const diagnosticResult = {
+    ...(data.result || {}),
+    ok: !diagnostics.hasErrors,
+    diagnostics
+  };
+  const summary = diagnostics.text || 'Monitor 监听结束，未提取到错误信息。';
+
+  renderToolResult({
+    ...data,
+    result: diagnosticResult,
+    diagnostics
+  });
+
+  state.lastToolResult = {
+    tool: 'monitor',
+    command: data.command,
+    result: diagnosticResult,
+    summary
+  };
+  state.tools.monitor = {
+    ok: !diagnostics.hasErrors,
+    code: data.result?.code ?? null,
+    ranAt: new Date().toISOString()
+  };
+  state.debugFix = null;
+  renderDebugFix();
+  renderSteps();
+
+  await recordMemoryEvent(
+    diagnostics.hasErrors ? 'monitor_failed' : 'monitor_passed',
+    diagnostics.hasErrors ? 'monitor 发现错误' : 'monitor 未发现错误',
+    summary,
+    { tool: 'monitor-diagnose', errorCount: diagnostics.keyLines?.length || 0 }
+  );
+
+  if (!diagnostics.hasErrors) {
+    setStatus('Monitor 未提取到错误信息。', 'ok');
+    logActivity('Monitor diagnostics found no errors', 'ok');
+    return;
+  }
+
+  setStatus('Monitor 发现错误，正在交给 agent 重新生成固件...', 'warn');
+  logActivity('Monitor diagnostics found errors; requesting firmware fix...', 'warn');
+  await debugFixLastTool();
 }
 
 async function debugFixLastTool() {
@@ -1540,7 +1630,7 @@ async function debugFixLastTool() {
     });
     state.debugFix = data;
     if ((data.files || []).length > 0) {
-      state.files = data.files;
+      state.files = mergeProjectFileList(state.files, data.files);
       state.validation = data.validation || null;
       state.selectedFilePath = '';
       renderFiles();

@@ -7,6 +7,7 @@ import { spawn } from 'node:child_process';
 import { loadConfig } from './lib/config.js';
 import { callLlm, listProviderTemplates } from './lib/llm.js';
 import { scanSdk } from './lib/sdkScanner.js';
+import { extractMonitorDiagnostics } from './lib/monitorDiagnostics.js';
 import {
   buildChatPrompt,
   buildCodegenPrompt,
@@ -261,6 +262,10 @@ function mergeProjectFiles(diskFiles, draftFiles) {
 }
 
 function extractToolErrors(toolResult = {}) {
+  if (Array.isArray(toolResult.diagnostics?.keyLines) && toolResult.diagnostics.keyLines.length > 0) {
+    return toolResult.diagnostics.keyLines.slice(0, 80);
+  }
+
   const text = [
     String(toolResult.stdout || ''),
     String(toolResult.stderr || ''),
@@ -1321,6 +1326,9 @@ async function handleTool(req, res, kind) {
     args.push(target, board);
   } else {
     args.push(port);
+    if (kind === 'monitor') {
+      args.push(String(Math.ceil(Number(body.timeoutMs || 15000) / 1000)));
+    }
   }
 
   const timeoutMs = kind === 'monitor' ? Number(body.timeoutMs || 15000) : 0;
@@ -1334,6 +1342,33 @@ async function handleTool(req, res, kind) {
     toolOk: result.ok,
     command: ['bash', ...args].join(' '),
     result
+  });
+}
+
+async function handleMonitorDiagnose(req, res) {
+  const body = await readJson(req);
+  const { normalized } = safeProjectPath(body.projectPath || 'project/led_effects_demo');
+  const port = body.port || '/dev/ttyUSB0';
+  const script = path.join(sdkRoot, 'tools', 'monitor.sh');
+  const timeoutMs = Number(body.timeoutMs || 15000);
+  const args = [
+    bashPath(script),
+    bashPath(path.join(sdkRoot, normalized)),
+    port,
+    String(Math.ceil(timeoutMs / 1000))
+  ];
+  const result = await runTool('bash', args, sdkRoot, timeoutMs, {
+    okOnTimeout: true,
+    maxOutputBytes: Number(config.execution?.maxOutputBytes || 200000)
+  });
+  const diagnostics = extractMonitorDiagnostics(result);
+  sendJson(res, 200, {
+    ok: true,
+    tool: 'monitor-diagnose',
+    toolOk: !diagnostics.hasErrors,
+    command: ['bash', ...args].join(' '),
+    result,
+    diagnostics
   });
 }
 
@@ -1509,6 +1544,11 @@ async function handleApi(req, res, pathname) {
 
     if (req.method === 'POST' && pathname === '/api/tools/monitor') {
       await handleTool(req, res, 'monitor');
+      return;
+    }
+
+    if (req.method === 'POST' && pathname === '/api/tools/monitor-diagnose') {
+      await handleMonitorDiagnose(req, res);
       return;
     }
 
