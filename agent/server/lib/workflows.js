@@ -122,6 +122,60 @@ function boardResourceLines(sdkSummary, boardName = '') {
   ];
 }
 
+function selectedBoard(sdkSummary, boardName = '') {
+  return (sdkSummary.boards || []).find((item) => item.name === boardName)
+    || (sdkSummary.boards || []).find((item) => item.name.includes('esp32s3'))
+    || (sdkSummary.boards || [])[0]
+    || null;
+}
+
+function componentByName(sdkSummary, name) {
+  return (sdkSummary.components || []).find((component) => component.name === name) || null;
+}
+
+function expandComponentDeps(names, sdkSummary) {
+  const result = new Set();
+  const visit = (name) => {
+    if (!name || result.has(name)) return;
+    result.add(name);
+    const component = componentByName(sdkSummary, name);
+    for (const dep of component?.requires || []) {
+      if (componentByName(sdkSummary, dep)) {
+        visit(dep);
+      }
+    }
+  };
+  for (const name of names || []) {
+    visit(name);
+  }
+  return [...result];
+}
+
+function boardMacroStatus(sdkSummary, boardName = '', componentNamesToCheck = []) {
+  const board = selectedBoard(sdkSummary, boardName);
+  const defines = board?.defines || {};
+  const components = expandComponentDeps(componentNamesToCheck, sdkSummary);
+  return components
+    .map((name) => {
+      const component = componentByName(sdkSummary, name);
+      const required = component?.requiredBoardMacros || [];
+      const missing = required.filter((macro) => !Object.prototype.hasOwnProperty.call(defines, macro));
+      return { component: name, required, missing };
+    })
+    .filter((item) => item.required.length > 0 || item.missing.length > 0);
+}
+
+function boardMacroStatusText(sdkSummary, boardName = '', componentNamesToCheck = []) {
+  const rows = boardMacroStatus(sdkSummary, boardName, componentNamesToCheck);
+  if (rows.length === 0) {
+    return '未命中需要 BOARD_* 宏的组件。';
+  }
+  return rows.map((row) => {
+    const state = row.missing.length === 0 ? 'OK' : `缺失: ${row.missing.join(', ')}`;
+    return `${row.component}: ${state}`;
+  }).join('\n');
+}
+
 function buildMermaid(capabilities) {
   const nodes = [
     '用户需求',
@@ -411,7 +465,7 @@ export function buildChatPrompt({ question, requirement, currentPlan, sdkSummary
   };
 }
 
-export function buildCodegenPrompt({ requirement, projectName, plan, sdkSummary, globalPrompt = '' }) {
+export function buildCodegenPrompt({ requirement, projectName, plan, sdkSummary, globalPrompt = '', boardName = '' }) {
   const globalConstraint = String(globalPrompt || '').trim();
   const capabilities = detectCapabilities(`${requirement}\n${plan}`, sdkSummary);
   const availableComponents = new Set(componentNames(sdkSummary));
@@ -440,6 +494,12 @@ export function buildCodegenPrompt({ requirement, projectName, plan, sdkSummary,
           '必须严格使用下方提供的 C 函数原型、结构体字段、类型名和枚举名；不要改名，不要臆造 wrapper，不要把 void 返回值当成 esp_err_t。',
           '生成代码前必须先对照当前 SDK 扫描摘要检查 components/ 是否存在相应组件；只允许引用已扫描到的组件头文件和函数。',
           '如果某个需求模块在 components/ 中没有对应组件，只能生成 TODO、日志或最小可编译占位，不要 include 或调用不存在的 driver/service。',
+          '生成 include、函数调用和 main/CMakeLists.txt REQUIRES 前，必须检查目标板卡 board.h 是否定义该组件及其传递依赖所需的全部 BOARD_* 宏；缺任何宏时禁止使用该组件，只能 TODO/降级。',
+          '组件存在不代表当前板卡可用；例如 driver_motor 会传递依赖 driver_tb6612 和 driver_encoder，必须同时具备 BOARD_MOTOR_* 与 BOARD_ENCODER_* 宏。',
+          '如果声明 static const char *TAG 或 #define TAG，必须至少使用一次 ESP_LOGI/W/E/D(TAG, ...)；如果不需要日志，就不要声明 TAG 或 include esp_log.h。',
+          '使用 snprintf 写入固定长度显示行、小数组或 OLED 文本缓冲区时，来自数组/状态字段的 %s 必须带精度限制，例如 %.19s；不要把长数组字符串无界写入更小数组。',
+          '配置结构体字段必须完全匹配可用 API 里的头文件定义；例如 bsp_uart_config_t 使用 tx_gpio/rx_gpio，禁止写 tx_pin/rx_pin。',
+          '不要留下未调用的 static helper 函数、未使用变量或未使用全局状态；预留逻辑只写 TODO，不生成死代码。',
           '优先调用 components/ 中已有 driver_* 和 service_* 的公共函数；不要在应用层绕过组件直接访问 I2C/UART/PWM/GPIO 等底层 BSP，除非没有上层组件且可用 API 明确允许。',
           '只能 #include 下方“可用 API”和“BSP 公共头文件”中真实存在的头文件，或者 ESP-IDF 标准头。板级宏头文件名是 "board.h"，不是 "bsp_board.h"。',
           '如果 main.c 调用了某个组件函数，必须 #include 对应公共头，并在 project/<name>/main/CMakeLists.txt 的 REQUIRES 中加入对应组件名。',
@@ -463,6 +523,8 @@ export function buildCodegenPrompt({ requirement, projectName, plan, sdkSummary,
           `根据需求和硬件搭建文档初步命中的组件：${matchedComponents.join(', ') || '(未命中)'}`,
           `缺失组件（禁止 include 或调用，只能 TODO/降级）：${missingComponents.join(', ') || '(无)'}`,
           `当前 components/ 扫描结果：${componentNames(sdkSummary).join(', ') || '(无)'}`,
+          `目标板卡：${boardName || '未指定'}`,
+          `目标板卡 BOARD_* 宏支持检查：\n${boardMacroStatusText(sdkSummary, boardName, matchedComponents)}`,
           `可用 API：\n${availableApiText(sdkSummary)}`
         ].join('\n\n')
       }
@@ -470,7 +532,7 @@ export function buildCodegenPrompt({ requirement, projectName, plan, sdkSummary,
   };
 }
 
-export function buildDebugFixPrompt({ requirement, projectName, plan, sdkSummary, toolContext, projectFiles, globalPrompt = '' }) {
+export function buildDebugFixPrompt({ requirement, projectName, plan, sdkSummary, toolContext, projectFiles, globalPrompt = '', boardName = '' }) {
   const globalConstraint = String(globalPrompt || '').trim();
   const projectText = (projectFiles || [])
     .map((file) => `===== CURRENT FILE: ${file.path} =====\n${file.content}`)
@@ -492,6 +554,11 @@ export function buildDebugFixPrompt({ requirement, projectName, plan, sdkSummary
           '只能 #include 下方“可用 API”和“BSP 公共头文件”中真实存在的头文件，或者 ESP-IDF 标准头。板级宏头文件名是 "board.h"，不是 "bsp_board.h"。',
           '如果 main.c 调用了某个组件函数，必须 #include 对应公共头，并在 main/CMakeLists.txt 的 REQUIRES 中加入对应组件名。',
           '不要因为 include 了 "esp_log.h"、"freertos/FreeRTOS.h"、"freertos/task.h" 等标准头就把 esp_log、FreeRTOS、task 写进 REQUIRES。',
+          '如果 Build 报 components/ 内缺少 BOARD_* 宏，说明当前板卡不支持该组件或其传递依赖；不要修改 components/，应从 project/ 中移除该组件 include/调用/REQUIRES，或降级为 TODO。',
+          '修复前必须检查目标板卡 board.h 是否定义组件及其传递依赖所需的 BOARD_* 宏；缺宏时禁止继续使用该组件。',
+          '如果声明 static const char *TAG 或 #define TAG，必须至少使用一次 ESP_LOGI/W/E/D(TAG, ...)；修复 -Wunused-variable 时优先添加有意义日志或删除 TAG/esp_log.h。',
+          '修复 format-truncation 时，不要关闭 -Werror；应扩大目标缓冲区，或给 snprintf 的 %s 加精度限制，例如 %.19s。',
+          '修复结构体字段错误时，必须对照可用 API/头文件里的字段名；bsp_uart_config_t 是 tx_gpio/rx_gpio，不是 tx_pin/rx_pin。',
           '不要为了绕过编译而删除核心需求逻辑；如果必须降级，只做最小可编译降级并保留 TODO 注释。',
           '输出格式必须严格使用文件块：',
           '===== FILE: project/<name>/path =====',
@@ -506,6 +573,8 @@ export function buildDebugFixPrompt({ requirement, projectName, plan, sdkSummary
           `当前硬件搭建文档：${plan || '(暂无)'}`,
           `工具错误上下文：\n${toolContext || '(无)'}`,
           `当前 project 文件：\n${projectText || '(无)'}`,
+          `目标板卡：${boardName || '未指定'}`,
+          `当前 project 组件的目标板卡 BOARD_* 宏支持检查：\n${boardMacroStatusText(sdkSummary, boardName, mentionedSdkComponents(projectText))}`,
           `可用 API：\n${availableApiText(sdkSummary)}`
         ].join('\n\n')
       }
@@ -1105,7 +1174,47 @@ function cmakeRequires(content) {
     .filter((item) => !/^["')]+$/.test(item));
 }
 
-export function validateGeneratedFiles(files, sdkSummary = null) {
+function charArraySizes(content) {
+  const sizes = new Map();
+  const text = String(content || '');
+  for (const match of text.matchAll(/\bchar\s+(\w+)\s*\[\s*(\d+)\s*\]/g)) {
+    sizes.set(match[1], Number(match[2]));
+  }
+  for (const match of text.matchAll(/\bchar\s+(\w+)\s*\[\s*(\d+)\s*\]\s*;/g)) {
+    sizes.set(match[1], Number(match[2]));
+  }
+  return sizes;
+}
+
+function unboundedStringFormat(format) {
+  return /(^|[^%])%s/.test(String(format || ''));
+}
+
+function snprintfTruncationRisks(content) {
+  const text = String(content || '');
+  const sizes = charArraySizes(text);
+  const risks = [];
+  const callPattern = /snprintf\s*\(\s*(\w+)\s*,\s*sizeof\s*\(\s*\1\s*\)\s*,\s*"((?:\\.|[^"\\])*)"\s*,([\s\S]*?)\)\s*;/g;
+
+  for (const match of text.matchAll(callPattern)) {
+    const [, dest, format, args] = match;
+    const destSize = sizes.get(dest);
+    if (!destSize || !unboundedStringFormat(format)) {
+      continue;
+    }
+
+    for (const [name, sourceSize] of sizes.entries()) {
+      const sourceRefPattern = new RegExp(`(?:\\b${name}\\b|[\\w)\\]]+(?:\\.|->)${name}\\b)`);
+      if (sourceSize >= destSize && sourceRefPattern.test(args)) {
+        risks.push({ dest, source: name, destSize, sourceSize });
+      }
+    }
+  }
+
+  return risks;
+}
+
+export function validateGeneratedFiles(files, sdkSummary = null, boardName = '') {
   const errors = [];
   const warnings = [];
   const main = (files || []).find((file) => /\/main\/main\.c$/.test(file.path));
@@ -1193,6 +1302,21 @@ export function validateGeneratedFiles(files, sdkSummary = null) {
     for (const dep of requires) {
       if (!knownProjectDeps.has(dep) && !knownIdfDeps.has(dep) && !forbiddenRequires.has(dep)) {
         errors.push(`main/CMakeLists.txt REQUIRES contains unknown component ${dep}; use scanned components/BSP names, not header names`);
+      }
+    }
+
+    const board = selectedBoard(sdkSummary, boardName);
+    const boardDefines = board?.defines || {};
+    const usedComponents = expandComponentDeps([
+      ...requires.filter((dep) => componentByName(sdkSummary, dep)),
+      ...mentionedSdkComponents(`${content}\n${mainCmake?.content || ''}`)
+    ], sdkSummary);
+    for (const componentName of usedComponents) {
+      const component = componentByName(sdkSummary, componentName);
+      const missingMacros = (component?.requiredBoardMacros || [])
+        .filter((macro) => !Object.prototype.hasOwnProperty.call(boardDefines, macro));
+      if (missingMacros.length > 0) {
+        errors.push(`component ${componentName} requires undefined board macros for ${board?.name || 'selected board'}: ${missingMacros.join(', ')}; do not use this component until board.h defines them`);
       }
     }
   }
@@ -1286,6 +1410,19 @@ export function validateGeneratedFiles(files, sdkSummary = null) {
 
   if (/esp_err_t\s+\w+\s*=\s*service_device_init\s*\(/.test(content)) {
     errors.push('service_device_init returns void, not esp_err_t');
+  }
+
+  if (/\.\s*(?:tx_pin|rx_pin)\b/.test(content)) {
+    errors.push('bsp_uart_config_t fields are tx_gpio/rx_gpio, not tx_pin/rx_pin; use scanned struct fields exactly');
+  }
+
+  if ((/\bstatic\s+const\s+char\s*\*\s*TAG\b/.test(content) || /#define\s+TAG\b/.test(content))
+    && !/\bESP_LOG[EWIDV]\s*\(\s*TAG\b/.test(content)) {
+    errors.push('TAG is declared but never used by ESP_LOG*; add a meaningful ESP_LOG*(TAG, ...) call or remove TAG/esp_log.h');
+  }
+
+  for (const risk of snprintfTruncationRisks(content)) {
+    errors.push(`snprintf into ${risk.dest}[${risk.destSize}] uses unbounded %s from ${risk.source}[${risk.sourceSize}]; use a precision such as %.Ns or increase the destination buffer`);
   }
 
   if (/driver_oled_init_profile\s*\(\s*\)/.test(content)) {

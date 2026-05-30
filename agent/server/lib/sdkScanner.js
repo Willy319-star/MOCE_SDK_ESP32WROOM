@@ -90,6 +90,27 @@ function parseBoardDefines(boardText) {
   return defines;
 }
 
+function parseBoardMacroRefs(text) {
+  return [...new Set(String(text || '').match(/\bBOARD_[A-Z0-9_]+\b/g) || [])].sort();
+}
+
+function parseCmakeRequires(cmakeText) {
+  const match = String(cmakeText || '').match(/idf_component_register\s*\(([\s\S]*?)\)/);
+  if (!match) return [];
+  const body = match[1].replace(/#[^\n]*/g, ' ');
+  const requires = [];
+  for (const keyword of ['REQUIRES', 'PRIV_REQUIRES']) {
+    const requiresMatch = body.match(new RegExp(`\\b${keyword}\\b([\\s\\S]*?)(?:\\bREQUIRES\\b|\\bPRIV_REQUIRES\\b|\\bSRCS\\b|\\bINCLUDE_DIRS\\b|\\bPRIV_INCLUDE_DIRS\\b|$)`));
+    if (!requiresMatch) continue;
+    requires.push(...requiresMatch[1]
+      .split(/\s+/)
+      .map((item) => item.trim())
+      .filter(Boolean)
+      .filter((item) => !/^["')]+$/.test(item)));
+  }
+  return [...new Set(requires)].sort();
+}
+
 async function scanComponent(root, name) {
   const includeRoot = path.join(root, name, 'include');
   const headers = await listFiles(includeRoot, (filePath) => filePath.endsWith('.h'));
@@ -103,7 +124,16 @@ async function scanComponent(root, name) {
       declarations: parseTypeDeclarations(text)
     });
   }
-  return { name, api };
+  const sourceFiles = await listFiles(path.join(root, name), (filePath) => /\.(?:c|h|hpp|cpp|cc)$/.test(filePath));
+  const sourceTexts = await Promise.all(sourceFiles.map((filePath) => fs.readFile(filePath, 'utf8').catch(() => '')));
+  const cmakePath = path.join(root, name, 'CMakeLists.txt');
+  const cmakeText = (await exists(cmakePath)) ? await fs.readFile(cmakePath, 'utf8') : '';
+  return {
+    name,
+    api,
+    requires: parseCmakeRequires(cmakeText),
+    requiredBoardMacros: [...new Set(sourceTexts.flatMap((text) => parseBoardMacroRefs(text)))].sort()
+  };
 }
 
 export async function scanSdk(sdkRoot) {

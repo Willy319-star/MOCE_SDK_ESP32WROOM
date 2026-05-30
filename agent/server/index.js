@@ -699,7 +699,8 @@ async function handleCodegen(req, res) {
     projectName: body.projectName || '',
     plan: body.plan || '',
     sdkSummary,
-    globalPrompt
+    globalPrompt,
+    boardName: body.board || body.boardName || 'my_board_esp32s3'
   });
   const messages = applyGlobalPrompt(
     applySkillPrompt(prompt.messages, firmwareDraftSkillFile, await getSkillText(firmwareDraftSkillFile)),
@@ -716,7 +717,7 @@ async function handleCodegen(req, res) {
       });
       const fallback = fallbackCodegen(requirement, body.projectName || '', sdkSummary);
       const parsedFiles = parseGeneratedFiles(text);
-      const validation = validateGeneratedFiles(parsedFiles, sdkSummary);
+      const validation = validateGeneratedFiles(parsedFiles, sdkSummary, body.board || body.boardName || 'my_board_esp32s3');
       const useParsedFiles = parsedFiles.length > 0 && validation.errors.length === 0;
       sendJson(res, 200, {
         ok: true,
@@ -724,7 +725,7 @@ async function handleCodegen(req, res) {
         projectName: fallback.projectName,
         result: normalizeAgentText(text),
         files: useParsedFiles ? parsedFiles : fallback.files,
-        validation: useParsedFiles ? validation : validateGeneratedFiles(fallback.files, sdkSummary),
+        validation: useParsedFiles ? validation : validateGeneratedFiles(fallback.files, sdkSummary, body.board || body.boardName || 'my_board_esp32s3'),
         note: useParsedFiles
           ? 'LLM file blocks were parsed into editable files.'
           : parsedFiles.length > 0
@@ -738,7 +739,7 @@ async function handleCodegen(req, res) {
         ok: true,
         mode: 'fallback',
         warning: error.message,
-        validation: validateGeneratedFiles(fallback.files, sdkSummary),
+        validation: validateGeneratedFiles(fallback.files, sdkSummary, body.board || body.boardName || 'my_board_esp32s3'),
         ...fallback
       });
       return;
@@ -748,7 +749,7 @@ async function handleCodegen(req, res) {
   sendJson(res, 200, {
     ok: true,
     mode: 'fallback',
-    validation: validateGeneratedFiles(fallbackCodegen(requirement, body.projectName || '', sdkSummary).files, sdkSummary),
+    validation: validateGeneratedFiles(fallbackCodegen(requirement, body.projectName || '', sdkSummary).files, sdkSummary, body.board || body.boardName || 'my_board_esp32s3'),
     ...fallbackCodegen(requirement, body.projectName || '', sdkSummary)
   });
 }
@@ -769,7 +770,8 @@ async function handleDebugFix(req, res) {
     sdkSummary,
     toolContext,
     projectFiles,
-    globalPrompt
+    globalPrompt,
+    boardName: body.board || body.boardName || 'my_board_esp32s3'
   });
   const messages = applyGlobalPrompt(prompt.messages, globalPrompt);
 
@@ -782,10 +784,10 @@ async function handleDebugFix(req, res) {
         temperature: body.temperature ?? 0.1
       });
       const parsedFiles = parseGeneratedFiles(text);
-      const validation = validateGeneratedFiles(mergeProjectFiles(projectFiles, parsedFiles), sdkSummary);
+      const validation = validateGeneratedFiles(mergeProjectFiles(projectFiles, parsedFiles), sdkSummary, body.board || body.boardName || 'my_board_esp32s3');
       const useParsedFiles = parsedFiles.length > 0 && validation.errors.length === 0;
       const fallbackFiles = fallbackDebugFix(projectFiles);
-      const fallbackValidation = validateGeneratedFiles(mergeProjectFiles(projectFiles, fallbackFiles), sdkSummary);
+      const fallbackValidation = validateGeneratedFiles(mergeProjectFiles(projectFiles, fallbackFiles), sdkSummary, body.board || body.boardName || 'my_board_esp32s3');
       sendJson(res, 200, {
         ok: true,
         mode: 'llm',
@@ -802,7 +804,7 @@ async function handleDebugFix(req, res) {
       return;
     } catch (error) {
       const fallbackFiles = fallbackDebugFix(projectFiles);
-      const validation = validateGeneratedFiles(mergeProjectFiles(projectFiles, fallbackFiles), sdkSummary);
+      const validation = validateGeneratedFiles(mergeProjectFiles(projectFiles, fallbackFiles), sdkSummary, body.board || body.boardName || 'my_board_esp32s3');
       sendJson(res, 200, {
         ok: true,
         mode: 'fallback',
@@ -820,7 +822,7 @@ async function handleDebugFix(req, res) {
   }
 
   const fallbackFiles = fallbackDebugFix(projectFiles);
-  const validation = validateGeneratedFiles(mergeProjectFiles(projectFiles, fallbackFiles), sdkSummary);
+  const validation = validateGeneratedFiles(mergeProjectFiles(projectFiles, fallbackFiles), sdkSummary, body.board || body.boardName || 'my_board_esp32s3');
   sendJson(res, 200, {
     ok: true,
     mode: 'fallback',

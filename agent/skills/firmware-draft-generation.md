@@ -25,6 +25,9 @@
 1. **先检查组件存在性**
    - 生成任何 `#include "driver_xxx.h"` 或 `#include "service_xxx.h"` 前，必须确认 `components/` 扫描结果中存在对应组件。
    - 如果硬件搭建文档提到某个模块，但 `components/` 中没有对应 driver/service，只能在 `project/` 里降级为 TODO、日志或状态占位，不要引用不存在的组件。
+   - 组件存在后，还必须检查目标板卡 `board.h` 是否定义该组件及其 CMake 传递依赖使用的全部 `BOARD_*` 宏。
+   - 缺少任意必需 `BOARD_*` 宏时，禁止 include、调用或在 `REQUIRES` 中加入该组件；只能生成 TODO、日志或最小可编译降级。
+   - 例如 `driver_motor` 会传递依赖 `driver_tb6612` 和 `driver_encoder`，必须同时具备 `BOARD_MOTOR_*` 与 `BOARD_ENCODER_*` 宏，否则禁止使用电机驱动组件。
    - 不允许臆造组件名、头文件名、函数名、类型名、枚举名或结构体字段。
 
 2. **优先调用 components 的公共接口**
@@ -60,6 +63,11 @@
 6. **代码行为保守可编译**
    - 不把 `void` 返回值当成 `esp_err_t`。
    - 对返回 `esp_err_t` 的函数检查错误；对 `void` 函数直接调用。
+   - 声明 `static const char *TAG` 或 `#define TAG` 时，必须至少有一处 `ESP_LOGI/W/E/D(TAG, ...)` 使用；如果不输出日志，就不要声明 `TAG`，也不要包含 `esp_log.h`。
+   - 使用 `snprintf()` 写入固定长度显示行或小缓冲区时，所有来自数组/状态字段的 `%s` 都必须带精度限制，例如 `"I2C:%.19s"`；或者目标缓冲区必须足够容纳前缀、最长源字符串和结尾 `\0`。
+   - 不允许把较长数组字符串直接通过无界 `%s` 写入更小的数组，例如 `char line[24]` 接收 `char scan[48]`。
+   - 配置结构体字段必须完全匹配扫描到的头文件定义；例如 `bsp_uart_config_t` 使用 `tx_gpio`、`rx_gpio`，禁止臆造 `tx_pin`、`rx_pin`。
+   - 不要留下未调用的 `static` helper 函数、未使用的局部变量或未使用的全局状态；如果只是预留逻辑，写 TODO 注释而不是生成死代码。
    - 未确认的硬件参数、地址、阈值或业务策略使用清晰的 `TODO` 注释或保守默认值。
    - FreeRTOS 循环必须包含合理 `vTaskDelay()`，避免忙等。
 
@@ -67,12 +75,13 @@
 
 1. 从硬件搭建文档提取需要用到的 SDK 组件。
 2. 对照当前 `components/` 扫描结果，列出“可用组件”和“缺失组件”。
-3. 只为可用组件生成 `#include`、函数调用和 `REQUIRES`。
-4. 对照可用 API 原型检查每个函数调用的参数、返回值、类型和枚举。
-5. 确认每个引用的头文件都真实存在，且 CMake 依赖完整。
-6. 确认输出文件全部在 `project/<project_name>/` 下。
-7. 确认 `main/CMakeLists.txt` 的 `REQUIRES` 没有把 ESP-IDF/FreeRTOS 标准头误写成组件名。
-8. 确认根 `CMakeLists.txt` 和 `main/CMakeLists.txt` 没有写反：根文件必须包含 `cmake_minimum_required()`、`include(project.cmake)`、`project()`；组件文件必须包含 `idf_component_register()`。
+3. 对照目标板卡 `board.h`，检查可用组件及其传递依赖所需的 `BOARD_*` 宏是否全部已定义。
+4. 只为“组件存在且板级宏完整”的组件生成 `#include`、函数调用和 `REQUIRES`。
+5. 对照可用 API 原型检查每个函数调用的参数、返回值、类型和枚举。
+6. 确认每个引用的头文件都真实存在，且 CMake 依赖完整。
+7. 确认输出文件全部在 `project/<project_name>/` 下。
+8. 确认 `main/CMakeLists.txt` 的 `REQUIRES` 没有把 ESP-IDF/FreeRTOS 标准头误写成组件名。
+9. 确认根 `CMakeLists.txt` 和 `main/CMakeLists.txt` 没有写反：根文件必须包含 `cmake_minimum_required()`、`include(project.cmake)`、`project()`；组件文件必须包含 `idf_component_register()`。
 
 输出格式：
 
