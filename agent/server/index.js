@@ -57,6 +57,7 @@ const contentTypes = {
 };
 
 let sdkSummaryCache = null;
+let sdkSummaryCacheSignature = '';
 let globalPromptCache = null;
 const skillCache = new Map();
 const promptRoot = path.join(sdkRoot, 'prompt');
@@ -402,10 +403,55 @@ function applySkillPrompt(messages, skillName, skillText) {
 }
 
 async function getSdkSummary() {
-  if (!sdkSummaryCache) {
+  const signature = await sdkScanSignature();
+  if (!sdkSummaryCache || sdkSummaryCacheSignature !== signature) {
     sdkSummaryCache = await scanSdk(sdkRoot);
+    sdkSummaryCacheSignature = signature;
   }
   return sdkSummaryCache;
+}
+
+async function sdkScanSignature() {
+  const roots = ['boards', 'components', 'bsp'].map((dir) => path.join(sdkRoot, dir));
+  const parts = [];
+  async function walk(current) {
+    let entries = [];
+    try {
+      entries = await fs.readdir(current, { withFileTypes: true });
+    } catch {
+      return;
+    }
+    for (const entry of entries) {
+      const fullPath = path.join(current, entry.name);
+      if (entry.isDirectory()) {
+        await walk(fullPath);
+        continue;
+      }
+      if (!/\.(?:h|c|hpp|cpp|cc|txt)$/.test(entry.name) && entry.name !== 'CMakeLists.txt') {
+        continue;
+      }
+      const stat = await fs.stat(fullPath);
+      parts.push(`${path.relative(sdkRoot, fullPath)}:${stat.mtimeMs}:${stat.size}`);
+    }
+  }
+  for (const root of roots) {
+    await walk(root);
+  }
+  return parts.sort().join('|');
+}
+
+function loadSdkResourcesForBoard(sdkSummary, boardName = 'my_board_esp32s3') {
+  const board = (sdkSummary.boards || []).find((item) => item.name === boardName)
+    || (sdkSummary.boards || []).find((item) => item.name.includes('esp32s3'))
+    || (sdkSummary.boards || [])[0]
+    || null;
+  return {
+    tool: 'sdkResourceLoader',
+    board: board?.name || boardName,
+    boardResources: board?.resources || [],
+    componentBusResources: (sdkSummary.components || []).flatMap((component) => component.busResources || []),
+    defines: board?.defines || {}
+  };
 }
 
 async function serveStaticFromRoot(res, root, requested) {
@@ -597,13 +643,16 @@ async function handleHardwareResourcePlanning(req, res) {
   const body = await readJson(req);
   const requirement = await requirementFromBody(body);
   const sdkSummary = await getSdkSummary();
+  const boardName = body.board || body.boardName || 'my_board_esp32s3';
+  const sdkResources = loadSdkResourcesForBoard(sdkSummary, boardName);
   const prompt = buildHardwareResourcePlanningPrompt({
     requirement,
     analysis: body.analysis || '',
     componentSelection: body.componentSelection || '',
     resourceNotes: body.resourceNotes || '',
     sdkSummary,
-    boardName: body.board || body.boardName || 'my_board_esp32s3'
+    boardName,
+    sdkResources
   });
   const messages = applyGlobalPrompt(
     applySkillPrompt(prompt.messages, hardwareResourcePlanningSkillFile, await getSkillText(hardwareResourcePlanningSkillFile)),
@@ -622,7 +671,8 @@ async function handleHardwareResourcePlanning(req, res) {
         ok: true,
         mode: 'llm',
         result: normalizeAgentText(text),
-        sdkSummary
+        sdkSummary,
+        sdkResources
       });
       return;
     } catch (error) {
@@ -631,7 +681,8 @@ async function handleHardwareResourcePlanning(req, res) {
         mode: 'fallback',
         warning: error.message,
         result: fallbackHardwareResourcePlanning(requirement, body.analysis || '', body.componentSelection || '', body.resourceNotes || '', sdkSummary),
-        sdkSummary
+        sdkSummary,
+        sdkResources
       });
       return;
     }
@@ -641,7 +692,8 @@ async function handleHardwareResourcePlanning(req, res) {
     ok: true,
     mode: 'fallback',
     result: fallbackHardwareResourcePlanning(requirement, body.analysis || '', body.componentSelection || '', body.resourceNotes || '', sdkSummary),
-    sdkSummary
+    sdkSummary,
+    sdkResources
   });
 }
 
@@ -1306,6 +1358,21 @@ async function handleApi(req, res, pathname) {
       return;
     }
 
+    if (req.method === 'GET' && pathname === '/api/sdk/resources') {
+      const url = new URL(req.url, 'http://localhost');
+      const sdkSummary = await getSdkSummary();
+      const boardName = url.searchParams.get('board') || url.searchParams.get('boardName') || 'my_board_esp32s3';
+      const sdkResources = loadSdkResourcesForBoard(sdkSummary, boardName);
+      sendJson(res, 200, {
+        ok: true,
+        board: sdkResources.board,
+        resources: sdkResources.boardResources,
+        componentBusResources: sdkResources.componentBusResources,
+        defines: sdkResources.defines
+      });
+      return;
+    }
+
     if (req.method === 'GET' && pathname === '/api/prompts') {
       sendJson(res, 200, { ok: true, prompts: await listPromptDocuments() });
       return;
@@ -1319,6 +1386,7 @@ async function handleApi(req, res, pathname) {
 
     if (req.method === 'POST' && pathname === '/api/sdk/refresh') {
       sdkSummaryCache = await scanSdk(sdkRoot);
+      sdkSummaryCacheSignature = await sdkScanSignature();
       sendJson(res, 200, { ok: true, summary: sdkSummaryCache });
       return;
     }
@@ -1475,6 +1543,16 @@ const server = http.createServer(async (req, res) => {
   }
 
   await serveStatic(req, res, pathname);
+});
+
+server.on('error', (error) => {
+  if (error.code === 'EADDRINUSE') {
+    console.error(`Moce Hardware Agent failed to start: ${config.host}:${config.port} is already in use.`);
+    console.error('Close the existing agent process, or start this one on another port:');
+    console.error(`  MOCE_AGENT_PORT=${Number(config.port) + 1} npm --prefix agent start`);
+    process.exit(1);
+  }
+  throw error;
 });
 
 server.listen(config.port, config.host, () => {

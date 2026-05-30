@@ -101,24 +101,28 @@ function boardResourceLines(sdkSummary, boardName = '') {
     return ['当前未扫描到 boards/ 下的板级定义。'];
   }
 
-  const define = board.defines || {};
-  const groups = [
-    ['LED', ['BOARD_LED_GPIO', 'BOARD_LED_PWM_CHANNEL', 'BOARD_LED_PWM_FREQUENCY_HZ']],
-    ['Button', ['BOARD_BUTTON_GPIO', 'BOARD_BUTTON_ACTIVE_LEVEL']],
-    ['Servo', ['BOARD_SERVO_GPIO_0', 'BOARD_SERVO_GPIO_1', 'BOARD_SERVO_PWM_FREQUENCY_HZ']],
-    ['I2C', ['BOARD_I2C_SDA_GPIO', 'BOARD_I2C_SCL_GPIO', 'BOARD_I2C_FREQUENCY_HZ']],
-    ['UART', ['BOARD_UART_TX_GPIO', 'BOARD_UART_RX_GPIO', 'BOARD_UART_BAUD_RATE']]
-  ];
-
   return [
     `默认参考板卡：${board.name}`,
-    ...groups.map(([name, keys]) => {
-      const values = keys
-        .filter((key) => Object.prototype.hasOwnProperty.call(define, key))
-        .map((key) => `${key}=${define[key]}`)
+    ...((board.resources || []).map((resource) => {
+      const values = (resource.macros || [])
+        .map((macro) => `${macro.name}=${macro.value}`)
         .join(', ');
-      return values ? `${name}: ${values}` : `${name}: 当前板级文件未声明`;
-    })
+      return values ? `${resource.name}: ${values}` : `${resource.name}: 当前板级文件未声明`;
+    })),
+    ...componentBusResourceLines(sdkSummary)
+  ];
+}
+
+function componentBusResourceLines(sdkSummary) {
+  const rows = (sdkSummary.components || [])
+    .flatMap((component) => component.busResources || [])
+    .filter((resource) => resource.bus === 'I2C');
+  if (rows.length === 0) {
+    return [];
+  }
+  return [
+    '组件 I2C 地址:',
+    ...rows.map((resource) => `${resource.component}: ${resource.name}=${resource.resolvedValue || resource.value}`)
   ];
 }
 
@@ -299,7 +303,26 @@ export function buildHardwareBuildPrompt({ requirement, sdkSummary, boardName, a
   };
 }
 
-export function buildHardwareResourcePlanningPrompt({ requirement, analysis, componentSelection, resourceNotes = '', sdkSummary, boardName }) {
+function sdkResourceToolLines(sdkResources) {
+  if (!sdkResources) {
+    return ['sdkResourceLoader: 未调用'];
+  }
+  const boardLines = (sdkResources.boardResources || []).map((resource) => (
+    `${resource.name}: ${resource.interface}; ${resource.pins}; SDK=${resource.sdk}; source=${resource.source}`
+  ));
+  const busLines = (sdkResources.componentBusResources || [])
+    .filter((resource) => resource.bus === 'I2C')
+    .map((resource) => `${resource.component}: ${resource.name}=${resource.resolvedValue || resource.value}`);
+  return [
+    `sdkResourceLoader: 已调用，board=${sdkResources.board}`,
+    '板级资源:',
+    ...(boardLines.length ? boardLines : ['(无)']),
+    '组件总线地址:',
+    ...(busLines.length ? busLines : ['(无)'])
+  ];
+}
+
+export function buildHardwareResourcePlanningPrompt({ requirement, analysis, componentSelection, resourceNotes = '', sdkSummary, boardName, sdkResources = null }) {
   return {
     messages: [
       {
@@ -309,6 +332,7 @@ export function buildHardwareResourcePlanningPrompt({ requirement, analysis, com
           sdkBoundary,
           '本阶段只做目标板卡上的接口、引脚和资源分配，不生成固件代码。',
           '必须基于已接受的器件选型，为每个器件或模块分配板级资源。',
+          '必须使用 sdkResourceLoader 工具输出的板级资源和组件总线地址作为资源分配依据。',
           '必须使用目标板卡已有 BOARD_* 宏和已扫描到的 board 定义，不要猜 GPIO。',
           '必须检查 GPIO、I2C 地址、UART、PWM/LEDC、PCNT/编码器等资源冲突。',
           '如果资源不足或不确定，必须明确标为缺口或待确认。'
@@ -327,6 +351,7 @@ export function buildHardwareResourcePlanningPrompt({ requirement, analysis, com
           `Boards：${(sdkSummary.boards || []).map((board) => board.name).join(', ')}`,
           `Examples：${(sdkSummary.examples || []).join(', ')}`,
           `目标板卡资源：\n${boardResourceLines(sdkSummary, boardName).join('\n')}`,
+          `sdkResourceLoader 工具输出：\n${sdkResourceToolLines(sdkResources).join('\n')}`,
           [
             '请只输出硬件资源规划，格式如下：',
             '## 硬件资源规划摘要',
@@ -604,6 +629,8 @@ function componentResourceText(component, sdkSummary) {
     return resources.match(/I2C:[^；]+/)?.[0] || 'I2C 资源待确认';
   }
   if (component === 'driver_tw_tts') return resources.match(/UART:[^；]+/)?.[0] || 'UART 资源待确认';
+  if (component === 'driver_motor' || component === 'driver_tb6612') return resources.match(/Motor:[^；]+/)?.[0] || 'Motor GPIO/PWM 资源待确认';
+  if (component === 'driver_encoder') return resources.match(/Encoder:[^；]+/)?.[0] || 'Encoder GPIO 资源待确认';
   if (component === 'service_wifi') return 'WiFi 射频和网络配置';
   return '待确认';
 }

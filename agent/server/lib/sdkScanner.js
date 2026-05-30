@@ -1,6 +1,8 @@
 import path from 'node:path';
 import { promises as fs } from 'node:fs';
 
+import { loadBoardResourcesFromDefines, loadComponentBusResourcesFromDefines } from './sdkResources.js';
+
 async function exists(filePath) {
   try {
     await fs.access(filePath);
@@ -79,6 +81,17 @@ function parseTypeDeclarations(headerText) {
   return declarations;
 }
 
+function parsePublicDefines(headerText) {
+  const defines = {};
+  const definePattern = /^\s*#define\s+([A-Z][A-Z0-9_]+)\s+(.+?)\s*(?:\/\*.*)?$/gm;
+  let match = definePattern.exec(headerText);
+  while (match) {
+    defines[match[1]] = match[2].trim();
+    match = definePattern.exec(headerText);
+  }
+  return defines;
+}
+
 function parseBoardDefines(boardText) {
   const defines = {};
   const definePattern = /^\s*#define\s+(BOARD_[A-Z0-9_]+)\s+(.+?)\s*(?:\/\*.*)?$/gm;
@@ -115,8 +128,10 @@ async function scanComponent(root, name) {
   const includeRoot = path.join(root, name, 'include');
   const headers = await listFiles(includeRoot, (filePath) => filePath.endsWith('.h'));
   const api = [];
+  const publicDefines = {};
   for (const header of headers) {
     const text = await fs.readFile(header, 'utf8');
+    Object.assign(publicDefines, parsePublicDefines(text));
     api.push({
       header: path.relative(root, header).replaceAll('\\', '/'),
       functions: parseFunctions(text),
@@ -132,7 +147,8 @@ async function scanComponent(root, name) {
     name,
     api,
     requires: parseCmakeRequires(cmakeText),
-    requiredBoardMacros: [...new Set(sourceTexts.flatMap((text) => parseBoardMacroRefs(text)))].sort()
+    requiredBoardMacros: [...new Set(sourceTexts.flatMap((text) => parseBoardMacroRefs(text)))].sort(),
+    busResources: loadComponentBusResourcesFromDefines(name, publicDefines)
   };
 }
 
@@ -153,11 +169,13 @@ export async function scanSdk(sdkRoot) {
   for (const board of await listDirectories(boardsRoot)) {
     const boardHeader = path.join(boardsRoot, board, 'board.h');
     const defaults = path.join(boardsRoot, board, 'sdkconfig.defaults');
+    const defines = (await exists(boardHeader)) ? parseBoardDefines(await fs.readFile(boardHeader, 'utf8')) : {};
     boards.push({
       name: board,
       hasBoardHeader: await exists(boardHeader),
       hasSdkconfigDefaults: await exists(defaults),
-      defines: (await exists(boardHeader)) ? parseBoardDefines(await fs.readFile(boardHeader, 'utf8')) : {}
+      defines,
+      resources: loadBoardResourcesFromDefines(defines)
     });
   }
 

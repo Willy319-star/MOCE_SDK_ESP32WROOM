@@ -38,6 +38,7 @@ const state = {
   },
   lastToolResult: null,
   debugFix: null,
+  sdkResources: null,
   sessions: [],
   timeline: [],
   autosave: true
@@ -65,6 +66,8 @@ const hardwareKeywords = [
   ['ToF', /tof|vl53|测距|distance/i],
   ['OLED', /oled|display|显示|屏/i],
   ['Servo', /servo|舵机|steer|scan/i],
+  ['Motor', /motor|tb6612|电机|马达|小车|驱动轮/i],
+  ['Encoder', /encoder|编码器|码盘|测速|ab\s*相/i],
   ['Button', /button|按键|按钮/i],
   ['WiFi', /wifi|tcp|udp|上位机|host/i],
   ['LED', /(^|[^a-z])led([^a-z]|$)|灯/i]
@@ -758,21 +761,96 @@ function boardResourceRows() {
   const boardName = $('#boardName')?.value || 'my_board_esp32s3';
   const board = (state.sdk?.boards || []).find((item) => item.name === boardName)
     || (state.sdk?.boards || []).find((item) => item.name.includes('esp32s3'));
-  const defines = board?.defines || {};
-  const rows = [
-    ['LED', 'GPIO/PWM', defines.BOARD_LED_GPIO || '-', 'driver_led', 'board'],
-    ['Button', 'GPIO', defines.BOARD_BUTTON_GPIO || '-', 'driver_button', 'board'],
-    ['Servo 0', 'PWM', defines.BOARD_SERVO_GPIO_0 || '-', 'driver_servo', 'board'],
-    ['Servo 1', 'PWM', defines.BOARD_SERVO_GPIO_1 || '-', 'driver_servo', 'board'],
-    ['I2C', 'I2C', `SDA ${defines.BOARD_I2C_SDA_GPIO || '-'} / SCL ${defines.BOARD_I2C_SCL_GPIO || '-'}`, 'bsp_i2c', 'board'],
-    ['UART', 'UART', `TX ${defines.BOARD_UART_TX_GPIO || '-'} / RX ${defines.BOARD_UART_RX_GPIO || '-'}`, 'bsp_uart', 'board']
-  ];
+  const resources = board?.resources?.length ? board.resources : resourcesFromBoardDefines(board?.defines || {});
+  const rows = resources.map((resource) => [
+    resource.name || '-',
+    resource.interface || '-',
+    resource.pins || '-',
+    resource.sdk || 'board',
+    resource.source || 'board.h'
+  ]);
+  const busRows = (state.sdk?.components || [])
+    .flatMap((component) => component.busResources || [])
+    .filter((resource) => resource.bus === 'I2C')
+    .map((resource) => [
+      resource.component || '-',
+      resource.bus || '-',
+      `${compactComponentBusName(resource.name, resource.component)}=${resource.resolvedValue || resource.value || '-'}`,
+      resource.component || 'component',
+      resource.source || 'component header'
+    ]);
+  const allRows = [...rows, ...busRows];
   return `
     <table>
       <thead><tr><th>资源</th><th>接口</th><th>引脚</th><th>SDK</th><th>来源</th></tr></thead>
-      <tbody>${rows.map((row) => `<tr>${row.map((cell) => `<td>${escapeHtml(cell)}</td>`).join('')}</tr>`).join('')}</tbody>
+      <tbody>${allRows.length
+        ? allRows.map((row) => `<tr>${row.map((cell) => `<td>${escapeHtml(cell)}</td>`).join('')}</tr>`).join('')
+        : '<tr><td colspan="5">未扫描到 board.h 资源。</td></tr>'}</tbody>
     </table>
   `;
+}
+
+function resourcesFromBoardDefines(defines) {
+  const groups = new Map();
+  for (const macro of Object.keys(defines || {}).sort()) {
+    if (!macro.startsWith('BOARD_')) continue;
+    const family = macro.match(/^BOARD_([A-Z0-9]+)_/)?.[1] || 'BOARD';
+    const parts = macro.replace(/^BOARD_/, '').split('_');
+    const side = parts.includes('LEFT') ? 'L' : parts.includes('RIGHT') ? 'R' : (parts.find((part) => /^\d+$/.test(part)) || '');
+    const key = side ? `${family}:${side}` : family;
+    if (!groups.has(key)) {
+      groups.set(key, { family, side, macros: [] });
+    }
+    groups.get(key).macros.push(macro);
+  }
+  const order = ['LED', 'BUTTON', 'SERVO', 'I2C', 'UART', 'MOTOR', 'ENCODER'];
+  const labels = { LED: 'LED', BUTTON: 'Button', SERVO: 'Servo', I2C: 'I2C', UART: 'UART', MOTOR: 'Motor', ENCODER: 'Encoder' };
+  const sdks = { LED: 'driver_led', BUTTON: 'driver_button', SERVO: 'driver_servo', I2C: 'bsp_i2c', UART: 'bsp_uart', MOTOR: 'driver_motor', ENCODER: 'driver_encoder' };
+  return [...groups.values()]
+    .sort((a, b) => (order.indexOf(a.family) === -1 ? 99 : order.indexOf(a.family)) - (order.indexOf(b.family) === -1 ? 99 : order.indexOf(b.family)))
+    .map((group) => {
+      const name = `${labels[group.family] || group.family}${group.side ? ` ${group.side}` : ''}`;
+      const pins = group.macros
+        .filter((macro) => /GPIO|CHANNEL|ADDRESS|BAUD_RATE|FREQUENCY_HZ|PORT|ACTIVE_LEVEL/.test(macro))
+        .map((macro) => `${compactBoardMacroName(macro, group.family)}=${defines[macro]}`)
+        .join(' / ');
+      return {
+        name,
+        family: group.family,
+        interface: group.family === 'I2C' || group.family === 'UART'
+          ? group.family
+          : group.family === 'ENCODER'
+            ? 'PCNT/GPIO'
+            : group.macros.some((macro) => /PWM|CHANNEL|TIMER|FREQUENCY/.test(macro))
+              ? group.macros.some((macro) => /GPIO/.test(macro)) ? 'GPIO/PWM' : 'PWM'
+              : 'GPIO',
+        pins: pins || '-',
+        sdk: sdks[group.family] || 'board',
+        source: 'board.h'
+      };
+    });
+}
+
+function compactBoardMacroName(macro, family) {
+  return String(macro || '')
+    .replace(/^BOARD_/, '')
+    .replace(new RegExp(`^${family}_`), '')
+    .replace(/^(LEFT|RIGHT)_/, '')
+    .replace(/_GPIO$/, '')
+    .replace(/_CHANNEL$/, '_CH')
+    .replace(/_FREQUENCY_HZ$/, '_FREQ')
+    .replace(/^BAUD_RATE$/, 'BAUD')
+    .replace(/_ADDRESS$/, '_ADDR');
+}
+
+function compactComponentBusName(macro, component) {
+  return String(macro || '')
+    .replace(/^DRIVER_/, '')
+    .replace(new RegExp(`^${String(component || '').replace(/^driver_/, '').toUpperCase()}_`), '')
+    .replace(/^DEFAULT_I2C_ADDR$/, 'ADDR_DEFAULT')
+    .replace(/^I2C_ADDR_/, 'ADDR_')
+    .replace(/_I2C_ADDR$/, '_ADDR')
+    .replace(/I2C_ADDR/g, 'ADDR');
 }
 
 function renderResources() {
@@ -1145,6 +1223,10 @@ async function generateResourcePlan() {
   if (data.sdkSummary) {
     state.sdk = data.sdkSummary;
     renderSdk();
+  }
+  if (data.sdkResources) {
+    state.sdkResources = data.sdkResources;
+    logActivity(`SDK resources loaded: ${data.sdkResources.board}`, 'ok');
   }
   renderResources();
   renderPlan();
