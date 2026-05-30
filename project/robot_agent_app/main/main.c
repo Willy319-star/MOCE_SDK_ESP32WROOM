@@ -2,26 +2,39 @@
 #include <string.h>
 #include <math.h>
 
-#include "esp_err.h"
 #include "esp_log.h"
+#include "esp_err.h"
 #include "freertos/FreeRTOS.h"
 #include "freertos/task.h"
 
 #include "board.h"
-#include "driver_button.h"
-#include "driver_encoder.h"
-#include "driver_led.h"
-#include "driver_motor.h"
-#include "driver_mpu6050.h"
-#include "driver_oled.h"
-#include "driver_servo.h"
-#include "driver_tof2000c_vl53l0x.h"
-#include "driver_tw_tts.h"
 #include "service_device.h"
 #include "service_pid.h"
-#include "service_wifi.h"
 
-static const char *TAG = "robot_agent_app";
+#include "driver_button.h"
+#include "driver_encoder.h"
+#include "driver_mpu6050.h"
+#include "driver_oled.h"
+#include "driver_motor.h"
+#include "driver_tb6612.h"
+#include "driver_tof2000c_vl53l0x.h"
+#include "driver_tw_tts.h"
+
+#define APP_LOOP_PERIOD_MS              100
+#define APP_TELEMETRY_PERIOD_MS         300
+#define APP_BOOT_WAIT_MS                1500
+#define APP_SELF_CHECK_TICKS            20
+#define APP_MOVE_SPEED_DEFAULT          220
+#define APP_MOVE_SPEED_SLOW            120
+#define APP_TURN_SPEED                  180
+#define APP_DISTANCE_NEAR_MM            450
+#define APP_DISTANCE_OBSTACLE_MM        250
+#define APP_DISTANCE_CRITICAL_MM        160
+#define APP_TILT_LIMIT_DEG              28.0f
+#define APP_LIFT_ACCEL_LIMIT_G          0.45f
+#define APP_STALL_DELTA_COUNT           3
+#define APP_STALL_TICKS                 6
+#define APP_PID_DT_S                    0.10f
 
 typedef enum {
     APP_STATE_INIT = 0,
@@ -35,449 +48,434 @@ typedef enum {
 } app_state_t;
 
 typedef struct {
-    bool tof_ok;
-    bool mpu_ok;
+    uint16_t tof_distance_mm;
+    uint8_t tof_status;
+    bool tof_timeout;
+    driver_mpu6050_data_t mpu;
+    int encoder_left;
+    int encoder_right;
     bool encoder_ok;
     bool motor_ok;
-    bool tts_ok;
-    bool oled_ok;
-} app_health_t;
+} app_sensor_data_t;
 
-typedef struct {
-    float distance_mm;
-    float pitch_deg;
-    float roll_deg;
-    int left_encoder;
-    int right_encoder;
-    bool user_near;
-    bool obstacle_close;
-    bool tilted;
-    bool shaken;
-    bool motor_stall;
-} app_sensor_fusion_t;
+static const char *TAG = "robot_agent";
 
-static service_pid_t s_left_pid;
-static service_pid_t s_right_pid;
+static service_pid_t s_pid_left;
+static service_pid_t s_pid_right;
 static app_state_t s_state = APP_STATE_INIT;
-static app_state_t s_last_announced_state = APP_STATE_ERROR;
-static app_health_t s_health;
-static bool s_tts_enabled = false;
-static bool s_oled_enabled = false;
-static uint32_t s_loop_count = 0;
-static int s_last_left_encoder = 0;
-static int s_last_right_encoder = 0;
+static app_state_t s_last_spoken_state = APP_STATE_ERROR;
+static int s_stall_ticks = 0;
+static int s_prev_left_count = 0;
+static int s_prev_right_count = 0;
+static bool s_have_prev_count = false;
+static bool s_initialized = false;
 
-static const char *app_state_name(app_state_t state)
+static void app_stop_motors(void)
 {
-    switch (state) {
-    case APP_STATE_INIT: return "INIT";
-    case APP_STATE_SELF_CHECK: return "SELF_CHECK";
-    case APP_STATE_IDLE: return "IDLE";
-    case APP_STATE_INTERACT: return "INTERACT";
-    case APP_STATE_MOVE: return "MOVE";
-    case APP_STATE_AVOID: return "AVOID";
-    case APP_STATE_PROTECT: return "PROTECT";
-    case APP_STATE_ERROR: return "ERROR";
-    default: return "UNKNOWN";
-    }
+    (void)driver_motor_brake(DRIVER_MOTOR_LEFT);
+    (void)driver_motor_brake(DRIVER_MOTOR_RIGHT);
+    (void)driver_tb6612_brake(DRIVER_TB6612_MOTOR_LEFT);
+    (void)driver_tb6612_brake(DRIVER_TB6612_MOTOR_RIGHT);
+    (void)driver_motor_set_pwm_raw(DRIVER_MOTOR_LEFT, 0);
+    (void)driver_motor_set_pwm_raw(DRIVER_MOTOR_RIGHT, 0);
 }
 
-static void app_speak_once(app_state_t state, const char *text)
+static void app_oled_show(const app_sensor_data_t *s, app_state_t state)
 {
-    if (!s_tts_enabled || s_last_announced_state == state) {
-        return;
-    }
-    if (driver_tw_tts_speak(text) == ESP_OK) {
-        s_last_announced_state = state;
-    }
-}
+    char line0[24];
+    char line1[24];
+    char line2[24];
+    char line3[24];
+    char line4[24];
 
-static void app_set_motors_stop(bool brake)
-{
-    if (brake) {
-        (void)driver_motor_brake(DRIVER_MOTOR_LEFT);
-        (void)driver_motor_brake(DRIVER_MOTOR_RIGHT);
-    } else {
-        (void)driver_motor_coast(DRIVER_MOTOR_LEFT);
-        (void)driver_motor_coast(DRIVER_MOTOR_RIGHT);
-    }
-}
-
-static void app_update_oled(const app_sensor_fusion_t *fusion)
-{
-    if (!s_oled_enabled) {
-        return;
-    }
-
-    char line0[32];
-    char line1[32];
-    char line2[32];
-    char line3[32];
-
-    snprintf(line0, sizeof(line0), "S:%s", app_state_name(s_state));
-    snprintf(line1, sizeof(line1), "D:%4.0fmm P:%5.1f", fusion->distance_mm, fusion->pitch_deg);
-    snprintf(line2, sizeof(line2), "R:%5.1f L:%d", fusion->roll_deg, fusion->left_encoder);
-    snprintf(line3, sizeof(line3), "R:%d %s", fusion->right_encoder, fusion->tilted ? "TILT" : "OK");
+    snprintf(line0, sizeof(line0), "State:%d", (int)state);
+    snprintf(line1, sizeof(line1), "TOF:%umm", (unsigned int)s->tof_distance_mm);
+    snprintf(line2, sizeof(line2), "A:%.1fG", (double)s->mpu.accel_z_g);
+    snprintf(line3, sizeof(line3), "GY:%.1f", (double)s->mpu.gyro_z_dps);
+    snprintf(line4, sizeof(line4), "L:%d R:%d", s->encoder_left, s->encoder_right);
 
     driver_oled_clear();
     driver_oled_draw_string(0, 0, line0, true);
-    driver_oled_draw_string(0, 16, line1, true);
-    driver_oled_draw_string(0, 32, line2, true);
-    driver_oled_draw_string(0, 48, line3, true);
+    driver_oled_draw_string(0, 12, line1, true);
+    driver_oled_draw_string(0, 24, line2, true);
+    driver_oled_draw_string(0, 36, line3, true);
+    driver_oled_draw_string(0, 48, line4, true);
     (void)driver_oled_flush();
 }
 
-static bool app_init_oled(void)
+static void app_speak_state_once(app_state_t state)
 {
-    if (driver_oled_init_profile(DRIVER_OLED_PROFILE_096_SSD1306) != ESP_OK) {
-        ESP_LOGW(TAG, "OLED init failed");
-        return false;
+    if (s_last_spoken_state == state) {
+        return;
     }
-    s_oled_enabled = true;
-    return true;
+
+    switch (state) {
+    case APP_STATE_SELF_CHECK:
+        (void)driver_tw_tts_speak("系统自检中");
+        break;
+    case APP_STATE_IDLE:
+        (void)driver_tw_tts_speak("进入待机");
+        break;
+    case APP_STATE_INTERACT:
+        (void)driver_tw_tts_speak("检测到用户靠近");
+        break;
+    case APP_STATE_MOVE:
+        (void)driver_tw_tts_speak("开始移动");
+        break;
+    case APP_STATE_AVOID:
+        (void)driver_tw_tts_speak("前方有障碍，正在避障");
+        break;
+    case APP_STATE_PROTECT:
+        (void)driver_tw_tts_speak("进入保护状态");
+        break;
+    case APP_STATE_ERROR:
+        (void)driver_tw_tts_speak("系统故障，请检查");
+        break;
+    case APP_STATE_INIT:
+    default:
+        break;
+    }
+
+    s_last_spoken_state = state;
 }
 
-static bool app_init_tof(void)
+static esp_err_t app_init_all(void)
 {
-    if (driver_tof2000c_vl53l0x_init_default() != ESP_OK) {
-        ESP_LOGW(TAG, "TOF init failed");
-        return false;
+    esp_err_t ret;
+
+    service_device_init();
+    driver_button_init();
+
+    ret = driver_tof2000c_vl53l0x_init_default();
+    if (ret != ESP_OK) {
+        ESP_LOGE(TAG, "TOF init failed: %s", esp_err_to_name(ret));
+        return ret;
     }
-    return true;
+
+    ret = driver_mpu6050_init_default();
+    if (ret != ESP_OK) {
+        ESP_LOGE(TAG, "MPU6050 init failed: %s", esp_err_to_name(ret));
+        return ret;
+    }
+
+    ret = driver_oled_init_profile(DRIVER_OLED_PROFILE_096_SSD1306);
+    if (ret != ESP_OK) {
+        ESP_LOGE(TAG, "OLED init failed: %s", esp_err_to_name(ret));
+        return ret;
+    }
+
+    ret = driver_tw_tts_init_default();
+    if (ret != ESP_OK) {
+        ESP_LOGE(TAG, "TTS init failed: %s", esp_err_to_name(ret));
+        return ret;
+    }
+
+    ret = driver_motor_init(DRIVER_MOTOR_LEFT, NULL);
+    if (ret != ESP_OK) {
+        ESP_LOGE(TAG, "Left motor init failed: %s", esp_err_to_name(ret));
+        return ret;
+    }
+
+    ret = driver_motor_init(DRIVER_MOTOR_RIGHT, NULL);
+    if (ret != ESP_OK) {
+        ESP_LOGE(TAG, "Right motor init failed: %s", esp_err_to_name(ret));
+        return ret;
+    }
+
+    ret = driver_tb6612_init(DRIVER_TB6612_MOTOR_LEFT);
+    if (ret != ESP_OK) {
+        ESP_LOGE(TAG, "TB6612 left init failed: %s", esp_err_to_name(ret));
+        return ret;
+    }
+
+    ret = driver_tb6612_init(DRIVER_TB6612_MOTOR_RIGHT);
+    if (ret != ESP_OK) {
+        ESP_LOGE(TAG, "TB6612 right init failed: %s", esp_err_to_name(ret));
+        return ret;
+    }
+
+    ret = driver_encoder_init(DRIVER_ENCODER_LEFT);
+    if (ret != ESP_OK) {
+        ESP_LOGE(TAG, "Left encoder init failed: %s", esp_err_to_name(ret));
+        return ret;
+    }
+
+    ret = driver_encoder_init(DRIVER_ENCODER_RIGHT);
+    if (ret != ESP_OK) {
+        ESP_LOGE(TAG, "Right encoder init failed: %s", esp_err_to_name(ret));
+        return ret;
+    }
+
+    app_stop_motors();
+    ESP_LOGI(TAG, "All peripherals initialized");
+    return ESP_OK;
 }
 
-static bool app_init_mpu(void)
-{
-    if (driver_mpu6050_init_default() != ESP_OK) {
-        ESP_LOGW(TAG, "MPU6050 init failed");
-        return false;
-    }
-    return true;
-}
-
-static bool app_init_tts(void)
-{
-    if (driver_tw_tts_init_default() != ESP_OK) {
-        ESP_LOGW(TAG, "TTS init failed");
-        return false;
-    }
-    s_tts_enabled = true;
-    return true;
-}
-
-static bool app_init_motors(void)
-{
-    driver_motor_config_t cfg = {
-        .ppr = DRIVER_MOTOR_PPR_DEFAULT,
-    };
-
-    esp_err_t err = driver_motor_init(DRIVER_MOTOR_LEFT, &cfg);
-    if (err != ESP_OK) {
-        ESP_LOGW(TAG, "Left motor init failed: %s", esp_err_to_name(err));
-        return false;
-    }
-    err = driver_motor_init(DRIVER_MOTOR_RIGHT, &cfg);
-    if (err != ESP_OK) {
-        ESP_LOGW(TAG, "Right motor init failed: %s", esp_err_to_name(err));
-        return false;
-    }
-    app_set_motors_stop(true);
-    return true;
-}
-
-static bool app_init_pid(void)
-{
-    service_pid_config_t pid_cfg = {
-        .kp = 1.2f,
-        .ki = 0.05f,
-        .kd = 0.02f,
-        .output_min = -100.0f,
-        .output_max = 100.0f,
-        .integral_max = 80.0f,
-    };
-
-    if (service_pid_init(&s_left_pid, &pid_cfg) != ESP_OK) {
-        return false;
-    }
-    if (service_pid_init(&s_right_pid, &pid_cfg) != ESP_OK) {
-        return false;
-    }
-    return true;
-}
-
-static void app_collect_fusion(app_sensor_fusion_t *fusion)
+static bool app_collect_sensors(app_sensor_data_t *s)
 {
     driver_tof2000c_vl53l0x_result_t tof = {0};
-    driver_mpu6050_data_t mpu = {0};
-    int left_count = 0;
-    int right_count = 0;
+    esp_err_t ret;
 
-    fusion->distance_mm = 9999.0f;
-    fusion->pitch_deg = 0.0f;
-    fusion->roll_deg = 0.0f;
-    fusion->left_encoder = s_last_left_encoder;
-    fusion->right_encoder = s_last_right_encoder;
-    fusion->user_near = false;
-    fusion->obstacle_close = false;
-    fusion->tilted = false;
-    fusion->shaken = false;
-    fusion->motor_stall = false;
-
-    if (driver_tof2000c_vl53l0x_read_single(&tof) == ESP_OK && !tof.timeout) {
-        fusion->distance_mm = (float)tof.distance_mm;
-        fusion->user_near = (tof.distance_mm > 0 && tof.distance_mm < 700);
-        fusion->obstacle_close = (tof.distance_mm > 0 && tof.distance_mm < 200);
+    ret = driver_tof2000c_vl53l0x_read_single(&tof);
+    if (ret != ESP_OK) {
+        ESP_LOGW(TAG, "TOF read failed: %s", esp_err_to_name(ret));
+        s->tof_timeout = true;
+        s->tof_distance_mm = 0;
+    } else {
+        s->tof_timeout = tof.timeout;
+        s->tof_distance_mm = tof.distance_mm;
+        s->tof_status = tof.range_status;
     }
 
-    if (driver_mpu6050_read(&mpu) == ESP_OK) {
-        fusion->pitch_deg = atan2f(mpu.accel_x_g, sqrtf(mpu.accel_y_g * mpu.accel_y_g + mpu.accel_z_g * mpu.accel_z_g)) * 57.29578f;
-        fusion->roll_deg = atan2f(mpu.accel_y_g, mpu.accel_z_g) * 57.29578f;
-        fusion->tilted = fabsf(fusion->pitch_deg) > 35.0f || fabsf(fusion->roll_deg) > 35.0f;
-        fusion->shaken = fabsf(mpu.gyro_x_dps) > 150.0f || fabsf(mpu.gyro_y_dps) > 150.0f || fabsf(mpu.gyro_z_dps) > 150.0f;
+    ret = driver_mpu6050_read(&s->mpu);
+    if (ret != ESP_OK) {
+        ESP_LOGW(TAG, "MPU6050 read failed: %s", esp_err_to_name(ret));
+        return false;
     }
 
-    if (driver_encoder_get_count(DRIVER_ENCODER_LEFT, &left_count) == ESP_OK &&
-        driver_encoder_get_count(DRIVER_ENCODER_RIGHT, &right_count) == ESP_OK) {
-        fusion->left_encoder = left_count;
-        fusion->right_encoder = right_count;
-        fusion->motor_stall = (abs(left_count - s_last_left_encoder) < 2) && (abs(right_count - s_last_right_encoder) < 2);
-        s_last_left_encoder = left_count;
-        s_last_right_encoder = right_count;
+    ret = driver_encoder_get_count(DRIVER_ENCODER_LEFT, &s->encoder_left);
+    if (ret != ESP_OK) {
+        ESP_LOGW(TAG, "Left encoder read failed: %s", esp_err_to_name(ret));
+        s->encoder_ok = false;
     }
+    ret = driver_encoder_get_count(DRIVER_ENCODER_RIGHT, &s->encoder_right);
+    if (ret != ESP_OK) {
+        ESP_LOGW(TAG, "Right encoder read failed: %s", esp_err_to_name(ret));
+        s->encoder_ok = false;
+    }
+
+    if (s->encoder_ok) {
+        s->motor_ok = true;
+    }
+
+    return true;
 }
 
-static void app_update_state(const app_sensor_fusion_t *fusion)
+static bool app_is_tilted(const app_sensor_data_t *s)
 {
+    float ax = fabsf(s->mpu.accel_x_g);
+    float ay = fabsf(s->mpu.accel_y_g);
+    float az = fabsf(s->mpu.accel_z_g);
+    float tilt_score = ax + ay;
+
+    return (tilt_score > 1.1f) || (az < 0.6f) || (ax > APP_LIFT_ACCEL_LIMIT_G) || (ay > APP_LIFT_ACCEL_LIMIT_G);
+}
+
+static bool app_is_near_user(const app_sensor_data_t *s)
+{
+    return (!s->tof_timeout && s->tof_distance_mm > 0 && s->tof_distance_mm <= APP_DISTANCE_NEAR_MM);
+}
+
+static bool app_is_obstacle(const app_sensor_data_t *s)
+{
+    return (!s->tof_timeout && s->tof_distance_mm > 0 && s->tof_distance_mm <= APP_DISTANCE_OBSTACLE_MM);
+}
+
+static bool app_is_critical_obstacle(const app_sensor_data_t *s)
+{
+    return (!s->tof_timeout && s->tof_distance_mm > 0 && s->tof_distance_mm <= APP_DISTANCE_CRITICAL_MM);
+}
+
+static bool app_detect_stall(const app_sensor_data_t *s)
+{
+    int dleft = 0;
+    int dright = 0;
+
+    if (!s_have_prev_count) {
+        s_prev_left_count = s->encoder_left;
+        s_prev_right_count = s->encoder_right;
+        s_have_prev_count = true;
+        return false;
+    }
+
+    dleft = abs(s->encoder_left - s_prev_left_count);
+    dright = abs(s->encoder_right - s_prev_right_count);
+    s_prev_left_count = s->encoder_left;
+    s_prev_right_count = s->encoder_right;
+
+    if (dleft <= APP_STALL_DELTA_COUNT && dright <= APP_STALL_DELTA_COUNT) {
+        s_stall_ticks++;
+    } else {
+        s_stall_ticks = 0;
+    }
+
+    return (s_stall_ticks >= APP_STALL_TICKS);
+}
+
+static void app_update_oled_and_log(const app_sensor_data_t *s)
+{
+    ESP_LOGI(TAG, "state=%d tof=%umm accel=(%.2f,%.2f,%.2f) gyro=(%.1f,%.1f,%.1f) enc=(%d,%d)",
+             (int)s_state,
+             (unsigned int)s->tof_distance_mm,
+             (double)s->mpu.accel_x_g, (double)s->mpu.accel_y_g, (double)s->mpu.accel_z_g,
+             (double)s->mpu.gyro_x_dps, (double)s->mpu.gyro_y_dps, (double)s->mpu.gyro_z_dps,
+             s->encoder_left, s->encoder_right);
+    app_oled_show(s, s_state);
+}
+
+static void app_run_state_machine(void)
+{
+    app_sensor_data_t s = {
+        .encoder_ok = true,
+        .motor_ok = true,
+    };
+
+    if (!app_collect_sensors(&s)) {
+        s_state = APP_STATE_ERROR;
+    }
+
     switch (s_state) {
     case APP_STATE_INIT:
-        s_state = APP_STATE_SELF_CHECK;
+        if (app_init_all() == ESP_OK) {
+            s_state = APP_STATE_SELF_CHECK;
+        } else {
+            s_state = APP_STATE_ERROR;
+        }
         break;
 
     case APP_STATE_SELF_CHECK:
-        if (s_health.tof_ok && s_health.mpu_ok && s_health.encoder_ok && s_health.motor_ok && s_health.tts_ok) {
+        app_speak_state_once(APP_STATE_SELF_CHECK);
+        if (driver_tof2000c_vl53l0x_is_initialized() &&
+            driver_mpu6050_is_initialized() &&
+            driver_oled_is_initialized() &&
+            driver_tw_tts_is_initialized()) {
             s_state = APP_STATE_IDLE;
+            ESP_LOGI(TAG, "Self check passed");
         } else {
             s_state = APP_STATE_ERROR;
         }
         break;
 
     case APP_STATE_IDLE:
-        if (fusion->tilted || fusion->shaken) {
+        if (app_is_critical_obstacle(&s) || app_is_tilted(&s)) {
             s_state = APP_STATE_PROTECT;
-        } else if (fusion->obstacle_close) {
+        } else if (app_is_obstacle(&s)) {
             s_state = APP_STATE_AVOID;
-        } else if (fusion->user_near) {
+        } else if (app_is_near_user(&s)) {
             s_state = APP_STATE_INTERACT;
-        } else if (s_loop_count % 40 == 0) {
-            s_state = APP_STATE_MOVE;
         }
         break;
 
     case APP_STATE_INTERACT:
-        if (fusion->tilted || fusion->shaken) {
+        app_speak_state_once(APP_STATE_INTERACT);
+        if (app_is_tilted(&s)) {
             s_state = APP_STATE_PROTECT;
-        } else if (fusion->obstacle_close) {
+        } else if (app_is_obstacle(&s)) {
             s_state = APP_STATE_AVOID;
-        } else if (!fusion->user_near) {
-            s_state = APP_STATE_IDLE;
-        }
-        break;
-
-    case APP_STATE_MOVE:
-        if (fusion->tilted || fusion->shaken || fusion->motor_stall) {
-            s_state = APP_STATE_PROTECT;
-        } else if (fusion->obstacle_close) {
-            s_state = APP_STATE_AVOID;
-        } else if (!fusion->user_near && (s_loop_count % 25 == 0)) {
-            s_state = APP_STATE_IDLE;
-        }
-        break;
-
-    case APP_STATE_AVOID:
-        if (fusion->tilted || fusion->shaken) {
-            s_state = APP_STATE_PROTECT;
-        } else if (!fusion->obstacle_close && fusion->user_near) {
-            s_state = APP_STATE_INTERACT;
-        } else if (!fusion->obstacle_close) {
+        } else {
             s_state = APP_STATE_MOVE;
-        }
-        break;
-
-    case APP_STATE_PROTECT:
-        if (!fusion->tilted && !fusion->shaken && !fusion->motor_stall) {
-            s_state = APP_STATE_IDLE;
-        }
-        break;
-
-    case APP_STATE_ERROR:
-    default:
-        break;
-    }
-}
-
-static void app_apply_state(const app_sensor_fusion_t *fusion)
-{
-    switch (s_state) {
-    case APP_STATE_INIT:
-        app_set_motors_stop(true);
-        driver_led_set(1);
-        break;
-
-    case APP_STATE_SELF_CHECK:
-        app_set_motors_stop(true);
-        driver_led_set_brightness(50);
-        break;
-
-    case APP_STATE_IDLE:
-        app_set_motors_stop(false);
-        driver_led_set_brightness(10);
-        break;
-
-    case APP_STATE_INTERACT:
-        app_set_motors_stop(false);
-        driver_led_set_brightness(30);
-        if (s_last_announced_state != APP_STATE_INTERACT) {
-            app_speak_once(APP_STATE_INTERACT, "欢迎使用桌面伴侣");
         }
         break;
 
     case APP_STATE_MOVE: {
-        int16_t base_speed = 35;
-        int16_t left_speed = base_speed;
-        int16_t right_speed = base_speed;
-        if (fusion->user_near) {
-            base_speed = 25;
-            left_speed = base_speed;
-            right_speed = base_speed;
-        }
-        if (fusion->motor_stall) {
-            app_set_motors_stop(true);
+        int16_t left_speed = APP_MOVE_SPEED_DEFAULT;
+        int16_t right_speed = APP_MOVE_SPEED_DEFAULT;
+
+        if (app_is_tilted(&s)) {
+            s_state = APP_STATE_PROTECT;
             break;
         }
+        if (app_is_critical_obstacle(&s)) {
+            s_state = APP_STATE_PROTECT;
+            break;
+        }
+        if (app_is_obstacle(&s)) {
+            s_state = APP_STATE_AVOID;
+            break;
+        }
+
+        if (app_detect_stall(&s)) {
+            ESP_LOGW(TAG, "Possible motor stall detected");
+            s_state = APP_STATE_PROTECT;
+            break;
+        }
+
+        if (s.tof_distance_mm <= APP_DISTANCE_NEAR_MM) {
+            left_speed = APP_MOVE_SPEED_SLOW;
+            right_speed = APP_MOVE_SPEED_SLOW;
+        }
+
         (void)driver_motor_set_speed(DRIVER_MOTOR_LEFT, left_speed);
         (void)driver_motor_set_speed(DRIVER_MOTOR_RIGHT, right_speed);
-        driver_led_set_brightness(80);
+        (void)driver_tb6612_set_speed(DRIVER_TB6612_MOTOR_LEFT, left_speed);
+        (void)driver_tb6612_set_speed(DRIVER_TB6612_MOTOR_RIGHT, right_speed);
         break;
     }
 
     case APP_STATE_AVOID:
-        (void)driver_motor_set_speed(DRIVER_MOTOR_LEFT, -20);
-        (void)driver_motor_set_speed(DRIVER_MOTOR_RIGHT, -20);
-        driver_led_set_brightness(60);
-        if (s_last_announced_state != APP_STATE_AVOID) {
-            app_speak_once(APP_STATE_AVOID, "前方有障碍，正在避障");
+        app_speak_state_once(APP_STATE_AVOID);
+        (void)driver_motor_set_speed(DRIVER_MOTOR_LEFT, -APP_TURN_SPEED);
+        (void)driver_motor_set_speed(DRIVER_MOTOR_RIGHT, APP_TURN_SPEED);
+        (void)driver_tb6612_set_speed(DRIVER_TB6612_MOTOR_LEFT, -APP_TURN_SPEED);
+        (void)driver_tb6612_set_speed(DRIVER_TB6612_MOTOR_RIGHT, APP_TURN_SPEED);
+        if (!app_is_obstacle(&s)) {
+            s_state = APP_STATE_MOVE;
         }
         break;
 
     case APP_STATE_PROTECT:
-        app_set_motors_stop(true);
-        driver_led_set(0);
-        if (s_last_announced_state != APP_STATE_PROTECT) {
-            app_speak_once(APP_STATE_PROTECT, "设备状态异常，已停止运动");
+        app_speak_state_once(APP_STATE_PROTECT);
+        app_stop_motors();
+        if (!app_is_tilted(&s) && !app_is_critical_obstacle(&s)) {
+            s_state = APP_STATE_IDLE;
         }
         break;
 
     case APP_STATE_ERROR:
     default:
-        app_set_motors_stop(true);
-        driver_led_set(0);
-        if (s_last_announced_state != APP_STATE_ERROR) {
-            app_speak_once(APP_STATE_ERROR, "系统故障，请复位");
+        app_speak_state_once(APP_STATE_ERROR);
+        app_stop_motors();
+        break;
+    }
+
+    app_update_oled_and_log(&s);
+}
+
+static void app_task(void *arg)
+{
+    (void)arg;
+    app_state_t last_state = APP_STATE_INIT;
+
+    ESP_LOGI(TAG, "boot");
+    app_stop_motors();
+    vTaskDelay(pdMS_TO_TICKS(APP_BOOT_WAIT_MS));
+
+    while (1) {
+        if (s_state != last_state) {
+            ESP_LOGI(TAG, "state change %d -> %d", (int)last_state, (int)s_state);
+            last_state = s_state;
         }
-        break;
-    }
-}
 
-static void app_init_peripherals(void)
-{
-    service_device_init();
-    driver_led_init();
-    driver_button_init();
+        if (s_state == APP_STATE_SELF_CHECK) {
+            app_speak_state_once(APP_STATE_SELF_CHECK);
+        }
 
-    s_health.tof_ok = app_init_tof();
-    s_health.mpu_ok = app_init_mpu();
-    s_health.oled_ok = app_init_oled();
-    s_health.tts_ok = app_init_tts();
-    s_health.motor_ok = app_init_motors();
-    s_health.encoder_ok = (driver_encoder_init(DRIVER_ENCODER_LEFT) == ESP_OK) &&
-                          (driver_encoder_init(DRIVER_ENCODER_RIGHT) == ESP_OK);
-    s_health.encoder_ok = s_health.encoder_ok && (driver_encoder_reset(DRIVER_ENCODER_LEFT) == ESP_OK) &&
-                          (driver_encoder_reset(DRIVER_ENCODER_RIGHT) == ESP_OK);
-    (void)driver_servo_init();
-    s_health.encoder_ok = s_health.encoder_ok && (driver_servo_set_angle(DRIVER_SERVO_0, 90) == ESP_OK);
-    s_health.encoder_ok = s_health.encoder_ok && (driver_servo_set_angle(DRIVER_SERVO_1, 90) == ESP_OK);
+        app_run_state_machine();
 
-    ESP_LOGI(TAG, "Init result: TOF=%d MPU=%d OLED=%d TTS=%d MOTOR=%d ENC=%d",
-             s_health.tof_ok, s_health.mpu_ok, s_health.oled_ok, s_health.tts_ok,
-             s_health.motor_ok, s_health.encoder_ok);
-}
+        if (s_state == APP_STATE_IDLE) {
+            app_speak_state_once(APP_STATE_IDLE);
+        }
 
-static void app_state_voice_and_log(void)
-{
-    if (s_last_announced_state == s_state) {
-        return;
-    }
-
-    ESP_LOGI(TAG, "State -> %s", app_state_name(s_state));
-
-    switch (s_state) {
-    case APP_STATE_INIT:
-        app_speak_once(APP_STATE_INIT, "系统初始化中");
-        break;
-    case APP_STATE_SELF_CHECK:
-        app_speak_once(APP_STATE_SELF_CHECK, "系统自检中");
-        break;
-    case APP_STATE_IDLE:
-        app_speak_once(APP_STATE_IDLE, "进入待机");
-        break;
-    case APP_STATE_INTERACT:
-        app_speak_once(APP_STATE_INTERACT, "检测到用户靠近");
-        break;
-    case APP_STATE_MOVE:
-        app_speak_once(APP_STATE_MOVE, "开始移动");
-        break;
-    case APP_STATE_AVOID:
-        app_speak_once(APP_STATE_AVOID, "正在避障");
-        break;
-    case APP_STATE_PROTECT:
-        app_speak_once(APP_STATE_PROTECT, "进入保护状态");
-        break;
-    case APP_STATE_ERROR:
-    default:
-        app_speak_once(APP_STATE_ERROR, "进入故障状态");
-        break;
+        vTaskDelay(pdMS_TO_TICKS(APP_LOOP_PERIOD_MS));
     }
 }
 
 void app_main(void)
 {
-    app_init_peripherals();
-    s_state = APP_STATE_SELF_CHECK;
-    s_last_announced_state = APP_STATE_ERROR;
+    service_pid_config_t pid_cfg = {
+        .kp = 0.8f,
+        .ki = 0.02f,
+        .kd = 0.05f,
+        .output_min = -255.0f,
+        .output_max = 255.0f,
+        .integral_max = 120.0f,
+    };
 
-    while (1) {
-        driver_button_process();
+    ESP_ERROR_CHECK(service_pid_init(&s_pid_left, &pid_cfg));
+    ESP_ERROR_CHECK(service_pid_init(&s_pid_right, &pid_cfg));
 
-        app_sensor_fusion_t fusion;
-        app_collect_fusion(&fusion);
+    s_state = APP_STATE_INIT;
+    s_last_spoken_state = APP_STATE_ERROR;
 
-        if (s_state == APP_STATE_SELF_CHECK) {
-            app_state_voice_and_log();
-            app_update_state(&fusion);
-        } else {
-            app_update_state(&fusion);
-        }
-
-        app_state_voice_and_log();
-        app_apply_state(&fusion);
-        app_update_oled(&fusion);
-
-        if (driver_button_get_event() == DRIVER_BUTTON_EVENT_LONG_PRESS) {
-            s_state = APP_STATE_MOVE;
-            s_last_announced_state = APP_STATE_ERROR;
-        }
-
-        s_loop_count++;
-        vTaskDelay(pdMS_TO_TICKS(100));
-    }
+    xTaskCreate(app_task, "robot_agent_task", 6144, NULL, 5, NULL);
 }
