@@ -555,6 +555,20 @@ pre {
   gap: 12px;
 }
 
+.debug-layout {
+  grid-template-columns: minmax(0, 1fr);
+  align-items: stretch;
+}
+
+.debug-layout .work-card {
+  min-width: 0;
+}
+
+.debug-card {
+  display: grid;
+  gap: 14px;
+}
+
 .hardware-details {
   margin-top: 12px;
 }
@@ -695,19 +709,96 @@ pre {
 }
 
 .exec-panel {
-  margin-top: 12px;
-  padding-top: 12px;
-  border-top: 1px solid var(--line);
+  margin-top: 0;
+  padding: 12px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--panel-soft);
   display: grid;
   gap: 10px;
 }
 
 .debug-fix-panel {
-  margin-top: 12px;
-  padding-top: 12px;
-  border-top: 1px solid var(--line);
+  margin-top: 0;
+  padding: 12px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: #fff;
   display: grid;
   gap: 10px;
+}
+
+.monitor-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  min-height: 36px;
+  padding: 8px 10px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--panel-soft);
+}
+
+.monitor-status {
+  display: inline-flex;
+  align-items: center;
+  min-height: 24px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  padding: 2px 9px;
+  background: #fff;
+  color: var(--muted);
+  font-size: 13px;
+}
+
+.monitor-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+}
+
+.tool-output-grid {
+  display: grid;
+  grid-template-columns: minmax(240px, 0.75fr) minmax(0, 1.25fr);
+  gap: 12px;
+}
+
+.tool-output-panel {
+  min-width: 0;
+  display: grid;
+  gap: 6px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--panel-soft);
+  padding: 10px;
+}
+
+.tool-output-panel h4 {
+  margin: 0;
+  color: var(--muted);
+  font-size: 13px;
+}
+
+.tool-output {
+  height: min(48vh, 460px);
+  min-height: 320px;
+  overflow: auto;
+  font-size: 12px;
+  line-height: 1.5;
+  border-radius: 6px;
+}
+
+.error-output {
+  border-color: #f1b8b8;
+  background: var(--red-soft);
+  color: #7f1d1d;
+}
+
+.log-output {
+  background: #101827;
+  color: #dce7f5;
+  border-color: #22304a;
 }
 
 .exec-grid {
@@ -949,6 +1040,7 @@ pre {
   .right-rail,
   .summary-grid,
   .section-grid,
+  .tool-output-grid,
   .code-layout,
   .exec-grid,
   .prompt-source,

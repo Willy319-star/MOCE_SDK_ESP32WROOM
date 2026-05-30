@@ -44,6 +44,9 @@ const state = {
   autosave: true
 };
 
+let monitorPollTimer = null;
+let activeMonitorId = '';
+
 const steps = [
   '提出产品需求',
   '功能分析',
@@ -408,6 +411,8 @@ function updateWorkflowControls() {
 }
 
 function clearTestTools() {
+  clearMonitorPoll();
+  activeMonitorId = '';
   state.tools = {
     build: null,
     flash: null,
@@ -415,6 +420,8 @@ function clearTestTools() {
   };
   state.lastToolResult = null;
   state.debugFix = null;
+  $('#disconnectMonitorBtn').disabled = true;
+  setToolOutputs({ monitorStatus: '未连接' });
   renderDebugFix();
 }
 
@@ -496,14 +503,18 @@ function updateModelChip() {
 }
 
 function renderSdk() {
+  const sdkGrid = $('#sdkGrid');
+  if (!sdkGrid) {
+    return;
+  }
   if (!state.sdk) {
-    $('#sdkGrid').innerHTML = '<div class="sdk-card"><h4>SDK</h4><p>尚未扫描。</p></div>';
+    sdkGrid.innerHTML = '<div class="sdk-card"><h4>SDK</h4><p>尚未扫描。</p></div>';
     return;
   }
 
   const components = state.sdk.components || [];
   const boards = state.sdk.boards || [];
-  $('#sdkGrid').innerHTML = `
+  sdkGrid.innerHTML = `
     <div class="sdk-card">
       <h4>Components</h4>
       <p>${components.length} 个组件</p>
@@ -1355,7 +1366,7 @@ async function writeProject() {
 function renderToolResult(data) {
   const result = data.result || {};
   const summary = data.diagnostics?.text || summarizeToolOutput(result);
-  $('#toolOutput').textContent = [
+  const lines = [
     data.cwd ? `cwd: ${data.cwd}` : '',
     `$ ${data.command}`,
     '',
@@ -1363,7 +1374,34 @@ function renderToolResult(data) {
     result.timedOut ? 'timed out: true' : '',
     result.truncated ? 'output truncated: true' : '',
     `exit code: ${result.code}`
-  ].filter(Boolean).join('\n');
+  ].filter(Boolean);
+  setToolOutputs({
+    errors: data.diagnostics?.keyLines || (result.ok === false ? lines : []),
+    logs: data.diagnostics?.keyLines ? [`$ ${data.command}`, `exit code: ${result.code}`] : lines,
+    monitorStatus: data.tool === 'monitor-session' ? data.status : ''
+  });
+}
+
+function trimOutputLines(lines, limit) {
+  const input = Array.isArray(lines) ? lines : String(lines || '').split(/\r?\n/);
+  const filtered = input.map((line) => String(line || '').trimEnd()).filter((line) => line.trim());
+  if (filtered.length <= limit) return filtered;
+  return [`... 已清理 ${filtered.length - limit} 行旧日志 ...`, ...filtered.slice(-limit)];
+}
+
+function setScrollableText(element, lines, emptyText, limit) {
+  if (!element) return;
+  const trimmed = trimOutputLines(lines, limit);
+  element.textContent = trimmed.length ? trimmed.join('\n') : emptyText;
+  element.scrollTop = element.scrollHeight;
+}
+
+function setToolOutputs({ errors = [], logs = [], monitorStatus = '' } = {}) {
+  setScrollableText($('#toolErrorOutput'), errors, '尚未提取错误。', 120);
+  setScrollableText($('#toolLogOutput'), logs, '尚未运行工具。', 220);
+  if (monitorStatus) {
+    $('#monitorStatus').textContent = monitorStatus;
+  }
 }
 
 function renderDebugFix() {
@@ -1489,7 +1527,11 @@ function summarizeToolOutput(result) {
 async function runTool(kind) {
   const payload = currentPayload();
   const projectPath = `project/${payload.projectName || 'robot_agent_app'}`;
-  $('#toolOutput').textContent = `正在运行 ${kind}...`;
+  if (kind === 'monitor') {
+    await runMonitorDiagnosisAfterFlash(payload, projectPath);
+    return;
+  }
+  setToolOutputs({ logs: [`正在运行 ${kind}...`], monitorStatus: kind === 'monitor' ? '连接中' : '' });
   switchTab('sdk');
   logActivity(`Running ${kind}...`, 'warn');
   const endpoint = kind === 'monitor' ? '/api/tools/monitor-diagnose' : `/api/tools/${kind}`;
@@ -1536,65 +1578,121 @@ async function runTool(kind) {
 }
 
 async function runMonitorDiagnosisAfterFlash(payload, projectPath) {
-  $('#toolOutput').textContent = 'Flash 完成，正在监听 monitor 并提取错误信息...';
+  await stopMonitorSession(false);
+  setToolOutputs({ logs: ['Flash 完成，正在连接 monitor...'], monitorStatus: '连接中' });
   switchTab('sdk');
-  logActivity('Running monitor diagnostics after flash...', 'warn');
-  const data = await api('/api/tools/monitor-diagnose', {
+  logActivity('Starting monitor session after flash...', 'warn');
+  const data = await api('/api/tools/monitor-session/start', {
     method: 'POST',
     body: {
       projectPath,
       target: payload.target,
       board: payload.board,
       port: payload.port,
-      timeoutMs: 15000
+      timeoutMs: 60000
     }
   });
+  activeMonitorId = data.id;
+  $('#disconnectMonitorBtn').disabled = false;
+  updateMonitorSessionView(data);
+  pollMonitorSession(projectPath);
+}
 
+function updateMonitorSessionView(data) {
   const diagnostics = data.diagnostics || { hasErrors: false, keyLines: [], text: '' };
-  const diagnosticResult = {
+  const logs = data.logs || [];
+  const errors = data.errors || diagnostics.keyLines || [];
+  setToolOutputs({
+    errors,
+    logs,
+    monitorStatus: data.status === 'running' ? '已连接' : data.status || '未连接'
+  });
+
+  const result = {
     ...(data.result || {}),
     ok: !diagnostics.hasErrors,
     diagnostics
   };
-  const summary = diagnostics.text || 'Monitor 监听结束，未提取到错误信息。';
-
-  renderToolResult({
-    ...data,
-    result: diagnosticResult,
-    diagnostics
-  });
-
   state.lastToolResult = {
     tool: 'monitor',
     command: data.command,
-    result: diagnosticResult,
-    summary
+    result,
+    summary: diagnostics.text || errors.join('\n') || 'Monitor 未提取到错误信息。'
   };
   state.tools.monitor = {
     ok: !diagnostics.hasErrors,
     code: data.result?.code ?? null,
     ranAt: new Date().toISOString()
   };
-  state.debugFix = null;
   renderDebugFix();
   renderSteps();
+}
 
-  await recordMemoryEvent(
-    diagnostics.hasErrors ? 'monitor_failed' : 'monitor_passed',
-    diagnostics.hasErrors ? 'monitor 发现错误' : 'monitor 未发现错误',
-    summary,
-    { tool: 'monitor-diagnose', errorCount: diagnostics.keyLines?.length || 0 }
-  );
-
-  if (!diagnostics.hasErrors) {
-    setStatus('Monitor 未提取到错误信息。', 'ok');
-    logActivity('Monitor diagnostics found no errors', 'ok');
-    return;
+function clearMonitorPoll() {
+  if (monitorPollTimer) {
+    clearTimeout(monitorPollTimer);
+    monitorPollTimer = null;
   }
+}
 
-  setStatus('Monitor 发现错误，正在交给 agent 重新生成固件...', 'warn');
-  logActivity('Monitor diagnostics found errors; requesting firmware fix...', 'warn');
-  await debugFixLastTool();
+async function pollMonitorSession(projectPath) {
+  clearMonitorPoll();
+  if (!activeMonitorId) return;
+  monitorPollTimer = setTimeout(async () => {
+    try {
+      const data = await api('/api/tools/monitor-session/status', {
+        method: 'POST',
+        body: { id: activeMonitorId }
+      });
+      updateMonitorSessionView(data);
+      const hasErrors = data.diagnostics?.hasErrors === true || (data.errors || []).length > 0;
+      if (hasErrors) {
+        clearMonitorPoll();
+        $('#disconnectMonitorBtn').disabled = true;
+        setStatus('Monitor 发现错误，正在交给 agent 重新生成固件...', 'warn');
+        logActivity('Monitor diagnostics found errors; requesting firmware fix...', 'warn');
+        await stopMonitorSession(false);
+        await recordMemoryEvent('monitor_failed', 'monitor 发现错误', state.lastToolResult.summary, {
+          tool: 'monitor-session',
+          errorCount: data.errors?.length || 0
+        });
+        await debugFixLastTool();
+        return;
+      }
+      if (data.status === 'running') {
+        pollMonitorSession(projectPath);
+        return;
+      }
+      activeMonitorId = '';
+      $('#disconnectMonitorBtn').disabled = true;
+      setStatus('Monitor 已结束，未提取到错误信息。', 'ok');
+      logActivity('Monitor session ended with no errors', 'ok');
+      await recordMemoryEvent('monitor_passed', 'monitor 未发现错误', state.lastToolResult.summary, {
+        tool: 'monitor-session'
+      });
+    } catch (error) {
+      activeMonitorId = '';
+      $('#disconnectMonitorBtn').disabled = true;
+      setStatus(error.message, 'error');
+      logActivity(error.message, 'error');
+    }
+  }, 1000);
+}
+
+async function stopMonitorSession(updateStatus = true) {
+  clearMonitorPoll();
+  if (!activeMonitorId) return;
+  const data = await api('/api/tools/monitor-session/stop', {
+    method: 'POST',
+    body: { id: activeMonitorId }
+  });
+  updateMonitorSessionView(data);
+  activeMonitorId = '';
+  $('#disconnectMonitorBtn').disabled = true;
+  if (updateStatus) {
+    setStatus('已断开 monitor 连接。', 'ok');
+    logActivity('Monitor disconnected', 'ok');
+  }
 }
 
 async function debugFixLastTool() {
@@ -1651,7 +1749,7 @@ async function debugFixLastTool() {
 async function runExec() {
   const command = $('#execCommand').value.trim();
   if (!command) return;
-  $('#toolOutput').textContent = `Running ${command}...`;
+  setToolOutputs({ logs: [`Running ${command}...`] });
   switchTab('sdk');
   logActivity(`Running exec: ${command}`, 'warn');
   const data = await api('/api/tools/exec', {
@@ -1905,6 +2003,7 @@ function bindEvents() {
   $('#buildBtn').addEventListener('click', () => runTool('build').catch(showError));
   $('#flashBtn').addEventListener('click', () => runTool('flash').catch(showError));
   $('#monitorBtn').addEventListener('click', () => runTool('monitor').catch(showError));
+  $('#disconnectMonitorBtn').addEventListener('click', () => stopMonitorSession(true).catch(showError));
   $('#debugFixBtn').addEventListener('click', () => debugFixLastTool().catch(showError));
   $('#execBtn').addEventListener('click', () => runExec().catch(showError));
   $('#askBtn').addEventListener('click', () => askQuestion().catch(showError));

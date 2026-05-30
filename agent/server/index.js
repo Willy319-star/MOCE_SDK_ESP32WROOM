@@ -7,7 +7,11 @@ import { spawn } from 'node:child_process';
 import { loadConfig } from './lib/config.js';
 import { callLlm, listProviderTemplates } from './lib/llm.js';
 import { scanSdk } from './lib/sdkScanner.js';
-import { extractMonitorDiagnostics } from './lib/monitorDiagnostics.js';
+import {
+  cleanMonitorLine,
+  extractMonitorDiagnostics,
+  isMonitorDiagnosticLine
+} from './lib/monitorDiagnostics.js';
 import {
   buildChatPrompt,
   buildCodegenPrompt,
@@ -61,6 +65,7 @@ let sdkSummaryCache = null;
 let sdkSummaryCacheSignature = '';
 let globalPromptCache = null;
 const skillCache = new Map();
+const monitorSessions = new Map();
 const promptRoot = path.join(sdkRoot, 'prompt');
 const skillsRoot = path.join(agentRoot, 'skills');
 const planningSkillFile = 'requirement-analysis-hardware-breakdown.md';
@@ -990,6 +995,52 @@ function runTool(tool, args, cwd, timeoutMs = 0, options = {}) {
   });
 }
 
+function appendSessionLines(session, chunk, stream) {
+  const text = chunk.toString();
+  session[stream] += text;
+  const lines = text.split(/\r?\n/);
+  for (const line of lines) {
+    const clean = cleanMonitorLine(line);
+    if (!clean.trim()) continue;
+    const target = isMonitorDiagnosticLine(clean) ? session.errorLines : session.logLines;
+    target.push(clean);
+  }
+  if (session.logLines.length > 300) {
+    session.logLines.splice(0, session.logLines.length - 300);
+    session.logsTrimmed = true;
+  }
+  if (session.errorLines.length > 160) {
+    session.errorLines.splice(0, session.errorLines.length - 160);
+    session.errorsTrimmed = true;
+  }
+}
+
+function monitorSessionPayload(session) {
+  const result = {
+    ok: session.status === 'running' || session.code === 0,
+    code: session.code,
+    timedOut: false,
+    startedAt: session.startedAt,
+    finishedAt: session.finishedAt || null,
+    stdout: session.stdout,
+    stderr: session.stderr,
+    error: session.error || '',
+    truncated: session.logsTrimmed || session.errorsTrimmed
+  };
+  const diagnostics = extractMonitorDiagnostics(result);
+  return {
+    id: session.id,
+    status: session.status,
+    command: session.command,
+    result,
+    diagnostics,
+    logs: session.logLines.slice(-160),
+    errors: diagnostics.keyLines.length ? diagnostics.keyLines : session.errorLines.slice(-80),
+    logsTrimmed: session.logsTrimmed,
+    errorsTrimmed: session.errorsTrimmed
+  };
+}
+
 function bashPath(filePath) {
   return filePath.replaceAll('\\', '/');
 }
@@ -1372,6 +1423,99 @@ async function handleMonitorDiagnose(req, res) {
   });
 }
 
+async function handleMonitorSessionStart(req, res) {
+  const body = await readJson(req);
+  const { normalized } = safeProjectPath(body.projectPath || 'project/led_effects_demo');
+  const port = body.port || '/dev/ttyUSB0';
+  const script = path.join(sdkRoot, 'tools', 'monitor.sh');
+  const durationSeconds = Math.max(1, Math.ceil(Number(body.timeoutMs || 60000) / 1000));
+  const args = [
+    bashPath(script),
+    bashPath(path.join(sdkRoot, normalized)),
+    port,
+    String(durationSeconds)
+  ];
+  const id = `${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 8)}`;
+  const command = ['bash', ...args].join(' ');
+  const child = spawn('bash', args, {
+    cwd: sdkRoot,
+    shell: false,
+    env: process.env
+  });
+  const session = {
+    id,
+    child,
+    command,
+    status: 'running',
+    code: null,
+    startedAt: new Date().toISOString(),
+    finishedAt: null,
+    stdout: '',
+    stderr: '',
+    error: '',
+    logLines: [],
+    errorLines: [],
+    logsTrimmed: false,
+    errorsTrimmed: false
+  };
+  monitorSessions.set(id, session);
+
+  child.stdout?.on('data', (chunk) => appendSessionLines(session, chunk, 'stdout'));
+  child.stderr?.on('data', (chunk) => appendSessionLines(session, chunk, 'stderr'));
+  child.on('error', (error) => {
+    session.error = error.message;
+    session.errorLines.push(`ERROR: ${error.message}`);
+    session.status = 'failed';
+    session.code = -1;
+    session.finishedAt = new Date().toISOString();
+  });
+  child.on('close', (code) => {
+    session.status = session.status === 'stopped' ? 'stopped' : 'completed';
+    session.code = code;
+    session.finishedAt = new Date().toISOString();
+  });
+
+  sendJson(res, 200, {
+    ok: true,
+    tool: 'monitor-session',
+    ...monitorSessionPayload(session)
+  });
+}
+
+async function handleMonitorSessionStatus(req, res) {
+  const body = await readJson(req);
+  const id = String(body.id || '').trim();
+  const session = monitorSessions.get(id);
+  if (!session) {
+    sendError(res, 404, 'monitor session not found');
+    return;
+  }
+  sendJson(res, 200, {
+    ok: true,
+    tool: 'monitor-session',
+    ...monitorSessionPayload(session)
+  });
+}
+
+async function handleMonitorSessionStop(req, res) {
+  const body = await readJson(req);
+  const id = String(body.id || '').trim();
+  const session = monitorSessions.get(id);
+  if (!session) {
+    sendError(res, 404, 'monitor session not found');
+    return;
+  }
+  if (session.status === 'running') {
+    session.status = 'stopped';
+    session.child.kill('SIGTERM');
+  }
+  sendJson(res, 200, {
+    ok: true,
+    tool: 'monitor-session',
+    ...monitorSessionPayload(session)
+  });
+}
+
 async function handleApi(req, res, pathname) {
   try {
     if (req.method === 'GET' && pathname === '/api/health') {
@@ -1549,6 +1693,21 @@ async function handleApi(req, res, pathname) {
 
     if (req.method === 'POST' && pathname === '/api/tools/monitor-diagnose') {
       await handleMonitorDiagnose(req, res);
+      return;
+    }
+
+    if (req.method === 'POST' && pathname === '/api/tools/monitor-session/start') {
+      await handleMonitorSessionStart(req, res);
+      return;
+    }
+
+    if (req.method === 'POST' && pathname === '/api/tools/monitor-session/status') {
+      await handleMonitorSessionStatus(req, res);
+      return;
+    }
+
+    if (req.method === 'POST' && pathname === '/api/tools/monitor-session/stop') {
+      await handleMonitorSessionStop(req, res);
       return;
     }
 

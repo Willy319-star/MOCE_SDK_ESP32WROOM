@@ -26,21 +26,21 @@ const CONTINUATION_PATTERNS = [
   /Backtrace:/i
 ];
 
-function cleanLine(line) {
+export function cleanMonitorLine(line) {
   return String(line || '')
     .replace(/\x1b\[[0-9;?]*[A-Za-z]/g, '')
     .trimEnd();
 }
 
-function isDiagnosticLine(line) {
-  const text = cleanLine(line).trim();
+export function isMonitorDiagnosticLine(line) {
+  const text = cleanMonitorLine(line).trim();
   if (!text) return false;
   return ERROR_PATTERNS.some((pattern) => pattern.test(text))
     || WARNING_PATTERNS.some((pattern) => pattern.test(text));
 }
 
 function isContinuationLine(line) {
-  const text = cleanLine(line);
+  const text = cleanMonitorLine(line);
   return CONTINUATION_PATTERNS.some((pattern) => pattern.test(text));
 }
 
@@ -50,13 +50,13 @@ export function extractMonitorDiagnostics(result = {}, options = {}) {
     ...String(result.stdout || '').split(/\r?\n/),
     ...String(result.stderr || '').split(/\r?\n/),
     String(result.error || '')
-  ].map(cleanLine);
+  ].map(cleanMonitorLine);
 
   const picked = [];
   const seen = new Set();
 
   function push(line) {
-    const text = cleanLine(line);
+    const text = cleanMonitorLine(line);
     if (!text.trim() || seen.has(text)) return;
     seen.add(text);
     picked.push(text);
@@ -64,7 +64,7 @@ export function extractMonitorDiagnostics(result = {}, options = {}) {
 
   for (let index = 0; index < rawLines.length; index += 1) {
     const line = rawLines[index];
-    if (!isDiagnosticLine(line)) {
+    if (!isMonitorDiagnosticLine(line)) {
       continue;
     }
 
