@@ -1332,6 +1332,32 @@ function publicExecutionConfig() {
   };
 }
 
+function defaultSerialPort() {
+  return process.platform === 'win32' ? 'COM3' : '/dev/ttyUSB0';
+}
+
+function scriptRunner(scriptName, args) {
+  if (process.platform === 'win32') {
+    const powershell = process.env.PWSH || process.env.POWERSHELL || 'powershell';
+    const script = path.join(sdkRoot, 'tools', `${scriptName}.ps1`);
+    return {
+      tool: powershell,
+      args: ['-NoProfile', '-ExecutionPolicy', 'Bypass', '-File', script, ...args],
+      commandParts: [powershell, '-NoProfile', '-File', script, ...args],
+      spawnOptions: undefined
+    };
+  }
+
+  const script = path.join(sdkRoot, 'tools', `${scriptName}.sh`);
+  const bashArgs = [bashPath(script), ...args.map((arg) => bashPath(arg))];
+  return {
+    tool: 'bash',
+    args: bashArgs,
+    commandParts: ['bash', ...bashArgs],
+    spawnOptions: undefined
+  };
+}
+
 async function handleExec(req, res) {
   if (config.execution?.enabled === false) {
     sendError(res, 403, 'agent execution is disabled');
@@ -1369,29 +1395,34 @@ async function handleTool(req, res, kind) {
   const { normalized } = safeProjectPath(body.projectPath || 'project/led_effects_demo');
   const target = body.target || 'esp32';
   const board = body.board || `my_board_${target}`;
-  const port = body.port || '/dev/ttyUSB0';
-  const script = path.join(sdkRoot, 'tools', `${kind}.sh`);
-  const args = [bashPath(script), bashPath(path.join(sdkRoot, normalized))];
+  const port = body.port || defaultSerialPort();
+  const projectAbsolute = path.join(sdkRoot, normalized);
+  const durationSeconds = Math.ceil(Number(body.timeoutMs || 15000) / 1000);
+  const args = [projectAbsolute];
 
   if (kind === 'build') {
     args.push(target, board);
+  } else if (kind === 'flash') {
+    args.push('--target', target, '--board', board, '--port', port);
   } else {
     args.push(port);
     if (kind === 'monitor') {
-      args.push(String(Math.ceil(Number(body.timeoutMs || 15000) / 1000)));
+      args.push(String(durationSeconds));
     }
   }
 
+  const resolved = scriptRunner(kind, args);
   const timeoutMs = kind === 'monitor' ? Number(body.timeoutMs || 15000) : 0;
-  const result = await runTool('bash', args, sdkRoot, timeoutMs, {
+  const result = await runTool(resolved.tool, resolved.args, sdkRoot, timeoutMs, {
     okOnTimeout: kind === 'monitor',
-    maxOutputBytes: Number(config.execution?.maxOutputBytes || 200000)
+    maxOutputBytes: Number(config.execution?.maxOutputBytes || 200000),
+    spawnOptions: resolved.spawnOptions
   });
   sendJson(res, 200, {
     ok: true,
     tool: kind,
     toolOk: result.ok,
-    command: ['bash', ...args].join(' '),
+    command: formatCommand(resolved.commandParts),
     result
   });
 }
@@ -1399,25 +1430,24 @@ async function handleTool(req, res, kind) {
 async function handleMonitorDiagnose(req, res) {
   const body = await readJson(req);
   const { normalized } = safeProjectPath(body.projectPath || 'project/led_effects_demo');
-  const port = body.port || '/dev/ttyUSB0';
-  const script = path.join(sdkRoot, 'tools', 'monitor.sh');
+  const port = body.port || defaultSerialPort();
   const timeoutMs = Number(body.timeoutMs || 15000);
-  const args = [
-    bashPath(script),
-    bashPath(path.join(sdkRoot, normalized)),
+  const resolved = scriptRunner('monitor', [
+    path.join(sdkRoot, normalized),
     port,
     String(Math.ceil(timeoutMs / 1000))
-  ];
-  const result = await runTool('bash', args, sdkRoot, timeoutMs, {
+  ]);
+  const result = await runTool(resolved.tool, resolved.args, sdkRoot, timeoutMs, {
     okOnTimeout: true,
-    maxOutputBytes: Number(config.execution?.maxOutputBytes || 200000)
+    maxOutputBytes: Number(config.execution?.maxOutputBytes || 200000),
+    spawnOptions: resolved.spawnOptions
   });
   const diagnostics = extractMonitorDiagnostics(result);
   sendJson(res, 200, {
     ok: true,
     tool: 'monitor-diagnose',
     toolOk: !diagnostics.hasErrors,
-    command: ['bash', ...args].join(' '),
+    command: formatCommand(resolved.commandParts),
     result,
     diagnostics
   });
@@ -1426,21 +1456,20 @@ async function handleMonitorDiagnose(req, res) {
 async function handleMonitorSessionStart(req, res) {
   const body = await readJson(req);
   const { normalized } = safeProjectPath(body.projectPath || 'project/led_effects_demo');
-  const port = body.port || '/dev/ttyUSB0';
-  const script = path.join(sdkRoot, 'tools', 'monitor.sh');
+  const port = body.port || defaultSerialPort();
   const durationSeconds = Math.max(1, Math.ceil(Number(body.timeoutMs || 60000) / 1000));
-  const args = [
-    bashPath(script),
-    bashPath(path.join(sdkRoot, normalized)),
+  const resolved = scriptRunner('monitor', [
+    path.join(sdkRoot, normalized),
     port,
     String(durationSeconds)
-  ];
+  ]);
   const id = `${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 8)}`;
-  const command = ['bash', ...args].join(' ');
-  const child = spawn('bash', args, {
+  const command = formatCommand(resolved.commandParts);
+  const child = spawn(resolved.tool, resolved.args, {
     cwd: sdkRoot,
     shell: false,
-    env: process.env
+    env: process.env,
+    ...(resolved.spawnOptions || {})
   });
   const session = {
     id,
@@ -1524,6 +1553,8 @@ async function handleApi(req, res, pathname) {
         version: '0.1.0',
         sdkRoot,
         agentRoot,
+        platform: process.platform,
+        defaultSerialPort: defaultSerialPort(),
         defaultProvider: config.defaultProvider,
         providers: listProviderTemplates(config),
         execution: publicExecutionConfig(),
