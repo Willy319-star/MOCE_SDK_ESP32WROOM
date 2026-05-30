@@ -330,7 +330,7 @@ function restoreSnapshot(snapshot = {}) {
   $('#projectName').value = snapshot.projectName || 'robot_agent_app';
   $('#targetName').value = snapshot.target || 'esp32s3';
   $('#boardName').value = snapshot.board || 'my_board_esp32s3';
-  $('#portName').value = snapshot.port || '/dev/ttyUSB0';
+  $('#portName').value = snapshot.port || state.health?.defaultSerialPort || '/dev/ttyUSB0';
   $('#requirement').value = snapshot.requirement || '';
   if ($('#analysisRefinement')) $('#analysisRefinement').value = snapshot.refinement || '';
   if ($('#componentSelectionNotes')) $('#componentSelectionNotes').value = snapshot.componentSelectionNotes || '';
@@ -998,6 +998,9 @@ function switchTab(name) {
 async function loadHealth() {
   state.health = await api('/api/health');
   renderProviders();
+  if (!$('#portName').value.trim() || $('#portName').value === '/dev/ttyUSB0') {
+    $('#portName').value = state.health.defaultSerialPort || $('#portName').value;
+  }
   const execution = state.health.execution || {};
   if (execution.defaultCwd) {
     $('#execCwd').value = execution.defaultCwd;

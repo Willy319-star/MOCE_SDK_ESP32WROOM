@@ -9,7 +9,7 @@
 - LLM provider：OpenAI-compatible、OpenAI、DeepSeek、OpenRouter、Anthropic、Gemini、Ollama、Custom。
 - 无 API key 时自动使用本地 fallback 规划和代码脚手架。
 - 代码写入时强制限制在 `project/` 下。
-- Build、Flash、Monitor 调用仓库 `tools/*.sh`，Monitor 默认采集 15 秒后返回。
+- Build、Flash、Monitor 会按运行平台调用仓库脚本：Linux/macOS 使用 `tools/*.sh`，Windows 使用 `tools/*.ps1`。Monitor 默认采集 15 秒后返回，非交互环境使用串口采集器。
 - SDK / 工具页支持受控执行文件或程序：`/api/tools/exec` 会把 cwd 限制在 SDK 根目录内，默认不走 shell，并带超时、输出截断和程序白名单。
 - physical agent 暂无仓库实现，首版提供占位适配层。
 

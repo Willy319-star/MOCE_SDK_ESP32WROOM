@@ -5,12 +5,19 @@ param(
 )
 
 $ErrorActionPreference = "Stop"
-$SdkRoot = Resolve-Path (Join-Path $PSScriptRoot "..")
+$SdkRoot = (Resolve-Path -LiteralPath (Join-Path $PSScriptRoot "..")).Path
+
+function Invoke-Idf {
+    & idf.py @args
+    if ($LASTEXITCODE -ne 0) {
+        exit $LASTEXITCODE
+    }
+}
 
 if ([string]::IsNullOrWhiteSpace($ProjectDir)) {
     $ProjectDir = Join-Path $SdkRoot "examples/blink_minimal"
 }
-$ProjectDir = (Resolve-Path $ProjectDir).Path
+$ProjectDir = (Resolve-Path -LiteralPath $ProjectDir).Path
 
 $Target = ""
 $Board = ""
@@ -60,7 +67,7 @@ for ($i = 0; $i -lt $Rest.Count; $i++) {
 
 if ([string]::IsNullOrWhiteSpace($Target)) {
     $Sdkconfig = Join-Path $ProjectDir "sdkconfig"
-    if (Test-Path $Sdkconfig) {
+    if (Test-Path -LiteralPath $Sdkconfig) {
         $Match = Select-String -Path $Sdkconfig -Pattern '^CONFIG_IDF_TARGET="([^"]+)"' | Select-Object -First 1
         if ($Match) {
             $Target = $Match.Matches[0].Groups[1].Value
@@ -80,17 +87,17 @@ if ([string]::IsNullOrWhiteSpace($Port)) {
 
 $SdkconfigDefaults = Join-Path $SdkRoot "boards/$Board/sdkconfig.defaults"
 $ProjectSdkconfigDefaults = Join-Path $ProjectDir "sdkconfig.defaults"
-if (Test-Path $ProjectSdkconfigDefaults) {
+if (Test-Path -LiteralPath $ProjectSdkconfigDefaults) {
     $SdkconfigDefaults = "$ProjectSdkconfigDefaults;$SdkconfigDefaults"
 }
 
 . (Join-Path $SdkRoot "third_party/esp-idf/export.ps1")
 
-Set-Location $ProjectDir
+Set-Location -LiteralPath $ProjectDir
 
 $CurrentTarget = ""
 $Sdkconfig = Join-Path $ProjectDir "sdkconfig"
-if (Test-Path $Sdkconfig) {
+if (Test-Path -LiteralPath $Sdkconfig) {
     $Match = Select-String -Path $Sdkconfig -Pattern '^CONFIG_IDF_TARGET="([^"]+)"' | Select-Object -First 1
     if ($Match) {
         $CurrentTarget = $Match.Matches[0].Groups[1].Value
@@ -98,7 +105,7 @@ if (Test-Path $Sdkconfig) {
 }
 
 if ($CurrentTarget -ne $Target) {
-    idf.py "-DMOCE_BOARD=$Board" "-DSDKCONFIG_DEFAULTS=$SdkconfigDefaults" set-target $Target
+    Invoke-Idf "-DMOCE_BOARD=$Board" "-DSDKCONFIG_DEFAULTS=$SdkconfigDefaults" set-target $Target
 }
 
-idf.py "-DMOCE_BOARD=$Board" "-DSDKCONFIG_DEFAULTS=$SdkconfigDefaults" -p $Port flash
+Invoke-Idf "-DMOCE_BOARD=$Board" "-DSDKCONFIG_DEFAULTS=$SdkconfigDefaults" -p $Port flash
