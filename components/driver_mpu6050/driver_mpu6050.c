@@ -68,6 +68,12 @@ static bool config_is_valid(const driver_mpu6050_config_t *config)
            config->dlpf <= DRIVER_MPU6050_DLPF_BW_5HZ;
 }
 
+static bool who_am_i_is_supported(uint8_t who_am_i)
+{
+    return who_am_i == DRIVER_MPU6050_WHO_AM_I_VALUE ||
+           who_am_i == DRIVER_MPU6050_WHO_AM_I_VALUE_ALT;
+}
+
 static esp_err_t write_reg_byte(uint8_t reg, uint8_t value)
 {
     if (!s_inited || s_dev == NULL) {
@@ -116,10 +122,13 @@ esp_err_t driver_mpu6050_init(const driver_mpu6050_config_t *config)
     if (err != ESP_OK) {
         goto fail;
     }
-    if (who_am_i != DRIVER_MPU6050_WHO_AM_I_VALUE) {
+    if (!who_am_i_is_supported(who_am_i)) {
         ESP_LOGE(TAG, "unexpected WHO_AM_I: 0x%02x", who_am_i);
         err = ESP_ERR_NOT_FOUND;
         goto fail;
+    }
+    if (who_am_i != DRIVER_MPU6050_WHO_AM_I_VALUE) {
+        ESP_LOGW(TAG, "accepted compatible WHO_AM_I: 0x%02x", who_am_i);
     }
 
     err = driver_mpu6050_set_sleep(false);

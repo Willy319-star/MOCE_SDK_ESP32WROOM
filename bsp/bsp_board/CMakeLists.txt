@@ -1,4 +1,6 @@
-if(CONFIG_IDF_TARGET_ESP32S3)
+if(MOCE_BOARD)
+    set(MOCE_BOARD_DIR "${CMAKE_CURRENT_LIST_DIR}/../../boards/${MOCE_BOARD}")
+elseif(CONFIG_IDF_TARGET_ESP32S3)
     set(MOCE_BOARD_DIR "${CMAKE_CURRENT_LIST_DIR}/../../boards/my_board_esp32s3")
 else()
     set(MOCE_BOARD_DIR "${CMAKE_CURRENT_LIST_DIR}/../../boards/my_board_esp32")
