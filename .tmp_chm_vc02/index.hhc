@@ -1,0 +1,441 @@
+<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML//EN">
+<HTML><HEAD></HEAD><BODY>
+<OBJECT type="text/site properties">
+<param name="FrameName" value="right">
+</OBJECT>
+<UL>
+<LI><OBJECT type="text/sitemap"><param name="Name" value="ReleaseNote"><param name="Local" value="index.html"><param name="ImageNumber" value="11"></OBJECT>
+<LI><OBJECT type="text/sitemap"><param name="Name" value="1、简介"><param name="Local" value="jianjie.html"><param name="ImageNumber" value="11"></OBJECT>
+<LI><OBJECT type="text/sitemap"><param name="Name" value="2、产品说明"><param name="Local" value="chanpinshuoming.html"><param name="ImageNumber" value="11"></OBJECT>
+<LI><OBJECT type="text/sitemap"><param name="Name" value="3、获取源码"><param name="Local" value="huoquyuanma.html"><param name="ImageNumber" value="11"></OBJECT>
+<LI><OBJECT type="text/sitemap"><param name="Name" value="4、烧录固件"><param name="Local" value="shaolugujian.html"><param name="ImageNumber" value="11"></OBJECT>
+<LI><OBJECT type="text/sitemap"><param name="Name" value="5、搭建开发环境"><param name="Local" value="dajiankaifahuanjing.html"><param name="ImageNumber" value="11"></OBJECT>
+<LI><OBJECT type="text/sitemap"><param name="Name" value="6、软件架构"><param name="Local" value="ruanjianjiagou.html"><param name="ImageNumber" value="11"></OBJECT>
+<LI><OBJECT type="text/sitemap"><param name="Name" value="7、二次开发"><param name="Local" value="ercikaifa.html"><param name="ImageNumber" value="11"></OBJECT>
+<LI><OBJECT type="text/sitemap"><param name="Name" value="模块"><param name="Local" value="modules.html"><param name="ImageNumber" value="1"></OBJECT>
+  <UL>
+  <LI><OBJECT type="text/sitemap"><param name="Name" value="配置宏定义"><param name="Local" value="group__uni__config__macro.html"><param name="ImageNumber" value="1"></OBJECT>
+    <UL>
+    <LI><OBJECT type="text/sitemap"><param name="Name" value="GPIO相关宏定义"><param name="Local" value="group__uni__config__gpio__macro.html"><param name="ImageNumber" value="1"></OBJECT>
+      <UL>
+      <LI><OBJECT type="text/sitemap"><param name="Name" value="GPIO_OUT_DEF_VAL"><param name="Local" value="group__uni__config__gpio__macro.html#ga04ff584c7678ff45479acd026002c7c6"><param name="ImageNumber" value="11"></OBJECT>
+      </UL>
+    <LI><OBJECT type="text/sitemap"><param name="Name" value="audio相关宏定义"><param name="Local" value="group__uni__config__audio__macro.html"><param name="ImageNumber" value="1"></OBJECT>
+      <UL>
+      <LI><OBJECT type="text/sitemap"><param name="Name" value="USER_AUDIO_VOL_DEF"><param name="Local" value="group__uni__config__audio__macro.html#ga0e7402dddeb93b956a66f057db304a3e"><param name="ImageNumber" value="11"></OBJECT>
+      <LI><OBJECT type="text/sitemap"><param name="Name" value="USER_AUDIO_VOL_LEVEL"><param name="Local" value="group__uni__config__audio__macro.html#ga21f2726b02ac9bd6478b7717ced74cd1"><param name="ImageNumber" value="11"></OBJECT>
+      <LI><OBJECT type="text/sitemap"><param name="Name" value="USER_AUDIO_VOL_MAX"><param name="Local" value="group__uni__config__audio__macro.html#gac2422c3acd1005199f4c706ffd5c219f"><param name="ImageNumber" value="11"></OBJECT>
+      <LI><OBJECT type="text/sitemap"><param name="Name" value="USER_AUDIO_VOL_MID"><param name="Local" value="group__uni__config__audio__macro.html#gadd72d3a5a81aeb43769608ee20a93373"><param name="ImageNumber" value="11"></OBJECT>
+      <LI><OBJECT type="text/sitemap"><param name="Name" value="USER_AUDIO_VOL_MIN"><param name="Local" value="group__uni__config__audio__macro.html#ga3f88d016c527bce826753c4deffd7e2d"><param name="ImageNumber" value="11"></OBJECT>
+      </UL>
+    <LI><OBJECT type="text/sitemap"><param name="Name" value="通讯相关宏定义"><param name="Local" value="group__uni__config__communication__macro.html"><param name="ImageNumber" value="1"></OBJECT>
+      <UL>
+      <LI><OBJECT type="text/sitemap"><param name="Name" value="OPEN_ASR_EVENT_UCP"><param name="Local" value="group__uni__config__communication__macro.html#ga5c1f3f90ac06dbe4dd9faca576bc1e1c"><param name="ImageNumber" value="11"></OBJECT>
+      <LI><OBJECT type="text/sitemap"><param name="Name" value="UNI_UART_BAUD_RATE"><param name="Local" value="group__uni__config__communication__macro.html#ga7315fd00f4b405afcdff7f83cb87645a"><param name="ImageNumber" value="11"></OBJECT>
+      <LI><OBJECT type="text/sitemap"><param name="Name" value="UNI_UART_DEVICE_NUM"><param name="Local" value="group__uni__config__communication__macro.html#gae7e65b6d04b4c8f1236bbced8cba1247"><param name="ImageNumber" value="11"></OBJECT>
+      <LI><OBJECT type="text/sitemap"><param name="Name" value="UNI_UART_PARITY"><param name="Local" value="group__uni__config__communication__macro.html#ga4dfe7e2a18374139f1d11724ba7fc1bf"><param name="ImageNumber" value="11"></OBJECT>
+      <LI><OBJECT type="text/sitemap"><param name="Name" value="UNI_UART_PIN_SELECT"><param name="Local" value="group__uni__config__communication__macro.html#gaab1009829432105de368004b373ee51c"><param name="ImageNumber" value="11"></OBJECT>
+      <LI><OBJECT type="text/sitemap"><param name="Name" value="UNI_UART_STOP_BIT"><param name="Local" value="group__uni__config__communication__macro.html#ga5651b4b89c44a3ca652dcd182fb25ca3"><param name="ImageNumber" value="11"></OBJECT>
+      <LI><OBJECT type="text/sitemap"><param name="Name" value="USE_SAMPLE_PROTOCOL"><param name="Local" value="group__uni__config__communication__macro.html#gac5173b15d269cfe816a810e672ff72f2"><param name="ImageNumber" value="11"></OBJECT>
+      <LI><OBJECT type="text/sitemap"><param name="Name" value="USE_UNIONE_PROTOCOL"><param name="Local" value="group__uni__config__communication__macro.html#ga4e8e1ce809fd83e0fcc1df4ef5053e3e"><param name="ImageNumber" value="11"></OBJECT>
+      </UL>
+    <LI><OBJECT type="text/sitemap"><param name="Name" value="串口相关宏定义"><param name="Local" value="group__uni__config__uart__macro.html"><param name="ImageNumber" value="1"></OBJECT>
+      <UL>
+      <LI><OBJECT type="text/sitemap"><param name="Name" value="USER_UART_BAUD_RATE"><param name="Local" value="group__uni__config__uart__macro.html#ga879c18f3fe004b689f18694756a900f6"><param name="ImageNumber" value="11"></OBJECT>
+      <LI><OBJECT type="text/sitemap"><param name="Name" value="USER_UART_DEVICE_NUM"><param name="Local" value="group__uni__config__uart__macro.html#ga436a62c1b3904c1b826c0e88c1bf86c2"><param name="ImageNumber" value="11"></OBJECT>
+      <LI><OBJECT type="text/sitemap"><param name="Name" value="USER_UART_PARITY"><param name="Local" value="group__uni__config__uart__macro.html#gaa790ae4531e8fb16808ee8b4261366df"><param name="ImageNumber" value="11"></OBJECT>
+      <LI><OBJECT type="text/sitemap"><param name="Name" value="USER_UART_PIN_SELECT"><param name="Local" value="group__uni__config__uart__macro.html#ga24d7358640837334d04ff42208a12d80"><param name="ImageNumber" value="11"></OBJECT>
+      <LI><OBJECT type="text/sitemap"><param name="Name" value="USER_UART_STOP_BIT"><param name="Local" value="group__uni__config__uart__macro.html#ga17bfd105e8bbea8a9b58c78e7109e460"><param name="ImageNumber" value="11"></OBJECT>
+      </UL>
+    <LI><OBJECT type="text/sitemap"><param name="Name" value="语音相关宏定义"><param name="Local" value="group__uni__config__asr__macro.html"><param name="ImageNumber" value="1"></OBJECT>
+      <UL>
+      <LI><OBJECT type="text/sitemap"><param name="Name" value="MULTI_DIALOGUE_MODE"><param name="Local" value="group__uni__config__asr__macro.html#gad247e343e7b64f5777f58221510bb69f"><param name="ImageNumber" value="11"></OBJECT>
+      <LI><OBJECT type="text/sitemap"><param name="Name" value="WAKEUP_INTERRUPT_MODE"><param name="Local" value="group__uni__config__asr__macro.html#ga7d04734711e842f5d61f3a4c5c4a0ecc"><param name="ImageNumber" value="11"></OBJECT>
+      </UL>
+    <LI><OBJECT type="text/sitemap"><param name="Name" value="Demo相关宏定义"><param name="Local" value="group__uni__config__demo__macro.html"><param name="ImageNumber" value="1"></OBJECT>
+      <UL>
+      <LI><OBJECT type="text/sitemap"><param name="Name" value="AUTO_RESET_TIME"><param name="Local" value="group__uni__config__demo__macro.html#ga90a85b03c04cd1fa429cbfdd5c99a812"><param name="ImageNumber" value="11"></OBJECT>
+      <LI><OBJECT type="text/sitemap"><param name="Name" value="USER_DEMO_ADC_CTRL"><param name="Local" value="group__uni__config__demo__macro.html#ga863c533855e5cbe96b1640b72a02e982"><param name="ImageNumber" value="11"></OBJECT>
+      <LI><OBJECT type="text/sitemap"><param name="Name" value="USER_DEMO_ASR_CONTROL"><param name="Local" value="group__uni__config__demo__macro.html#ga1d015a4c93110cd852565fc8e9475d2e"><param name="ImageNumber" value="11"></OBJECT>
+      <LI><OBJECT type="text/sitemap"><param name="Name" value="USER_DEMO_AUTO_GPIO"><param name="Local" value="group__uni__config__demo__macro.html#ga8bec746377b593e7232369f9b288566b"><param name="ImageNumber" value="11"></OBJECT>
+      <LI><OBJECT type="text/sitemap"><param name="Name" value="USER_DEMO_BUZZER"><param name="Local" value="group__uni__config__demo__macro.html#ga809e04d80b031d919c841ae486721936"><param name="ImageNumber" value="11"></OBJECT>
+      <LI><OBJECT type="text/sitemap"><param name="Name" value="USER_DEMO_FLASH"><param name="Local" value="group__uni__config__demo__macro.html#ga2fbf4d8a60c011f53044d583ddc8a2ef"><param name="ImageNumber" value="11"></OBJECT>
+      <LI><OBJECT type="text/sitemap"><param name="Name" value="USER_DEMO_HOUSEKEEPER"><param name="Local" value="group__uni__config__demo__macro.html#ga53c2b5853d53f4ada7af3c94dab3ec50"><param name="ImageNumber" value="11"></OBJECT>
+      <LI><OBJECT type="text/sitemap"><param name="Name" value="USER_DEMO_I2C_TIME"><param name="Local" value="group__uni__config__demo__macro.html#ga7e670cde6312b69cd39e59b3f72b3601"><param name="ImageNumber" value="11"></OBJECT>
+      <LI><OBJECT type="text/sitemap"><param name="Name" value="USER_DEMO_KEY_WAKEUP"><param name="Local" value="group__uni__config__demo__macro.html#ga886bba14f078121bb622c51be2669bd3"><param name="ImageNumber" value="11"></OBJECT>
+      <LI><OBJECT type="text/sitemap"><param name="Name" value="USER_DEMO_PLAYER"><param name="Local" value="group__uni__config__demo__macro.html#ga281556e09f80f842ce10b4cce618b440"><param name="ImageNumber" value="11"></OBJECT>
+      <LI><OBJECT type="text/sitemap"><param name="Name" value="USER_DEMO_POWER_SLEEP"><param name="Local" value="group__uni__config__demo__macro.html#gab2ac58d37bc7c3c01adf94ae71fefb90"><param name="ImageNumber" value="11"></OBJECT>
+      <LI><OBJECT type="text/sitemap"><param name="Name" value="USER_DEMO_PWM_LED"><param name="Local" value="group__uni__config__demo__macro.html#ga00e309604b7ecee38e8102e69efccc50"><param name="ImageNumber" value="11"></OBJECT>
+      <LI><OBJECT type="text/sitemap"><param name="Name" value="USER_DEMO_SMART_AC"><param name="Local" value="group__uni__config__demo__macro.html#gaa74782b27dbb3f578717fe5b288e9337"><param name="ImageNumber" value="11"></OBJECT>
+      <LI><OBJECT type="text/sitemap"><param name="Name" value="USER_DEMO_SPI_LCD"><param name="Local" value="group__uni__config__demo__macro.html#gac7e0395213888eaa2e36e918d6cbab8e"><param name="ImageNumber" value="11"></OBJECT>
+      <LI><OBJECT type="text/sitemap"><param name="Name" value="USER_DEMO_TIMERS"><param name="Local" value="group__uni__config__demo__macro.html#ga4de9c6ccb7bde4228a9d0df4919108c8"><param name="ImageNumber" value="11"></OBJECT>
+      <LI><OBJECT type="text/sitemap"><param name="Name" value="USER_DEMO_UART"><param name="Local" value="group__uni__config__demo__macro.html#gaff35eb937e56f06e9e83e0bc42b70ac0"><param name="ImageNumber" value="11"></OBJECT>
+      <LI><OBJECT type="text/sitemap"><param name="Name" value="USER_DEMO_UART_SUCP"><param name="Local" value="group__uni__config__demo__macro.html#ga9c595bf8de625c883d640eae9ec74fef"><param name="ImageNumber" value="11"></OBJECT>
+      <LI><OBJECT type="text/sitemap"><param name="Name" value="USER_DEMO_UART_UCP"><param name="Local" value="group__uni__config__demo__macro.html#gae15d6ede42b97c62bce8836a2cdfe211"><param name="ImageNumber" value="11"></OBJECT>
+      <LI><OBJECT type="text/sitemap"><param name="Name" value="USER_RUN_DEMO"><param name="Local" value="group__uni__config__demo__macro.html#gaa9eb4e4d78b9eb2dc2da1d0171237e18"><param name="ImageNumber" value="11"></OBJECT>
+      <LI><OBJECT type="text/sitemap"><param name="Name" value="USER_RUN_DEMO_SELECT"><param name="Local" value="group__uni__config__demo__macro.html#ga234a8d36ebd8d152f3c487e19868578d"><param name="ImageNumber" value="11"></OBJECT>
+      </UL>
+    </UL>
+  <LI><OBJECT type="text/sitemap"><param name="Name" value="音频控制"><param name="Local" value="group__uni__player.html"><param name="ImageNumber" value="1"></OBJECT>
+    <UL>
+    <LI><OBJECT type="text/sitemap"><param name="Name" value="音频控制说明"><param name="Local" value="group__uni__player__note.html"><param name="ImageNumber" value="11"></OBJECT>
+      <UL>
+      </UL>
+    <LI><OBJECT type="text/sitemap"><param name="Name" value="音频控制接口"><param name="Local" value="group__uni__player__inf.html"><param name="ImageNumber" value="1"></OBJECT>
+      <UL>
+      <LI><OBJECT type="text/sitemap"><param name="Name" value="user_player_play"><param name="Local" value="group__uni__player__inf.html#ga4473e2cc3c6a07e170e10cf0c317dfe9"><param name="ImageNumber" value="11"></OBJECT>
+      <LI><OBJECT type="text/sitemap"><param name="Name" value="user_player_reply_list_in_order"><param name="Local" value="group__uni__player__inf.html#ga27521c012137d0e8c32ce68eaa4828e9"><param name="ImageNumber" value="11"></OBJECT>
+      <LI><OBJECT type="text/sitemap"><param name="Name" value="user_player_reply_list_num"><param name="Local" value="group__uni__player__inf.html#ga8638ce40d50e8d08516925830d6dbd94"><param name="ImageNumber" value="11"></OBJECT>
+      <LI><OBJECT type="text/sitemap"><param name="Name" value="user_player_reply_list_random"><param name="Local" value="group__uni__player__inf.html#ga1835960e52668ec97beea7937b4c619a"><param name="ImageNumber" value="11"></OBJECT>
+      <LI><OBJECT type="text/sitemap"><param name="Name" value="user_player_set_volume_down"><param name="Local" value="group__uni__player__inf.html#ga0f199afec71fe2f57dc4ba5e2e4819da"><param name="ImageNumber" value="11"></OBJECT>
+      <LI><OBJECT type="text/sitemap"><param name="Name" value="user_player_set_volume_max"><param name="Local" value="group__uni__player__inf.html#gae603648a4e8db0fb69fa8bdd25ef05df"><param name="ImageNumber" value="11"></OBJECT>
+      <LI><OBJECT type="text/sitemap"><param name="Name" value="user_player_set_volume_mid"><param name="Local" value="group__uni__player__inf.html#ga35cb9ee64f99957205b157f49a964dfe"><param name="ImageNumber" value="11"></OBJECT>
+      <LI><OBJECT type="text/sitemap"><param name="Name" value="user_player_set_volume_min"><param name="Local" value="group__uni__player__inf.html#ga55d7758461c676131b77d4177686f4c4"><param name="ImageNumber" value="11"></OBJECT>
+      <LI><OBJECT type="text/sitemap"><param name="Name" value="user_player_set_volume_up"><param name="Local" value="group__uni__player__inf.html#ga1c2747205a3d1978c8f0b8350518f56e"><param name="ImageNumber" value="11"></OBJECT>
+      <LI><OBJECT type="text/sitemap"><param name="Name" value="user_player_shutup_exit"><param name="Local" value="group__uni__player__inf.html#gac189138d903b980ca4bfcf98b5264b78"><param name="ImageNumber" value="11"></OBJECT>
+      <LI><OBJECT type="text/sitemap"><param name="Name" value="user_player_shutup_mode"><param name="Local" value="group__uni__player__inf.html#ga11a025a5b1c09eb9ef4737088ee26965"><param name="ImageNumber" value="11"></OBJECT>
+      <LI><OBJECT type="text/sitemap"><param name="Name" value="user_player_speaker_mute"><param name="Local" value="group__uni__player__inf.html#gadaedc08722caea58197700eb1799d32a"><param name="ImageNumber" value="11"></OBJECT>
+      <LI><OBJECT type="text/sitemap"><param name="Name" value="user_player_speaker_unmute"><param name="Local" value="group__uni__player__inf.html#gada2f10e7ab7b44195359350a547a70ae"><param name="ImageNumber" value="11"></OBJECT>
+      <LI><OBJECT type="text/sitemap"><param name="Name" value="user_player_stop"><param name="Local" value="group__uni__player__inf.html#ga15a00832af5304fbb06650bf461e087e"><param name="ImageNumber" value="11"></OBJECT>
+      </UL>
+    <LI><OBJECT type="text/sitemap"><param name="Name" value="音频控制示例"><param name="Local" value="group__uni__player__example.html"><param name="ImageNumber" value="1"></OBJECT>
+      <UL>
+      <LI><OBJECT type="text/sitemap"><param name="Name" value="hb_player.c"><param name="Local" value="group__uni__player__example__1.html"><param name="ImageNumber" value="11"></OBJECT>
+        <UL>
+        </UL>
+      </UL>
+    </UL>
+  <LI><OBJECT type="text/sitemap"><param name="Name" value="语音控制"><param name="Local" value="group__uni__asr.html"><param name="ImageNumber" value="1"></OBJECT>
+    <UL>
+    <LI><OBJECT type="text/sitemap"><param name="Name" value="语音控制说明"><param name="Local" value="group__uni__asr__note.html"><param name="ImageNumber" value="11"></OBJECT>
+      <UL>
+      </UL>
+    <LI><OBJECT type="text/sitemap"><param name="Name" value="语音控制接口"><param name="Local" value="group__uni__asr__inf.html"><param name="ImageNumber" value="1"></OBJECT>
+      <UL>
+      <LI><OBJECT type="text/sitemap"><param name="Name" value="user_asr_goto_awakend"><param name="Local" value="group__uni__asr__inf.html#gaa5fd4ce869fea62e88398b5c4bc48cad"><param name="ImageNumber" value="11"></OBJECT>
+      <LI><OBJECT type="text/sitemap"><param name="Name" value="user_asr_goto_sleep"><param name="Local" value="group__uni__asr__inf.html#gab4cc6b45df69f8d1cc6bfc1092a8a9a2"><param name="ImageNumber" value="11"></OBJECT>
+      <LI><OBJECT type="text/sitemap"><param name="Name" value="user_asr_recognize_disable"><param name="Local" value="group__uni__asr__inf.html#gad34223021046f61938dfecf9c84ec844"><param name="ImageNumber" value="11"></OBJECT>
+      <LI><OBJECT type="text/sitemap"><param name="Name" value="user_asr_recognize_enable"><param name="Local" value="group__uni__asr__inf.html#gaba916844edbff8fab65316b37d1abdf7"><param name="ImageNumber" value="11"></OBJECT>
+      <LI><OBJECT type="text/sitemap"><param name="Name" value="user_asr_timeout_disable"><param name="Local" value="group__uni__asr__inf.html#ga0ed52984b825843f9625e6a94070f1cb"><param name="ImageNumber" value="11"></OBJECT>
+      <LI><OBJECT type="text/sitemap"><param name="Name" value="user_asr_timeout_enable"><param name="Local" value="group__uni__asr__inf.html#gaf0f590527f0ac999193eb4d557bf4ea2"><param name="ImageNumber" value="11"></OBJECT>
+      <LI><OBJECT type="text/sitemap"><param name="Name" value="user_asr_word_disable"><param name="Local" value="group__uni__asr__inf.html#gafbb3e2c544f129a590a1a57394f2a4ed"><param name="ImageNumber" value="11"></OBJECT>
+      <LI><OBJECT type="text/sitemap"><param name="Name" value="user_asr_word_enable"><param name="Local" value="group__uni__asr__inf.html#ga31241285d796dcd881ec8d4251f462e1"><param name="ImageNumber" value="11"></OBJECT>
+      </UL>
+    <LI><OBJECT type="text/sitemap"><param name="Name" value="音频控制示例"><param name="Local" value="group__uni__asr__example.html"><param name="ImageNumber" value="1"></OBJECT>
+      <UL>
+      <LI><OBJECT type="text/sitemap"><param name="Name" value="hb_asr_control.c"><param name="Local" value="group__uni__asr__example__1.html"><param name="ImageNumber" value="11"></OBJECT>
+        <UL>
+        </UL>
+      </UL>
+    </UL>
+  <LI><OBJECT type="text/sitemap"><param name="Name" value="功耗控制"><param name="Local" value="group__uni__power.html"><param name="ImageNumber" value="1"></OBJECT>
+    <UL>
+    <LI><OBJECT type="text/sitemap"><param name="Name" value="功耗控制说明"><param name="Local" value="group__uni__power__note.html"><param name="ImageNumber" value="11"></OBJECT>
+      <UL>
+      </UL>
+    <LI><OBJECT type="text/sitemap"><param name="Name" value="低功耗模式"><param name="Local" value="group__uni__power__sleep.html"><param name="ImageNumber" value="1"></OBJECT>
+      <UL>
+      <LI><OBJECT type="text/sitemap"><param name="Name" value="低功耗模式示例"><param name="Local" value="group__uni__power__sleep__example.html"><param name="ImageNumber" value="11"></OBJECT>
+        <UL>
+        </UL>
+      </UL>
+    </UL>
+  <LI><OBJECT type="text/sitemap"><param name="Name" value="云知声数据通讯协议"><param name="Local" value="group__uni__communication.html"><param name="ImageNumber" value="1"></OBJECT>
+    <UL>
+    <LI><OBJECT type="text/sitemap"><param name="Name" value="云知声标准协议数据通讯"><param name="Local" value="group__uni__communication__note.html"><param name="ImageNumber" value="11"></OBJECT>
+      <UL>
+      </UL>
+    <LI><OBJECT type="text/sitemap"><param name="Name" value="云知声标准协议数据通讯接口"><param name="Local" value="group__uni__communication__inf.html"><param name="ImageNumber" value="1"></OBJECT>
+      <UL>
+      <LI><OBJECT type="text/sitemap"><param name="Name" value="_user_uni_recv"><param name="Local" value="group__uni__communication__inf.html#ga93486863ba77210a1680bb9e29514e85"><param name="ImageNumber" value="11"></OBJECT>
+      <LI><OBJECT type="text/sitemap"><param name="Name" value="user_uni_ucp_final"><param name="Local" value="group__uni__communication__inf.html#ga9f0cb3a678c5bb5a5540b2935a677440"><param name="ImageNumber" value="11"></OBJECT>
+      <LI><OBJECT type="text/sitemap"><param name="Name" value="user_uni_ucp_init"><param name="Local" value="group__uni__communication__inf.html#gaf0f25e2042c65d32d8ff02cafe2cda11"><param name="ImageNumber" value="11"></OBJECT>
+      <LI><OBJECT type="text/sitemap"><param name="Name" value="user_uni_ucp_send"><param name="Local" value="group__uni__communication__inf.html#gaa12638382ed3a07be1549842668b65d2"><param name="ImageNumber" value="11"></OBJECT>
+      </UL>
+    <LI><OBJECT type="text/sitemap"><param name="Name" value="云知声标准协议数据通讯示例"><param name="Local" value="group__uni__communication__example.html"><param name="ImageNumber" value="1"></OBJECT>
+      <UL>
+      <LI><OBJECT type="text/sitemap"><param name="Name" value="hb_uart_ucp.c"><param name="Local" value="group__uni__communication__example__1.html"><param name="ImageNumber" value="11"></OBJECT>
+        <UL>
+        </UL>
+      </UL>
+    <LI><OBJECT type="text/sitemap"><param name="Name" value="云知声简易协议数据通讯"><param name="Local" value="group__uni__communication__sucp__note.html"><param name="ImageNumber" value="11"></OBJECT>
+      <UL>
+      </UL>
+    <LI><OBJECT type="text/sitemap"><param name="Name" value="云知声简易协议数据通讯接口"><param name="Local" value="group__uni__sample__communication__inf.html"><param name="ImageNumber" value="1"></OBJECT>
+      <UL>
+      <LI><OBJECT type="text/sitemap"><param name="Name" value="sucp_pack_t"><param name="Local" value="structsucp__pack__t.html"><param name="ImageNumber" value="1"></OBJECT>
+        <UL>
+        <LI><OBJECT type="text/sitemap"><param name="Name" value="checksum"><param name="Local" value="structsucp__pack__t.html#a98a79d506a5cade52f0173f8845e4295"><param name="ImageNumber" value="11"></OBJECT>
+        <LI><OBJECT type="text/sitemap"><param name="Name" value="cmd_code"><param name="Local" value="structsucp__pack__t.html#a59e060c4ba448b976120fee2c8f1f7b1"><param name="ImageNumber" value="11"></OBJECT>
+        <LI><OBJECT type="text/sitemap"><param name="Name" value="reserve"><param name="Local" value="structsucp__pack__t.html#a2a9be22cbfc29680f097be9580ce9c45"><param name="ImageNumber" value="11"></OBJECT>
+        <LI><OBJECT type="text/sitemap"><param name="Name" value="start_code"><param name="Local" value="structsucp__pack__t.html#a4bd342667060f25961cdecde7fd50074"><param name="ImageNumber" value="11"></OBJECT>
+        </UL>
+      <LI><OBJECT type="text/sitemap"><param name="Name" value="_user_uni_sucp_recv"><param name="Local" value="group__uni__sample__communication__inf.html#gaac8df8826ab046862d483223f2a3146b"><param name="ImageNumber" value="11"></OBJECT>
+      <LI><OBJECT type="text/sitemap"><param name="Name" value="user_uni_sucp_final"><param name="Local" value="group__uni__sample__communication__inf.html#ga770b24b17172e0518a0c1dea0984afa3"><param name="ImageNumber" value="11"></OBJECT>
+      <LI><OBJECT type="text/sitemap"><param name="Name" value="user_uni_sucp_init"><param name="Local" value="group__uni__sample__communication__inf.html#ga1f7600707efa28a7a5bfe3786b20ade1"><param name="ImageNumber" value="11"></OBJECT>
+      <LI><OBJECT type="text/sitemap"><param name="Name" value="user_uni_sucp_send"><param name="Local" value="group__uni__sample__communication__inf.html#ga10c1afdb62cee33313f843c5a0dd1397"><param name="ImageNumber" value="11"></OBJECT>
+      </UL>
+    <LI><OBJECT type="text/sitemap"><param name="Name" value="云知声简易协议数据通讯示例"><param name="Local" value="group__uni__communication__sucp__example.html"><param name="ImageNumber" value="1"></OBJECT>
+      <UL>
+      <LI><OBJECT type="text/sitemap"><param name="Name" value="hb_uart_sucp.c"><param name="Local" value="group__uni__communication__example__sucp.html"><param name="ImageNumber" value="11"></OBJECT>
+        <UL>
+        </UL>
+      </UL>
+    </UL>
+  <LI><OBJECT type="text/sitemap"><param name="Name" value="数据存储"><param name="Local" value="group__uni__flash.html"><param name="ImageNumber" value="1"></OBJECT>
+    <UL>
+    <LI><OBJECT type="text/sitemap"><param name="Name" value="数据存储说明"><param name="Local" value="group__uni__flash__note.html"><param name="ImageNumber" value="11"></OBJECT>
+      <UL>
+      </UL>
+    <LI><OBJECT type="text/sitemap"><param name="Name" value="数据存储接口"><param name="Local" value="group__uni__flash__inf.html"><param name="ImageNumber" value="1"></OBJECT>
+      <UL>
+      <LI><OBJECT type="text/sitemap"><param name="Name" value="user_flash_final"><param name="Local" value="group__uni__flash__inf.html#ga94076cfb767562e8be67b4fa61e02fad"><param name="ImageNumber" value="11"></OBJECT>
+      <LI><OBJECT type="text/sitemap"><param name="Name" value="user_flash_get_env_blob"><param name="Local" value="group__uni__flash__inf.html#ga2d0294f811e7fda5f18f291ac899b2ba"><param name="ImageNumber" value="11"></OBJECT>
+      <LI><OBJECT type="text/sitemap"><param name="Name" value="user_flash_init"><param name="Local" value="group__uni__flash__inf.html#gaad13ffb6718e50a9ca8710dee9fa9c82"><param name="ImageNumber" value="11"></OBJECT>
+      <LI><OBJECT type="text/sitemap"><param name="Name" value="user_flash_set_env_blob"><param name="Local" value="group__uni__flash__inf.html#gab5d4eca5c4afdca266efd4aecf6a55f1"><param name="ImageNumber" value="11"></OBJECT>
+      </UL>
+    <LI><OBJECT type="text/sitemap"><param name="Name" value="数据存储示例"><param name="Local" value="group__uni__flash__example.html"><param name="ImageNumber" value="1"></OBJECT>
+      <UL>
+      <LI><OBJECT type="text/sitemap"><param name="Name" value="hb_flash_example.c"><param name="Local" value="group__uni__flash__example__1.html"><param name="ImageNumber" value="11"></OBJECT>
+        <UL>
+        </UL>
+      </UL>
+    </UL>
+  <LI><OBJECT type="text/sitemap"><param name="Name" value="串口收发"><param name="Local" value="group__uni__uart.html"><param name="ImageNumber" value="1"></OBJECT>
+    <UL>
+    <LI><OBJECT type="text/sitemap"><param name="Name" value="串口收发说明"><param name="Local" value="group__uni__uart__note.html"><param name="ImageNumber" value="11"></OBJECT>
+      <UL>
+      </UL>
+    <LI><OBJECT type="text/sitemap"><param name="Name" value="串口收发接口"><param name="Local" value="group__uni__uart__inf.html"><param name="ImageNumber" value="1"></OBJECT>
+      <UL>
+      <LI><OBJECT type="text/sitemap"><param name="Name" value="_user_uart_recv"><param name="Local" value="group__uni__uart__inf.html#gad9a2d93ed594a966a4699c9026960b71"><param name="ImageNumber" value="11"></OBJECT>
+      <LI><OBJECT type="text/sitemap"><param name="Name" value="user_uart_final"><param name="Local" value="group__uni__uart__inf.html#ga40f6b3ecd697784494ca1b20d414b558"><param name="ImageNumber" value="11"></OBJECT>
+      <LI><OBJECT type="text/sitemap"><param name="Name" value="user_uart_init"><param name="Local" value="group__uni__uart__inf.html#ga7311320ff7ced3bff8625610aaa4c64a"><param name="ImageNumber" value="11"></OBJECT>
+      <LI><OBJECT type="text/sitemap"><param name="Name" value="user_uart_send"><param name="Local" value="group__uni__uart__inf.html#ga73f50c3250d36a374016f449e882e9aa"><param name="ImageNumber" value="11"></OBJECT>
+      </UL>
+    <LI><OBJECT type="text/sitemap"><param name="Name" value="串口收发示例"><param name="Local" value="group__uni__uart__example.html"><param name="ImageNumber" value="1"></OBJECT>
+      <UL>
+      <LI><OBJECT type="text/sitemap"><param name="Name" value="hb_uart.c"><param name="Local" value="group__uni__uart__example__1.html"><param name="ImageNumber" value="11"></OBJECT>
+        <UL>
+        </UL>
+      </UL>
+    </UL>
+  <LI><OBJECT type="text/sitemap"><param name="Name" value="定时器"><param name="Local" value="group__uni__timer.html"><param name="ImageNumber" value="1"></OBJECT>
+    <UL>
+    <LI><OBJECT type="text/sitemap"><param name="Name" value="定时器说明"><param name="Local" value="group__uni__timer__note.html"><param name="ImageNumber" value="11"></OBJECT>
+      <UL>
+      </UL>
+    <LI><OBJECT type="text/sitemap"><param name="Name" value="定时器接口"><param name="Local" value="group__uni__timer__inf.html"><param name="ImageNumber" value="1"></OBJECT>
+      <UL>
+      <LI><OBJECT type="text/sitemap"><param name="Name" value="user_timer_init"><param name="Local" value="group__uni__timer__inf.html#ga387a0bcd1fe9ed832c7b59a6916a1bd2"><param name="ImageNumber" value="11"></OBJECT>
+      <LI><OBJECT type="text/sitemap"><param name="Name" value="user_timer_pause"><param name="Local" value="group__uni__timer__inf.html#ga8ca96dac886c412113068c806c29f094"><param name="ImageNumber" value="11"></OBJECT>
+      <LI><OBJECT type="text/sitemap"><param name="Name" value="user_timer_resume"><param name="Local" value="group__uni__timer__inf.html#ga2be02c0850329181bb8724d7a62f6c79"><param name="ImageNumber" value="11"></OBJECT>
+      <LI><OBJECT type="text/sitemap"><param name="Name" value="user_timer_start"><param name="Local" value="group__uni__timer__inf.html#ga6b16748e51ee0f7dfc1f6d0eefc0a0ae"><param name="ImageNumber" value="11"></OBJECT>
+      </UL>
+    <LI><OBJECT type="text/sitemap"><param name="Name" value="定时器类型定义"><param name="Local" value="group__uni__timer__def.html"><param name="ImageNumber" value="1"></OBJECT>
+      <UL>
+      <LI><OBJECT type="text/sitemap"><param name="Name" value="eTIMER_IDX"><param name="Local" value="group__uni__timer__def.html#ga2336a2d465e48fc3aba5c7b34edb7786"><param name="ImageNumber" value="11"></OBJECT>
+      <LI><OBJECT type="text/sitemap"><param name="Name" value="usr_timer_callback"><param name="Local" value="group__uni__timer__def.html#gad1bf9ba5ed3284e396d24d96bbd30bb9"><param name="ImageNumber" value="11"></OBJECT>
+      <LI><OBJECT type="text/sitemap"><param name="Name" value="TIMER_IDX"><param name="Local" value="group__uni__timer__def.html#ga31471014d98e6fd39bfa623cc02e9670"><param name="ImageNumber" value="1"></OBJECT>
+        <UL>
+        </UL>
+      </UL>
+    <LI><OBJECT type="text/sitemap"><param name="Name" value="定时器示例"><param name="Local" value="group__uni__timer__example.html"><param name="ImageNumber" value="1"></OBJECT>
+      <UL>
+      <LI><OBJECT type="text/sitemap"><param name="Name" value="hb_sw_timers.c"><param name="Local" value="group__timer__example1.html"><param name="ImageNumber" value="11"></OBJECT>
+        <UL>
+        </UL>
+      <LI><OBJECT type="text/sitemap"><param name="Name" value="user_timer_buzzer.c"><param name="Local" value="group__timer__example2.html"><param name="ImageNumber" value="11"></OBJECT>
+        <UL>
+        </UL>
+      </UL>
+    </UL>
+  <LI><OBJECT type="text/sitemap"><param name="Name" value="GPIO"><param name="Local" value="group__uni__gpio.html"><param name="ImageNumber" value="1"></OBJECT>
+    <UL>
+    <LI><OBJECT type="text/sitemap"><param name="Name" value="GPIO说明"><param name="Local" value="group__uni__gpio__note.html"><param name="ImageNumber" value="11"></OBJECT>
+      <UL>
+      </UL>
+    <LI><OBJECT type="text/sitemap"><param name="Name" value="GPIO相关接口"><param name="Local" value="group__uni__gpio__inf.html"><param name="ImageNumber" value="1"></OBJECT>
+      <UL>
+      <LI><OBJECT type="text/sitemap"><param name="Name" value="user_gpio_clear_interrupt"><param name="Local" value="group__uni__gpio__inf.html#gaa0fa04582d1b4a471cba7edd0bd83fed"><param name="ImageNumber" value="11"></OBJECT>
+      <LI><OBJECT type="text/sitemap"><param name="Name" value="user_gpio_final"><param name="Local" value="group__uni__gpio__inf.html#ga6a998752d2d162a7c2bc3d7d5368833c"><param name="ImageNumber" value="11"></OBJECT>
+      <LI><OBJECT type="text/sitemap"><param name="Name" value="user_gpio_get_value"><param name="Local" value="group__uni__gpio__inf.html#gaeb2fb86366e9b816de71d64d1ee8fa25"><param name="ImageNumber" value="11"></OBJECT>
+      <LI><OBJECT type="text/sitemap"><param name="Name" value="user_gpio_init"><param name="Local" value="group__uni__gpio__inf.html#gaed630c4a7949f960914f5b4398b1996f"><param name="ImageNumber" value="11"></OBJECT>
+      <LI><OBJECT type="text/sitemap"><param name="Name" value="user_gpio_interrupt_disable"><param name="Local" value="group__uni__gpio__inf.html#ga0b29c0339e374085d048368cf1c35b47"><param name="ImageNumber" value="11"></OBJECT>
+      <LI><OBJECT type="text/sitemap"><param name="Name" value="user_gpio_interrupt_enable"><param name="Local" value="group__uni__gpio__inf.html#gaa90aa3d7b5feb1be9d6773f5d103a097"><param name="ImageNumber" value="11"></OBJECT>
+      <LI><OBJECT type="text/sitemap"><param name="Name" value="user_gpio_set_interrupt"><param name="Local" value="group__uni__gpio__inf.html#ga4844d8972c5fe3679b059b7ee9656fd1"><param name="ImageNumber" value="11"></OBJECT>
+      <LI><OBJECT type="text/sitemap"><param name="Name" value="user_gpio_set_mode"><param name="Local" value="group__uni__gpio__inf.html#ga723df1589dae08fc7a847f66a999a2d8"><param name="ImageNumber" value="11"></OBJECT>
+      <LI><OBJECT type="text/sitemap"><param name="Name" value="user_gpio_set_pull_mode"><param name="Local" value="group__uni__gpio__inf.html#ga7901ff5cc1ad6bd600770400fd298dba"><param name="ImageNumber" value="11"></OBJECT>
+      <LI><OBJECT type="text/sitemap"><param name="Name" value="user_gpio_set_value"><param name="Local" value="group__uni__gpio__inf.html#gad55c8bdb99d85eb520175ef09c70bcc8"><param name="ImageNumber" value="11"></OBJECT>
+      <LI><OBJECT type="text/sitemap"><param name="Name" value="user_sw_timer_gpio_pulse"><param name="Local" value="group__uni__gpio__inf.html#ga2f687fffb0fcee88f2b5f2005aaa5af9"><param name="ImageNumber" value="11"></OBJECT>
+      </UL>
+    <LI><OBJECT type="text/sitemap"><param name="Name" value="GPIO类型定义"><param name="Local" value="group__uni__gpio__def.html"><param name="ImageNumber" value="1"></OBJECT>
+      <UL>
+      <LI><OBJECT type="text/sitemap"><param name="Name" value="_gpio_interrupt_cb"><param name="Local" value="group__uni__gpio__def.html#gac732f5445a1e94252c37f79061db47b6"><param name="ImageNumber" value="11"></OBJECT>
+      <LI><OBJECT type="text/sitemap"><param name="Name" value="GPIO_INT_TYPE"><param name="Local" value="group__uni__gpio__def.html#ga6f9e27f786736a857f19c93ab7f7ebba"><param name="ImageNumber" value="1"></OBJECT>
+        <UL>
+        </UL>
+      <LI><OBJECT type="text/sitemap"><param name="Name" value="GPIO_MODE"><param name="Local" value="group__uni__gpio__def.html#ga201df5e2845212d28c89e2cf3fdaa642"><param name="ImageNumber" value="1"></OBJECT>
+        <UL>
+        </UL>
+      <LI><OBJECT type="text/sitemap"><param name="Name" value="GPIO_NUMBER"><param name="Local" value="group__uni__gpio__def.html#gab98b40805939a8489960247300b6043a"><param name="ImageNumber" value="1"></OBJECT>
+        <UL>
+        <LI><OBJECT type="text/sitemap"><param name="Name" value="GPIO_NUM_A25"><param name="Local" value="group__uni__gpio__def.html#ggab98b40805939a8489960247300b6043aadd7d6d0160c90c2af8a719759e5ae4e5"><param name="ImageNumber" value="11"></OBJECT>
+        <LI><OBJECT type="text/sitemap"><param name="Name" value="GPIO_NUM_A26"><param name="Local" value="group__uni__gpio__def.html#ggab98b40805939a8489960247300b6043aa47caba26ac21e763450d1abbaab0fb27"><param name="ImageNumber" value="11"></OBJECT>
+        <LI><OBJECT type="text/sitemap"><param name="Name" value="GPIO_NUM_A27"><param name="Local" value="group__uni__gpio__def.html#ggab98b40805939a8489960247300b6043aa1d3dcb39f62859e227523223eb3bab65"><param name="ImageNumber" value="11"></OBJECT>
+        <LI><OBJECT type="text/sitemap"><param name="Name" value="GPIO_NUM_A28"><param name="Local" value="group__uni__gpio__def.html#ggab98b40805939a8489960247300b6043aa58afb74cd62e1f773496ce8152953d37"><param name="ImageNumber" value="11"></OBJECT>
+        <LI><OBJECT type="text/sitemap"><param name="Name" value="GPIO_NUM_B0"><param name="Local" value="group__uni__gpio__def.html#ggab98b40805939a8489960247300b6043aaaa947ad568e20e520f5beabf61325cd6"><param name="ImageNumber" value="11"></OBJECT>
+        <LI><OBJECT type="text/sitemap"><param name="Name" value="GPIO_NUM_B1"><param name="Local" value="group__uni__gpio__def.html#ggab98b40805939a8489960247300b6043aa3d0996dbb14d6bfe3afc752634cfecc2"><param name="ImageNumber" value="11"></OBJECT>
+        <LI><OBJECT type="text/sitemap"><param name="Name" value="GPIO_NUM_B2"><param name="Local" value="group__uni__gpio__def.html#ggab98b40805939a8489960247300b6043aa57fec5a50c9a3d08b329ce4f3366587d"><param name="ImageNumber" value="11"></OBJECT>
+        <LI><OBJECT type="text/sitemap"><param name="Name" value="GPIO_NUM_B3"><param name="Local" value="group__uni__gpio__def.html#ggab98b40805939a8489960247300b6043aa632acb792707a046b34c0fd2016d2c46"><param name="ImageNumber" value="11"></OBJECT>
+        <LI><OBJECT type="text/sitemap"><param name="Name" value="GPIO_NUM_B6"><param name="Local" value="group__uni__gpio__def.html#ggab98b40805939a8489960247300b6043aa75c1fa6f4193ff8240f648cf0fabd885"><param name="ImageNumber" value="11"></OBJECT>
+        <LI><OBJECT type="text/sitemap"><param name="Name" value="GPIO_NUM_B7"><param name="Local" value="group__uni__gpio__def.html#ggab98b40805939a8489960247300b6043aa4ca8f96fa59d77a4ca73c70d4cc8408c"><param name="ImageNumber" value="11"></OBJECT>
+        <LI><OBJECT type="text/sitemap"><param name="Name" value="GPIO_NUM_B8"><param name="Local" value="group__uni__gpio__def.html#ggab98b40805939a8489960247300b6043aafbb52339495ba31244a753cedde4ddcc"><param name="ImageNumber" value="11"></OBJECT>
+        </UL>
+      <LI><OBJECT type="text/sitemap"><param name="Name" value="GPIO_PULL_MODE"><param name="Local" value="group__uni__gpio__def.html#ga20b0a645d2008266af0f9aefc7a745ae"><param name="ImageNumber" value="1"></OBJECT>
+        <UL>
+        </UL>
+      </UL>
+    <LI><OBJECT type="text/sitemap"><param name="Name" value="GPIO示例"><param name="Local" value="group__uni__gpio__example.html"><param name="ImageNumber" value="1"></OBJECT>
+      <UL>
+      <LI><OBJECT type="text/sitemap"><param name="Name" value="hb_gpio_adc.c"><param name="Local" value="group__gpio__example1.html"><param name="ImageNumber" value="11"></OBJECT>
+        <UL>
+        </UL>
+      <LI><OBJECT type="text/sitemap"><param name="Name" value="hb_gpio_key.c"><param name="Local" value="group__gpio__example2.html"><param name="ImageNumber" value="11"></OBJECT>
+        <UL>
+        </UL>
+      </UL>
+    </UL>
+  <LI><OBJECT type="text/sitemap"><param name="Name" value="Event事件"><param name="Local" value="group__uni__event.html"><param name="ImageNumber" value="1"></OBJECT>
+    <UL>
+    <LI><OBJECT type="text/sitemap"><param name="Name" value="Event事件说明"><param name="Local" value="group__uni__event__note.html"><param name="ImageNumber" value="11"></OBJECT>
+      <UL>
+      </UL>
+    <LI><OBJECT type="text/sitemap"><param name="Name" value="Event事件接口"><param name="Local" value="group__uni__event__inf.html"><param name="ImageNumber" value="1"></OBJECT>
+      <UL>
+      <LI><OBJECT type="text/sitemap"><param name="Name" value="user_event_clear_observers"><param name="Local" value="group__uni__event__inf.html#ga35275d351b16a746611940c87daeb6c9"><param name="ImageNumber" value="11"></OBJECT>
+      <LI><OBJECT type="text/sitemap"><param name="Name" value="user_event_get_observer"><param name="Local" value="group__uni__event__inf.html#ga6c06e39d0b80439dff64144db908008c"><param name="ImageNumber" value="11"></OBJECT>
+      <LI><OBJECT type="text/sitemap"><param name="Name" value="user_event_subscribe_event"><param name="Local" value="group__uni__event__inf.html#ga02223c46639ad1880e53ad1e4a2c669d"><param name="ImageNumber" value="11"></OBJECT>
+      </UL>
+    <LI><OBJECT type="text/sitemap"><param name="Name" value="Event事件类型定义"><param name="Local" value="group__uni__event__def.html"><param name="ImageNumber" value="1"></OBJECT>
+      <UL>
+      <LI><OBJECT type="text/sitemap"><param name="Name" value="event_audio_play_t"><param name="Local" value="structevent__audio__play__t.html"><param name="ImageNumber" value="1"></OBJECT>
+        <UL>
+        <LI><OBJECT type="text/sitemap"><param name="Name" value="file_name"><param name="Local" value="structevent__audio__play__t.html#a915b84fdd8462c49e98780d831e1c243"><param name="ImageNumber" value="11"></OBJECT>
+        <LI><OBJECT type="text/sitemap"><param name="Name" value="type"><param name="Local" value="structevent__audio__play__t.html#a6153e83e6cd3069c33759e741990dbf4"><param name="ImageNumber" value="11"></OBJECT>
+        </UL>
+      <LI><OBJECT type="text/sitemap"><param name="Name" value="event_audio_end_t"><param name="Local" value="structevent__audio__end__t.html"><param name="ImageNumber" value="1"></OBJECT>
+        <UL>
+        <LI><OBJECT type="text/sitemap"><param name="Name" value="is_auto"><param name="Local" value="structevent__audio__end__t.html#a3b778369ff785050c97f990066e7f117"><param name="ImageNumber" value="11"></OBJECT>
+        <LI><OBJECT type="text/sitemap"><param name="Name" value="type"><param name="Local" value="structevent__audio__end__t.html#ad928d75f2b8000cb060e8482846c8526"><param name="ImageNumber" value="11"></OBJECT>
+        </UL>
+      <LI><OBJECT type="text/sitemap"><param name="Name" value="event_custom_setting_t"><param name="Local" value="structevent__custom__setting__t.html"><param name="ImageNumber" value="1"></OBJECT>
+        <UL>
+        <LI><OBJECT type="text/sitemap"><param name="Name" value="cmd"><param name="Local" value="structevent__custom__setting__t.html#a116d7dc0d8de517af583917a27cd76b5"><param name="ImageNumber" value="11"></OBJECT>
+        <LI><OBJECT type="text/sitemap"><param name="Name" value="reply_files"><param name="Local" value="structevent__custom__setting__t.html#ac0ee5d49efd66093352c41ae73539cb8"><param name="ImageNumber" value="11"></OBJECT>
+        <LI><OBJECT type="text/sitemap"><param name="Name" value="word_str"><param name="Local" value="structevent__custom__setting__t.html#aecb9b321d24dce38e956719dc929b24e"><param name="ImageNumber" value="11"></OBJECT>
+        </UL>
+      <LI><OBJECT type="text/sitemap"><param name="Name" value="event_goto_sleeping_t"><param name="Local" value="structevent__goto__sleeping__t.html"><param name="ImageNumber" value="1"></OBJECT>
+        <UL>
+        <LI><OBJECT type="text/sitemap"><param name="Name" value="cmd"><param name="Local" value="structevent__goto__sleeping__t.html#a8e50b83c8ebc566897ce84a0e21cb844"><param name="ImageNumber" value="11"></OBJECT>
+        <LI><OBJECT type="text/sitemap"><param name="Name" value="reply_files"><param name="Local" value="structevent__goto__sleeping__t.html#aaf8265deb711316c01228d347b0ac769"><param name="ImageNumber" value="11"></OBJECT>
+        <LI><OBJECT type="text/sitemap"><param name="Name" value="trigger"><param name="Local" value="structevent__goto__sleeping__t.html#a584490f77754d1c6dc45bdc972b5a281"><param name="ImageNumber" value="11"></OBJECT>
+        <LI><OBJECT type="text/sitemap"><param name="Name" value="word_str"><param name="Local" value="structevent__goto__sleeping__t.html#a20f40aea69cb6cb94e0057db8090454b"><param name="ImageNumber" value="11"></OBJECT>
+        </UL>
+      <LI><OBJECT type="text/sitemap"><param name="Name" value="event_goto_awakend_t"><param name="Local" value="structevent__goto__awakend__t.html"><param name="ImageNumber" value="1"></OBJECT>
+        <UL>
+        <LI><OBJECT type="text/sitemap"><param name="Name" value="cmd"><param name="Local" value="structevent__goto__awakend__t.html#a2a5293812804bce1aeb044e538a40dc9"><param name="ImageNumber" value="11"></OBJECT>
+        <LI><OBJECT type="text/sitemap"><param name="Name" value="reply_files"><param name="Local" value="structevent__goto__awakend__t.html#a8e561a86d72841824a63ef0c6c3208c9"><param name="ImageNumber" value="11"></OBJECT>
+        <LI><OBJECT type="text/sitemap"><param name="Name" value="trigger"><param name="Local" value="structevent__goto__awakend__t.html#a7a368a2b09bb985b03a9765dfc71f824"><param name="ImageNumber" value="11"></OBJECT>
+        <LI><OBJECT type="text/sitemap"><param name="Name" value="word_str"><param name="Local" value="structevent__goto__awakend__t.html#a618a6abdfcfe7cbe6aa8cb2d10e5a525"><param name="ImageNumber" value="11"></OBJECT>
+        </UL>
+      <LI><OBJECT type="text/sitemap"><param name="Name" value="event_volume_setting_t"><param name="Local" value="structevent__volume__setting__t.html"><param name="ImageNumber" value="1"></OBJECT>
+        <UL>
+        <LI><OBJECT type="text/sitemap"><param name="Name" value="cmd"><param name="Local" value="structevent__volume__setting__t.html#ae0d40e43dfca21f269652c165381cd41"><param name="ImageNumber" value="11"></OBJECT>
+        <LI><OBJECT type="text/sitemap"><param name="Name" value="max_val"><param name="Local" value="structevent__volume__setting__t.html#a392d8037a284d056bade6c8e9400d5b1"><param name="ImageNumber" value="11"></OBJECT>
+        <LI><OBJECT type="text/sitemap"><param name="Name" value="min_val"><param name="Local" value="structevent__volume__setting__t.html#a5c1709bb5297230a89206af0cd0eeafc"><param name="ImageNumber" value="11"></OBJECT>
+        <LI><OBJECT type="text/sitemap"><param name="Name" value="reply_files"><param name="Local" value="structevent__volume__setting__t.html#a2055ec90d3d8b97160a78bffa72b7d15"><param name="ImageNumber" value="11"></OBJECT>
+        <LI><OBJECT type="text/sitemap"><param name="Name" value="trigger"><param name="Local" value="structevent__volume__setting__t.html#a853888fc88fab267bbd40710a6312ca9"><param name="ImageNumber" value="11"></OBJECT>
+        <LI><OBJECT type="text/sitemap"><param name="Name" value="value"><param name="Local" value="structevent__volume__setting__t.html#abd4132c67d1e31d011857decc235c29f"><param name="ImageNumber" value="11"></OBJECT>
+        <LI><OBJECT type="text/sitemap"><param name="Name" value="word_str"><param name="Local" value="structevent__volume__setting__t.html#ae6835433a11fb93a829dc08805a8018c"><param name="ImageNumber" value="11"></OBJECT>
+        </UL>
+      <LI><OBJECT type="text/sitemap"><param name="Name" value="user_event_context_t"><param name="Local" value="unionuser__event__context__t.html"><param name="ImageNumber" value="1"></OBJECT>
+        <UL>
+        <LI><OBJECT type="text/sitemap"><param name="Name" value="audio_end"><param name="Local" value="unionuser__event__context__t.html#a2cdf25e792e0a56a09271d4b02fb744c"><param name="ImageNumber" value="11"></OBJECT>
+        <LI><OBJECT type="text/sitemap"><param name="Name" value="audio_play"><param name="Local" value="unionuser__event__context__t.html#a078da687db8dce42ef68358462e7c01c"><param name="ImageNumber" value="11"></OBJECT>
+        <LI><OBJECT type="text/sitemap"><param name="Name" value="custom_setting"><param name="Local" value="unionuser__event__context__t.html#a43ba72e2ff7c14ac71980f10c32893a3"><param name="ImageNumber" value="11"></OBJECT>
+        <LI><OBJECT type="text/sitemap"><param name="Name" value="goto_awakend"><param name="Local" value="unionuser__event__context__t.html#a0a42907c149243b4090998fd50e2038f"><param name="ImageNumber" value="11"></OBJECT>
+        <LI><OBJECT type="text/sitemap"><param name="Name" value="goto_sleeping"><param name="Local" value="unionuser__event__context__t.html#a297b6e16967f2ab116c8c611e2370c2e"><param name="ImageNumber" value="11"></OBJECT>
+        <LI><OBJECT type="text/sitemap"><param name="Name" value="voluem_setting"><param name="Local" value="unionuser__event__context__t.html#a3b505939db5436bd4c3d674779fe4375"><param name="ImageNumber" value="11"></OBJECT>
+        </UL>
+      <LI><OBJECT type="text/sitemap"><param name="Name" value="_user_event_cb"><param name="Local" value="group__uni__event__def.html#ga0ee6610236330d58c94fe535be3bf4ea"><param name="ImageNumber" value="11"></OBJECT>
+      <LI><OBJECT type="text/sitemap"><param name="Name" value="AUDIO_PLAY_TYPE"><param name="Local" value="group__uni__event__def.html#ga307b45efe10d5edb14203b65a5130302"><param name="ImageNumber" value="1"></OBJECT>
+        <UL>
+        <LI><OBJECT type="text/sitemap"><param name="Name" value="AUDIO_PLAY_REPLY"><param name="Local" value="group__uni__event__def.html#gga307b45efe10d5edb14203b65a5130302a48c4e09df490d4ee7a71f011ef7f3f66"><param name="ImageNumber" value="11"></OBJECT>
+        <LI><OBJECT type="text/sitemap"><param name="Name" value="AUDIO_PLAY_MUSIC"><param name="Local" value="group__uni__event__def.html#gga307b45efe10d5edb14203b65a5130302a9cf750bfc99a5281c48c7f68197bff09"><param name="ImageNumber" value="11"></OBJECT>
+        <LI><OBJECT type="text/sitemap"><param name="Name" value="AUDIO_PLAY_SKILL"><param name="Local" value="group__uni__event__def.html#gga307b45efe10d5edb14203b65a5130302a1e5bf70b4367aad215f3e28f0dcacd5e"><param name="ImageNumber" value="11"></OBJECT>
+        </UL>
+      <LI><OBJECT type="text/sitemap"><param name="Name" value="EVENT_TRIGGER"><param name="Local" value="group__uni__event__def.html#gaad619614cc7faaad1f392c03a720641a"><param name="ImageNumber" value="1"></OBJECT>
+        <UL>
+        <LI><OBJECT type="text/sitemap"><param name="Name" value="EVENT_TRIGGER_ASR"><param name="Local" value="group__uni__event__def.html#ggaad619614cc7faaad1f392c03a720641aaac1d30cbb9e9a3084860c811189e821d"><param name="ImageNumber" value="11"></OBJECT>
+        <LI><OBJECT type="text/sitemap"><param name="Name" value="EVENT_TRIGGER_AUTO"><param name="Local" value="group__uni__event__def.html#ggaad619614cc7faaad1f392c03a720641aa55866be4caa9d72de1d4a9d5caf33472"><param name="ImageNumber" value="11"></OBJECT>
+        <LI><OBJECT type="text/sitemap"><param name="Name" value="EVENT_TRIGGER_USER"><param name="Local" value="group__uni__event__def.html#ggaad619614cc7faaad1f392c03a720641aa57515bbf17697fe6ef85b8202128bc4c"><param name="ImageNumber" value="11"></OBJECT>
+        </UL>
+      <LI><OBJECT type="text/sitemap"><param name="Name" value="USER_EVENT_TYPE"><param name="Local" value="group__uni__event__def.html#ga902502909694e32b6ffe17cc0486b71d"><param name="ImageNumber" value="1"></OBJECT>
+        <UL>
+        <LI><OBJECT type="text/sitemap"><param name="Name" value="USER_INVALID_EVENT"><param name="Local" value="group__uni__event__def.html#gga902502909694e32b6ffe17cc0486b71dad0dcdf45deafe0f87068a75f8ef2e74a"><param name="ImageNumber" value="11"></OBJECT>
+        <LI><OBJECT type="text/sitemap"><param name="Name" value="USER_AUDIO_PLAY_START"><param name="Local" value="group__uni__event__def.html#gga902502909694e32b6ffe17cc0486b71da0537b1a80c09264ce7eaaa4bae091ebb"><param name="ImageNumber" value="11"></OBJECT>
+        <LI><OBJECT type="text/sitemap"><param name="Name" value="USER_AUDIO_PLAY_END"><param name="Local" value="group__uni__event__def.html#gga902502909694e32b6ffe17cc0486b71dacedc5f6d926eeb7c3e1def77cad42ba8"><param name="ImageNumber" value="11"></OBJECT>
+        <LI><OBJECT type="text/sitemap"><param name="Name" value="USER_CUSTOM_SETTING"><param name="Local" value="group__uni__event__def.html#gga902502909694e32b6ffe17cc0486b71da49fa04fd990408f5d66b194e306dd379"><param name="ImageNumber" value="11"></OBJECT>
+        <LI><OBJECT type="text/sitemap"><param name="Name" value="USER_VOLUME_SETTING"><param name="Local" value="group__uni__event__def.html#gga902502909694e32b6ffe17cc0486b71da2d25e8dea7a45e1e6410c2ff5deb33e8"><param name="ImageNumber" value="11"></OBJECT>
+        <LI><OBJECT type="text/sitemap"><param name="Name" value="USER_GOTO_SLEEPING"><param name="Local" value="group__uni__event__def.html#gga902502909694e32b6ffe17cc0486b71dac657cc02e4cdf099ae7c028dc2eb8d3d"><param name="ImageNumber" value="11"></OBJECT>
+        <LI><OBJECT type="text/sitemap"><param name="Name" value="USER_GOTO_AWAKENED"><param name="Local" value="group__uni__event__def.html#gga902502909694e32b6ffe17cc0486b71da6427287c5d673468f6b648f03985a3ce"><param name="ImageNumber" value="11"></OBJECT>
+        </UL>
+      </UL>
+    </UL>
+  <LI><OBJECT type="text/sitemap"><param name="Name" value="PWM"><param name="Local" value="group__uni__pwm.html"><param name="ImageNumber" value="1"></OBJECT>
+    <UL>
+    <LI><OBJECT type="text/sitemap"><param name="Name" value="PWM说明"><param name="Local" value="group__uni__pwm__note.html"><param name="ImageNumber" value="11"></OBJECT>
+      <UL>
+      </UL>
+    <LI><OBJECT type="text/sitemap"><param name="Name" value="PWM相关接口"><param name="Local" value="group__uni__pwm__inf.html"><param name="ImageNumber" value="1"></OBJECT>
+      <UL>
+      <LI><OBJECT type="text/sitemap"><param name="Name" value="user_pwm_change_duty"><param name="Local" value="group__uni__pwm__inf.html#gaacfe251ab7522f69ee4a8d51fee49732"><param name="ImageNumber" value="11"></OBJECT>
+      <LI><OBJECT type="text/sitemap"><param name="Name" value="user_pwm_duty_dec"><param name="Local" value="group__uni__pwm__inf.html#ga26d661bba6789bf9e041138cc76b33a2"><param name="ImageNumber" value="11"></OBJECT>
+      <LI><OBJECT type="text/sitemap"><param name="Name" value="user_pwm_duty_inc"><param name="Local" value="group__uni__pwm__inf.html#gad890e74b78c9fc4899254e2e70293df8"><param name="ImageNumber" value="11"></OBJECT>
+      <LI><OBJECT type="text/sitemap"><param name="Name" value="user_pwm_final"><param name="Local" value="group__uni__pwm__inf.html#gaa7dc5f6a134f570bc000daa1315dfa0f"><param name="ImageNumber" value="11"></OBJECT>
+      <LI><OBJECT type="text/sitemap"><param name="Name" value="user_pwm_init"><param name="Local" value="group__uni__pwm__inf.html#ga2a33c5ae39256f9dd271f946f18b9c02"><param name="ImageNumber" value="11"></OBJECT>
+      <LI><OBJECT type="text/sitemap"><param name="Name" value="user_pwm_pause"><param name="Local" value="group__uni__pwm__inf.html#gaf405c4b93ab2fd1e77138a2cd90e26c1"><param name="ImageNumber" value="11"></OBJECT>
+      <LI><OBJECT type="text/sitemap"><param name="Name" value="user_pwm_resume"><param name="Local" value="group__uni__pwm__inf.html#ga55a4e61a66e15eda76fd3cc9383d994e"><param name="ImageNumber" value="11"></OBJECT>
+      <LI><OBJECT type="text/sitemap"><param name="Name" value="user_pwm_start"><param name="Local" value="group__uni__pwm__inf.html#ga9c3570393651dea1298227a84bcc33f4"><param name="ImageNumber" value="11"></OBJECT>
+      <LI><OBJECT type="text/sitemap"><param name="Name" value="user_pwm_stop"><param name="Local" value="group__uni__pwm__inf.html#ga68e522b645964ba3b5d0d33beabeb4d7"><param name="ImageNumber" value="11"></OBJECT>
+      </UL>
+    <LI><OBJECT type="text/sitemap"><param name="Name" value="PWM类型定义"><param name="Local" value="group__uni__pwm__def.html"><param name="ImageNumber" value="1"></OBJECT>
+      <UL>
+      <LI><OBJECT type="text/sitemap"><param name="Name" value="USER_PWM_NUM"><param name="Local" value="group__uni__pwm__def.html#gaa8017b41b719c5883a5ff5afa3f9b289"><param name="ImageNumber" value="1"></OBJECT>
+        <UL>
+        <LI><OBJECT type="text/sitemap"><param name="Name" value="PWM_NUM_1_B2"><param name="Local" value="group__uni__pwm__def.html#ggaa8017b41b719c5883a5ff5afa3f9b289a0696edf4c3055f3f0b8f25c8e4fbc3ea"><param name="ImageNumber" value="11"></OBJECT>
+        <LI><OBJECT type="text/sitemap"><param name="Name" value="PWM_NUM_2_A28"><param name="Local" value="group__uni__pwm__def.html#ggaa8017b41b719c5883a5ff5afa3f9b289a5d20f1663ea3a290c06c4e9187a4429c"><param name="ImageNumber" value="11"></OBJECT>
+        <LI><OBJECT type="text/sitemap"><param name="Name" value="PWM_NUM_2_B3"><param name="Local" value="group__uni__pwm__def.html#ggaa8017b41b719c5883a5ff5afa3f9b289a4ac220ca8d393ea5a96034117590264d"><param name="ImageNumber" value="11"></OBJECT>
+        </UL>
+      </UL>
+    <LI><OBJECT type="text/sitemap"><param name="Name" value="PWM示例"><param name="Local" value="group__uni__pwm__example.html"><param name="ImageNumber" value="1"></OBJECT>
+      <UL>
+      <LI><OBJECT type="text/sitemap"><param name="Name" value="hb_pwm_led.c"><param name="Local" value="group__uni__pwm__example1.html"><param name="ImageNumber" value="11"></OBJECT>
+        <UL>
+        </UL>
+      </UL>
+    </UL>
+  <LI><OBJECT type="text/sitemap"><param name="Name" value="方案示例"><param name="Local" value="group__uni__example.html"><param name="ImageNumber" value="1"></OBJECT>
+    <UL>
+    <LI><OBJECT type="text/sitemap"><param name="Name" value="智能电风扇"><param name="Local" value="group__hb__smart__ac.html"><param name="ImageNumber" value="11"></OBJECT>
+      <UL>
+      </UL>
+    <LI><OBJECT type="text/sitemap"><param name="Name" value="智能管家"><param name="Local" value="group__hb__housekeeper.html"><param name="ImageNumber" value="11"></OBJECT>
+      <UL>
+      </UL>
+    </UL>
+  </UL>
+</UL>
+</BODY>
+</HTML>

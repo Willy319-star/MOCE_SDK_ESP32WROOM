@@ -1,0 +1,284 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "https://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=9"/>
+<meta name="generator" content="Doxygen 1.8.18"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>蜂鸟M离线方案开发指导手册: 音频控制接口</title>
+<link href="tabs.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="jquery.js"></script>
+<script type="text/javascript" src="dynsections.js"></script>
+<link href="doxygen.css" rel="stylesheet" type="text/css" />
+</head>
+<body>
+<div id="top"><!-- do not remove this div, it is closed by doxygen! -->
+<div id="titlearea">
+<table cellspacing="0" cellpadding="0">
+ <tbody>
+ <tr style="height: 56px;">
+  <td id="projectalign" style="padding-left: 0.5em;">
+   <div id="projectname">蜂鸟M离线方案开发指导手册
+   &#160;<span id="projectnumber">v1.0.4</span>
+   </div>
+  </td>
+ </tr>
+ </tbody>
+</table>
+</div>
+<!-- end header part -->
+<!-- 制作者 Doxygen 1.8.18 -->
+<script type="text/javascript" src="menudata.js"></script>
+<script type="text/javascript" src="menu.js"></script>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:cf05388f2679ee054f2beb29a391d25f4e673ac3&amp;dn=gpl-2.0.txt GPL-v2 */
+$(function() {
+  initMenu('',false,false,'search.php','搜索');
+});
+/* @license-end */</script>
+<div id="main-nav"></div>
+</div><!-- top -->
+<div class="header">
+  <div class="summary">
+<a href="#func-members">函数</a>  </div>
+  <div class="headertitle">
+<div class="title">音频控制接口<div class="ingroups"><a class="el" href="group__uni__player.html">音频控制</a></div></div>  </div>
+</div><!--header-->
+<div class="contents">
+<table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
+函数</h2></td></tr>
+<tr class="memitem:ga4473e2cc3c6a07e170e10cf0c317dfe9"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__uni__player__inf.html#ga4473e2cc3c6a07e170e10cf0c317dfe9">user_player_play</a> (<a class="el" href="group__uni__event__def.html#ga307b45efe10d5edb14203b65a5130302">AUDIO_PLAY_TYPE</a> type, const char *file)</td></tr>
+<tr class="memdesc:ga4473e2cc3c6a07e170e10cf0c317dfe9"><td class="mdescLeft">&#160;</td><td class="mdescRight">播放文件  <a href="group__uni__player__inf.html#ga4473e2cc3c6a07e170e10cf0c317dfe9">更多...</a><br /></td></tr>
+<tr class="separator:ga4473e2cc3c6a07e170e10cf0c317dfe9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga8638ce40d50e8d08516925830d6dbd94"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__uni__player__inf.html#ga8638ce40d50e8d08516925830d6dbd94">user_player_reply_list_num</a> (const char *file_list, int num)</td></tr>
+<tr class="memdesc:ga8638ce40d50e8d08516925830d6dbd94"><td class="mdescLeft">&#160;</td><td class="mdescRight">播放列表序号音频  <a href="group__uni__player__inf.html#ga8638ce40d50e8d08516925830d6dbd94">更多...</a><br /></td></tr>
+<tr class="separator:ga8638ce40d50e8d08516925830d6dbd94"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga1835960e52668ec97beea7937b4c619a"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__uni__player__inf.html#ga1835960e52668ec97beea7937b4c619a">user_player_reply_list_random</a> (const char *file_list)</td></tr>
+<tr class="memdesc:ga1835960e52668ec97beea7937b4c619a"><td class="mdescLeft">&#160;</td><td class="mdescRight">随机播放列表音频  <a href="group__uni__player__inf.html#ga1835960e52668ec97beea7937b4c619a">更多...</a><br /></td></tr>
+<tr class="separator:ga1835960e52668ec97beea7937b4c619a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga27521c012137d0e8c32ce68eaa4828e9"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__uni__player__inf.html#ga27521c012137d0e8c32ce68eaa4828e9">user_player_reply_list_in_order</a> (const char *file_list)</td></tr>
+<tr class="memdesc:ga27521c012137d0e8c32ce68eaa4828e9"><td class="mdescLeft">&#160;</td><td class="mdescRight">顺序播放列表中所有音频  <a href="group__uni__player__inf.html#ga27521c012137d0e8c32ce68eaa4828e9">更多...</a><br /></td></tr>
+<tr class="separator:ga27521c012137d0e8c32ce68eaa4828e9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga15a00832af5304fbb06650bf461e087e"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__uni__player__inf.html#ga15a00832af5304fbb06650bf461e087e">user_player_stop</a> (<a class="el" href="group__uni__event__def.html#ga307b45efe10d5edb14203b65a5130302">AUDIO_PLAY_TYPE</a> type)</td></tr>
+<tr class="memdesc:ga15a00832af5304fbb06650bf461e087e"><td class="mdescLeft">&#160;</td><td class="mdescRight">停止播放  <a href="group__uni__player__inf.html#ga15a00832af5304fbb06650bf461e087e">更多...</a><br /></td></tr>
+<tr class="separator:ga15a00832af5304fbb06650bf461e087e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga55d7758461c676131b77d4177686f4c4"><td class="memItemLeft" align="right" valign="top"><a id="ga55d7758461c676131b77d4177686f4c4"></a>
+int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__uni__player__inf.html#ga55d7758461c676131b77d4177686f4c4">user_player_set_volume_min</a> (void)</td></tr>
+<tr class="memdesc:ga55d7758461c676131b77d4177686f4c4"><td class="mdescLeft">&#160;</td><td class="mdescRight">设置最小音量 <br /></td></tr>
+<tr class="separator:ga55d7758461c676131b77d4177686f4c4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:gae603648a4e8db0fb69fa8bdd25ef05df"><td class="memItemLeft" align="right" valign="top"><a id="gae603648a4e8db0fb69fa8bdd25ef05df"></a>
+int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__uni__player__inf.html#gae603648a4e8db0fb69fa8bdd25ef05df">user_player_set_volume_max</a> (void)</td></tr>
+<tr class="memdesc:gae603648a4e8db0fb69fa8bdd25ef05df"><td class="mdescLeft">&#160;</td><td class="mdescRight">设置最大音量 <br /></td></tr>
+<tr class="separator:gae603648a4e8db0fb69fa8bdd25ef05df"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga35cb9ee64f99957205b157f49a964dfe"><td class="memItemLeft" align="right" valign="top"><a id="ga35cb9ee64f99957205b157f49a964dfe"></a>
+int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__uni__player__inf.html#ga35cb9ee64f99957205b157f49a964dfe">user_player_set_volume_mid</a> (void)</td></tr>
+<tr class="memdesc:ga35cb9ee64f99957205b157f49a964dfe"><td class="mdescLeft">&#160;</td><td class="mdescRight">设置中等音量 <br /></td></tr>
+<tr class="separator:ga35cb9ee64f99957205b157f49a964dfe"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga1c2747205a3d1978c8f0b8350518f56e"><td class="memItemLeft" align="right" valign="top"><a id="ga1c2747205a3d1978c8f0b8350518f56e"></a>
+int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__uni__player__inf.html#ga1c2747205a3d1978c8f0b8350518f56e">user_player_set_volume_up</a> (void)</td></tr>
+<tr class="memdesc:ga1c2747205a3d1978c8f0b8350518f56e"><td class="mdescLeft">&#160;</td><td class="mdescRight">增加音量 <br /></td></tr>
+<tr class="separator:ga1c2747205a3d1978c8f0b8350518f56e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga0f199afec71fe2f57dc4ba5e2e4819da"><td class="memItemLeft" align="right" valign="top"><a id="ga0f199afec71fe2f57dc4ba5e2e4819da"></a>
+int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__uni__player__inf.html#ga0f199afec71fe2f57dc4ba5e2e4819da">user_player_set_volume_down</a> (void)</td></tr>
+<tr class="memdesc:ga0f199afec71fe2f57dc4ba5e2e4819da"><td class="mdescLeft">&#160;</td><td class="mdescRight">减小音量 <br /></td></tr>
+<tr class="separator:ga0f199afec71fe2f57dc4ba5e2e4819da"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:gadaedc08722caea58197700eb1799d32a"><td class="memItemLeft" align="right" valign="top"><a id="gadaedc08722caea58197700eb1799d32a"></a>
+int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__uni__player__inf.html#gadaedc08722caea58197700eb1799d32a">user_player_speaker_mute</a> (void)</td></tr>
+<tr class="memdesc:gadaedc08722caea58197700eb1799d32a"><td class="mdescLeft">&#160;</td><td class="mdescRight">设置喇叭静音 <br /></td></tr>
+<tr class="separator:gadaedc08722caea58197700eb1799d32a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:gada2f10e7ab7b44195359350a547a70ae"><td class="memItemLeft" align="right" valign="top"><a id="gada2f10e7ab7b44195359350a547a70ae"></a>
+int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__uni__player__inf.html#gada2f10e7ab7b44195359350a547a70ae">user_player_speaker_unmute</a> (void)</td></tr>
+<tr class="memdesc:gada2f10e7ab7b44195359350a547a70ae"><td class="mdescLeft">&#160;</td><td class="mdescRight">取消设置喇叭静音 <br /></td></tr>
+<tr class="separator:gada2f10e7ab7b44195359350a547a70ae"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga11a025a5b1c09eb9ef4737088ee26965"><td class="memItemLeft" align="right" valign="top"><a id="ga11a025a5b1c09eb9ef4737088ee26965"></a>
+int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__uni__player__inf.html#ga11a025a5b1c09eb9ef4737088ee26965">user_player_shutup_mode</a> (void)</td></tr>
+<tr class="memdesc:ga11a025a5b1c09eb9ef4737088ee26965"><td class="mdescLeft">&#160;</td><td class="mdescRight">系统进入无回复播报模式 <br /></td></tr>
+<tr class="separator:ga11a025a5b1c09eb9ef4737088ee26965"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:gac189138d903b980ca4bfcf98b5264b78"><td class="memItemLeft" align="right" valign="top"><a id="gac189138d903b980ca4bfcf98b5264b78"></a>
+int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__uni__player__inf.html#gac189138d903b980ca4bfcf98b5264b78">user_player_shutup_exit</a> (void)</td></tr>
+<tr class="memdesc:gac189138d903b980ca4bfcf98b5264b78"><td class="mdescLeft">&#160;</td><td class="mdescRight">系统退出无回复播报模式 <br /></td></tr>
+<tr class="separator:gac189138d903b980ca4bfcf98b5264b78"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table>
+<a name="details" id="details"></a><h2 class="groupheader">详细描述</h2>
+<h2 class="groupheader">函数说明</h2>
+<a id="ga4473e2cc3c6a07e170e10cf0c317dfe9"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ga4473e2cc3c6a07e170e10cf0c317dfe9">&#9670;&nbsp;</a></span>user_player_play()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int user_player_play </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="group__uni__event__def.html#ga307b45efe10d5edb14203b65a5130302">AUDIO_PLAY_TYPE</a>&#160;</td>
+          <td class="paramname"><em>type</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const char *&#160;</td>
+          <td class="paramname"><em>file</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<dl class="params"><dt>参数</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">type</td><td>播放类型 </td></tr>
+    <tr><td class="paramname">file</td><td>播放文件名 </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="retval"><dt>返回值</dt><dd>
+  <table class="retval">
+    <tr><td class="paramname">0</td><td>操作成功 </td></tr>
+    <tr><td class="paramname">-1</td><td>操作失败 </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="ga27521c012137d0e8c32ce68eaa4828e9"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ga27521c012137d0e8c32ce68eaa4828e9">&#9670;&nbsp;</a></span>user_player_reply_list_in_order()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int user_player_reply_list_in_order </td>
+          <td>(</td>
+          <td class="paramtype">const char *&#160;</td>
+          <td class="paramname"><em>file_list</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<dl class="params"><dt>参数</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">file_list</td><td>文件列表 [1, 2, 3] </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="retval"><dt>返回值</dt><dd>
+  <table class="retval">
+    <tr><td class="paramname">0</td><td>操作成功 </td></tr>
+    <tr><td class="paramname">-1</td><td>操作失败 </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="ga8638ce40d50e8d08516925830d6dbd94"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ga8638ce40d50e8d08516925830d6dbd94">&#9670;&nbsp;</a></span>user_player_reply_list_num()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int user_player_reply_list_num </td>
+          <td>(</td>
+          <td class="paramtype">const char *&#160;</td>
+          <td class="paramname"><em>file_list</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>num</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<dl class="params"><dt>参数</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">file_list</td><td>文件列表 [1, 2, 3] </td></tr>
+    <tr><td class="paramname">num</td><td>列表序号 </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="retval"><dt>返回值</dt><dd>
+  <table class="retval">
+    <tr><td class="paramname">0</td><td>操作成功 </td></tr>
+    <tr><td class="paramname">-1</td><td>操作失败 </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="ga1835960e52668ec97beea7937b4c619a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ga1835960e52668ec97beea7937b4c619a">&#9670;&nbsp;</a></span>user_player_reply_list_random()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int user_player_reply_list_random </td>
+          <td>(</td>
+          <td class="paramtype">const char *&#160;</td>
+          <td class="paramname"><em>file_list</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<dl class="params"><dt>参数</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">file_list</td><td>文件列表 [1, 2, 3] </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="retval"><dt>返回值</dt><dd>
+  <table class="retval">
+    <tr><td class="paramname">0</td><td>操作成功 </td></tr>
+    <tr><td class="paramname">-1</td><td>操作失败 </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="ga15a00832af5304fbb06650bf461e087e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ga15a00832af5304fbb06650bf461e087e">&#9670;&nbsp;</a></span>user_player_stop()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int user_player_stop </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="group__uni__event__def.html#ga307b45efe10d5edb14203b65a5130302">AUDIO_PLAY_TYPE</a>&#160;</td>
+          <td class="paramname"><em>type</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<dl class="params"><dt>参数</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">type</td><td>播放类型 </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="retval"><dt>返回值</dt><dd>
+  <table class="retval">
+    <tr><td class="paramname">0</td><td>操作成功 </td></tr>
+    <tr><td class="paramname">-1</td><td>操作失败 </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+</div><!-- contents -->
+</body>
+</html>

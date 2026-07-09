@@ -1,0 +1,157 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "https://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=9"/>
+<meta name="generator" content="Doxygen 1.8.18"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>蜂鸟M离线方案开发指导手册: Event事件接口</title>
+<link href="tabs.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="jquery.js"></script>
+<script type="text/javascript" src="dynsections.js"></script>
+<link href="doxygen.css" rel="stylesheet" type="text/css" />
+</head>
+<body>
+<div id="top"><!-- do not remove this div, it is closed by doxygen! -->
+<div id="titlearea">
+<table cellspacing="0" cellpadding="0">
+ <tbody>
+ <tr style="height: 56px;">
+  <td id="projectalign" style="padding-left: 0.5em;">
+   <div id="projectname">蜂鸟M离线方案开发指导手册
+   &#160;<span id="projectnumber">v1.0.4</span>
+   </div>
+  </td>
+ </tr>
+ </tbody>
+</table>
+</div>
+<!-- end header part -->
+<!-- 制作者 Doxygen 1.8.18 -->
+<script type="text/javascript" src="menudata.js"></script>
+<script type="text/javascript" src="menu.js"></script>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:cf05388f2679ee054f2beb29a391d25f4e673ac3&amp;dn=gpl-2.0.txt GPL-v2 */
+$(function() {
+  initMenu('',false,false,'search.php','搜索');
+});
+/* @license-end */</script>
+<div id="main-nav"></div>
+</div><!-- top -->
+<div class="header">
+  <div class="summary">
+<a href="#func-members">函数</a>  </div>
+  <div class="headertitle">
+<div class="title">Event事件接口<div class="ingroups"><a class="el" href="group__uni__event.html">Event事件</a></div></div>  </div>
+</div><!--header-->
+<div class="contents">
+<table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
+函数</h2></td></tr>
+<tr class="memitem:ga02223c46639ad1880e53ad1e4a2c669d"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__uni__event__inf.html#ga02223c46639ad1880e53ad1e4a2c669d">user_event_subscribe_event</a> (<a class="el" href="group__uni__event__def.html#ga902502909694e32b6ffe17cc0486b71d">USER_EVENT_TYPE</a> event, <a class="el" href="group__uni__event__def.html#ga0ee6610236330d58c94fe535be3bf4ea">_user_event_cb</a> cb)</td></tr>
+<tr class="memdesc:ga02223c46639ad1880e53ad1e4a2c669d"><td class="mdescLeft">&#160;</td><td class="mdescRight">订阅一个事件  <a href="group__uni__event__inf.html#ga02223c46639ad1880e53ad1e4a2c669d">更多...</a><br /></td></tr>
+<tr class="separator:ga02223c46639ad1880e53ad1e4a2c669d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga35275d351b16a746611940c87daeb6c9"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__uni__event__inf.html#ga35275d351b16a746611940c87daeb6c9">user_event_clear_observers</a> (void)</td></tr>
+<tr class="memdesc:ga35275d351b16a746611940c87daeb6c9"><td class="mdescLeft">&#160;</td><td class="mdescRight">清空事件订阅队列，不再接受任何事件  <a href="group__uni__event__inf.html#ga35275d351b16a746611940c87daeb6c9">更多...</a><br /></td></tr>
+<tr class="separator:ga35275d351b16a746611940c87daeb6c9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga6c06e39d0b80439dff64144db908008c"><td class="memItemLeft" align="right" valign="top"><a class="el" href="group__uni__event__def.html#ga0ee6610236330d58c94fe535be3bf4ea">_user_event_cb</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__uni__event__inf.html#ga6c06e39d0b80439dff64144db908008c">user_event_get_observer</a> (<a class="el" href="group__uni__event__def.html#ga902502909694e32b6ffe17cc0486b71d">USER_EVENT_TYPE</a> event)</td></tr>
+<tr class="memdesc:ga6c06e39d0b80439dff64144db908008c"><td class="mdescLeft">&#160;</td><td class="mdescRight">查询事件回调函数  <a href="group__uni__event__inf.html#ga6c06e39d0b80439dff64144db908008c">更多...</a><br /></td></tr>
+<tr class="separator:ga6c06e39d0b80439dff64144db908008c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table>
+<a name="details" id="details"></a><h2 class="groupheader">详细描述</h2>
+<h2 class="groupheader">函数说明</h2>
+<a id="ga35275d351b16a746611940c87daeb6c9"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ga35275d351b16a746611940c87daeb6c9">&#9670;&nbsp;</a></span>user_event_clear_observers()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int user_event_clear_observers </td>
+          <td>(</td>
+          <td class="paramtype">void&#160;</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<dl class="retval"><dt>返回值</dt><dd>
+  <table class="retval">
+    <tr><td class="paramname">0</td><td>操作成功 </td></tr>
+    <tr><td class="paramname">-1</td><td>操作失败 </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="ga6c06e39d0b80439dff64144db908008c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ga6c06e39d0b80439dff64144db908008c">&#9670;&nbsp;</a></span>user_event_get_observer()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="group__uni__event__def.html#ga0ee6610236330d58c94fe535be3bf4ea">_user_event_cb</a> user_event_get_observer </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="group__uni__event__def.html#ga902502909694e32b6ffe17cc0486b71d">USER_EVENT_TYPE</a>&#160;</td>
+          <td class="paramname"><em>event</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<dl class="params"><dt>参数</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">event</td><td>待查询事件类型 </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>返回</dt><dd>事件回调函数指针 </dd></dl>
+
+</div>
+</div>
+<a id="ga02223c46639ad1880e53ad1e4a2c669d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ga02223c46639ad1880e53ad1e4a2c669d">&#9670;&nbsp;</a></span>user_event_subscribe_event()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int user_event_subscribe_event </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="group__uni__event__def.html#ga902502909694e32b6ffe17cc0486b71d">USER_EVENT_TYPE</a>&#160;</td>
+          <td class="paramname"><em>event</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="group__uni__event__def.html#ga0ee6610236330d58c94fe535be3bf4ea">_user_event_cb</a>&#160;</td>
+          <td class="paramname"><em>cb</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<dl class="params"><dt>参数</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">event</td><td>待订阅事件类型 </td></tr>
+    <tr><td class="paramname">cb</td><td>事件回调函数指针 </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="retval"><dt>返回值</dt><dd>
+  <table class="retval">
+    <tr><td class="paramname">0</td><td>操作成功 </td></tr>
+    <tr><td class="paramname">-1</td><td>操作失败 </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+</div><!-- contents -->
+</body>
+</html>

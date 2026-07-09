@@ -1,0 +1,188 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "https://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=9"/>
+<meta name="generator" content="Doxygen 1.8.18"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>蜂鸟M离线方案开发指导手册: 数据存储接口</title>
+<link href="tabs.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="jquery.js"></script>
+<script type="text/javascript" src="dynsections.js"></script>
+<link href="doxygen.css" rel="stylesheet" type="text/css" />
+</head>
+<body>
+<div id="top"><!-- do not remove this div, it is closed by doxygen! -->
+<div id="titlearea">
+<table cellspacing="0" cellpadding="0">
+ <tbody>
+ <tr style="height: 56px;">
+  <td id="projectalign" style="padding-left: 0.5em;">
+   <div id="projectname">蜂鸟M离线方案开发指导手册
+   &#160;<span id="projectnumber">v1.0.4</span>
+   </div>
+  </td>
+ </tr>
+ </tbody>
+</table>
+</div>
+<!-- end header part -->
+<!-- 制作者 Doxygen 1.8.18 -->
+<script type="text/javascript" src="menudata.js"></script>
+<script type="text/javascript" src="menu.js"></script>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:cf05388f2679ee054f2beb29a391d25f4e673ac3&amp;dn=gpl-2.0.txt GPL-v2 */
+$(function() {
+  initMenu('',false,false,'search.php','搜索');
+});
+/* @license-end */</script>
+<div id="main-nav"></div>
+</div><!-- top -->
+<div class="header">
+  <div class="summary">
+<a href="#func-members">函数</a>  </div>
+  <div class="headertitle">
+<div class="title">数据存储接口<div class="ingroups"><a class="el" href="group__uni__flash.html">数据存储</a></div></div>  </div>
+</div><!--header-->
+<div class="contents">
+<table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
+函数</h2></td></tr>
+<tr class="memitem:gaad13ffb6718e50a9ca8710dee9fa9c82"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__uni__flash__inf.html#gaad13ffb6718e50a9ca8710dee9fa9c82">user_flash_init</a> (void)</td></tr>
+<tr class="memdesc:gaad13ffb6718e50a9ca8710dee9fa9c82"><td class="mdescLeft">&#160;</td><td class="mdescRight">flash初始化  <a href="group__uni__flash__inf.html#gaad13ffb6718e50a9ca8710dee9fa9c82">更多...</a><br /></td></tr>
+<tr class="separator:gaad13ffb6718e50a9ca8710dee9fa9c82"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga94076cfb767562e8be67b4fa61e02fad"><td class="memItemLeft" align="right" valign="top"><a id="ga94076cfb767562e8be67b4fa61e02fad"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__uni__flash__inf.html#ga94076cfb767562e8be67b4fa61e02fad">user_flash_final</a> (void)</td></tr>
+<tr class="memdesc:ga94076cfb767562e8be67b4fa61e02fad"><td class="mdescLeft">&#160;</td><td class="mdescRight">flash逆初始化 <br /></td></tr>
+<tr class="separator:ga94076cfb767562e8be67b4fa61e02fad"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:gab5d4eca5c4afdca266efd4aecf6a55f1"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__uni__flash__inf.html#gab5d4eca5c4afdca266efd4aecf6a55f1">user_flash_set_env_blob</a> (const char *key, const void *value_buf, int buf_len)</td></tr>
+<tr class="memdesc:gab5d4eca5c4afdca266efd4aecf6a55f1"><td class="mdescLeft">&#160;</td><td class="mdescRight">保存键值数据对到flash  <a href="group__uni__flash__inf.html#gab5d4eca5c4afdca266efd4aecf6a55f1">更多...</a><br /></td></tr>
+<tr class="separator:gab5d4eca5c4afdca266efd4aecf6a55f1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga2d0294f811e7fda5f18f291ac899b2ba"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__uni__flash__inf.html#ga2d0294f811e7fda5f18f291ac899b2ba">user_flash_get_env_blob</a> (const char *key, void *value_buf, int buf_len, int *save_len)</td></tr>
+<tr class="memdesc:ga2d0294f811e7fda5f18f291ac899b2ba"><td class="mdescLeft">&#160;</td><td class="mdescRight">读取输入键的值  <a href="group__uni__flash__inf.html#ga2d0294f811e7fda5f18f291ac899b2ba">更多...</a><br /></td></tr>
+<tr class="separator:ga2d0294f811e7fda5f18f291ac899b2ba"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table>
+<a name="details" id="details"></a><h2 class="groupheader">详细描述</h2>
+<h2 class="groupheader">函数说明</h2>
+<a id="ga2d0294f811e7fda5f18f291ac899b2ba"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ga2d0294f811e7fda5f18f291ac899b2ba">&#9670;&nbsp;</a></span>user_flash_get_env_blob()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int user_flash_get_env_blob </td>
+          <td>(</td>
+          <td class="paramtype">const char *&#160;</td>
+          <td class="paramname"><em>key</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">void *&#160;</td>
+          <td class="paramname"><em>value_buf</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>buf_len</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int *&#160;</td>
+          <td class="paramname"><em>save_len</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Get a blob ENV value by key name.</p>
+<dl class="params"><dt>参数</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">key</td><td>ENV name </td></tr>
+    <tr><td class="paramname">value_buf</td><td>ENV blob buffer </td></tr>
+    <tr><td class="paramname">buf_len</td><td>ENV blob buffer length </td></tr>
+    <tr><td class="paramname">save_len</td><td>return the length of the value saved on the flash, 0: NOT found</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>返回</dt><dd>the actually get size on successful </dd></dl>
+
+</div>
+</div>
+<a id="gaad13ffb6718e50a9ca8710dee9fa9c82"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#gaad13ffb6718e50a9ca8710dee9fa9c82">&#9670;&nbsp;</a></span>user_flash_init()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int user_flash_init </td>
+          <td>(</td>
+          <td class="paramtype">void&#160;</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<dl class="retval"><dt>返回值</dt><dd>
+  <table class="retval">
+    <tr><td class="paramname">0</td><td>操作成功 </td></tr>
+    <tr><td class="paramname">-1</td><td>操作失败 </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="gab5d4eca5c4afdca266efd4aecf6a55f1"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#gab5d4eca5c4afdca266efd4aecf6a55f1">&#9670;&nbsp;</a></span>user_flash_set_env_blob()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int user_flash_set_env_blob </td>
+          <td>(</td>
+          <td class="paramtype">const char *&#160;</td>
+          <td class="paramname"><em>key</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const void *&#160;</td>
+          <td class="paramname"><em>value_buf</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>buf_len</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<dl class="params"><dt>参数</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">key</td><td>键名 </td></tr>
+    <tr><td class="paramname">value_buf</td><td>键值 </td></tr>
+    <tr><td class="paramname">buf_len</td><td>键值长度 </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>返回</dt><dd>-成功：返回键值长度 -失败：-1 </dd></dl>
+
+</div>
+</div>
+</div><!-- contents -->
+</body>
+</html>

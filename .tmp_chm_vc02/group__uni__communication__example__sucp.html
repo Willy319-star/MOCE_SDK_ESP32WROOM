@@ -1,0 +1,112 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "https://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=9"/>
+<meta name="generator" content="Doxygen 1.8.18"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>蜂鸟M离线方案开发指导手册: hb_uart_sucp.c</title>
+<link href="tabs.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="jquery.js"></script>
+<script type="text/javascript" src="dynsections.js"></script>
+<link href="doxygen.css" rel="stylesheet" type="text/css" />
+</head>
+<body>
+<div id="top"><!-- do not remove this div, it is closed by doxygen! -->
+<div id="titlearea">
+<table cellspacing="0" cellpadding="0">
+ <tbody>
+ <tr style="height: 56px;">
+  <td id="projectalign" style="padding-left: 0.5em;">
+   <div id="projectname">蜂鸟M离线方案开发指导手册
+   &#160;<span id="projectnumber">v1.0.4</span>
+   </div>
+  </td>
+ </tr>
+ </tbody>
+</table>
+</div>
+<!-- end header part -->
+<!-- 制作者 Doxygen 1.8.18 -->
+<script type="text/javascript" src="menudata.js"></script>
+<script type="text/javascript" src="menu.js"></script>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:cf05388f2679ee054f2beb29a391d25f4e673ac3&amp;dn=gpl-2.0.txt GPL-v2 */
+$(function() {
+  initMenu('',false,false,'search.php','搜索');
+});
+/* @license-end */</script>
+<div id="main-nav"></div>
+</div><!-- top -->
+<div class="header">
+  <div class="headertitle">
+<div class="title">hb_uart_sucp.c<div class="ingroups"><a class="el" href="group__uni__communication.html">云知声数据通讯协议</a> &raquo; <a class="el" href="group__uni__communication__sucp__example.html">云知声简易协议数据通讯示例</a></div></div>  </div>
+</div><!--header-->
+<div class="contents">
+<dl class="section user"><dt></dt><dd></dd></dl>
+<p>可通过定义user/inc/user_config.h中的宏<a class="el" href="group__uni__config__demo__macro.html#ga234a8d36ebd8d152f3c487e19868578d">USER_RUN_DEMO_SELECT</a> 为<a class="el" href="group__uni__config__demo__macro.html#ga9c595bf8de625c883d640eae9ec74fef">USER_DEMO_UART_SUCP</a> 运行示例程序 </p><div class="fragment"><div class="line"><span class="comment">/**************************************************************************</span></div>
+<div class="line"><span class="comment"> * Copyright (C) 2017-2017  Unisound</span></div>
+<div class="line"><span class="comment"> *</span></div>
+<div class="line"><span class="comment"> * This program is free software; you can redistribute it and/or modify</span></div>
+<div class="line"><span class="comment"> * it under the terms of the GNU General Public License as published by</span></div>
+<div class="line"><span class="comment"> * the Free Software Foundation; either version 2 of the License, or</span></div>
+<div class="line"><span class="comment"> * any later version.</span></div>
+<div class="line"><span class="comment"> *</span></div>
+<div class="line"><span class="comment"> * This program is distributed in the hope that it will be useful,</span></div>
+<div class="line"><span class="comment"> * but WITHOUT ANY WARRANTY; without even the implied warranty of</span></div>
+<div class="line"><span class="comment"> * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the</span></div>
+<div class="line"><span class="comment"> * GNU General Public License for more details.</span></div>
+<div class="line"><span class="comment"> *</span></div>
+<div class="line"><span class="comment"> * You should have received a copy of the GNU General Public License along</span></div>
+<div class="line"><span class="comment"> * with this program; if not, write to the Free Software Foundation, Inc.,</span></div>
+<div class="line"><span class="comment"> * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.</span></div>
+<div class="line"><span class="comment"> **************************************************************************</span></div>
+<div class="line"><span class="comment"> *</span></div>
+<div class="line"><span class="comment"> * Description : hb_uart_sucp.c</span></div>
+<div class="line"><span class="comment"> * Author      : wufangfang@unisound.com</span></div>
+<div class="line"><span class="comment"> * Date        : 2020.06.09</span></div>
+<div class="line"><span class="comment"> *</span></div>
+<div class="line"><span class="comment"> **************************************************************************/</span></div>
+<div class="line"><span class="preprocessor">#include &quot;user_uni_sucp.h&quot;</span></div>
+<div class="line"> </div>
+<div class="line"><span class="preprocessor">#define TAG &quot;hb_sucp&quot;</span></div>
+<div class="line"> </div>
+<div class="line"><span class="comment">/* 接收到串口数据后，该接口将被触发回调 */</span></div>
+<div class="line"><span class="keyword">static</span> <span class="keywordtype">void</span> _hb_sucp_recv(<a class="code" href="structsucp__pack__t.html" title="简易串口协议数据包定义">sucp_pack_t</a> *pack) {</div>
+<div class="line">  LOGT(TAG, <span class="stringliteral">&quot;recv sucp packet, cmd_code=0x%02x, reserve[0] = 0x%02x, reserve[1] = 0x%02x&quot;</span>,</div>
+<div class="line">            pack-&gt;<a class="code" href="structsucp__pack__t.html#a59e060c4ba448b976120fee2c8f1f7b1" title="命令码，用于传递指令信息">cmd_code</a>, pack-&gt;<a class="code" href="structsucp__pack__t.html#a2a9be22cbfc29680f097be9580ce9c45" title="保留字用于扩展，未使用固定为0x00">reserve</a>[0], pack-&gt;<a class="code" href="structsucp__pack__t.html#a2a9be22cbfc29680f097be9580ce9c45" title="保留字用于扩展，未使用固定为0x00">reserve</a>[1]);</div>
+<div class="line">}</div>
+<div class="line"> </div>
+<div class="line"><span class="keyword">static</span> <span class="keywordtype">void</span> _hb_sucp_send_task(<span class="keywordtype">void</span> *args) {</div>
+<div class="line">  <span class="keywordtype">char</span> buf[2] = {0x11, 0x22};</div>
+<div class="line">  <span class="keywordtype">int</span> ret;</div>
+<div class="line"> </div>
+<div class="line">  <span class="keywordflow">while</span> (1) {</div>
+<div class="line">    LOGT(TAG, <span class="stringliteral">&quot;hb uart sucp send heartbeat: 0x11 - 0x22&quot;</span>);</div>
+<div class="line">    <span class="comment">/* 蜂鸟系列支持最多150条命令词，这里cmd_code建议从150开始 */</span></div>
+<div class="line">    ret = <a class="code" href="group__uni__sample__communication__inf.html#ga10c1afdb62cee33313f843c5a0dd1397" title="通讯数据发送">user_uni_sucp_send</a>(150, buf);</div>
+<div class="line">    LOGT(TAG, <span class="stringliteral">&quot;hb uart send done, ret=%d&quot;</span>, ret);</div>
+<div class="line">    uni_msleep(2000);</div>
+<div class="line">  }</div>
+<div class="line">}</div>
+<div class="line"> </div>
+<div class="line"><span class="keywordtype">int</span> hb_uart_sucp(<span class="keywordtype">void</span>) {</div>
+<div class="line">  <span class="comment">//将宏USE_SAMPLE_PROTOCOL打开，设置为1</span></div>
+<div class="line">  <span class="keywordtype">int</span> ret = <a class="code" href="group__uni__sample__communication__inf.html#ga1f7600707efa28a7a5bfe3786b20ade1" title="通讯初始化">user_uni_sucp_init</a>(_hb_sucp_recv);</div>
+<div class="line">  <span class="keywordflow">if</span> (ret != 0) {</div>
+<div class="line">    LOGE(TAG, <span class="stringliteral">&quot;hb uart sucp init failed&quot;</span>);</div>
+<div class="line">    <span class="keywordflow">return</span> -1;</div>
+<div class="line">  }</div>
+<div class="line"> </div>
+<div class="line">  <span class="comment">//启动一个线程，模拟发送串口消息任务</span></div>
+<div class="line">  uni_pthread_t pid;</div>
+<div class="line">  thread_param param;</div>
+<div class="line">  param.stack_size = STACK_SMALL_SIZE;</div>
+<div class="line">  param.priority   = OS_PRIORITY_NORMAL;</div>
+<div class="line">  uni_strncpy(param.task_name, <span class="stringliteral">&quot;hb-sucp&quot;</span>, <span class="keyword">sizeof</span>(param.task_name) - 1);</div>
+<div class="line">  uni_pthread_create(&amp;pid, &amp;param, _hb_sucp_send_task, NULL);</div>
+<div class="line">  <span class="keywordflow">return</span> 0;</div>
+<div class="line">}</div>
+</div><!-- fragment --> </div><!-- contents -->
+</body>
+</html>

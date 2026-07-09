@@ -1,0 +1,1633 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "https://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=9"/>
+<meta name="generator" content="Doxygen 1.8.18"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>蜂鸟M离线方案开发指导手册: 3、获取源码</title>
+<link href="tabs.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="jquery.js"></script>
+<script type="text/javascript" src="dynsections.js"></script>
+<link href="doxygen.css" rel="stylesheet" type="text/css" />
+</head>
+<body>
+<div id="top"><!-- do not remove this div, it is closed by doxygen! -->
+<div id="titlearea">
+<table cellspacing="0" cellpadding="0">
+ <tbody>
+ <tr style="height: 56px;">
+  <td id="projectalign" style="padding-left: 0.5em;">
+   <div id="projectname">蜂鸟M离线方案开发指导手册
+   &#160;<span id="projectnumber">v1.0.4</span>
+   </div>
+  </td>
+ </tr>
+ </tbody>
+</table>
+</div>
+<!-- end header part -->
+<!-- 制作者 Doxygen 1.8.18 -->
+<script type="text/javascript" src="menudata.js"></script>
+<script type="text/javascript" src="menu.js"></script>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:cf05388f2679ee054f2beb29a391d25f4e673ac3&amp;dn=gpl-2.0.txt GPL-v2 */
+$(function() {
+  initMenu('',false,false,'search.php','搜索');
+});
+/* @license-end */</script>
+<div id="main-nav"></div>
+</div><!-- top -->
+<div class="PageDoc"><div class="header">
+  <div class="headertitle">
+<div class="title">3、获取源码 </div>  </div>
+</div><!--header-->
+<div class="contents">
+<div class="textblock"><html>
+
+<head>
+<meta http-equiv=Content-Type content="text/html; charset=utf-8">
+<meta name=Generator content="Microsoft Word 15 (filtered)">
+<style>
+<!--
+ /* Font Definitions */
+ @font-face
+	{font-family:Wingdings;
+	panose-1:5 0 0 0 0 0 0 0 0 0;}
+@font-face
+	{font-family:宋体;
+	panose-1:2 1 6 0 3 1 1 1 1 1;}
+@font-face
+	{font-family:"Cambria Math";
+	panose-1:2 4 5 3 5 4 6 3 2 4;}
+@font-face
+	{font-family:等线;
+	panose-1:2 1 6 0 3 1 1 1 1 1;}
+@font-face
+	{font-family:Calibri;
+	panose-1:2 15 5 2 2 2 4 3 2 4;}
+@font-face
+	{font-family:"Calibri Light";
+	panose-1:2 15 3 2 2 2 4 3 2 4;}
+@font-face
+	{font-family:"\@等线";
+	panose-1:2 1 6 0 3 1 1 1 1 1;}
+@font-face
+	{font-family:"\@宋体";
+	panose-1:2 1 6 0 3 1 1 1 1 1;}
+ /* Style Definitions */
+ p.MsoNormal, li.MsoNormal, div.MsoNormal
+	{margin:0cm;
+	margin-bottom:.0001pt;
+	text-align:justify;
+	text-justify:inter-ideograph;
+	font-size:10.5pt;
+	font-family:"Calibri",sans-serif;}
+h2
+	{mso-style-link:"标题 2 字符";
+	margin-top:13.0pt;
+	margin-right:0cm;
+	margin-bottom:13.0pt;
+	margin-left:0cm;
+	text-align:justify;
+	text-justify:inter-ideograph;
+	line-height:173%;
+	page-break-after:avoid;
+	font-size:12.0pt;
+	font-family:"Calibri Light",sans-serif;
+	font-weight:bold;}
+h3
+	{mso-style-link:"标题 3 字符";
+	margin-top:13.0pt;
+	margin-right:0cm;
+	margin-bottom:13.0pt;
+	margin-left:0cm;
+	text-align:justify;
+	text-justify:inter-ideograph;
+	line-height:173%;
+	page-break-after:avoid;
+	font-size:10.5pt;
+	font-family:"Calibri",sans-serif;
+	font-weight:bold;}
+h4
+	{mso-style-link:"标题 4 字符";
+	margin-top:14.0pt;
+	margin-right:0cm;
+	margin-bottom:14.5pt;
+	margin-left:0cm;
+	text-align:justify;
+	text-justify:inter-ideograph;
+	line-height:156%;
+	page-break-after:avoid;
+	font-size:10.5pt;
+	font-family:"Calibri Light",sans-serif;
+	font-weight:bold;}
+h5
+	{mso-style-link:"标题 5 字符";
+	margin-top:14.0pt;
+	margin-right:0cm;
+	margin-bottom:14.5pt;
+	margin-left:0cm;
+	text-align:justify;
+	text-justify:inter-ideograph;
+	line-height:156%;
+	page-break-after:avoid;
+	font-size:10.5pt;
+	font-family:"Calibri",sans-serif;
+	font-weight:bold;}
+p.MsoHeader, li.MsoHeader, div.MsoHeader
+	{mso-style-link:"页眉 字符";
+	margin:0cm;
+	margin-bottom:.0001pt;
+	text-align:center;
+	layout-grid-mode:char;
+	border:none;
+	padding:0cm;
+	font-size:9.0pt;
+	font-family:"Calibri",sans-serif;}
+p.MsoFooter, li.MsoFooter, div.MsoFooter
+	{mso-style-link:"页脚 字符";
+	margin:0cm;
+	margin-bottom:.0001pt;
+	layout-grid-mode:char;
+	font-size:9.0pt;
+	font-family:"Calibri",sans-serif;}
+a:link, span.MsoHyperlink
+	{color:#0563C1;
+	text-decoration:underline;}
+a:visited, span.MsoHyperlinkFollowed
+	{color:#954F72;
+	text-decoration:underline;}
+p
+	{margin-right:0cm;
+	margin-left:0cm;
+	font-size:12.0pt;
+	font-family:宋体;}
+p.MsoAcetate, li.MsoAcetate, div.MsoAcetate
+	{mso-style-link:"批注框文本 字符";
+	margin:0cm;
+	margin-bottom:.0001pt;
+	text-align:justify;
+	text-justify:inter-ideograph;
+	font-size:9.0pt;
+	font-family:"Calibri",sans-serif;}
+p.MsoListParagraph, li.MsoListParagraph, div.MsoListParagraph
+	{margin:0cm;
+	margin-bottom:.0001pt;
+	text-align:justify;
+	text-justify:inter-ideograph;
+	text-indent:21.0pt;
+	font-size:10.5pt;
+	font-family:"Calibri",sans-serif;}
+span.a
+	{mso-style-name:"页眉 字符";
+	mso-style-link:页眉;}
+span.a0
+	{mso-style-name:"页脚 字符";
+	mso-style-link:页脚;}
+span.2
+	{mso-style-name:"标题 2 字符";
+	mso-style-link:"标题 2";
+	font-family:"Calibri Light",sans-serif;
+	font-weight:bold;}
+span.3
+	{mso-style-name:"标题 3 字符";
+	mso-style-link:"标题 3";
+	font-family:等线;
+	font-weight:bold;}
+span.4
+	{mso-style-name:"标题 4 字符";
+	mso-style-link:"标题 4";
+	font-family:"Calibri Light",sans-serif;
+	font-weight:bold;}
+span.a1
+	{mso-style-name:"批注框文本 字符";
+	mso-style-link:批注框文本;}
+span.5
+	{mso-style-name:"标题 5 字符";
+	mso-style-link:"标题 5";
+	font-family:等线;
+	font-weight:bold;}
+.MsoChpDefault
+	{font-size:10.0pt;
+	font-family:"Calibri",sans-serif;}
+ /* Page Definitions */
+ @page WordSection1
+	{size:595.3pt 841.9pt;
+	margin:72.0pt 90.0pt 72.0pt 90.0pt;
+	layout-grid:15.6pt;}
+div.WordSection1
+	{page:WordSection1;}
+ /* List Definitions */
+ ol
+	{margin-bottom:0cm;}
+ul
+	{margin-bottom:0cm;}
+-->
+</style>
+
+</head>
+
+<body lang=EN-US link="#0563C1" vlink="#954F72" style='text-justify-trim:punctuation'>
+
+<div class=WordSection1 style='layout-grid:15.6pt'>
+
+<h2><a name="_Toc35612004"></a><a name="_Toc29851377">1. </a><span lang=ZH-CN
+style='font-family:等线'>前期准备</span></h2>
+
+<h3><a name="_Toc29851378"></a><a name="_Toc35612005">1.1 </a><span lang=ZH-CN
+style='font-family:等线'>账号创建</span></h3>
+
+<p class=MsoNormal align=left style='margin-left:36.0pt;text-align:left;
+text-indent:-18.0pt'><span style='font-size:9.0pt;font-family:"Arial",sans-serif'>•<span
+style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span></span><span
+lang=ZH-CN style='font-size:9.0pt;font-family:等线'>进入云知声开放平台：</span><a
+href="http://dev.hivoice.cn/"><span style='font-size:9.0pt;font-family:"Times New Roman",serif'>http://dev.hivoice.cn/</span></a></p>
+
+<p class=MsoNormal align=left style='margin-left:36.0pt;text-align:left;
+text-indent:-18.0pt'><span style='font-size:9.0pt;font-family:"Arial",sans-serif'>•<span
+style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span></span><span
+lang=ZH-CN style='font-size:9.0pt;font-family:等线'>点击右上角的</span><span
+lang=ZH-CN style='font-size:9.0pt;font-family:"Times New Roman",serif'> </span><b><span
+lang=ZH-CN style='font-size:9.0pt;font-family:等线'>登陆</span></b><b><span
+style='font-size:9.0pt;font-family:"Times New Roman",serif'>/</span></b><b><span
+lang=ZH-CN style='font-size:9.0pt;font-family:等线'>注册</span></b><span
+lang=ZH-CN style='font-size:9.0pt;font-family:等线'>，弹出如下窗口：</span></p>
+
+<p class=MsoNormal align=center style='text-align:center'><span
+style='font-size:9.0pt;font-family:"Times New Roman",serif'><img border=0
+width=279 height=320 id="图片 92" src="hqym3_image001.jpg"></span></p>
+
+<p class=MsoNormal align=left style='margin-left:36.0pt;text-align:left;
+text-indent:-18.0pt'><span style='font-size:9.0pt;font-family:"Arial",sans-serif'>•<span
+style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span></span><span
+lang=ZH-CN style='font-size:9.0pt;font-family:等线'>如无账号，请点击</span><span
+lang=ZH-CN style='font-size:9.0pt;font-family:"Times New Roman",serif'> </span><b><span
+lang=ZH-CN style='font-size:9.0pt;font-family:等线'>去注册</span></b><span
+lang=ZH-CN style='font-size:9.0pt;font-family:等线'>；</span></p>
+
+<p class=MsoNormal align=left style='margin-left:36.0pt;text-align:left;
+text-indent:-18.0pt'><span style='font-size:9.0pt;font-family:"Arial",sans-serif'>•<span
+style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span></span><span
+lang=ZH-CN style='font-size:9.0pt;font-family:等线'>注册方式有“<b><i>手机账号注册</i></b>”、“<b><i>邮箱账号注册</i></b>”两种方式</span></p>
+
+<p class=MsoNormal align=left style='margin-left:36.0pt;text-align:left;
+text-indent:-18.0pt'><span style='font-size:9.0pt;font-family:"Arial",sans-serif'>•<span
+style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span></span><span
+lang=ZH-CN style='font-size:9.0pt;font-family:等线'>如已有云知声开发账号请忽略本步骤；</span></p>
+
+<p class=MsoNormal align=center style='text-align:center'><span
+style='font-size:9.0pt;font-family:"Times New Roman",serif'><img border=0
+width=346 height=272 id="图片 69" src="hqym3_image002.jpg"></span></p>
+
+<p class=MsoNormal align=left style='margin-left:36.0pt;text-align:left;
+text-indent:-18.0pt'><span style='font-size:9.0pt;font-family:"Arial",sans-serif'>•<span
+style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span></span><span
+lang=ZH-CN style='font-size:9.0pt;font-family:等线'>选择邮箱账号注册需点击激活邮件后才能正常登陆</span></p>
+
+<p class=MsoNormal align=center style='text-align:center'><img border=0
+width=351 height=278 id="图片 14" src="hqym3_image003.jpg"></p>
+
+<p class=MsoNormal align=center style='text-align:center'><span
+style='font-size:9.0pt;font-family:"Times New Roman",serif'>&nbsp;</span></p>
+
+<p class=MsoNormal align=center style='text-align:center'><img border=0
+width=553 height=212 id="图片 13" src="hqym3_image004.jpg"></p>
+
+<h3><a name="_Toc35612006"></a><a name="_Toc29851379">1.2 </a><span lang=ZH-CN
+style='font-family:等线'>完善资料</span></h3>
+
+<p class=MsoNormal align=left style='text-align:left;text-indent:21.0pt'><span
+lang=ZH-CN style='font-size:9.0pt;font-family:等线'>注册成功后，为确保账号可用，请登陆云知声账号；</span></p>
+
+<p class=MsoNormal align=left style='text-align:left;text-indent:21.0pt'><span
+lang=ZH-CN style='font-size:9.0pt;font-family:等线'>登陆后，点击右上角的</span><span
+lang=ZH-CN style='font-size:9.0pt;font-family:"Times New Roman",serif'> </span><b><span
+lang=ZH-CN style='font-size:9.0pt;font-family:等线'>完善资料</span></b><span
+lang=ZH-CN style='font-size:9.0pt;font-family:等线'>，输入相关必填信息。</span></p>
+
+<p class=MsoNormal align=center style='text-align:center'><span
+style='font-size:9.0pt;font-family:"Times New Roman",serif'><img border=0
+width=464 height=246 id="图片 53" src="hqym3_image005.jpg"></span></p>
+
+<h3><a name="_Toc29851380"></a><a name="_Toc35612007">1.3 </a><span lang=ZH-CN
+style='font-family:等线'>开通权限</span></h3>
+
+<p class=MsoNormal align=left style='text-align:left;text-indent:18.0pt'><span
+style='font-size:9.0pt;font-family:"Times New Roman",serif'>1. </span><span
+lang=ZH-CN style='font-size:9.0pt;font-family:等线'>联系云知声商务，申请开通云知声智能设备平台权限，获取离线标准开发板；</span></p>
+
+<p class=MsoNormal align=left style='text-align:left;text-indent:18.0pt'><span
+style='font-size:9.0pt;font-family:"Times New Roman",serif'>2. </span><span
+lang=ZH-CN style='font-size:9.0pt;font-family:等线'>开通权限后，产品控制台入口可见，在<b>控制台</b></span><b><span
+style='font-size:9.0pt;font-family:"Times New Roman",serif'>-</span></b><b><span
+lang=ZH-CN style='font-size:9.0pt;font-family:等线'>产品接入</span></b><span
+lang=ZH-CN style='font-size:9.0pt;font-family:等线'>下。</span></p>
+
+<h2><a name="_Toc35612008"></a><a name="_Toc29851381">2. </a><span lang=ZH-CN
+style='font-family:等线'>配置并生成产品版本</span></h2>
+
+<h3><a name="_Toc29851382"></a><a name="_Toc35612009">2.1 </a><span lang=ZH-CN
+style='font-family:等线'>创建产品</span></h3>
+
+<p class=MsoNormal align=left style='text-align:left;text-indent:18.0pt'><span
+lang=ZH-CN style='font-size:9.0pt;font-family:等线'>（</span><span
+style='font-size:9.0pt;font-family:"Times New Roman",serif'>1</span><span
+lang=ZH-CN style='font-size:9.0pt;font-family:等线'>）用户登陆云知声开放平台（</span><a
+href="http://dev.hivoice.cn/"><span style='font-size:9.0pt;font-family:"Times New Roman",serif'>http://dev.hivoice.cn/</span></a><span
+lang=ZH-CN style='font-size:9.0pt;font-family:等线'>），点击导航栏中的</span><span
+lang=ZH-CN style='font-size:9.0pt;font-family:"Times New Roman",serif'> </span><b><span
+lang=ZH-CN style='font-size:9.0pt;font-family:等线'>控制台</span></b><span
+lang=ZH-CN style='font-size:9.0pt;font-family:等线'>，点击</span><span lang=ZH-CN
+style='font-size:9.0pt;font-family:"Times New Roman",serif'> </span><b><span
+lang=ZH-CN style='font-size:9.0pt;font-family:等线'>产品接入</span></b><b><span
+lang=ZH-CN style='font-size:9.0pt;font-family:"Times New Roman",serif'> </span></b><span
+lang=ZH-CN style='font-size:9.0pt;font-family:等线'>进入产品接入控制台。</span></p>
+
+<p class=MsoNormal align=center style='text-align:center'><span
+style='font-size:9.0pt;font-family:"Times New Roman",serif'><img border=0
+width=552 height=252 id="图片 17" src="hqym3_image006.jpg"></span></p>
+
+<p class=MsoNormal align=left style='text-align:left'><span style='font-size:
+9.0pt;font-family:"Times New Roman",serif'>&nbsp;</span></p>
+
+<p class=MsoNormal align=left style='text-align:left;text-indent:18.0pt'><span
+lang=ZH-CN style='font-size:9.0pt;font-family:等线'>（</span><span
+style='font-size:9.0pt;font-family:"Times New Roman",serif'>2</span><span
+lang=ZH-CN style='font-size:9.0pt;font-family:等线'>）进入产品控制台后，点击</span><span
+lang=ZH-CN style='font-size:9.0pt;font-family:"Times New Roman",serif'> </span><b><span
+lang=ZH-CN style='font-size:9.0pt;font-family:等线'>创建产品</span></b><span
+lang=ZH-CN style='font-size:9.0pt;font-family:等线'>。</span></p>
+
+<p class=MsoNormal align=center style='text-align:center'><span
+style='font-size:9.0pt;font-family:"Times New Roman",serif'><img border=0
+width=528 height=244 id="图片 21" src="hqym3_image007.png"></span></p>
+
+<p class=MsoNormal align=left style='text-align:left;text-indent:18.0pt'><span
+lang=ZH-CN style='font-size:9.0pt;font-family:等线'>（</span><span
+style='font-size:9.0pt;font-family:"Times New Roman",serif'>3</span><span
+lang=ZH-CN style='font-size:9.0pt;font-family:等线'>）云知声智能设备平台提供不同场景，用以定制不同语音产品形态，此处选择智能家居（纯离线）</span></p>
+
+<p class=MsoNormal align=center style='text-align:center'><span
+style='font-size:9.0pt;font-family:"Times New Roman",serif'><img border=0
+width=502 height=276 id="图片 45" src="hqym3_image008.jpg"></span></p>
+
+<p class=MsoNormal align=left style='text-align:left;text-indent:18.0pt'><span
+lang=ZH-CN style='font-size:9.0pt;font-family:等线'>（</span><span
+style='font-size:9.0pt;font-family:"Times New Roman",serif'>4</span><span
+lang=ZH-CN style='font-size:9.0pt;font-family:等线'>）选择系统与芯片平台，选择</span><span
+lang=ZH-CN style='font-size:9.0pt;font-family:"Times New Roman",serif'> </span><b><span
+lang=ZH-CN style='font-size:9.0pt;font-family:等线'>蜂鸟</span></b><b><span
+style='font-size:9.0pt;font-family:"Times New Roman",serif'>M</span></b><b><span
+lang=ZH-CN style='font-size:9.0pt;font-family:等线'>芯片</span></b></p>
+
+<p class=MsoNormal align=left style='text-align:left'><span lang=ZH-CN
+style='font-size:9.0pt;font-family:等线'>该页面点击芯片旁的<b>？</b>按钮，可以获取蜂鸟芯片产品手册。</span></p>
+
+<p class=MsoNormal align=left style='text-align:left'><span style='font-size:
+9.0pt;font-family:"Times New Roman",serif'>     </span><span lang=ZH-CN
+style='font-size:9.0pt;font-family:等线'>选择设备类型：</span></p>
+
+<p class=MsoListParagraph align=left style='margin-left:39.3pt;text-align:left;
+text-indent:-18.0pt'><span style='font-size:9.0pt;font-family:"Times New Roman",serif'>1）<span
+style='font:7.0pt "Times New Roman"'> </span></span><span lang=ZH-CN
+style='font-size:9.0pt;font-family:等线'>选择<b>具体产品</b>，云知声针对细分的终端产品类型进行了初始功能定义，提供了更准确的语音识别性能与预置的控制指令。</span></p>
+
+<p class=MsoListParagraph align=left style='margin-left:40.5pt;text-align:left;
+text-indent:0cm'><span lang=ZH-CN style='font-size:9.0pt;font-family:等线'>联系商务，获取具体产品方案权限。</span></p>
+
+<p class=MsoListParagraph align=left style='margin-left:39.3pt;text-align:left;
+text-indent:-18.0pt'><span style='font-size:9.0pt;font-family:"Times New Roman",serif'>2）<span
+style='font:7.0pt "Times New Roman"'> </span></span><span lang=ZH-CN
+style='font-size:9.0pt;font-family:等线'>选择<b>通用</b>，根据开发者需求，自主合成终端产品能力</span><span
+lang=ZH-CN style='font-size:9.0pt;font-family:"Times New Roman",serif'> </span><span
+lang=ZH-CN style='font-size:9.0pt;font-family:等线'>，覆盖的使用场景更加广泛。</span></p>
+
+<p class=MsoNormal align=center style='text-align:center'><span
+style='font-size:9.0pt;font-family:"Times New Roman",serif'><img border=0
+width=553 height=366 id="图片 2" src="hqym3_image009.jpg"></span></p>
+
+<p class=MsoNormal align=left style='text-align:left;text-indent:18.0pt'><span
+lang=ZH-CN style='font-size:9.0pt;font-family:等线'>（</span><span
+style='font-size:9.0pt;font-family:"Times New Roman",serif'>5</span><span
+lang=ZH-CN style='font-size:9.0pt;font-family:等线'>）填写产品信息，包括名称与描述</span></p>
+
+<p class=MsoNormal align=center style='text-align:center'><span
+style='font-size:9.0pt;font-family:"Times New Roman",serif'><img border=0
+width=553 height=305 id="图片 9" src="hqym3_image010.jpg"></span></p>
+
+<p class=MsoNormal align=left style='text-align:left'><span style='font-size:
+9.0pt;font-family:"Times New Roman",serif'>&nbsp;</span></p>
+
+<p class=MsoNormal align=left style='text-align:left;text-indent:18.0pt'><span
+lang=ZH-CN style='font-size:9.0pt;font-family:等线'>（</span><span
+style='font-size:9.0pt;font-family:"Times New Roman",serif'>6</span><span
+lang=ZH-CN style='font-size:9.0pt;font-family:等线'>）确认所选项无问题，点击</span><span
+lang=ZH-CN style='font-size:9.0pt;font-family:"Times New Roman",serif'> </span><span
+lang=ZH-CN style='font-size:9.0pt;font-family:等线'>保存且下一步，即初步创建产品成功</span></p>
+
+<p class=MsoNormal align=center style='text-align:center'><span
+style='font-size:9.0pt;font-family:"Times New Roman",serif'><img border=0
+width=554 height=209 id="图片 10" src="hqym3_image011.jpg"></span></p>
+
+<h3><a name="_Toc29851383"></a><a name="_Toc35612010">2.2 </a><span lang=ZH-CN
+style='font-family:等线'>产品版本开发</span></h3>
+
+<h4>2.2.1 <span lang=ZH-CN style='font-family:等线'>创建产品版本</span></h4>
+
+<p class=MsoNormal align=left style='text-align:left'><span lang=ZH-CN
+style='font-size:9.0pt;font-family:等线'>（</span><span style='font-size:9.0pt;
+font-family:"Times New Roman",serif'>1</span><span lang=ZH-CN style='font-size:
+9.0pt;font-family:等线'>）创建产品版本，填写版本号及版本信息，点击下一步</span></p>
+
+<p class=MsoNormal align=left style='margin-left:36.0pt;text-align:left;
+text-indent:-18.0pt'><span style='font-size:9.0pt;font-family:"Arial",sans-serif'>•<span
+style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span></span><span
+lang=ZH-CN style='font-size:9.0pt;font-family:等线'>产品创建成功后，系统会自动为该产品分配</span><span
+style='font-size:9.0pt;font-family:"Times New Roman",serif'>Appkey</span><span
+lang=ZH-CN style='font-size:9.0pt;font-family:等线'>与</span><span
+style='font-size:9.0pt;font-family:"Times New Roman",serif'>AppSecret</span><span
+lang=ZH-CN style='font-size:9.0pt;font-family:等线'>，此为该产品唯一识别</span><span
+style='font-size:9.0pt;font-family:"Times New Roman",serif'>ID</span><span
+lang=ZH-CN style='font-size:9.0pt;font-family:等线'>和密匙</span></p>
+
+<p class=MsoNormal align=left style='margin-left:36.0pt;text-align:left;
+text-indent:-18.0pt'><span style='font-size:9.0pt;font-family:"Arial",sans-serif'>•<span
+style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span></span><span
+lang=ZH-CN style='font-size:9.0pt;font-family:等线'>一个产品可维护多个版本，可通过版本号与版本描述来区分</span></p>
+
+<p class=MsoNormal align=center style='margin-left:18.0pt;text-align:center'><span
+style='font-size:9.0pt;font-family:"Times New Roman",serif'><img border=0
+width=512 height=418 src="hqym3_image012.jpg"></span></p>
+
+<h4><a name="_2.2.2_配置终端能力"></a><a name="_配置终端能力"></a>2.2.2 <span lang=ZH-CN
+style='font-family:等线'>配置终端能力</span><span lang=ZH-CN> </span></h4>
+
+<p class=MsoNormal align=left style='text-align:left'><b><span lang=ZH-CN
+style='font-size:9.0pt;font-family:等线'>（</span></b><b><span style='font-size:
+9.0pt;font-family:"Times New Roman",serif'>1</span></b><b><span lang=ZH-CN
+style='font-size:9.0pt;font-family:等线'>）</span></b><b><span lang=ZH-CN
+style='font-size:9.0pt;font-family:"Times New Roman",serif'> </span></b><b><span
+lang=ZH-CN style='font-size:9.0pt;font-family:等线'>选择前端信号处理方案</span></b></p>
+
+<p class=MsoNormal align=left style='text-align:left;text-indent:18.0pt'><span
+lang=ZH-CN style='font-size:9.0pt;font-family:等线'>蜂鸟</span><span
+style='font-size:9.0pt;font-family:"Times New Roman",serif'>M</span><span
+lang=ZH-CN style='font-size:9.0pt;font-family:等线'>芯片通用板支持单麦克风收音，开发者针对不同的使用场景，选择识别距离，实现对声音信号的处理方式，提升识别结果的准确率。</span></p>
+
+<p class=MsoNormal align=center style='text-align:center'><span
+style='font-size:9.0pt;font-family:"Times New Roman",serif'><img border=0
+width=554 height=74 id="图片 36" src="hqym3_image013.jpg"></span></p>
+
+<p class=MsoNormal align=left style='text-align:left'><b><span
+style='font-size:9.0pt;font-family:"Times New Roman",serif'>&nbsp;</span></b></p>
+
+<p class=MsoNormal align=left style='text-align:left'><b><span lang=ZH-CN
+style='font-size:9.0pt;font-family:等线'>（</span></b><b><span style='font-size:
+9.0pt;font-family:"Times New Roman",serif'>2</span></b><b><span lang=ZH-CN
+style='font-size:9.0pt;font-family:等线'>）</span></b><b><span style='font-size:
+9.0pt;font-family:"Times New Roman",serif'>PIN</span></b><b><span lang=ZH-CN
+style='font-size:9.0pt;font-family:等线'>脚配置</span></b></p>
+
+<p class=MsoNormal align=left style='text-align:left;text-indent:18.0pt'><span
+lang=ZH-CN style='font-size:9.0pt;font-family:等线'>蜂鸟</span><span
+style='font-size:9.0pt;font-family:"Times New Roman",serif'>M</span><span
+lang=ZH-CN style='font-size:9.0pt;font-family:等线'>支持无代码实现芯片引脚配置，通过参数配置自定义</span><span
+style='font-size:9.0pt;font-family:"Times New Roman",serif'>GPIO</span><span
+lang=ZH-CN style='font-size:9.0pt;font-family:等线'>、</span><span
+style='font-size:9.0pt;font-family:"Times New Roman",serif'>PWM</span><span
+lang=ZH-CN style='font-size:9.0pt;font-family:等线'>、</span><span
+style='font-size:9.0pt;font-family:"Times New Roman",serif'>UART</span><span
+lang=ZH-CN style='font-size:9.0pt;font-family:等线'>等端口的输出信号，直接控制外围电路。</span></p>
+
+<p class=MsoNormal align=center style='text-align:center'><img border=0
+width=553 height=367 id="图片 16" src="hqym3_image014.jpg"></p>
+
+<p class=MsoNormal align=left style='text-align:left'><b><span
+style='font-size:9.0pt;font-family:"Times New Roman",serif'>&nbsp;</span></b></p>
+
+<p class=MsoNormal align=left style='text-align:left'><b><span lang=ZH-CN
+style='font-size:9.0pt;font-family:等线'>（</span></b><b><span style='font-size:
+9.0pt;font-family:"Times New Roman",serif'>3</span></b><b><span lang=ZH-CN
+style='font-size:9.0pt;font-family:等线'>）自定义产品唤醒词，以及唤醒回复语</span></b></p>
+
+<p class=MsoNormal align=left style='margin-left:36.0pt;text-align:left;
+text-indent:-18.0pt'><span style='font-size:9.0pt;font-family:"Arial",sans-serif'>•<span
+style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span></span><span
+lang=ZH-CN style='font-size:9.0pt;font-family:等线'>支持</span><span
+style='font-size:9.0pt;font-family:"Times New Roman",serif'>3-6</span><span
+lang=ZH-CN style='font-size:9.0pt;font-family:等线'>个字的唤醒词自定义配置，最多支持</span><span
+style='font-size:9.0pt;font-family:"Times New Roman",serif'>10</span><span
+lang=ZH-CN style='font-size:9.0pt;font-family:等线'>组唤醒词的添加；</span></p>
+
+<p class=MsoNormal align=left style='margin-left:36.0pt;text-align:left;
+text-indent:-18.0pt'><span style='font-size:9.0pt;font-family:"Arial",sans-serif'>•<span
+style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span></span><span
+lang=ZH-CN style='font-size:9.0pt;font-family:等线'>为保证语音产品有最佳唤醒体验，平台针对唤醒词的发音提供打分功能，并会提供具体指导信息；</span></p>
+
+<p class=MsoNormal align=left style='margin-left:36.0pt;text-align:left;
+text-indent:-18.0pt'><span style='font-size:9.0pt;font-family:"Arial",sans-serif'>•<span
+style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span></span><span
+lang=ZH-CN style='font-size:9.0pt;font-family:等线'>涉及黄赌毒、政治敏感、低俗辱骂等不合规内容的唤醒词不可使用；</span></p>
+
+<p class=MsoNormal align=left style='margin-left:36.0pt;text-align:left;
+text-indent:-18.0pt'><span style='font-size:9.0pt;font-family:"Arial",sans-serif'>•<span
+style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span></span><span
+lang=ZH-CN style='font-size:9.0pt;font-family:等线'>完整唤醒词定义规则可点击界面上《唤醒词自定义规则》；</span></p>
+
+<p class=MsoNormal align=left style='margin-left:36.0pt;text-align:left;
+text-indent:-18.0pt'><span style='font-size:9.0pt;font-family:"Arial",sans-serif'>•<span
+style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span></span><span
+lang=ZH-CN style='font-size:9.0pt;font-family:等线'>支持按照产品使用场景自定义唤醒灵敏度；</span></p>
+
+<p class=MsoNormal align=left style='margin-left:36.0pt;text-align:left;
+text-indent:-18.0pt'><span style='font-size:9.0pt;font-family:"Arial",sans-serif'>•<span
+style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span></span><span
+lang=ZH-CN style='font-size:9.0pt;font-family:等线'>自定义设置唤醒回复语，唤醒回复最多支持</span><span
+style='font-size:9.0pt;font-family:"Times New Roman",serif'>10</span><span
+lang=ZH-CN style='font-size:9.0pt;font-family:等线'>条，设置后将随机播报。</span></p>
+
+<p class=MsoNormal align=center style='text-align:center'><span
+style='font-size:9.0pt;font-family:"Times New Roman",serif'><img border=0
+width=554 height=260 id="图片 54" src="hqym3_image015.png"></span></p>
+
+<p class=MsoNormal align=left style='text-align:left'><span style='font-size:
+9.0pt;font-family:"Times New Roman",serif'>&nbsp;</span></p>
+
+<p class=MsoNormal align=left style='text-align:left'><b><span lang=ZH-CN
+style='font-size:9.0pt;font-family:等线'>（</span></b><b><span style='font-size:
+9.0pt;font-family:"Times New Roman",serif'>4</span></b><b><span lang=ZH-CN
+style='font-size:9.0pt;font-family:等线'>）按照规则填写命令词与应答语</span></b></p>
+
+<p class=MsoNormal align=left style='text-align:left'><span style='font-size:
+9.0pt;font-family:"Times New Roman",serif'>         </span><span lang=ZH-CN
+style='font-size:9.0pt;font-family:等线'>如下图所示，点击“<b><i>如何自定义</i></b>”为语法格式说明与规则介绍；</span></p>
+
+<p class=MsoNormal align=left style='text-align:left;text-indent:18.0pt'><span
+lang=ZH-CN style='font-size:9.0pt;font-family:等线'>点击“<b><i>点这里添加</i></b>”则弹出输入框，可以在页面内直接输入命令词与应答语的定义；</span></p>
+
+<p class=MsoNormal align=left style='text-align:left'><span style='font-size:
+9.0pt;font-family:"Times New Roman",serif'>&nbsp;</span></p>
+
+<p class=MsoNormal align=center style='text-align:center'><img border=0
+width=554 height=135 id="图片 18" src="hqym3_image016.jpg"></p>
+
+<p class=MsoNormal align=left style='text-align:left;text-indent:18.0pt'><span
+lang=ZH-CN style='font-size:9.0pt;font-family:等线'>如不满足语法格式要求平台则会进行实时提示。输入完成后选择命令词识别灵敏度，点击“<b><i>确定</i></b>”即可提交。</span></p>
+
+<p class=MsoNormal align=center style='text-align:center'><img border=0
+width=530 height=355 id="图片 1" src="hqym3_image017.jpg"></p>
+
+<p class=MsoNormal align=left style='text-align:left;text-indent:18.0pt'><span
+lang=ZH-CN style='font-size:9.0pt;font-family:等线'>提交后仍可对词表基础信息进行编辑；</span></p>
+
+<p class=MsoNormal align=center style='text-align:center;text-indent:21.0pt'><img
+border=0 width=553 height=258 id="图片 19" src="hqym3_image018.jpg"></p>
+
+<p class=MsoNormal align=left style='text-align:left;text-indent:18.0pt'><span
+lang=ZH-CN style='font-size:9.0pt;font-family:等线'>点击“<b><i>控制详情</i></b>”切换</span><span
+style='font-size:9.0pt;font-family:"Times New Roman",serif'>TAB</span><span
+lang=ZH-CN style='font-size:9.0pt;font-family:等线'>，将控制行为与引脚输出信号进行对应，实现对控制指令的信号输出的配置。</span></p>
+
+<p class=MsoNormal align=left style='text-align:left'><span style='font-size:
+9.0pt;font-family:"Times New Roman",serif'>&nbsp;</span></p>
+
+<p class=MsoNormal align=center style='text-align:center'><img border=0
+width=554 height=245 id="图片 20" src="hqym3_image019.jpg"></p>
+
+<p class=MsoNormal align=center style='text-align:center'><span
+style='font-size:9.0pt;font-family:"Times New Roman",serif'>&nbsp;</span></p>
+
+<p class=MsoNormal align=center style='text-align:center'><img border=0
+width=554 height=285 id="图片 24" src="hqym3_image020.jpg"></p>
+
+<p class=MsoNormal align=left style='text-align:left'><b><span lang=ZH-CN
+style='font-size:9.0pt;font-family:等线'>语法格式说明与规则介绍</span></b></p>
+
+<p class=MsoNormal align=left style='margin-bottom:12.0pt;text-align:left;
+text-indent:21.0pt'><span lang=ZH-CN style='font-size:9.0pt;font-family:等线'>为方便产品构建，平台定义了一套语法格式，语法格式组成为：</span></p>
+
+<div align=center>
+
+<table class=MsoTableGrid border=1 cellspacing=0 cellpadding=0
+ style='border-collapse:collapse;border:none'>
+ <tr>
+  <td width=378 valign=top style='width:10.0cm;border:solid windowtext 1.0pt;
+  padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=MsoNormal align=center style='margin-top:12.0pt;margin-right:0cm;
+  margin-bottom:12.0pt;margin-left:0cm;text-align:center'><b><span
+  style='font-size:9.0pt;font-family:"Times New Roman",serif;color:#7030A0'>action</span></b><b><span
+  style='font-size:9.0pt;font-family:"Times New Roman",serif'>=</span></b><b><span
+  lang=ZH-CN style='font-size:9.0pt;font-family:等线;color:#5B9BD5'>命令词</span></b><b><span
+  style='font-size:9.0pt;font-family:"Times New Roman",serif;color:#5B9BD5'>1|</span></b><b><span
+  lang=ZH-CN style='font-size:9.0pt;font-family:等线;color:#5B9BD5'>命令词</span></b><b><span
+  style='font-size:9.0pt;font-family:"Times New Roman",serif;color:#5B9BD5'>2...</span></b><b><span
+  style='font-size:9.0pt;font-family:"Times New Roman",serif'>@</span></b><b><span
+  lang=ZH-CN style='font-size:9.0pt;font-family:等线;color:#ED7D31'>回复语</span></b></p>
+  </td>
+ </tr>
+</table>
+
+</div>
+
+<p class=MsoNormal align=left style='text-align:left'><span style='font-size:
+9.0pt;font-family:"Times New Roman",serif'>&nbsp;</span></p>
+
+<p class=MsoNormal align=left style='margin-bottom:12.0pt;text-align:left'><span
+lang=ZH-CN style='font-size:9.0pt;font-family:等线'>举例：</span><b><span
+style='font-size:9.0pt;font-family:"Times New Roman",serif;color:#7030A0'>TempSet15</span></b><span
+style='font-size:9.0pt;font-family:"Times New Roman",serif'>=</span><b><span
+lang=ZH-CN style='font-size:9.0pt;font-family:等线;color:#5B9BD5'>设置十五度</span></b><b><span
+style='font-size:9.0pt;font-family:"Times New Roman",serif'>|</span></b><b><span
+lang=ZH-CN style='font-size:9.0pt;font-family:等线;color:#5B9BD5'>十五度</span></b><span
+style='font-size:9.0pt;font-family:"Times New Roman",serif'>@</span><b><span
+lang=ZH-CN style='font-size:9.0pt;font-family:等线;color:#ED7D31'>已设为十五度</span></b></p>
+
+<p class=MsoNormal align=left style='margin-bottom:7.8pt;text-align:left'><b><span
+style='font-size:9.0pt;font-family:"Times New Roman",serif;color:#7030A0'>action
+</span></b><span lang=ZH-CN style='font-size:9.0pt;font-family:等线'>为一个控制指令的唯一标识，用户对着设备说出</span><span
+style='font-size:9.0pt;font-family:"Times New Roman",serif'>“</span><span
+lang=ZH-CN style='font-size:9.0pt;font-family:等线'>设置十五度</span><span
+style='font-size:9.0pt;font-family:"Times New Roman",serif'>”“</span><span
+lang=ZH-CN style='font-size:9.0pt;font-family:等线'>十五度</span><span
+style='font-size:9.0pt;font-family:"Times New Roman",serif'>”</span><span
+lang=ZH-CN style='font-size:9.0pt;font-family:等线'>并被语义理解时，如已对接设备，语义理解模块会将</span><span
+style='font-size:9.0pt;font-family:"Times New Roman",serif'>TempSet15</span><span
+lang=ZH-CN style='font-size:9.0pt;font-family:等线'>传给设备。</span></p>
+
+<p class=MsoNormal align=left style='margin-bottom:7.8pt;text-align:left'><b><span
+lang=ZH-CN style='font-size:9.0pt;font-family:等线;color:#5B9BD5'>命令词</span></b><b><span
+lang=ZH-CN style='font-size:9.0pt;font-family:"Times New Roman",serif;
+color:#5B9BD5'> </span></b><span lang=ZH-CN style='font-size:9.0pt;font-family:
+等线'>为想要定义的语音话术，用户必须按照定义的话术说出才有效。如用户可以使用</span><span style='font-size:9.0pt;
+font-family:"Times New Roman",serif'>“</span><span lang=ZH-CN style='font-size:
+9.0pt;font-family:等线'>设置十五度</span><span style='font-size:9.0pt;font-family:
+"Times New Roman",serif'>”“</span><span lang=ZH-CN style='font-size:9.0pt;
+font-family:等线'>十五度</span><span style='font-size:9.0pt;font-family:"Times New Roman",serif'>”</span><span
+lang=ZH-CN style='font-size:9.0pt;font-family:等线'>来实现同一个设置温度</span><span
+style='font-size:9.0pt;font-family:"Times New Roman",serif'>15</span><span
+lang=ZH-CN style='font-size:9.0pt;font-family:等线'>度的控制。</span></p>
+
+<p class=MsoNormal align=left style='margin-bottom:7.8pt;text-align:left'><b><span
+lang=ZH-CN style='font-size:9.0pt;font-family:等线;color:#ED7D31'>回复语</span></b><span
+lang=ZH-CN style='font-size:9.0pt;font-family:"Times New Roman",serif'> </span><span
+lang=ZH-CN style='font-size:9.0pt;font-family:等线'>为针对该条控制指令的设备回复播报。</span></p>
+
+<p class=MsoNormal align=left style='text-align:left;text-indent:21.0pt'><span
+style='font-size:9.0pt;font-family:"Times New Roman",serif'>action</span><span
+lang=ZH-CN style='font-size:9.0pt;font-family:等线'>、命令词、回复语均由用户定义。等号前的</span><span
+style='font-size:9.0pt;font-family:"Times New Roman",serif'>action</span><span
+lang=ZH-CN style='font-size:9.0pt;font-family:等线'>为唯一值；等号后的命令词可输入多个，以</span><span
+style='font-size:9.0pt;font-family:"Times New Roman",serif'> | </span><span
+lang=ZH-CN style='font-size:9.0pt;font-family:等线'>符号分割；</span><span
+style='font-size:9.0pt;font-family:"Times New Roman",serif'>@</span><span
+lang=ZH-CN style='font-size:9.0pt;font-family:等线'>后为回复语，每个控制指令可以定义对应的回复。</span></p>
+
+<p class=MsoNormal align=left style='text-align:left'><span style='font-size:
+9.0pt;font-family:"Times New Roman",serif'>&nbsp;</span></p>
+
+<p class=MsoNormal align=left style='text-align:left'><span lang=ZH-CN
+style='font-size:9.0pt;font-family:等线'>点击语法格式后的</span><span lang=ZH-CN
+style='font-size:9.0pt;font-family:"Times New Roman",serif'> </span><b><span
+lang=ZH-CN style='font-size:9.0pt;font-family:等线'>问号</span></b><span
+lang=ZH-CN style='font-size:9.0pt;font-family:等线'>，可看到语法格式要求：</span></p>
+
+<p class=MsoListParagraph align=left style='margin-left:21.0pt;text-align:left;
+text-indent:-21.0pt'><span style='font-size:9.0pt;font-family:Wingdings'>Ø<span
+style='font:7.0pt "Times New Roman"'>&nbsp; </span></span><span
+style='font-size:9.0pt;font-family:"Times New Roman",serif'>action</span><span
+lang=ZH-CN style='font-size:9.0pt;font-family:等线'>由英文、下划线</span><span
+style='font-size:9.0pt;font-family:"Times New Roman",serif'>“_”</span><span
+lang=ZH-CN style='font-size:9.0pt;font-family:等线'>和数字组成，必须英文开头，不区分大小写，</span><span
+style='font-size:9.0pt;font-family:"Times New Roman",serif'>15</span><span
+lang=ZH-CN style='font-size:9.0pt;font-family:等线'>个字符内</span></p>
+
+<p class=MsoListParagraph align=left style='margin-left:21.0pt;text-align:left;
+text-indent:-21.0pt'><span style='font-size:9.0pt;font-family:Wingdings'>Ø<span
+style='font:7.0pt "Times New Roman"'>&nbsp; </span></span><span lang=ZH-CN
+style='font-size:9.0pt;font-family:等线'>命令词最多支持</span><span style='font-size:
+9.0pt;font-family:"Times New Roman",serif'>150</span><span lang=ZH-CN
+style='font-size:9.0pt;font-family:等线'>条，每条限</span><span style='font-size:9.0pt;
+font-family:"Times New Roman",serif'> 2 - 10 </span><span lang=ZH-CN
+style='font-size:9.0pt;font-family:等线'>个字符，仅支持中文</span></p>
+
+<p class=MsoListParagraph align=left style='margin-left:21.0pt;text-align:left;
+text-indent:-21.0pt'><span style='font-size:9.0pt;font-family:Wingdings'>Ø<span
+style='font:7.0pt "Times New Roman"'>&nbsp; </span></span><span lang=ZH-CN
+style='font-size:9.0pt;font-family:等线'>一个</span><span style='font-size:9.0pt;
+font-family:"Times New Roman",serif'>action</span><span lang=ZH-CN
+style='font-size:9.0pt;font-family:等线'>仅支持一条回复语，回复语总字数不得超过</span><span
+style='font-size:9.0pt;font-family:"Times New Roman",serif'>500</span><span
+lang=ZH-CN style='font-size:9.0pt;font-family:等线'>个字符，支持中文、数字、逗号、句号、问号</span></p>
+
+<p class=MsoListParagraph align=left style='margin-left:21.0pt;text-align:left;
+text-indent:0cm'><span style='font-size:9.0pt;font-family:"Times New Roman",serif'>&nbsp;</span></p>
+
+<p class=MsoNormal align=left style='text-align:left'><span lang=ZH-CN
+style='font-size:9.0pt;font-family:等线'>点击语法句式后的</span><span lang=ZH-CN
+style='font-size:9.0pt;font-family:"Times New Roman",serif'> </span><b><span
+lang=ZH-CN style='font-size:9.0pt;font-family:等线'>问号</span></b><span
+lang=ZH-CN style='font-size:9.0pt;font-family:等线'>，可以看到针对回复播报特殊读音的标签使用说明：</span></p>
+
+<p class=MsoListParagraph align=left style='margin-left:21.0pt;text-align:left;
+text-indent:-21.0pt'><span style='font-size:9.0pt;font-family:Wingdings'>Ø<span
+style='font:7.0pt "Times New Roman"'>&nbsp; </span></span><b><span
+style='font-size:9.0pt;font-family:"Times New Roman",serif'>&lt;py&gt;</span></b><span
+lang=ZH-CN style='font-size:9.0pt;font-family:等线'>：需要对单个汉字的发音进行纠正的场合。</span></p>
+
+<p class=MsoNormal align=left style='margin-left:21.0pt;text-align:left;
+text-indent:21.0pt'><span lang=ZH-CN style='font-size:9.0pt;font-family:等线'>注：拼音声调范围为</span><span
+style='font-size:9.0pt;font-family:"Times New Roman",serif'> 1 - 5</span><span
+lang=ZH-CN style='font-size:9.0pt;font-family:等线'>，</span><span
+style='font-size:9.0pt;font-family:"Times New Roman",serif'>1 - 4 </span><span
+lang=ZH-CN style='font-size:9.0pt;font-family:等线'>对应一声到四声，</span><span
+style='font-size:9.0pt;font-family:"Times New Roman",serif'>5</span><span
+lang=ZH-CN style='font-size:9.0pt;font-family:等线'>对应轻声。</span></p>
+
+<p class=MsoNormal align=left style='margin-left:21.0pt;text-align:left;
+text-indent:21.0pt'><span lang=ZH-CN style='font-size:9.0pt;font-family:等线'>例：已调</span><span
+style='font-size:9.0pt;font-family:"Times New Roman",serif'>&lt;py&gt;tiao2&lt;/py&gt;</span><span
+lang=ZH-CN style='font-size:9.0pt;font-family:等线'>至中</span><span
+style='font-size:9.0pt;font-family:"Times New Roman",serif'>&lt;py&gt;zhong1&lt;/py&gt;</span><span
+lang=ZH-CN style='font-size:9.0pt;font-family:等线'>风档</span></p>
+
+<p class=MsoNormal align=left style='margin-left:21.0pt;text-align:left;
+text-indent:21.0pt'><span lang=ZH-CN style='font-size:9.0pt;font-family:等线'>播报为：已调</span><span
+style='font-size:9.0pt;font-family:"Times New Roman",serif'>(tiao2)</span><span
+lang=ZH-CN style='font-size:9.0pt;font-family:等线'>至中</span><span
+style='font-size:9.0pt;font-family:"Times New Roman",serif'>(zhong1)</span><span
+lang=ZH-CN style='font-size:9.0pt;font-family:等线'>风档</span></p>
+
+<p class=MsoListParagraph align=left style='margin-left:21.0pt;text-align:left;
+text-indent:-21.0pt'><span style='font-size:9.0pt;font-family:Wingdings'>Ø<span
+style='font:7.0pt "Times New Roman"'>&nbsp; </span></span><b><span
+style='font-size:9.0pt;font-family:"Times New Roman",serif'>&lt;value&gt;</span></b><span
+lang=ZH-CN style='font-size:9.0pt;font-family:等线'>：需要将数字按照数值读法播报</span></p>
+
+<p class=MsoNormal align=left style='margin-left:21.0pt;text-align:left;
+text-indent:21.0pt'><span lang=ZH-CN style='font-size:9.0pt;font-family:等线'>例：已设为</span><span
+style='font-size:9.0pt;font-family:"Times New Roman",serif'>&lt;value&gt;15&lt;/value&gt;</span><span
+lang=ZH-CN style='font-size:9.0pt;font-family:等线'>度</span></p>
+
+<p class=MsoNormal align=left style='margin-left:21.0pt;text-align:left;
+text-indent:21.0pt'><span lang=ZH-CN style='font-size:9.0pt;font-family:等线'>播报为：已设为十五度</span></p>
+
+<p class=MsoListParagraph align=left style='margin-left:21.0pt;text-align:left;
+text-indent:-21.0pt'><span style='font-size:9.0pt;font-family:Wingdings'>Ø<span
+style='font:7.0pt "Times New Roman"'>&nbsp; </span></span><b><span
+style='font-size:9.0pt;font-family:"Times New Roman",serif'>&lt;code&gt;</span></b><span
+lang=ZH-CN style='font-size:9.0pt;font-family:等线'>：需要将数字按照数字串逐位播报</span></p>
+
+<p class=MsoNormal align=left style='margin-left:21.0pt;text-align:left;
+text-indent:21.0pt'><span lang=ZH-CN style='font-size:9.0pt;font-family:等线'>例：已设为</span><span
+style='font-size:9.0pt;font-family:"Times New Roman",serif'>&lt;code&gt;15&lt;/code&gt;</span><span
+lang=ZH-CN style='font-size:9.0pt;font-family:等线'>度</span></p>
+
+<p class=MsoNormal align=left style='margin-left:21.0pt;text-align:left;
+text-indent:21.0pt'><span lang=ZH-CN style='font-size:9.0pt;font-family:等线'>播报为：已设为一五度</span></p>
+
+<p class=MsoNormal align=left style='margin-left:21.0pt;text-align:left;
+text-indent:21.0pt'><span style='font-size:9.0pt;font-family:"Times New Roman",serif'>&nbsp;</span></p>
+
+<div align=center>
+
+<table class=MsoTableGrid border=1 cellspacing=0 cellpadding=0
+ style='border-collapse:collapse;border:none'>
+ <tr>
+  <td width=553 valign=top style='width:414.8pt;border:solid windowtext 1.0pt;
+  padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=MsoNormal align=left style='text-align:left'><b><span lang=ZH-CN
+  style='font-size:9.0pt;font-family:等线'>开发者注意：</span></b></p>
+  <p class=MsoNormal align=left style='text-align:left'><b><span
+  style='font-size:9.0pt;font-family:"Times New Roman",serif'>&nbsp;</span></b></p>
+  <p class=MsoListParagraph align=left style='margin-left:18.0pt;text-align:
+  left;text-indent:-18.0pt'><b><span style='font-size:9.0pt;font-family:"Times New Roman",serif'>1.<span
+  style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+  </span></span></b><span lang=ZH-CN style='font-size:9.0pt;font-family:等线'>产品默认支持音量大小调节，音量调节控制默认句式如下：</span></p>
+  <p class=MsoListParagraph align=left style='margin-left:39.0pt;text-align:
+  left;text-indent:-21.0pt'><span lang=FR style='font-size:9.0pt;font-family:
+  Wingdings'><span style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp; </span></span><b><span
+  lang=FR style='font-size:9.0pt;font-family:"Times New Roman",serif'>volumeUpUni=</span></b><b><span
+  lang=ZH-CN style='font-size:9.0pt;font-family:等线'>增大音量</span></b></p>
+  <p class=MsoListParagraph align=left style='margin-left:39.0pt;text-align:
+  left;text-indent:-21.0pt'><span lang=FR style='font-size:9.0pt;font-family:
+  Wingdings'><span style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp; </span></span><b><span
+  lang=FR style='font-size:9.0pt;font-family:"Times New Roman",serif'>volumeDownUni=</span></b><b><span
+  lang=ZH-CN style='font-size:9.0pt;font-family:等线'>减小音量</span></b></p>
+  <p class=MsoNormal align=left style='margin-bottom:6.0pt;text-align:left'><span
+  lang=ZH-CN style='font-size:9.0pt;font-family:等线'>如需自定义音量与主动退出的控制话术与应答播报，可在语法文件内添加以上控制句式，只需保持</span><span
+  style='font-size:9.0pt;font-family:"Times New Roman",serif'>=</span><span
+  lang=ZH-CN style='font-size:9.0pt;font-family:等线'>号前的</span><span
+  style='font-size:9.0pt;font-family:"Times New Roman",serif'>action</span><span
+  lang=ZH-CN style='font-size:9.0pt;font-family:等线'>不变，修改</span><span
+  style='font-size:9.0pt;font-family:"Times New Roman",serif'>=</span><span
+  lang=ZH-CN style='font-size:9.0pt;font-family:等线'>后的内容即可。</span></p>
+  <p class=MsoNormal align=left style='text-align:left'><span lang=ZH-CN
+  style='font-size:9.0pt;font-family:等线'>举例如下：</span></p>
+  <p class=MsoNormal align=left style='text-align:left'><span style='font-size:
+  9.0pt;font-family:"Times New Roman",serif;color:#2E74B5'>volumeUpUni=</span><span
+  lang=ZH-CN style='font-size:9.0pt;font-family:等线;color:#2E74B5'>大声一点</span><span
+  style='font-size:9.0pt;font-family:"Times New Roman",serif;color:#2E74B5'>|</span><span
+  lang=ZH-CN style='font-size:9.0pt;font-family:等线;color:#2E74B5'>调大声点</span><span
+  style='font-size:9.0pt;font-family:"Times New Roman",serif;color:#2E74B5'>@</span><span
+  lang=ZH-CN style='font-size:9.0pt;font-family:等线;color:#2E74B5'>已为您调高音量</span></p>
+  <p class=MsoNormal align=left style='margin-bottom:12.0pt;text-align:left'><span
+  style='font-size:9.0pt;font-family:"Times New Roman",serif;color:#2E74B5'>exitUni=</span><span
+  lang=ZH-CN style='font-size:9.0pt;font-family:等线;color:#2E74B5'>拜拜</span><span
+  style='font-size:9.0pt;font-family:"Times New Roman",serif;color:#2E74B5'>|</span><span
+  lang=ZH-CN style='font-size:9.0pt;font-family:等线;color:#2E74B5'>再见</span><span
+  style='font-size:9.0pt;font-family:"Times New Roman",serif;color:#2E74B5'>@</span><span
+  lang=ZH-CN style='font-size:9.0pt;font-family:等线;color:#2E74B5'>好的，那我先退下了</span></p>
+  <p class=MsoListParagraph align=left style='margin-left:18.0pt;text-align:
+  left;text-indent:-18.0pt'><b><span style='font-size:9.0pt;font-family:"Times New Roman",serif'>2.<span
+  style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+  </span></span></b><span lang=ZH-CN style='font-size:9.0pt;font-family:等线'>产品内置</span><span
+  lang=ZH-CN style='font-size:9.0pt;font-family:等线'>音量等级三档控制逻辑，默认不开启。如需使用该逻辑，可在定义离线命令词与播报语处，添加词条后生效：</span></p>
+  <p class=MsoListParagraph align=left style='margin-left:57.75pt;text-align:
+  left;text-indent:-21.0pt'><span style='font-size:9.0pt;font-family:Wingdings'><span
+  style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp; </span></span><span
+  lang=ZH-CN style='font-size:9.0pt;font-family:等线'>最大音量</span><span
+  lang=ZH-CN style='font-size:9.0pt;font-family:"Times New Roman",serif'> </span><b><span
+  lang=FR style='font-size:9.0pt;font-family:"Times New Roman",serif'>volumeMaxUni</span></b></p>
+  <p class=MsoListParagraph align=left style='margin-left:57.75pt;text-align:
+  left;text-indent:-21.0pt'><span style='font-size:9.0pt;font-family:Wingdings'><span
+  style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp; </span></span><span
+  lang=ZH-CN style='font-size:9.0pt;font-family:等线'>中等音量</span><span
+  lang=ZH-CN style='font-size:9.0pt;font-family:"Times New Roman",serif'> </span><b><span
+  lang=FR style='font-size:9.0pt;font-family:"Times New Roman",serif'>volumeMidUni</span></b></p>
+  <p class=MsoListParagraph align=left style='margin-top:0cm;margin-right:0cm;
+  margin-bottom:6.0pt;margin-left:57.85pt;text-align:left;text-indent:-21.0pt'><span
+  style='font-size:9.0pt;font-family:Wingdings'><span style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;
+  </span></span><span lang=ZH-CN style='font-size:9.0pt;font-family:等线'>最小音量</span><span
+  lang=ZH-CN style='font-size:9.0pt;font-family:"Times New Roman",serif'> </span><b><span
+  lang=FR style='font-size:9.0pt;font-family:"Times New Roman",serif'>volumeMinUni</span></b></p>
+  <p class=MsoNormal align=left style='text-align:left'><span lang=ZH-CN
+  style='font-size:9.0pt;font-family:等线'>如希望添加最大音量调节，可参考下方举例添加句式：</span></p>
+  <p class=MsoNormal align=left style='text-align:left'><span style='font-size:
+  9.0pt;font-family:"Times New Roman",serif;color:#2E74B5'>volumeMaxUni=</span><span
+  lang=ZH-CN style='font-size:9.0pt;font-family:等线;color:#2E74B5'>最大音量</span><span
+  style='font-size:9.0pt;font-family:"Times New Roman",serif;color:#2E74B5'>|</span><span
+  lang=ZH-CN style='font-size:9.0pt;font-family:等线;color:#2E74B5'>音量调到最大</span><span
+  style='font-size:9.0pt;font-family:"Times New Roman",serif;color:#2E74B5'>@</span><span
+  lang=ZH-CN style='font-size:9.0pt;font-family:等线;color:#2E74B5'>已调至最大音量</span></p>
+  <p class=MsoNormal align=left style='text-align:left'><span style='font-size:
+  9.0pt;font-family:"Times New Roman",serif;color:#2E74B5'>&nbsp;</span></p>
+  <p class=MsoListParagraph align=left style='margin-left:18.0pt;text-align:
+  left;text-indent:-18.0pt'><b><span style='font-size:9.0pt;font-family:"Times New Roman",serif'>3.<span
+  style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+  </span></span></b><span lang=ZH-CN style='font-size:9.0pt;font-family:等线'>用户可以在离线命令词自定义部分，指定特定的</span><span
+  style='font-size:9.0pt;font-family:"Times New Roman",serif'>action</span><span
+  lang=ZH-CN style='font-size:9.0pt;font-family:等线'>，定义非语音交互的应答语播报，用于非正常语音交互的情景。</span></p>
+  <p class=MsoNormal align=left style='text-align:left'><span lang=ZH-CN
+  style='font-size:9.0pt;font-family:等线'>开发者需从指定文件夹获取此部分定制的语音音频文件，并根据产品定义修改源码。可参见文内</span><span
+  lang=ZH-CN style='font-size:9.0pt;font-family:"Times New Roman",serif'> </span><span
+  style='font-family:"Times New Roman",serif'><a href="#_5.3_播报逻辑开发"><span
+  style='font-size:9.0pt'>5.3 </span><span lang=ZH-CN style='font-size:9.0pt;
+  font-family:等线'>播报逻辑开发</span></a></span><span lang=ZH-CN style='font-size:
+  9.0pt;font-family:等线'>。</span></p>
+  <p class=MsoListParagraph align=left style='margin-left:18.0pt;text-align:
+  left;text-indent:0cm'><span lang=ZH-CN style='font-size:9.0pt;font-family:
+  等线'>格式如下：</span></p>
+  <p align=center style='margin-top:7.5pt;margin-right:0cm;margin-bottom:0cm;
+  margin-left:0cm;margin-bottom:.0001pt;text-align:center;line-height:150%;
+  background:white'><span style='font-size:9.0pt;line-height:150%;font-family:
+  "Times New Roman",serif;color:#333333'>Special_Replies@</span><span
+  lang=ZH-CN style='font-size:9.0pt;line-height:150%;font-family:等线;color:#333333'>回复语</span><span
+  style='font-size:9.0pt;line-height:150%;font-family:"Times New Roman",serif;
+  color:#333333'>1|</span><span lang=ZH-CN style='font-size:9.0pt;line-height:
+  150%;font-family:等线;color:#333333'>回复语</span><span style='font-size:9.0pt;
+  line-height:150%;font-family:"Times New Roman",serif;color:#333333'>2|</span><span
+  lang=ZH-CN style='font-size:9.0pt;line-height:150%;font-family:等线;color:#333333'>回复语</span><span
+  style='font-size:9.0pt;line-height:150%;font-family:"Times New Roman",serif;
+  color:#333333'>3</span></p>
+  <p class=MsoNormal align=left style='text-align:left'><span lang=ZH-CN
+  style='font-size:9.0pt;font-family:等线'>如警报播报：以智能烧水壶为例，产品内传感器检测到缺水状态，自动语音警报；</span></p>
+  <p class=MsoNormal align=left style='text-align:left'><span lang=ZH-CN
+  style='font-size:9.0pt;font-family:等线'>如极限播报：空调指令</span><span
+  style='font-size:9.0pt;font-family:"Times New Roman",serif'>“</span><span
+  lang=ZH-CN style='font-size:9.0pt;font-family:等线'>升高温度</span><span
+  style='font-size:9.0pt;font-family:"Times New Roman",serif'>”</span><span
+  lang=ZH-CN style='font-size:9.0pt;font-family:等线'>，正常播报为</span><span
+  style='font-size:9.0pt;font-family:"Times New Roman",serif'>“</span><span
+  lang=ZH-CN style='font-size:9.0pt;font-family:等线'>温度已升高</span><span
+  style='font-size:9.0pt;font-family:"Times New Roman",serif'>”</span><span
+  lang=ZH-CN style='font-size:9.0pt;font-family:等线'>；当温度到上限时，播报</span><span
+  style='font-size:9.0pt;font-family:"Times New Roman",serif'>“</span><span
+  lang=ZH-CN style='font-size:9.0pt;font-family:等线'>温度已调至最高</span><span
+  style='font-size:9.0pt;font-family:"Times New Roman",serif'>”</span><span
+  lang=ZH-CN style='font-size:9.0pt;font-family:等线'>。</span></p>
+  <p class=MsoNormal align=left style='text-align:left'><span lang=ZH-CN
+  style='font-size:9.0pt;font-family:等线;color:#333333;background:white'>举例如下：</span></p>
+  <p class=MsoNormal align=left style='text-align:left'><span style='font-size:
+  9.0pt;font-family:"Times New Roman",serif;color:#2E74B5'>Special_Replies@</span><span
+  lang=ZH-CN style='font-size:9.0pt;font-family:等线;color:#2E74B5'>内丹干烧</span><span
+  style='font-size:9.0pt;font-family:"Times New Roman",serif;color:#2E74B5'>|</span><span
+  lang=ZH-CN style='font-size:9.0pt;font-family:等线;color:#2E74B5'>水壶缺水</span><span
+  style='font-size:9.0pt;font-family:"Times New Roman",serif;color:#2E74B5'>|</span><span
+  lang=ZH-CN style='font-size:9.0pt;font-family:等线;color:#2E74B5'>没水啦</span><span
+  style='font-size:9.0pt;font-family:"Times New Roman",serif;color:#2E74B5'>|</span><span
+  lang=ZH-CN style='font-size:9.0pt;font-family:等线;color:#2E74B5'>主人请加水</span></p>
+  <p class=MsoNormal align=left style='text-align:left'><span style='font-size:
+  9.0pt;font-family:"Times New Roman",serif'>&nbsp;</span></p>
+  <p class=MsoListParagraph align=left style='margin-left:18.0pt;text-align:
+  left;text-indent:-18.0pt'><b><span style='font-size:9.0pt;font-family:"Times New Roman",serif'>4.<span
+  style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+  </span></span></b><span lang=ZH-CN style='font-size:9.0pt;font-family:等线'>用户可以在离线命令词自定义部分，指定特定的竞争词（可理解为无效命令词），防止一定概率的误识别。</span></p>
+  <p class=MsoListParagraph align=left style='margin-left:18.0pt;text-align:
+  left;text-indent:0cm'><span lang=ZH-CN style='font-size:9.0pt;font-family:
+  等线'>格式如下：</span></p>
+  <p align=center style='margin-top:7.5pt;margin-right:0cm;margin-bottom:0cm;
+  margin-left:0cm;margin-bottom:.0001pt;text-align:center;line-height:150%;
+  background:white'><span style='font-size:9.0pt;line-height:150%;font-family:
+  "Times New Roman",serif;color:#333333'>Special_Gabages=</span><span
+  lang=ZH-CN style='font-size:9.0pt;line-height:150%;font-family:等线;color:#333333'>命令词</span><span
+  style='font-size:9.0pt;line-height:150%;font-family:"Times New Roman",serif;
+  color:#333333'>1|</span><span lang=ZH-CN style='font-size:9.0pt;line-height:
+  150%;font-family:等线;color:#333333'>命令词</span><span style='font-size:9.0pt;
+  line-height:150%;font-family:"Times New Roman",serif;color:#333333'>2|</span><span
+  lang=ZH-CN style='font-size:9.0pt;line-height:150%;font-family:等线;color:#333333'>命令词</span><span
+  style='font-size:9.0pt;line-height:150%;font-family:"Times New Roman",serif;
+  color:#333333'>3|...</span></p>
+  <p class=MsoNormal align=left style='text-align:left'><span lang=ZH-CN
+  style='font-size:9.0pt;font-family:等线'>以</span><span lang=ZH-CN
+  style='font-size:9.0pt;font-family:等线'>空调产品为例，并没有高于</span><span
+  style='font-size:9.0pt;font-family:"Times New Roman",serif'>32</span><span
+  lang=ZH-CN style='font-size:9.0pt;font-family:等线'>度的温控指令，用户说出</span><span
+  style='font-size:9.0pt;font-family:"Times New Roman",serif'>“</span><span
+  lang=ZH-CN style='font-size:9.0pt;font-family:等线'>三十六度</span><span
+  style='font-size:9.0pt;font-family:"Times New Roman",serif'>”</span><span
+  lang=ZH-CN style='font-size:9.0pt;font-family:等线'>时，不希望空调识别到</span><span
+  style='font-size:9.0pt;font-family:"Times New Roman",serif'>“</span><span
+  lang=ZH-CN style='font-size:9.0pt;font-family:等线'>十六度</span><span
+  style='font-size:9.0pt;font-family:"Times New Roman",serif'>”</span><span
+  lang=ZH-CN style='font-size:9.0pt;font-family:等线'>；</span><span
+  style='font-size:9.0pt;font-family:"Times New Roman",serif'><br>
+  </span><span lang=ZH-CN style='font-size:9.0pt;font-family:等线'>以</span><span
+  lang=ZH-CN style='font-size:9.0pt;font-family:等线'>空调产品为例，没有自动风的指令，当用户说说出</span><span
+  style='font-size:9.0pt;font-family:"Times New Roman",serif'>“</span><span
+  lang=ZH-CN style='font-size:9.0pt;font-family:等线'>自动风</span><span
+  style='font-size:9.0pt;font-family:"Times New Roman",serif'>”</span><span
+  lang=ZH-CN style='font-size:9.0pt;font-family:等线'>时，不希望空调识别到</span><span
+  style='font-size:9.0pt;font-family:"Times New Roman",serif'>“</span><span
+  lang=ZH-CN style='font-size:9.0pt;font-family:等线'>自然风</span><span
+  style='font-size:9.0pt;font-family:"Times New Roman",serif'>”</span><span
+  lang=ZH-CN style='font-size:9.0pt;font-family:等线'>（如果阈值设置较低）。</span></p>
+  <p class=MsoNormal align=left style='text-align:left'><span lang=ZH-CN
+  style='font-size:9.0pt;font-family:等线'>举例如下：</span></p>
+  <p class=MsoNormal align=left style='text-align:left'><span lang=ZH-CN
+  style='font-size:9.0pt;font-family:等线;color:#2E74B5'>举例：</span><span
+  style='font-size:9.0pt;font-family:"Times New Roman",serif;color:#2E74B5'>Special_Gabages=</span><span
+  lang=ZH-CN style='font-size:9.0pt;font-family:等线;color:#2E74B5'>三十六度</span><span
+  style='font-size:9.0pt;font-family:"Times New Roman",serif;color:#2E74B5'>|</span><span
+  lang=ZH-CN style='font-size:9.0pt;font-family:等线;color:#2E74B5'>四十六度</span><span
+  style='font-size:9.0pt;font-family:"Times New Roman",serif;color:#2E74B5'>|</span><span
+  lang=ZH-CN style='font-size:9.0pt;font-family:等线;color:#2E74B5'>五十六度</span><span
+  style='font-size:9.0pt;font-family:"Times New Roman",serif;color:#2E74B5'>|</span><span
+  lang=ZH-CN style='font-size:9.0pt;font-family:等线;color:#2E74B5'>六十六度</span></p>
+  </td>
+ </tr>
+</table>
+
+</div>
+
+<p class=MsoNormal align=left style='text-align:left'><b><span
+style='font-size:9.0pt;font-family:"Times New Roman",serif'>&nbsp;</span></b></p>
+
+<p class=MsoNormal align=left style='text-align:left'><b><span lang=ZH-CN
+style='font-size:9.0pt;font-family:等线'>（</span></b><b><span style='font-size:
+9.0pt;font-family:"Times New Roman",serif'>5</span></b><b><span lang=ZH-CN
+style='font-size:9.0pt;font-family:等线'>）免唤醒命令词</span></b></p>
+
+<p class=MsoNormal align=left style='text-align:left;text-indent:21.0pt'><span
+lang=ZH-CN style='font-size:9.0pt;font-family:等线'>无需唤醒，说出命令词即可控制设备，此处的免唤醒命令词，需先在离线命令词定制模块设定后，方可进行选择配置。</span></p>
+
+<p class=MsoNormal align=left style='text-align:left;text-indent:21.0pt'><span
+lang=ZH-CN style='font-size:9.0pt;font-family:等线'>免唤醒命令词生效后，设备会处于待唤醒状态。</span></p>
+
+<p class=MsoNormal align=left style='text-align:left;text-indent:21.0pt'><span
+lang=ZH-CN style='font-size:9.0pt;font-family:等线;color:black'>免唤醒命令词</span><span
+lang=ZH-CN style='font-size:9.0pt;font-family:"Times New Roman",serif;
+color:black'> </span><span lang=ZH-CN style='font-size:9.0pt;font-family:等线;
+color:black'>与</span><span lang=ZH-CN style='font-size:9.0pt;font-family:"Times New Roman",serif;
+color:black'> </span><span lang=ZH-CN style='font-size:9.0pt;font-family:等线;
+color:black'>唤醒词</span><span lang=ZH-CN style='font-size:9.0pt;font-family:
+"Times New Roman",serif'> </span><span lang=ZH-CN style='font-size:9.0pt;
+font-family:等线'>可同时存在，也可单一存在，两者数量之和不可超过</span><span style='font-size:9.0pt;
+font-family:"Times New Roman",serif'>10</span><span lang=ZH-CN
+style='font-size:9.0pt;font-family:等线'>个。如针对某些特定语音产品，可只使用免唤醒命令词来替代唤醒词。</span></p>
+
+<p class=MsoNormal align=center style='text-align:center'><b><span
+style='font-size:9.0pt;font-family:"Times New Roman",serif'><img border=0
+width=553 height=127 id="图片 44" src="hqym3_image021.jpg"></span></b></p>
+
+<p class=MsoNormal align=left style='text-align:left'><b><span lang=ZH-CN
+style='font-size:9.0pt;font-family:等线'>（</span></b><b><span style='font-size:
+9.0pt;font-family:"Times New Roman",serif'>6</span></b><b><span lang=ZH-CN
+style='font-size:9.0pt;font-family:等线'>）选择语音识别模型</span></b></p>
+
+<p class=MsoNormal align=left style='text-align:left;text-indent:21.0pt'><span
+lang=ZH-CN style='font-size:9.0pt;font-family:等线'>蜂鸟</span><span
+style='font-size:9.0pt;font-family:"Times New Roman",serif'>M</span><span
+lang=ZH-CN style='font-size:9.0pt;font-family:等线'>芯片方案支持对声学模型进行选择，默认为云知声针对蜂鸟</span><span
+style='font-size:9.0pt;font-family:"Times New Roman",serif'>M</span><span
+lang=ZH-CN style='font-size:9.0pt;font-family:等线'>芯片定制的经过算法优化的通用声学模型。</span></p>
+
+<p class=MsoNormal align=left style='text-align:left;text-indent:21.0pt'><span
+lang=ZH-CN style='font-size:9.0pt;font-family:等线'>如当前系统默认的声学模型性能无法满足用户需求时（注：此处用户需求，指经过语音性能量化测试的明确指标），可以使用云知声模型训练平台，采集特定离线命令词的语音训练数据并进行模型定制。</span></p>
+
+<p class=MsoNormal align=center style='text-align:center'><b><span
+style='font-size:9.0pt;font-family:"Times New Roman",serif'><img border=0
+width=553 height=141 id="图片 104" src="hqym3_image022.jpg"></span></b></p>
+
+<p class=MsoNormal align=left style='text-align:left'><b><span
+style='font-size:9.0pt;font-family:"Times New Roman",serif'>&nbsp;</span></b></p>
+
+<p class=MsoNormal align=left style='text-align:left'><b><span lang=ZH-CN
+style='font-size:9.0pt;font-family:等线'>（</span></b><b><span style='font-size:
+9.0pt;font-family:"Times New Roman",serif'>7</span></b><b><span lang=ZH-CN
+style='font-size:9.0pt;font-family:等线'>）针对产品定位，选择适合产品形态的发音人</span></b></p>
+
+<p class=MsoNormal align=left style='margin-left:36.0pt;text-align:left;
+text-indent:-18.0pt'><span style='font-size:9.0pt;font-family:"Arial",sans-serif'>•<span
+style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span></span><span
+lang=ZH-CN style='font-size:9.0pt;font-family:等线'>活泼可爱的萱萱和</span><span
+style='font-size:9.0pt;font-family:"Times New Roman",serif'>KiYo</span><span
+lang=ZH-CN style='font-size:9.0pt;font-family:等线'>，童真童趣的糖糖和天天，温柔可亲的玲玲，庄重严肃的小雯与小峰，七种音色可供选择；</span></p>
+
+<p class=MsoNormal align=left style='margin-left:36.0pt;text-align:left;
+text-indent:-18.0pt'><span style='font-size:9.0pt;font-family:"Arial",sans-serif'>•<span
+style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span></span><span
+lang=ZH-CN style='font-size:9.0pt;font-family:等线'>可调节音量、语速与声音亮度；</span></p>
+
+<p class=MsoNormal align=left style='margin-left:36.0pt;text-align:left;
+text-indent:-18.0pt'><span style='font-size:9.0pt;font-family:"Arial",sans-serif'>•<span
+style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span></span><span
+lang=ZH-CN style='font-size:9.0pt;font-family:等线'>提供在线试听，方便用户进行决策；</span></p>
+
+<p class=MsoNormal align=center style='text-align:center'><span
+style='font-size:9.0pt;font-family:"Times New Roman",serif'><img border=0
+width=553 height=325 id="图片 56" src="hqym3_image023.jpg"></span></p>
+
+<p class=MsoNormal align=left style='text-align:left'><b><span
+style='font-size:9.0pt;font-family:"Times New Roman",serif'>&nbsp;</span></b></p>
+
+<p class=MsoNormal align=left style='text-align:left'><b><span lang=ZH-CN
+style='font-size:9.0pt;font-family:等线'>（</span></b><b><span style='font-size:
+9.0pt;font-family:"Times New Roman",serif'>8</span></b><b><span lang=ZH-CN
+style='font-size:9.0pt;font-family:等线'>）其它配置</span></b></p>
+
+<p class=MsoListParagraph align=left style='margin-left:42.1pt;text-align:left;
+text-indent:-21.0pt'><b><span style='font-size:9.0pt;font-family:"Times New Roman",serif'>1)<span
+style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp; </span></span></b><b><span
+lang=ZH-CN style='font-size:9.0pt;font-family:等线'>开机音配置</span></b></p>
+
+<p class=MsoNormal align=left style='text-align:left;text-indent:21.0pt'><span
+lang=ZH-CN style='font-size:9.0pt;font-family:等线'>系统自带默认开机铃声，可在页面点击试听。</span></p>
+
+<p class=MsoNormal align=left style='text-align:left;text-indent:21.0pt'><span
+lang=ZH-CN style='font-size:9.0pt;font-family:等线'>如需进行开机欢迎语的自定义，也可以选择自定义内容，产品则会在开机后自动进行播报，欢迎语播报自定义限中文，可输入</span><span
+style='font-size:9.0pt;font-family:"Times New Roman",serif'>30</span><span
+lang=ZH-CN style='font-size:9.0pt;font-family:等线'>个字符；也可选择不使用开机音。</span></p>
+
+<p class=MsoNormal align=center style='text-align:center'><span
+style='font-size:9.0pt;font-family:"Times New Roman",serif'><img border=0
+width=554 height=87 id="图片 58" src="hqym3_image024.jpg"></span></p>
+
+<p class=MsoListParagraph align=left style='margin-left:42.1pt;text-align:left;
+text-indent:-21.0pt'><b><span style='font-size:9.0pt;font-family:"Times New Roman",serif'>2)<span
+style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp; </span></span></b><b><span
+lang=ZH-CN style='font-size:9.0pt;font-family:等线'>识别状态退出相关配置</span></b></p>
+
+<p class=MsoNormal align=left style='text-align:left;text-indent:21.0pt'><span
+lang=ZH-CN style='font-size:9.0pt;font-family:等线'>语音产品为保证用户体验，唤醒后一段时间内无语音输入产品会主动退出识别状态，如需输入命令词，则需再次唤醒。</span></p>
+
+<p class=MsoNormal align=left style='text-align:left;text-indent:18.0pt'><span
+lang=ZH-CN style='font-size:9.0pt;font-family:等线'>此段等待用户输入语音命令的有效时间，即为</span><span
+style='font-size:9.0pt;font-family:"Times New Roman",serif'>“</span><span
+lang=ZH-CN style='font-size:9.0pt;font-family:等线'>唤醒超时退出时间</span><span
+style='font-size:9.0pt;font-family:"Times New Roman",serif'>”</span><span
+lang=ZH-CN style='font-size:9.0pt;font-family:等线'>。</span></p>
+
+<p class=MsoNormal align=left style='margin-left:36.0pt;text-align:left;
+text-indent:-18.0pt'><span style='font-size:9.0pt;font-family:"Arial",sans-serif'>•<span
+style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span></span><span
+lang=ZH-CN style='font-size:9.0pt;font-family:等线'>为确保产品有较好的用户体验，支持</span><span
+style='font-size:9.0pt;font-family:"Times New Roman",serif'>5s – 60s</span><span
+lang=ZH-CN style='font-size:9.0pt;font-family:等线'>的超时退出时间设置，默认为</span><span
+style='font-size:9.0pt;font-family:"Times New Roman",serif'>10</span><span
+lang=ZH-CN style='font-size:9.0pt;font-family:等线'>秒</span></p>
+
+<p class=MsoNormal align=left style='margin-top:0cm;margin-right:0cm;
+margin-bottom:12.0pt;margin-left:36.0pt;text-align:left;text-indent:-18.0pt'><span
+style='font-size:9.0pt;font-family:"Arial",sans-serif'>•<span style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span><span lang=ZH-CN style='font-size:9.0pt;font-family:等线'>超时退出回复最多可设置</span><span
+style='font-size:9.0pt;font-family:"Times New Roman",serif'>2</span><span
+lang=ZH-CN style='font-size:9.0pt;font-family:等线'>条</span></p>
+
+<p class=MsoNormal align=center style='margin-bottom:12.0pt;text-align:center'><span
+style='font-size:9.0pt;font-family:"Times New Roman",serif'><img border=0
+width=554 height=103 id="图片 59" src="hqym3_image025.jpg"></span></p>
+
+<p class=MsoNormal align=left style='text-align:left;text-indent:18.0pt'><span
+lang=ZH-CN style='font-size:9.0pt;font-family:等线'>当用户想要结束对话时，也可以主动要求退出识别状态。</span></p>
+
+<p class=MsoNormal align=left style='margin-left:36.0pt;text-align:left;
+text-indent:-18.0pt'><span style='font-size:9.0pt;font-family:"Arial",sans-serif'>•<span
+style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span></span><span
+lang=ZH-CN style='font-size:9.0pt;font-family:等线'>默认退出命令为</span><span
+style='font-size:9.0pt;font-family:"Times New Roman",serif'>“</span><span
+lang=ZH-CN style='font-size:9.0pt;font-family:等线'>退下</span><span
+style='font-size:9.0pt;font-family:"Times New Roman",serif'>”“</span><span
+lang=ZH-CN style='font-size:9.0pt;font-family:等线'>再见</span><span
+style='font-size:9.0pt;font-family:"Times New Roman",serif'>”</span><span
+lang=ZH-CN style='font-size:9.0pt;font-family:等线'>，可根据产品定义修改，最多可设置</span><span
+style='font-size:9.0pt;font-family:"Times New Roman",serif'>3</span><span
+lang=ZH-CN style='font-size:9.0pt;font-family:等线'>条</span></p>
+
+<p class=MsoNormal align=left style='margin-left:36.0pt;text-align:left;
+text-indent:-18.0pt'><span style='font-size:9.0pt;font-family:"Arial",sans-serif'>•<span
+style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span></span><span
+lang=ZH-CN style='font-size:9.0pt;font-family:等线'>主动退出回复最多可设置</span><span
+style='font-size:9.0pt;font-family:"Times New Roman",serif'>2</span><span
+lang=ZH-CN style='font-size:9.0pt;font-family:等线'>条</span></p>
+
+<p class=MsoNormal align=center style='text-align:center'><span
+style='font-size:9.0pt;font-family:"Times New Roman",serif'><img border=0
+width=554 height=170 id="图片 61" src="hqym3_image026.jpg"></span></p>
+
+<p class=MsoNormal align=left style='text-align:left'><span style='font-size:
+9.0pt;font-family:"Times New Roman",serif'>&nbsp;</span></p>
+
+<p class=MsoNormal align=left style='text-align:left'><span lang=ZH-CN
+style='font-size:9.0pt;font-family:等线'>如配置完成，则可点击下一步，进入版本发布页面。</span></p>
+
+<h4>2.2.3 <span lang=ZH-CN style='font-family:等线'>下载版本</span></h4>
+
+<p class=MsoNormal align=left style='text-align:left'><span lang=ZH-CN
+style='font-size:9.0pt;font-family:等线'>（</span><span style='font-size:9.0pt;
+font-family:"Times New Roman",serif'>1</span><span lang=ZH-CN style='font-size:
+9.0pt;font-family:等线'>）产品配置开发完成，进入发布页面后，可点击</span><span lang=ZH-CN
+style='font-size:9.0pt;font-family:"Times New Roman",serif'> </span><b><span
+lang=ZH-CN style='font-size:9.0pt;font-family:等线'>立即发布</span></b></p>
+
+<p class=MsoNormal align=center style='text-align:center'><span
+style='font-size:9.0pt;font-family:"Times New Roman",serif'><img border=0
+width=554 height=323 id="图片 11" src="hqym3_image027.jpg"></span></p>
+
+<p class=MsoNormal align=left style='margin-bottom:6.0pt;text-align:left'><span
+lang=ZH-CN style='font-size:9.0pt;font-family:等线'>（</span><span
+style='font-size:9.0pt;font-family:"Times New Roman",serif'>2</span><span
+lang=ZH-CN style='font-size:9.0pt;font-family:等线'>）产品发布需要一定时间，可以有两种方法获取到发布成功的产品</span></p>
+
+<p class=MsoNormal align=left style='margin-left:36.0pt;text-align:left;
+text-indent:-18.0pt'><span style='font-size:9.0pt;font-family:"Arial",sans-serif'>•<span
+style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span></span><span
+lang=ZH-CN style='font-size:9.0pt;font-family:等线'>发布界面下，版本发布成功后，会有下载提示</span></p>
+
+<p class=MsoNormal align=center style='text-align:center'><span
+style='font-size:9.0pt;font-family:"Times New Roman",serif'><img border=0
+width=554 height=318 id="图片 15" src="hqym3_image028.jpg"></span></p>
+
+<p class=MsoNormal align=left style='margin-left:36.0pt;text-align:left;
+text-indent:-18.0pt'><span style='font-size:9.0pt;font-family:"Arial",sans-serif'>•<span
+style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span></span><span
+lang=ZH-CN style='font-size:9.0pt;font-family:等线'>也可以直接返回产品详情，或关闭页面一段时间再进入智能设备平台的产品详情，页面中的版本列表处点击下载</span></p>
+
+<p class=MsoNormal align=center style='text-align:center'><a name="_Toc29851384"><span
+style='font-size:9.0pt;font-family:"Times New Roman",serif'><img border=0
+width=554 height=228 id="图片 22" src="hqym3_image029.jpg"></span></a></p>
+
+<h3><a name="_Toc43217799">2.3 </a><span lang=ZH-CN style='font-family:等线'>产品版本维护</span></h3>
+
+<p class=MsoNormal align=left style='text-align:left;text-indent:21.0pt'><span
+lang=ZH-CN style='font-size:9.0pt;font-family:等线'>产品详情页面可以查看已创建的产品，可以查看每个版本的配置信息，也可以对已发布成功的版本进行下载或者删除操作</span></p>
+
+<p class=MsoNormal align=center style='text-align:center'><span
+style='font-size:9.0pt;font-family:"Times New Roman",serif'><img border=0
+width=554 height=228 id="图片 23" src="hqym3_image029.jpg"></span></p>
+
+<h4>2.3.1 <span lang=ZH-CN style='font-family:等线'>新版本迭代</span></h4>
+
+<p class=MsoNormal align=left style='margin-bottom:6.0pt;text-align:left;
+text-indent:18.0pt'><span lang=ZH-CN style='font-size:9.0pt;font-family:等线'>同一个产品如有新需求的修改或迭代，可在产品详情页面点击产品方案的</span><span
+style='font-size:9.0pt;font-family:"Times New Roman",serif'>“</span><span
+lang=ZH-CN style='font-size:9.0pt;font-family:等线'>编辑</span><span
+style='font-size:9.0pt;font-family:"Times New Roman",serif'>” <b>+</b></span><b><span
+lang=ZH-CN style='font-size:9.0pt;font-family:等线'>开发新版本</span></b><span
+lang=ZH-CN style='font-size:9.0pt;font-family:等线'>，后续的操作步骤同创建产品版本时的流程一致。</span></p>
+
+<p class=MsoNormal align=center style='margin-bottom:6.0pt;text-align:center'><span
+style='font-size:9.0pt;font-family:"Times New Roman",serif'><img border=0
+width=554 height=268 id="图片 64" src="hqym3_image030.jpg"></span></p>
+
+<p class=MsoNormal align=center style='margin-bottom:6.0pt;text-align:center'><span
+style='font-size:9.0pt;font-family:"Times New Roman",serif'><img border=0
+width=554 height=265 id="图片 65" src="hqym3_image031.jpg"></span></p>
+
+<p class=MsoNormal align=left style='text-align:left;text-indent:18.0pt'><span
+lang=ZH-CN style='font-size:9.0pt;font-family:等线'>提供选择任一历史版本进行迭代开发的选项，默认为基于最新修改的版本，也可根据需求进行其它版本的选择。</span></p>
+
+<p class=MsoNormal align=center style='text-align:center'><span
+style='font-size:9.0pt;font-family:"Times New Roman",serif'><img border=0
+width=553 height=248 id="图片 106" src="hqym3_image032.jpg"></span></p>
+
+<h2><a name="_Toc43217819"></a><a name="_Toc42610784">3. </a><span lang=ZH-CN
+style='font-family:等线'>模型训练平台介绍</span></h2>
+
+<p class=MsoNormal align=left style='text-align:left;text-indent:21.0pt'><span
+lang=ZH-CN style='font-size:9.0pt;font-family:等线'>蜂鸟芯片方案支持通过云知声模型训练平台对声学模型进行定制。</span></p>
+
+<p class=MsoNormal align=left style='text-align:left;text-indent:21.0pt'><span
+lang=ZH-CN style='font-size:9.0pt;font-family:等线'>当系统默认的声学模型性能无法满足用户需求时（注：此处用户需求，指经过语音性能量化测试的明确指标），可以使用模型训练平台，采集特定离线命令词的语音训练数据，进行模型快速定制，可</span><span
+lang=ZH-CN style='font-size:9.0pt;font-family:等线'>有效提升语音识别准确率。</span></p>
+
+<p class=MsoNormal align=center style='text-align:center'><span
+style='font-size:9.0pt;font-family:"Times New Roman",serif'><img border=0
+width=553 height=258 id="图片 99" src="hqym3_image033.jpg"></span></p>
+
+<p class=MsoNormal align=left style='text-align:left;text-indent:21.0pt'><span
+lang=ZH-CN style='font-size:9.0pt;font-family:等线'>目前模型训练平台（</span><a
+href="https://atp.hivoice.cn/"><span style='font-size:9.0pt;font-family:"Times New Roman",serif'>https://atp.hivoice.cn/</span></a><span
+lang=ZH-CN style='font-size:9.0pt;font-family:等线'>）尚未正式在云知声开放平台中开放入口，仅在蜂鸟方案产品详情里，与配置终端能力里可进入。</span></p>
+
+<p class=MsoNormal align=left style='text-align:left;text-indent:21.0pt'><span
+lang=ZH-CN style='font-size:9.0pt;font-family:等线'>产品详情入口：</span></p>
+
+<p class=MsoNormal align=center style='text-align:center'><span
+style='font-size:9.0pt;font-family:"Times New Roman",serif'><img border=0
+width=554 height=217 id="图片 30" src="hqym3_image034.jpg"></span></p>
+
+<p class=MsoNormal align=left style='text-align:left;text-indent:21.0pt'><span
+lang=ZH-CN style='font-size:9.0pt;font-family:等线'>配置终端能力入口：</span></p>
+
+<p class=MsoNormal align=center style='text-align:center'><span
+style='font-size:9.0pt;font-family:"Times New Roman",serif'><img border=0
+width=553 height=105 id="图片 97" src="hqym3_image035.jpg"></span></p>
+
+<p class=MsoNormal align=left style='margin-right:15.0pt;text-align:left;
+text-indent:21.0pt'><span lang=ZH-CN style='font-size:9.0pt;font-family:等线'>正常的声学模型的流程为：</span></p>
+
+<p class=MsoNormal align=center style='margin-right:15.0pt;text-align:center'><span
+style='font-size:9.0pt;font-family:"Times New Roman",serif'><img border=0
+width=554 height=137 id="图片 149" src="hqym3_image036.jpg"></span></p>
+
+<h4><a name="_Toc43217820"></a><a name="_Toc42610785">3.1 </a><span lang=ZH-CN
+style='font-family:等线'>新建模型</span></h4>
+
+<p class=MsoNormal align=left style='text-align:left;text-indent:21.0pt'><span
+lang=ZH-CN style='font-size:9.0pt;font-family:等线'>进入训练平台首页，点击</span><span
+lang=ZH-CN style='font-size:9.0pt;font-family:"Times New Roman",serif'> </span><b><span
+style='font-size:9.0pt;font-family:"Times New Roman",serif'>+</span></b><b><span
+lang=ZH-CN style='font-size:9.0pt;font-family:等线'>新建声学模型</span></b></p>
+
+<p class=MsoNormal align=center style='text-align:center'><span
+style='font-size:9.0pt;font-family:"Times New Roman",serif'><img border=0
+width=553 height=218 id="图片 100" src="hqym3_image037.jpg"></span></p>
+
+<p class=MsoNormal align=left style='text-align:left;text-indent:21.0pt'><span
+lang=ZH-CN style='font-size:9.0pt;font-family:等线'>进入基础信息填写页面，需输入模型名称与模型描述。</span></p>
+
+<p class=MsoNormal align=left style='text-align:left;text-indent:21.0pt'><span
+lang=ZH-CN style='font-size:9.0pt;font-family:等线'>注：一经确认无法修改</span></p>
+
+<p class=MsoNormal align=center style='text-align:center'><span
+style='font-size:9.0pt;font-family:"Times New Roman",serif'><img border=0
+width=554 height=254 id="图片 105" src="hqym3_image038.jpg"></span></p>
+
+<p class=MsoNormal align=left style='text-align:left;text-indent:21.0pt'><span
+lang=ZH-CN style='font-size:9.0pt;font-family:等线'>填写完毕后，点击<b>下一步</b>，进入训练模型页面。</span></p>
+
+<p class=MsoNormal align=left style='text-align:left;text-indent:21.0pt'><span
+lang=ZH-CN style='font-size:9.0pt;font-family:等线'>由于新建模型尚未配置训练数据（即录音文件），页面显示为空，点击</span><b><span
+style='font-size:9.0pt;font-family:"Times New Roman",serif'> +</span></b><b><span
+lang=ZH-CN style='font-size:9.0pt;font-family:等线'>添加录音，</span></b><span
+lang=ZH-CN style='font-size:9.0pt;font-family:等线'>进入添加录音页面。</span></p>
+
+<p class=MsoNormal align=center style='text-align:center'><span
+style='font-size:9.0pt;font-family:"Times New Roman",serif'><img border=0
+width=553 height=269 id="图片 107" src="hqym3_image039.jpg"></span></p>
+
+<p class=MsoNormal align=left style='text-align:left;text-indent:21.0pt'><span
+lang=ZH-CN style='font-size:9.0pt;font-family:等线'>如果该账号下从未采集过任何录音，则显示</span><span
+style='font-size:9.0pt;font-family:"Times New Roman",serif'>“</span><span
+lang=ZH-CN style='font-size:9.0pt;font-family:等线'>暂无数据</span><span
+style='font-size:9.0pt;font-family:"Times New Roman",serif'>”</span><span
+lang=ZH-CN style='font-size:9.0pt;font-family:等线'>。</span></p>
+
+<p class=MsoNormal align=left style='text-align:left;text-indent:21.0pt'><span
+lang=ZH-CN style='font-size:9.0pt;font-family:等线'>需要首先采集录音，点击</span><span
+lang=ZH-CN style='font-size:9.0pt;font-family:"Times New Roman",serif'> </span><b><span
+lang=ZH-CN style='font-size:9.0pt;font-family:等线'>去新建录音任务</span></b></p>
+
+<p class=MsoNormal align=center style='text-align:center'><span
+style='font-size:9.0pt;font-family:"Times New Roman",serif'><img border=0
+width=553 height=261 id="图片 48" src="hqym3_image040.jpg"></span></p>
+
+<h3><a name="_Toc43217821"></a><a name="_Toc42610786">3.2 </a><span lang=ZH-CN
+style='font-family:等线'>创建录音任务</span></h3>
+
+<p class=MsoNormal align=left style='text-align:left;text-indent:21.0pt'><span
+lang=ZH-CN style='font-size:9.0pt;font-family:等线'>录音任务的创建可以在创建模型过程中跳转进入，如</span><i><span
+style='font-size:9.0pt;font-family:"Times New Roman",serif'>1. </span></i><i><span
+lang=ZH-CN style='font-size:9.0pt;font-family:等线'>新建模型</span></i><i><span
+lang=ZH-CN style='font-size:9.0pt;font-family:"Times New Roman",serif'> </span></i><span
+lang=ZH-CN style='font-size:9.0pt;font-family:等线'>中所述。也可以在首页处点击<b>录音任务</b>，进入<b>录音任务</b>页面。</span></p>
+
+<p class=MsoNormal align=left style='text-align:left;text-indent:21.0pt'><span
+lang=ZH-CN style='font-size:9.0pt;font-family:等线'>点击</span><span lang=ZH-CN
+style='font-size:9.0pt;font-family:"Times New Roman",serif'> </span><b><span
+style='font-size:9.0pt;font-family:"Times New Roman",serif'>+</span></b><b><span
+lang=ZH-CN style='font-size:9.0pt;font-family:等线'>新建录音任务</span></b><span
+lang=ZH-CN style='font-size:9.0pt;font-family:等线'>，进入录音任务的创建。</span></p>
+
+<p class=MsoNormal align=left style='text-align:left;text-indent:21.0pt'><span
+lang=ZH-CN style='font-size:9.0pt;font-family:等线'>此处配置的录音任务，可通过录音</span><span
+style='font-size:9.0pt;font-family:"Times New Roman",serif'>APP</span><span
+lang=ZH-CN style='font-size:9.0pt;font-family:等线'>获取进行采集。</span></p>
+
+<p class=MsoNormal align=center style='text-align:center'><span
+style='font-size:9.0pt;font-family:"Times New Roman",serif'><img border=0
+width=554 height=205 id="图片 4" src="hqym3_image041.jpg"></span></p>
+
+<p class=MsoNormal align=left style='text-align:left;text-indent:21.0pt'><span
+lang=ZH-CN style='font-size:9.0pt;font-family:等线'>进入新建录音任务页面，进行录音任务的配置。</span></p>
+
+<p class=MsoNormal align=center style='text-align:center'><img border=0
+width=554 height=384 id="图片 12" src="hqym3_image042.jpg"></p>
+
+<p class=MsoNormal align=left style='text-align:left'><span style='font-size:
+9.0pt;font-family:"Times New Roman",serif'>&nbsp;</span></p>
+
+<h4><a name="_Toc43217822"></a><a name="_Toc42610787">3.2.1 </a><span
+lang=ZH-CN style='font-family:等线'>录音任务基础信息</span></h4>
+
+<p class=MsoNormal align=left style='text-align:left;text-indent:21.0pt'><span
+lang=ZH-CN style='font-size:9.0pt;font-family:等线'>输入任务名称与任务描述，建议输入清晰明确的任务信息。</span></p>
+
+<p class=MsoNormal align=center style='text-align:center'><span
+style='font-size:9.0pt;font-family:"Times New Roman",serif'><img border=0
+width=554 height=159 id="图片 67" src="hqym3_image043.jpg"></span></p>
+
+<h4><a name="_Toc43217823"></a><a name="_Toc42610788">3.2.2 </a><span
+lang=ZH-CN style='font-family:等线'>录音配置</span></h4>
+
+<p class=MsoNormal align=center style='text-align:center'><img border=0
+width=554 height=149 id="图片 31" src="hqym3_image044.jpg"><b><span lang=ZH-CN
+style='font-size:9.0pt;font-family:等线'>语速配置：</span></b></p>
+
+<p class=MsoNormal align=left style='text-align:left;text-indent:21.0pt'><span
+lang=ZH-CN style='font-size:9.0pt;font-family:等线'>默认仅勾选正常语速，如产品对于快语速或慢语速的唤醒与识别有要求，则可根据需求勾选。</span></p>
+
+<p class=MsoNormal align=left style='text-align:left;text-indent:21.0pt'><span
+lang=ZH-CN style='font-size:9.0pt;font-family:等线'>详细语速要求可点击</span><span
+lang=ZH-CN style='font-size:9.0pt;font-family:"Times New Roman",serif'> </span><span
+lang=ZH-CN style='font-size:9.0pt;font-family:等线'>？号了解，目前系统定义的语速要求如下：</span></p>
+
+<div align=center>
+
+<table class=MsoTableGrid border=1 cellspacing=0 cellpadding=0
+ style='border-collapse:collapse;border:none'>
+ <tr>
+  <td width=184 valign=top style='width:138.25pt;border:solid windowtext 1.0pt;
+  background:#E7E6E6;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=MsoNormal align=center style='text-align:center'><b><span
+  lang=ZH-CN style='font-size:9.0pt;font-family:等线'>快语速</span></b></p>
+  </td>
+  <td width=184 valign=top style='width:138.25pt;border:solid windowtext 1.0pt;
+  border-left:none;background:#E7E6E6;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=MsoNormal align=center style='text-align:center'><b><span
+  lang=ZH-CN style='font-size:9.0pt;font-family:等线;color:black'>正常语速</span></b></p>
+  </td>
+  <td width=184 valign=top style='width:138.3pt;border:solid windowtext 1.0pt;
+  border-left:none;background:#E7E6E6;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=MsoNormal align=center style='text-align:center'><b><span
+  lang=ZH-CN style='font-size:9.0pt;font-family:等线;color:black'>慢语速</span></b></p>
+  </td>
+ </tr>
+ <tr>
+  <td width=184 valign=top style='width:138.25pt;border:solid windowtext 1.0pt;
+  border-top:none;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=MsoNormal align=center style='text-align:center'><span
+  style='font-size:9.0pt;font-family:"Times New Roman",serif'>2</span><span
+  lang=ZH-CN style='font-size:9.0pt;font-family:等线'>个字：</span><span
+  style='font-size:9.0pt;font-family:"Times New Roman",serif'>≤700ms<br>
+  3</span><span lang=ZH-CN style='font-size:9.0pt;font-family:等线'>个字：</span><span
+  style='font-size:9.0pt;font-family:"Times New Roman",serif'>≤800ms<br>
+  4</span><span lang=ZH-CN style='font-size:9.0pt;font-family:等线'>个字：</span><span
+  style='font-size:9.0pt;font-family:"Times New Roman",serif'>≤900ms<br>
+  5</span><span lang=ZH-CN style='font-size:9.0pt;font-family:等线'>个字：</span><span
+  style='font-size:9.0pt;font-family:"Times New Roman",serif'>≤1000ms<br>
+  6</span><span lang=ZH-CN style='font-size:9.0pt;font-family:等线'>个字：</span><span
+  style='font-size:9.0pt;font-family:"Times New Roman",serif'>≤1100ms<br>
+  7</span><span lang=ZH-CN style='font-size:9.0pt;font-family:等线'>个字：</span><span
+  style='font-size:9.0pt;font-family:"Times New Roman",serif'>≤1200ms<br>
+  8</span><span lang=ZH-CN style='font-size:9.0pt;font-family:等线'>个字：</span><span
+  style='font-size:9.0pt;font-family:"Times New Roman",serif'>≤1400ms<br>
+  9</span><span lang=ZH-CN style='font-size:9.0pt;font-family:等线'>个字：</span><span
+  style='font-size:9.0pt;font-family:"Times New Roman",serif'>≤1600ms<br>
+  10</span><span lang=ZH-CN style='font-size:9.0pt;font-family:等线'>个字：</span><span
+  style='font-size:9.0pt;font-family:"Times New Roman",serif'>≤1800ms</span></p>
+  </td>
+  <td width=184 valign=top style='width:138.25pt;border-top:none;border-left:
+  none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+  padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=MsoNormal align=center style='text-align:center'><span
+  style='font-size:9.0pt;font-family:"Times New Roman",serif'>2</span><span
+  lang=ZH-CN style='font-size:9.0pt;font-family:等线'>个字：</span><span
+  style='font-size:9.0pt;font-family:"Times New Roman",serif'>≥750ms<br>
+  3</span><span lang=ZH-CN style='font-size:9.0pt;font-family:等线'>个字：</span><span
+  style='font-size:9.0pt;font-family:"Times New Roman",serif'>≥850ms<br>
+  4</span><span lang=ZH-CN style='font-size:9.0pt;font-family:等线'>个字：</span><span
+  style='font-size:9.0pt;font-family:"Times New Roman",serif'>≥950ms<br>
+  5</span><span lang=ZH-CN style='font-size:9.0pt;font-family:等线'>个字：</span><span
+  style='font-size:9.0pt;font-family:"Times New Roman",serif'>≥1100ms<br>
+  6</span><span lang=ZH-CN style='font-size:9.0pt;font-family:等线'>个字：</span><span
+  style='font-size:9.0pt;font-family:"Times New Roman",serif'>≥1200ms<br>
+  7</span><span lang=ZH-CN style='font-size:9.0pt;font-family:等线'>个字：</span><span
+  style='font-size:9.0pt;font-family:"Times New Roman",serif'>≥1400ms<br>
+  8</span><span lang=ZH-CN style='font-size:9.0pt;font-family:等线'>个字：</span><span
+  style='font-size:9.0pt;font-family:"Times New Roman",serif'>≥1500ms<br>
+  9</span><span lang=ZH-CN style='font-size:9.0pt;font-family:等线'>个字：</span><span
+  style='font-size:9.0pt;font-family:"Times New Roman",serif'>≥1700ms<br>
+  10</span><span lang=ZH-CN style='font-size:9.0pt;font-family:等线'>个字：</span><span
+  style='font-size:9.0pt;font-family:"Times New Roman",serif'>≥1900ms</span></p>
+  </td>
+  <td width=184 valign=top style='width:138.3pt;border-top:none;border-left:
+  none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+  padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=MsoNormal align=center style='text-align:center'><span lang=ZH-CN
+  style='font-size:9.0pt;font-family:等线'>慢语速对录音时长无限制</span></p>
+  </td>
+ </tr>
+</table>
+
+</div>
+
+<p class=MsoNormal align=left style='text-align:left;text-indent:21.0pt'><span
+style='font-size:9.0pt;font-family:"Times New Roman",serif'>&nbsp;</span></p>
+
+<p class=MsoNormal align=left style='text-align:left;text-indent:21.0pt'><span
+lang=ZH-CN style='font-size:9.0pt;font-family:等线'>默认语速设置不符合目标用户群体特征，可以通过自定义语速去调整语速要求：</span></p>
+
+<p class=MsoNormal align=center style='text-align:center'><span
+style='font-size:12.0pt;font-family:宋体'><img border=0 width=371 height=647
+id="图片 25" src="hqym3_image045.jpg"></span></p>
+
+<p class=MsoNormal><span style='font-size:9.0pt;font-family:"Times New Roman",serif'>&nbsp;</span></p>
+
+<p class=MsoNormal><b><span lang=ZH-CN style='font-size:9.0pt;font-family:等线'>采样率：</span></b></p>
+
+<p class=MsoNormal align=left style='text-align:left;text-indent:21.0pt'><span
+lang=ZH-CN style='font-size:9.0pt;font-family:等线'>目前仅支持</span><span
+style='font-size:9.0pt;font-family:"Times New Roman",serif'>16000HZ</span><span
+lang=ZH-CN style='font-size:9.0pt;font-family:等线'>。</span></p>
+
+<p class=MsoNormal><b><span lang=ZH-CN style='font-size:9.0pt;font-family:等线'>录音次数：</span></b></p>
+
+<p class=MsoNormal align=left style='text-align:left;text-indent:21.0pt'><span
+lang=ZH-CN style='font-size:9.0pt;font-family:等线'>支持</span><span
+style='font-size:9.0pt;font-family:"Times New Roman",serif'>1-3</span><span
+lang=ZH-CN style='font-size:9.0pt;font-family:等线'>次的配置，通常采集</span><span
+style='font-size:9.0pt;font-family:"Times New Roman",serif'>3</span><span
+lang=ZH-CN style='font-size:9.0pt;font-family:等线'>次。</span></p>
+
+<h4><a name="_Toc43217824"></a><a name="_Toc42610789">3.2.3 </a><span
+lang=ZH-CN style='font-family:等线'>录音词条选择</span></h4>
+
+<p class=MsoNormal align=left style='text-align:left;text-indent:21.0pt'><span
+lang=ZH-CN style='font-size:9.0pt;font-family:等线'>当前训练平台支持导入云知声开放平台内创建的产品词条，也支持自选词条的任务上传。</span></p>
+
+<p class=MsoListParagraph align=left style='margin-left:39.0pt;text-align:left;
+text-indent:-18.0pt'><span style='font-size:9.0pt;font-family:"Times New Roman",serif'>1）<span
+style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp; </span></span><span
+lang=ZH-CN style='font-size:9.0pt;font-family:等线'>选择直接“<b><i>上传词条</i></b>”，可按照模板格式直接上传内容为录音词条的</span><span
+style='font-size:9.0pt;font-family:"Times New Roman",serif'>Excel</span><span
+lang=ZH-CN style='font-size:9.0pt;font-family:等线'>表格；</span></p>
+
+<p class=MsoListParagraph align=left style='margin-left:39.0pt;text-align:left;
+text-indent:-18.0pt'><span style='font-size:9.0pt;font-family:"Times New Roman",serif'>2）<span
+style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp; </span></span><span
+lang=ZH-CN style='font-size:9.0pt;font-family:等线'>选择“<b><i>来自</i></b></span><b><i><span
+style='font-size:9.0pt;font-family:"Times New Roman",serif'>UNIOS</span></i></b><b><i><span
+lang=ZH-CN style='font-size:9.0pt;font-family:等线'>开放平台产品的唤醒词和命令词</span></i></b><span
+lang=ZH-CN style='font-size:9.0pt;font-family:等线'>”，系统会根据产品名称与版本同步词表。</span></p>
+
+<p class=MsoNormal align=center style='text-align:center;text-indent:21.0pt'><img
+border=0 width=554 height=151 id="图片 27" src="hqym3_image046.jpg"></p>
+
+<p class=MsoNormal align=center style='text-align:center'>&nbsp;</p>
+
+<p class=MsoNormal align=center style='text-align:center'><img border=0
+width=514 height=246 id="图片 26" src="hqym3_image047.jpg"></p>
+
+<p class=MsoNormal align=left style='text-align:left;text-indent:21.0pt'><span
+lang=ZH-CN style='font-size:9.0pt;font-family:等线'>最后，选择录音任务的分配策略，系统为了减轻录音人员单次采集的压力，支持录音分组下发。</span></p>
+
+<p class=MsoNormal align=center style='text-align:center'><img border=0
+width=554 height=131 id="图片 28" src="hqym3_image048.jpg"></p>
+
+<p class=MsoNormal align=left style='text-align:left;text-indent:21.0pt'><span
+lang=ZH-CN style='font-size:9.0pt;font-family:等线'>完毕后点击</span><span lang=ZH-CN
+style='font-size:9.0pt;font-family:"Times New Roman",serif'> </span><b><i><span
+lang=ZH-CN style='font-size:9.0pt;font-family:等线'>确定</span></i></b><span
+lang=ZH-CN style='font-size:9.0pt;font-family:等线'>，即可发布录音任务。</span></p>
+
+<p class=MsoNormal align=left style='text-align:left;text-indent:21.0pt'><span
+lang=ZH-CN style='font-size:9.0pt;font-family:等线'>点击确定后，跳转至录音任务列表页面</span></p>
+
+<p class=MsoNormal align=center style='text-align:center'><span
+style='font-size:9.0pt;font-family:"Times New Roman",serif'><img border=0
+width=554 height=103 id="图片 5" src="hqym3_image049.jpg"></span></p>
+
+<p class=MsoNormal align=left style='text-align:left;text-indent:18.0pt'><span
+lang=ZH-CN style='font-size:9.0pt;font-family:等线'>此时任务尚未开始，还可对创建的录音任务进行编辑。</span></p>
+
+<p class=MsoNormal align=left style='text-align:left;text-indent:18.0pt'><span
+lang=ZH-CN style='font-size:9.0pt;font-family:等线'>如任务确认无误，可开始收集录音，则点击</span><span
+lang=ZH-CN style='font-size:9.0pt;font-family:"Times New Roman",serif'> </span><b><span
+lang=ZH-CN style='font-size:9.0pt;font-family:等线'>开始采集</span></b><span
+lang=ZH-CN style='font-size:9.0pt;font-family:等线'>。此时任务状态将切换为</span><span
+lang=ZH-CN style='font-size:9.0pt;font-family:"Times New Roman",serif'> </span><span
+lang=ZH-CN style='font-size:9.0pt;font-family:等线'>进行中；此时任务只可查看，不可编辑。</span></p>
+
+<p class=MsoNormal align=center style='text-align:center'><span
+style='font-size:9.0pt;font-family:"Times New Roman",serif'><img border=0
+width=553 height=101 id="图片 6" src="hqym3_image050.jpg"></span></p>
+
+<p class=MsoNormal align=left style='text-align:left;text-indent:21.0pt'><span
+lang=ZH-CN style='font-size:9.0pt;font-family:等线'>开始采集后，录音邀请码生效，点击变蓝的邀请码，将一键复制邀请码与录音</span><span
+style='font-size:9.0pt;font-family:"Times New Roman",serif'>APP</span><span
+lang=ZH-CN style='font-size:9.0pt;font-family:等线'>下载链接，目前仅支持安卓</span><span
+style='font-size:9.0pt;font-family:"Times New Roman",serif'>APP</span><span
+lang=ZH-CN style='font-size:9.0pt;font-family:等线'>。</span></p>
+
+<p class=MsoNormal align=center style='text-align:center'><span
+style='font-size:9.0pt;font-family:"Times New Roman",serif'><img border=0
+width=554 height=106 id="图片 7" src="hqym3_image051.jpg"></span></p>
+
+<p class=MsoNormal align=left style='text-align:left;text-indent:21.0pt'><span
+lang=ZH-CN style='font-size:9.0pt;font-family:等线'>对语音采集人发布任务时，只需粘贴，即可发送。</span></p>
+
+<p class=MsoNormal align=left style='text-align:left;text-indent:21.0pt'><span
+lang=ZH-CN style='font-size:9.0pt;font-family:等线'>邀请文字如下：</span></p>
+
+<div align=center>
+
+<table class=MsoTableGrid border=1 cellspacing=0 cellpadding=0
+ style='border-collapse:collapse;border:none'>
+ <tr>
+  <td width=553 valign=top style='width:414.8pt;border:solid windowtext 1.0pt;
+  padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=MsoNormal align=left style='text-align:left'><b><span lang=ZH-CN
+  style='font-size:9.0pt;font-family:等线;color:#3B3838'>录音邀请码：</span></b><b><span
+  style='font-size:9.0pt;font-family:"Times New Roman",serif;color:#3B3838'>eaRmhEZf</span></b><b><span
+  lang=ZH-CN style='font-size:9.0pt;font-family:等线;color:#3B3838'>，通过链接：</span></b><b><span
+  style='font-size:9.0pt;font-family:"Times New Roman",serif;color:#3B3838'>https://unios-udp.oss-cn-beijing.aliyuncs.com/unione/unisound_record_tool.apk
+  </span></b><b><span lang=ZH-CN style='font-size:9.0pt;font-family:等线;
+  color:#3B3838'>下载安装录音</span></b><b><span style='font-size:9.0pt;font-family:
+  "Times New Roman",serif;color:#3B3838'>APP, </span></b><b><span lang=ZH-CN
+  style='font-size:9.0pt;font-family:等线;color:#3B3838'>进入</span></b><b><span
+  style='font-size:9.0pt;font-family:"Times New Roman",serif;color:#3B3838'>
+  APP </span></b><b><span lang=ZH-CN style='font-size:9.0pt;font-family:等线;
+  color:#3B3838'>后跟随引导输入录音邀请码，即可进行录音采集，快来试试吧</span></b><b><span
+  style='font-size:9.0pt;font-family:"Times New Roman",serif;color:#3B3838'>~</span></b></p>
+  </td>
+ </tr>
+</table>
+
+</div>
+
+<h3><a name="_Toc43217825"></a><a name="_Toc42610790">3.3 </a><span lang=ZH-CN
+style='font-family:等线'>收集录音文件</span></h3>
+
+<h4><a name="_Toc43217826"></a><a name="_Toc42610791">3.3.1 APP</a><span
+lang=ZH-CN style='font-family:等线'>使用</span></h4>
+
+<p class=MsoNormal align=left style='text-align:left'><span lang=ZH-CN
+style='font-size:9.0pt;font-family:等线'>录音人可通过链接可下载</span><span
+style='font-size:9.0pt;font-family:"Times New Roman",serif'>APP</span><span
+lang=ZH-CN style='font-size:9.0pt;font-family:等线'>工具，下载安装成功后，图标如下：</span></p>
+
+<p class=MsoNormal align=center style='text-align:center'><span
+style='font-size:9.0pt;font-family:"Times New Roman",serif'><img border=0
+width=170 height=157 id="图片 8" src="hqym3_image052.png"></span></p>
+
+<p class=MsoNormal align=left style='text-align:left'><span lang=ZH-CN
+style='font-size:9.0pt;font-family:等线'>打开后，同意所有权限。</span></p>
+
+<p class=MsoNormal align=left style='text-align:left'><span lang=ZH-CN
+style='font-size:9.0pt;font-family:等线'>第一步，输入邀请码，点击<b>确认</b>。</span></p>
+
+<p class=MsoNormal align=center style='text-align:center'><span
+style='font-size:9.0pt;font-family:"Times New Roman",serif'><img border=0
+width=208 height=322 id="图片 3" src="hqym3_image053.jpg"></span></p>
+
+</div>
+
+</body>
+
+</html>
+ </div></div><!-- contents -->
+</div><!-- PageDoc -->
+</body>
+</html>

@@ -1,0 +1,236 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "https://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=9"/>
+<meta name="generator" content="Doxygen 1.8.18"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>蜂鸟M离线方案开发指导手册: 1、简介</title>
+<link href="tabs.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="jquery.js"></script>
+<script type="text/javascript" src="dynsections.js"></script>
+<link href="doxygen.css" rel="stylesheet" type="text/css" />
+</head>
+<body>
+<div id="top"><!-- do not remove this div, it is closed by doxygen! -->
+<div id="titlearea">
+<table cellspacing="0" cellpadding="0">
+ <tbody>
+ <tr style="height: 56px;">
+  <td id="projectalign" style="padding-left: 0.5em;">
+   <div id="projectname">蜂鸟M离线方案开发指导手册
+   &#160;<span id="projectnumber">v1.0.4</span>
+   </div>
+  </td>
+ </tr>
+ </tbody>
+</table>
+</div>
+<!-- end header part -->
+<!-- 制作者 Doxygen 1.8.18 -->
+<script type="text/javascript" src="menudata.js"></script>
+<script type="text/javascript" src="menu.js"></script>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:cf05388f2679ee054f2beb29a391d25f4e673ac3&amp;dn=gpl-2.0.txt GPL-v2 */
+$(function() {
+  initMenu('',false,false,'search.php','搜索');
+});
+/* @license-end */</script>
+<div id="main-nav"></div>
+</div><!-- top -->
+<div class="PageDoc"><div class="header">
+  <div class="headertitle">
+<div class="title">1、简介 </div>  </div>
+</div><!--header-->
+<div class="contents">
+<div class="textblock"><html>
+
+<head>
+<meta http-equiv=Content-Type content="text/html; charset=utf-8">
+<meta name=Generator content="Microsoft Word 15 (filtered)">
+<style>
+<!--
+ /* Font Definitions */
+ @font-face
+	{font-family:Wingdings;
+	panose-1:5 0 0 0 0 0 0 0 0 0;}
+@font-face
+	{font-family:"Cambria Math";
+	panose-1:2 4 5 3 5 4 6 3 2 4;}
+@font-face
+	{font-family:等线;
+	panose-1:2 1 6 0 3 1 1 1 1 1;}
+@font-face
+	{font-family:"\@等线";
+	panose-1:2 1 6 0 3 1 1 1 1 1;}
+ /* Style Definitions */
+ p.MsoNormal, li.MsoNormal, div.MsoNormal
+	{margin:0cm;
+	margin-bottom:.0001pt;
+	text-align:justify;
+	text-justify:inter-ideograph;
+	font-size:10.5pt;
+	font-family:等线;}
+h2
+	{mso-style-link:"标题 2 字符";
+	margin-top:13.0pt;
+	margin-right:0cm;
+	margin-bottom:13.0pt;
+	margin-left:0cm;
+	text-align:justify;
+	text-justify:inter-ideograph;
+	line-height:173%;
+	page-break-after:avoid;
+	font-size:16.0pt;
+	font-family:"等线 Light";}
+h3
+	{mso-style-link:"标题 3 字符";
+	margin-top:13.0pt;
+	margin-right:0cm;
+	margin-bottom:13.0pt;
+	margin-left:0cm;
+	text-align:justify;
+	text-justify:inter-ideograph;
+	line-height:173%;
+	page-break-after:avoid;
+	font-size:15.0pt;
+	font-family:等线;}
+p.MsoHeader, li.MsoHeader, div.MsoHeader
+	{mso-style-link:"页眉 字符";
+	margin:0cm;
+	margin-bottom:.0001pt;
+	text-align:center;
+	layout-grid-mode:char;
+	border:none;
+	padding:0cm;
+	font-size:9.0pt;
+	font-family:等线;}
+p.MsoFooter, li.MsoFooter, div.MsoFooter
+	{mso-style-link:"页脚 字符";
+	margin:0cm;
+	margin-bottom:.0001pt;
+	layout-grid-mode:char;
+	font-size:9.0pt;
+	font-family:等线;}
+p.MsoListParagraph, li.MsoListParagraph, div.MsoListParagraph
+	{margin:0cm;
+	margin-bottom:.0001pt;
+	text-align:justify;
+	text-justify:inter-ideograph;
+	text-indent:21.0pt;
+	font-size:10.5pt;
+	font-family:等线;}
+span.3
+	{mso-style-name:"标题 3 字符";
+	mso-style-link:"标题 3";
+	font-weight:bold;}
+span.a
+	{mso-style-name:"页眉 字符";
+	mso-style-link:页眉;}
+span.a0
+	{mso-style-name:"页脚 字符";
+	mso-style-link:页脚;}
+span.2
+	{mso-style-name:"标题 2 字符";
+	mso-style-link:"标题 2";
+	font-family:"等线 Light";
+	font-weight:bold;}
+.MsoChpDefault
+	{font-size:10.0pt;
+	font-family:等线;}
+ /* Page Definitions */
+ @page WordSection1
+	{size:595.3pt 841.9pt;
+	margin:72.0pt 90.0pt 72.0pt 90.0pt;
+	layout-grid:15.6pt;}
+div.WordSection1
+	{page:WordSection1;}
+ /* List Definitions */
+ ol
+	{margin-bottom:0cm;}
+ul
+	{margin-bottom:0cm;}
+-->
+</style>
+
+</head>
+
+<body lang=EN-US style='text-justify-trim:punctuation'>
+
+<div class=WordSection1 style='layout-grid:15.6pt'>
+
+<h2><a name="_Toc35600578"><span style='font-size:12.0pt;line-height:173%;
+font-family:"Times New Roman",serif'>1. </span></a><span lang=ZH-CN
+style='font-size:12.0pt;line-height:173%;font-family:等线'>引言</span></h2>
+
+<p class=MsoNormal style='margin-bottom:7.8pt'><span style='font-size:9.0pt;
+font-family:"Times New Roman",serif'>         </span><span lang=ZH-CN
+style='font-size:9.0pt'>云知声总部位于北京，在上海、深圳、厦门设有全资子公司。是一家专注物联网人工智能服务、拥有完全自主知识产权的世界顶尖的智能语音识别和语义理解技术的高新技术企业。自</span><span
+style='font-size:9.0pt;font-family:"Times New Roman",serif'>2012</span><span
+lang=ZH-CN style='font-size:9.0pt'>年由智能语音技术起家，云知声多年来不断拓展技术边界，技术能力不仅涵盖了感知、认知、交互等方面的人工智能语音语义技术，更是在突破了</span><span
+style='font-size:9.0pt;font-family:"Times New Roman",serif'> AI </span><span
+lang=ZH-CN style='font-size:9.0pt'>芯片设计技术后，一举打造出了自主研发、自主知识产权、自主可控的全栈式人工智能技术链条（深度学习算法</span><span
+style='font-size:9.0pt;font-family:"Times New Roman",serif'>+</span><span
+lang=ZH-CN style='font-size:9.0pt'>大数据</span><span style='font-size:9.0pt;
+font-family:"Times New Roman",serif'>+</span><span lang=ZH-CN style='font-size:
+9.0pt'>超级计算</span><span style='font-size:9.0pt;font-family:"Times New Roman",serif'>+</span><span
+lang=ZH-CN style='font-size:9.0pt'>芯片能力）。</span></p>
+
+<p class=MsoNormal style='margin-bottom:7.8pt'><span style='font-size:9.0pt;
+font-family:"Times New Roman",serif'>    </span><span lang=ZH-CN
+style='font-size:9.0pt'>以强大的计算平台为基础，云知声构建了</span><span style='font-size:9.0pt;
+font-family:"Times New Roman",serif'>“</span><span lang=ZH-CN style='font-size:
+9.0pt'>云端芯</span><span style='font-size:9.0pt;font-family:"Times New Roman",serif'>”</span><span
+lang=ZH-CN style='font-size:9.0pt'>生态体系，提供跨硬件平台、跨应用场景的软硬件一体化云端</span><span
+style='font-size:9.0pt;font-family:"Times New Roman",serif'>+</span><span
+lang=ZH-CN style='font-size:9.0pt'>本地智能的芯片终端解决方案。目前云知声是迄今为止行业内唯一实现芯片落地应用的公司、国内白色家电领域领先</span><span
+style='font-size:9.0pt;font-family:"Times New Roman",serif'>AI</span><span
+lang=ZH-CN style='font-size:9.0pt'>芯片供应商、国内首家推出医疗云服务并完成数百家医院系统测试的语音服务商、我国后装车机市场占有量行业第一、教育云社会化口语评测服务市场占有量第一。还在智慧生活（家居、车载、机器人等）和智慧服务（医疗、教育、司法等）等多个垂直场景均有落地应用。</span></p>
+
+<h2><a name="_Toc35600579"><span style='font-size:12.0pt;line-height:173%;
+font-family:"Times New Roman",serif'>2. </span></a><span lang=ZH-CN
+style='font-size:12.0pt;line-height:173%;font-family:等线'>产品简介</span></h2>
+
+<p class=MsoNormal style='margin-bottom:12.0pt;text-indent:18.0pt'><span
+lang=ZH-CN style='font-size:9.0pt;color:#333333;background:white'>云知声提供标准化软硬件一体离线语音解决方案，支持单麦拾音、前端降噪、语音唤醒、离线识别等。用户使用方案中的标准化硬件模组配合云知声设备平台与相关工具，快速定制语音产品，为空调、冰箱、灯具、开关等家居设备赋能，无需联网即可使其具备智能语音交互能力。</span></p>
+
+<p class=MsoListParagraph style='margin-left:36.0pt;text-indent:-18.0pt'><span
+style='font-size:9.0pt;font-family:"Arial",sans-serif;color:#333333'>-<span
+style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span></span><b><span
+lang=ZH-CN style='font-size:9.0pt'>硬件：</span></b><span lang=ZH-CN
+style='font-size:9.0pt'>基于云知声蜂鸟</span><span style='font-size:9.0pt;font-family:
+"Times New Roman",serif'>M</span><span lang=ZH-CN style='font-size:9.0pt'>芯片为核心的标准硬件板，集成离线识别算法</span></p>
+
+<p class=MsoListParagraph style='margin-left:36.0pt;text-indent:-18.0pt'><span
+style='font-size:9.0pt;font-family:"Arial",sans-serif;color:#333333'>-<span
+style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span></span><b><span
+lang=ZH-CN style='font-size:9.0pt'>开放平台：</span></b><span lang=ZH-CN
+style='font-size:9.0pt'>可进行语音相关配置并生成软件版本的云知声智能设备平台</span></p>
+
+<p class=MsoListParagraph style='margin-left:36.0pt;text-indent:-18.0pt'><span
+style='font-size:9.0pt;font-family:"Arial",sans-serif;color:#333333'>-<span
+style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span></span><b><span
+lang=ZH-CN style='font-size:9.0pt'>软件与源码：</span></b><span lang=ZH-CN
+style='font-size:9.0pt'>可直接使用，也可修改代码进行二次编译的软件版本</span></p>
+
+<p class=MsoListParagraph style='margin-left:36.0pt;text-indent:-18.0pt'><span
+style='font-size:9.0pt;font-family:"Arial",sans-serif;color:#333333'>-<span
+style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span></span><b><span
+lang=ZH-CN style='font-size:9.0pt'>文档与工具：</span></b><span lang=ZH-CN
+style='font-size:9.0pt'>使用指南与技术开发文档，配套测试工具</span></p>
+
+<p class=MsoNormal align=center style='text-align:center'><span
+style='font-size:9.0pt;font-family:"Times New Roman",serif'><img width=554
+height=234 id="图片 8" src="jianjie1_image001.jpg"></span></p>
+
+<p class=MsoNormal><span style='font-size:9.0pt;font-family:"Times New Roman",serif'>&nbsp;</span></p>
+
+</div>
+
+</body>
+
+</html>
+ </div></div><!-- contents -->
+</div><!-- PageDoc -->
+</body>
+</html>

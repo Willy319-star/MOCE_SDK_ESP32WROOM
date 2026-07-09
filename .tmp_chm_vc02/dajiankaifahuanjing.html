@@ -1,0 +1,288 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "https://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=9"/>
+<meta name="generator" content="Doxygen 1.8.18"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>蜂鸟M离线方案开发指导手册: 5、搭建开发环境</title>
+<link href="tabs.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="jquery.js"></script>
+<script type="text/javascript" src="dynsections.js"></script>
+<link href="doxygen.css" rel="stylesheet" type="text/css" />
+</head>
+<body>
+<div id="top"><!-- do not remove this div, it is closed by doxygen! -->
+<div id="titlearea">
+<table cellspacing="0" cellpadding="0">
+ <tbody>
+ <tr style="height: 56px;">
+  <td id="projectalign" style="padding-left: 0.5em;">
+   <div id="projectname">蜂鸟M离线方案开发指导手册
+   &#160;<span id="projectnumber">v1.0.4</span>
+   </div>
+  </td>
+ </tr>
+ </tbody>
+</table>
+</div>
+<!-- end header part -->
+<!-- 制作者 Doxygen 1.8.18 -->
+<script type="text/javascript" src="menudata.js"></script>
+<script type="text/javascript" src="menu.js"></script>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:cf05388f2679ee054f2beb29a391d25f4e673ac3&amp;dn=gpl-2.0.txt GPL-v2 */
+$(function() {
+  initMenu('',false,false,'search.php','搜索');
+});
+/* @license-end */</script>
+<div id="main-nav"></div>
+</div><!-- top -->
+<div class="PageDoc"><div class="header">
+  <div class="headertitle">
+<div class="title">5、搭建开发环境 </div>  </div>
+</div><!--header-->
+<div class="contents">
+<div class="textblock"><html>
+
+<head>
+<meta http-equiv=Content-Type content="text/html; charset=utf-8">
+<meta name=Generator content="Microsoft Word 15 (filtered)">
+<style>
+<!--
+ /* Font Definitions */
+ @font-face
+	{font-family:"Cambria Math";
+	panose-1:2 4 5 3 5 4 6 3 2 4;}
+@font-face
+	{font-family:等线;
+	panose-1:2 1 6 0 3 1 1 1 1 1;}
+@font-face
+	{font-family:"\@等线";
+	panose-1:2 1 6 0 3 1 1 1 1 1;}
+ /* Style Definitions */
+ p.MsoNormal, li.MsoNormal, div.MsoNormal
+	{margin:0cm;
+	margin-bottom:.0001pt;
+	text-align:justify;
+	text-justify:inter-ideograph;
+	font-size:10.5pt;
+	font-family:等线;}
+h2
+	{mso-style-link:"标题 2 字符";
+	margin-top:13.0pt;
+	margin-right:0cm;
+	margin-bottom:13.0pt;
+	margin-left:0cm;
+	text-align:justify;
+	text-justify:inter-ideograph;
+	line-height:173%;
+	page-break-after:avoid;
+	font-size:14.0pt;
+	font-family:"等线 Light";}
+h3
+	{mso-style-link:"标题 3 字符";
+	margin-top:13.0pt;
+	margin-right:0cm;
+	margin-bottom:13.0pt;
+	margin-left:0cm;
+	text-align:justify;
+	text-justify:inter-ideograph;
+	line-height:173%;
+	page-break-after:avoid;
+	font-size:15.0pt;
+	font-family:等线;}
+p.MsoHeader, li.MsoHeader, div.MsoHeader
+	{mso-style-link:"页眉 字符";
+	margin:0cm;
+	margin-bottom:.0001pt;
+	text-align:center;
+	layout-grid-mode:char;
+	border:none;
+	padding:0cm;
+	font-size:9.0pt;
+	font-family:等线;}
+p.MsoFooter, li.MsoFooter, div.MsoFooter
+	{mso-style-link:"页脚 字符";
+	margin:0cm;
+	margin-bottom:.0001pt;
+	layout-grid-mode:char;
+	font-size:9.0pt;
+	font-family:等线;}
+a:link, span.MsoHyperlink
+	{color:#0563C1;
+	text-decoration:underline;}
+a:visited, span.MsoHyperlinkFollowed
+	{color:#954F72;
+	text-decoration:underline;}
+p.MsoAcetate, li.MsoAcetate, div.MsoAcetate
+	{mso-style-link:"批注框文本 字符";
+	margin:0cm;
+	margin-bottom:.0001pt;
+	text-align:justify;
+	text-justify:inter-ideograph;
+	font-size:9.0pt;
+	font-family:等线;}
+span.3
+	{mso-style-name:"标题 3 字符";
+	mso-style-link:"标题 3";
+	font-weight:bold;}
+span.a
+	{mso-style-name:"页眉 字符";
+	mso-style-link:页眉;}
+span.a0
+	{mso-style-name:"页脚 字符";
+	mso-style-link:页脚;}
+span.2
+	{mso-style-name:"标题 2 字符";
+	mso-style-link:"标题 2";
+	font-family:"等线 Light";
+	font-weight:bold;}
+span.a1
+	{mso-style-name:"批注框文本 字符";
+	mso-style-link:批注框文本;}
+.MsoChpDefault
+	{font-size:10.0pt;
+	font-family:等线;}
+ /* Page Definitions */
+ @page WordSection1
+	{size:595.3pt 841.9pt;
+	margin:72.0pt 90.0pt 72.0pt 90.0pt;
+	layout-grid:15.6pt;}
+div.WordSection1
+	{page:WordSection1;}
+-->
+</style>
+
+</head>
+
+<body lang=EN-US link="#0563C1" vlink="#954F72" style='text-justify-trim:punctuation'>
+
+<div class=WordSection1 style='layout-grid:15.6pt'>
+
+<h2><a name="_Toc35600596"><span style='font-family:"Times New Roman",serif'>1 </span></a><span
+lang=ZH-CN style='font-family:等线'>环境准备</span></h2>
+
+<p class=MsoNormal style='text-indent:21.0pt'><span lang=ZH-CN
+style='font-size:9.0pt'>（</span><span style='font-size:9.0pt;font-family:"Times New Roman",serif'>1</span><span
+lang=ZH-CN style='font-size:9.0pt'>）下载编译工具</span></p>
+
+<p class=MsoNormal style='text-indent:21.0pt'><span lang=ZH-CN
+style='font-size:9.0pt'>推荐使用</span><span style='font-size:9.0pt;font-family:
+"Times New Roman",serif'>Ubuntu 16.04 / centos7</span><span lang=ZH-CN
+style='font-size:9.0pt'>以上版本作为开发环境。</span></p>
+
+<p class=MsoNormal style='text-indent:21.0pt'><span lang=ZH-CN
+style='font-size:9.0pt'>交叉编译工具下载地址：链接：</span><a
+href="https://pan.baidu.com/s/1EHa10q7xkoySt5MA8_abew"><span style='font-size:
+9.0pt;font-family:"Times New Roman",serif'>https://pan.baidu.com/s/1EHa10q7xkoySt5MA8_abew</span></a><span
+style='font-size:9.0pt;font-family:"Times New Roman",serif'> </span></p>
+
+<p class=MsoNormal style='text-indent:21.0pt'><span lang=ZH-CN
+style='font-size:9.0pt'>提取码：</span><span style='font-size:9.0pt;font-family:
+"Times New Roman",serif'>cdbx</span></p>
+
+<p class=MsoNormal style='text-indent:21.0pt'><span lang=ZH-CN
+style='font-size:9.0pt'>下载交叉编译工具并解压到开发环境</span><span style='font-size:9.0pt;
+font-family:"Times New Roman",serif'>“/opt”</span><span lang=ZH-CN
+style='font-size:9.0pt'>路径中，或其他路径，然后修改</span><span style='font-size:9.0pt;
+font-family:"Times New Roman",serif'>makefile</span><span lang=ZH-CN
+style='font-size:9.0pt'>文件中配置选项：</span></p>
+
+<p class=MsoNormal align=center style='text-align:center'><span
+style='font-size:9.0pt;font-family:"Times New Roman",serif'><img border=0
+width=554 height=67 id="图片 116" src="djkfhj5_image001.png"></span></p>
+
+<p class=MsoNormal align=left style='text-align:left;text-indent:21.0pt'><span
+lang=ZH-CN style='font-size:9.0pt;color:#191F25'>（</span><span
+style='font-size:9.0pt;font-family:"Times New Roman",serif;color:#191F25'>2</span><span
+lang=ZH-CN style='font-size:9.0pt;color:#191F25'>）已下载的版本里除了可直接烧录使用的</span><span
+style='font-size:9.0pt;font-family:"Times New Roman",serif;color:#191F25'>image_demo</span><span
+lang=ZH-CN style='font-size:9.0pt;color:#191F25'>外，文件夹内包含产品方案源码，如下图所示：</span></p>
+
+<p class=MsoNormal align=center style='text-align:center'><span
+style='font-size:9.0pt;font-family:"Times New Roman",serif'><img border=0
+width=554 height=229 id="图片 114" src="djkfhj5_image002.png"></span></p>
+
+<p class=MsoNormal style='text-indent:21.0pt'><span lang=ZH-CN
+style='font-size:9.0pt'>（</span><span style='font-size:9.0pt;font-family:"Times New Roman",serif'>3</span><span
+lang=ZH-CN style='font-size:9.0pt'>）修改</span><span style='font-size:9.0pt;
+font-family:"Times New Roman",serif'>build/makefile</span><span lang=ZH-CN
+style='font-size:9.0pt'>中交叉工具链的路径为实际解压到的工具路径；</span></p>
+
+<p class=MsoNormal align=center style='margin-left:21.0pt;text-align:center'><span
+style='font-size:9.0pt;font-family:"Times New Roman",serif'><img border=0
+width=554 height=382 id="图片 115" src="djkfhj5_image003.png"></span></p>
+
+<p class=MsoNormal style='margin-left:21.0pt'><span lang=ZH-CN
+style='font-size:9.0pt'>（</span><span style='font-size:9.0pt;font-family:"Times New Roman",serif'>4</span><span
+lang=ZH-CN style='font-size:9.0pt'>）安装</span><span style='font-size:9.0pt;
+font-family:"Times New Roman",serif'>python</span><span lang=ZH-CN
+style='font-size:9.0pt'>环境：</span><span style='font-size:9.0pt;font-family:
+"Times New Roman",serif'>sudo apt-get install python<br>
+</span><span lang=ZH-CN style='font-size:9.0pt'>（</span><span style='font-size:
+9.0pt;font-family:"Times New Roman",serif'>5</span><span lang=ZH-CN
+style='font-size:9.0pt'>）安装</span><span style='font-size:9.0pt;font-family:
+"Times New Roman",serif'>lame</span><span lang=ZH-CN style='font-size:9.0pt'>音频处理工具：</span><span
+style='font-size:9.0pt;font-family:"Times New Roman",serif'>sudo apt-get
+install lame</span></p>
+
+<p class=MsoNormal style='margin-left:21.0pt'><span lang=ZH-CN
+style='font-size:9.0pt'>（</span><span style='font-size:9.0pt;font-family:"Times New Roman",serif'>6</span><span
+lang=ZH-CN style='font-size:9.0pt'>）安装</span><span style='font-size:9.0pt;
+font-family:"Times New Roman",serif'>32</span><span lang=ZH-CN
+style='font-size:9.0pt'>位兼容库（如果系统未安装过）：</span><span style='font-size:9.0pt;
+font-family:"Times New Roman",serif'>sudo apt-get install lib32stdc++6 lib32z1
+lib32ncurses5 lib32bz2-1.0</span><span lang=ZH-CN style='font-size:9.0pt'>（仅适用于</span><span
+style='font-size:9.0pt;font-family:"Times New Roman",serif'>Ubuntu 16.04</span><span
+lang=ZH-CN style='font-size:9.0pt'>版本，其他版本请根据系统说明解决兼容性问题）</span></p>
+
+<h2><a name="_Toc35600597"><span style='font-family:"Times New Roman",serif'>2 </span></a><span
+lang=ZH-CN style='font-family:等线'>编译</span></h2>
+
+<p class=MsoNormal style='text-indent:21.0pt'><span style='font-size:9.0pt;
+font-family:"Times New Roman",serif'>(1) </span><span lang=ZH-CN
+style='font-size:9.0pt'>执行编译</span></p>
+
+<p class=MsoNormal style='text-indent:21.0pt'><span lang=ZH-CN
+style='font-size:9.0pt'>执行</span><span style='font-size:9.0pt;font-family:"Times New Roman",serif'>./build.sh</span><span
+lang=ZH-CN style='font-size:9.0pt'>，编译成功会看到如下信息：</span></p>
+
+<p class=MsoNormal align=center style='text-align:center;text-indent:21.0pt'><span
+style='font-size:9.0pt;font-family:"Times New Roman",serif'><img border=0
+width=554 height=165 id="图片 117" src="djkfhj5_image004.png"></span></p>
+
+<p class=MsoNormal style='text-indent:21.0pt'><span style='font-size:9.0pt;
+font-family:"Times New Roman",serif'>(2) “output”</span><span lang=ZH-CN
+style='font-size:9.0pt'>目录下可以看到编译生成的完整固件，使用章节</span><span style='font-size:
+9.0pt;font-family:"Times New Roman",serif'>3</span><span lang=ZH-CN
+style='font-size:9.0pt'>中的下载工具即可进行烧录使用，目前</span><span style='font-size:9.0pt;
+font-family:"Times New Roman",serif'>build.sh</span><span lang=ZH-CN
+style='font-size:9.0pt'>脚本会同时编译生成</span><span style='font-size:9.0pt;
+font-family:"Times New Roman",serif'>debug</span><span lang=ZH-CN
+style='font-size:9.0pt'>和</span><span style='font-size:9.0pt;font-family:"Times New Roman",serif'>release</span><span
+lang=ZH-CN style='font-size:9.0pt'>两个版本，如需编译特定版本或者查看</span><span
+style='font-size:9.0pt;font-family:"Times New Roman",serif'>symbol</span><span
+lang=ZH-CN style='font-size:9.0pt'>信息，可以进入</span><span style='font-size:9.0pt;
+font-family:"Times New Roman",serif'>build</span><span lang=ZH-CN
+style='font-size:9.0pt'>目录，运行</span><span style='font-size:9.0pt;font-family:
+"Times New Roman",serif'>make</span><span lang=ZH-CN style='font-size:9.0pt'>指令手动编译，该方式生成</span><span
+style='font-size:9.0pt;font-family:"Times New Roman",serif'>bin</span><span
+lang=ZH-CN style='font-size:9.0pt'>文件及</span><span style='font-size:9.0pt;
+font-family:"Times New Roman",serif'>symbol.txt</span><span lang=ZH-CN
+style='font-size:9.0pt'>文件，存放在</span><span style='font-size:9.0pt;font-family:
+"Times New Roman",serif'>output</span><span lang=ZH-CN style='font-size:9.0pt'>目录中以供查看：</span></p>
+
+<p class=MsoNormal align=center style='text-align:center;text-indent:21.0pt'><span
+style='font-size:9.0pt;font-family:"Times New Roman",serif'><img border=0
+width=518 height=66 id="图片 118" src="djkfhj5_image005.png"></span></p>
+
+</div>
+
+</body>
+
+</html>
+ </div></div><!-- contents -->
+</div><!-- PageDoc -->
+</body>
+</html>

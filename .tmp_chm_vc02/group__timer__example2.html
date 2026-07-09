@@ -1,0 +1,136 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "https://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=9"/>
+<meta name="generator" content="Doxygen 1.8.18"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>蜂鸟M离线方案开发指导手册: user_timer_buzzer.c</title>
+<link href="tabs.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="jquery.js"></script>
+<script type="text/javascript" src="dynsections.js"></script>
+<link href="doxygen.css" rel="stylesheet" type="text/css" />
+</head>
+<body>
+<div id="top"><!-- do not remove this div, it is closed by doxygen! -->
+<div id="titlearea">
+<table cellspacing="0" cellpadding="0">
+ <tbody>
+ <tr style="height: 56px;">
+  <td id="projectalign" style="padding-left: 0.5em;">
+   <div id="projectname">蜂鸟M离线方案开发指导手册
+   &#160;<span id="projectnumber">v1.0.4</span>
+   </div>
+  </td>
+ </tr>
+ </tbody>
+</table>
+</div>
+<!-- end header part -->
+<!-- 制作者 Doxygen 1.8.18 -->
+<script type="text/javascript" src="menudata.js"></script>
+<script type="text/javascript" src="menu.js"></script>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:cf05388f2679ee054f2beb29a391d25f4e673ac3&amp;dn=gpl-2.0.txt GPL-v2 */
+$(function() {
+  initMenu('',false,false,'search.php','搜索');
+});
+/* @license-end */</script>
+<div id="main-nav"></div>
+</div><!-- top -->
+<div class="header">
+  <div class="headertitle">
+<div class="title">user_timer_buzzer.c<div class="ingroups"><a class="el" href="group__uni__timer.html">定时器</a> &raquo; <a class="el" href="group__uni__timer__example.html">定时器示例</a></div></div>  </div>
+</div><!--header-->
+<div class="contents">
+<dl class="section user"><dt></dt><dd></dd></dl>
+<p>可通过定义user/inc/user_config.h中的宏<a class="el" href="group__uni__config__demo__macro.html#ga234a8d36ebd8d152f3c487e19868578d">USER_RUN_DEMO_SELECT</a> 为<a class="el" href="group__uni__config__demo__macro.html#ga809e04d80b031d919c841ae486721936">USER_DEMO_BUZZER</a> 运行示例程序 </p><div class="fragment"><div class="line"><span class="comment">/**************************************************************************</span></div>
+<div class="line"><span class="comment"> * Copyright (C) 2020-2020  Unisound</span></div>
+<div class="line"><span class="comment"> *</span></div>
+<div class="line"><span class="comment"> * This program is free software; you can redistribute it and/or modify</span></div>
+<div class="line"><span class="comment"> * it under the terms of the GNU General Public License as published by</span></div>
+<div class="line"><span class="comment"> * the Free Software Foundation; either version 2 of the License, or</span></div>
+<div class="line"><span class="comment"> * any later version.</span></div>
+<div class="line"><span class="comment"> *</span></div>
+<div class="line"><span class="comment"> * This program is distributed in the hope that it will be useful,</span></div>
+<div class="line"><span class="comment"> * but WITHOUT ANY WARRANTY; without even the implied warranty of</span></div>
+<div class="line"><span class="comment"> * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the</span></div>
+<div class="line"><span class="comment"> * GNU General Public License for more details.</span></div>
+<div class="line"><span class="comment"> *</span></div>
+<div class="line"><span class="comment"> * You should have received a copy of the GNU General Public License along</span></div>
+<div class="line"><span class="comment"> * with this program; if not, write to the Free Software Foundation, Inc.,</span></div>
+<div class="line"><span class="comment"> * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.</span></div>
+<div class="line"><span class="comment"> **************************************************************************</span></div>
+<div class="line"><span class="comment"> *</span></div>
+<div class="line"><span class="comment"> * Description : user_timer_buzzer.c</span></div>
+<div class="line"><span class="comment"> * Author      : liuwenzheng@unisound.com</span></div>
+<div class="line"><span class="comment"> * Date        : 2020.04.21</span></div>
+<div class="line"><span class="comment"> *</span></div>
+<div class="line"><span class="comment"> **************************************************************************/</span></div>
+<div class="line"><span class="preprocessor">#include &quot;user_timer_buzzer.h&quot;</span></div>
+<div class="line"><span class="preprocessor">#include &quot;user_timer.h&quot;</span></div>
+<div class="line"><span class="preprocessor">#include &quot;user_gpio.h&quot;</span></div>
+<div class="line"> </div>
+<div class="line"><span class="preprocessor">#define TAG &quot;buzzer&quot;</span></div>
+<div class="line"> </div>
+<div class="line"><span class="preprocessor">#define BUZZER_HZ_MAX 4000</span></div>
+<div class="line"> </div>
+<div class="line"><span class="keyword">typedef</span> <span class="keyword">struct </span>{</div>
+<div class="line">  <a class="code" href="group__uni__timer__def.html#ga2336a2d465e48fc3aba5c7b34edb7786" title="定时器索引">eTIMER_IDX</a>    timer_idx;</div>
+<div class="line">  <a class="code" href="group__uni__gpio__def.html#gab98b40805939a8489960247300b6043a" title="GPIO号">GPIO_NUMBER</a>   gpio_num;</div>
+<div class="line">  uni_u32       hz;</div>
+<div class="line">  uni_u32       time_us;</div>
+<div class="line">}buzzer_context_t;</div>
+<div class="line"> </div>
+<div class="line"><span class="keyword">static</span> buzzer_context_t g_buzzer = {0};</div>
+<div class="line"> </div>
+<div class="line"><span class="keyword">static</span> <span class="keywordtype">void</span> _buzzer_timer_handle(<a class="code" href="group__uni__timer__def.html#ga2336a2d465e48fc3aba5c7b34edb7786" title="定时器索引">eTIMER_IDX</a> TimerIdx) {</div>
+<div class="line"><span class="preprocessor">#if GPIO_OUT_DEF_VAL</span></div>
+<div class="line">  <span class="keyword">volatile</span> <span class="keyword">static</span> <span class="keywordtype">int</span> cur_level = 1;</div>
+<div class="line"><span class="preprocessor">#else</span></div>
+<div class="line">  <span class="keyword">volatile</span> <span class="keyword">static</span> <span class="keywordtype">int</span> cur_level = 0;</div>
+<div class="line"><span class="preprocessor">#endif</span></div>
+<div class="line">  <span class="keywordflow">if</span> (g_buzzer.timer_idx == TimerIdx) {</div>
+<div class="line">    cur_level ^= 1;</div>
+<div class="line">    <a class="code" href="group__uni__gpio__inf.html#gad55c8bdb99d85eb520175ef09c70bcc8" title="设置GPIO端口数值">user_gpio_set_value</a>(g_buzzer.gpio_num, cur_level);</div>
+<div class="line">  }</div>
+<div class="line">}</div>
+<div class="line"> </div>
+<div class="line"><span class="keywordtype">int</span> user_timer_buzzer_init(<a class="code" href="group__uni__gpio__def.html#gab98b40805939a8489960247300b6043a" title="GPIO号">GPIO_NUMBER</a> num, <a class="code" href="group__uni__timer__def.html#ga2336a2d465e48fc3aba5c7b34edb7786" title="定时器索引">eTIMER_IDX</a> idx) {</div>
+<div class="line">  <a class="code" href="group__uni__gpio__inf.html#gaed630c4a7949f960914f5b4398b1996f" title="GPIO初始化">user_gpio_init</a>();</div>
+<div class="line">  <span class="keywordflow">if</span> (0 != <a class="code" href="group__uni__gpio__inf.html#ga723df1589dae08fc7a847f66a999a2d8" title="设置GPIO工作模式">user_gpio_set_mode</a>(num, GPIO_MODE_OUT)) {</div>
+<div class="line">    LOGE(TAG, <span class="stringliteral">&quot;user_gpio_set_mode failed.&quot;</span>);</div>
+<div class="line">  }</div>
+<div class="line">  g_buzzer.timer_idx = idx;</div>
+<div class="line">  g_buzzer.hz = 0;</div>
+<div class="line">  g_buzzer.gpio_num = num;</div>
+<div class="line">  g_buzzer.time_us = 0;</div>
+<div class="line">  <span class="keywordflow">return</span> 0;</div>
+<div class="line">}</div>
+<div class="line"> </div>
+<div class="line"><span class="keywordtype">void</span> user_timer_buzzer_final(<span class="keywordtype">void</span>) {</div>
+<div class="line">  <a class="code" href="group__uni__timer__inf.html#ga8ca96dac886c412113068c806c29f094" title="暂停定时器计数">user_timer_pause</a>(g_buzzer.timer_idx);</div>
+<div class="line">}</div>
+<div class="line"> </div>
+<div class="line"><span class="keywordtype">int</span> user_timer_buzzer_set_hz(uni_u32 hz) {</div>
+<div class="line">  <span class="keywordflow">if</span> (hz &gt; BUZZER_HZ_MAX) {</div>
+<div class="line">    LOGE(TAG, <span class="stringliteral">&quot;The maximum frequency is 4000Hz.&quot;</span>);</div>
+<div class="line">    <span class="keywordflow">return</span> -1;</div>
+<div class="line">  }</div>
+<div class="line">  <a class="code" href="group__uni__timer__inf.html#ga8ca96dac886c412113068c806c29f094" title="暂停定时器计数">user_timer_pause</a>(g_buzzer.timer_idx);</div>
+<div class="line">  g_buzzer.hz = hz;</div>
+<div class="line">  g_buzzer.time_us = 1000 * 1000 / g_buzzer.hz;</div>
+<div class="line">  <a class="code" href="group__uni__timer__inf.html#ga387a0bcd1fe9ed832c7b59a6916a1bd2" title="定时器初始化">user_timer_init</a>(g_buzzer.timer_idx, g_buzzer.time_us, <span class="keyword">false</span>,</div>
+<div class="line">                  _buzzer_timer_handle);</div>
+<div class="line">  <a class="code" href="group__uni__timer__inf.html#ga6b16748e51ee0f7dfc1f6d0eefc0a0ae" title="启动定时器">user_timer_start</a>(g_buzzer.timer_idx);</div>
+<div class="line">  <span class="keywordflow">return</span> 0;</div>
+<div class="line">}</div>
+<div class="line"> </div>
+<div class="line">uni_u32 user_timer_buzzer_get_hz(<span class="keywordtype">void</span>) {</div>
+<div class="line">  <span class="keywordflow">return</span> g_buzzer.hz;</div>
+<div class="line">}</div>
+<div class="line"> </div>
+<div class="line"> </div>
+</div><!-- fragment --> </div><!-- contents -->
+</body>
+</html>

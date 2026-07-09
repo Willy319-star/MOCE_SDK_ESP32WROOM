@@ -1,0 +1,174 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "https://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=9"/>
+<meta name="generator" content="Doxygen 1.8.18"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>蜂鸟M离线方案开发指导手册: 云知声简易协议数据通讯接口</title>
+<link href="tabs.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="jquery.js"></script>
+<script type="text/javascript" src="dynsections.js"></script>
+<link href="doxygen.css" rel="stylesheet" type="text/css" />
+</head>
+<body>
+<div id="top"><!-- do not remove this div, it is closed by doxygen! -->
+<div id="titlearea">
+<table cellspacing="0" cellpadding="0">
+ <tbody>
+ <tr style="height: 56px;">
+  <td id="projectalign" style="padding-left: 0.5em;">
+   <div id="projectname">蜂鸟M离线方案开发指导手册
+   &#160;<span id="projectnumber">v1.0.4</span>
+   </div>
+  </td>
+ </tr>
+ </tbody>
+</table>
+</div>
+<!-- end header part -->
+<!-- 制作者 Doxygen 1.8.18 -->
+<script type="text/javascript" src="menudata.js"></script>
+<script type="text/javascript" src="menu.js"></script>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:cf05388f2679ee054f2beb29a391d25f4e673ac3&amp;dn=gpl-2.0.txt GPL-v2 */
+$(function() {
+  initMenu('',false,false,'search.php','搜索');
+});
+/* @license-end */</script>
+<div id="main-nav"></div>
+</div><!-- top -->
+<div class="header">
+  <div class="summary">
+<a href="#nested-classes">结构体</a> &#124;
+<a href="#typedef-members">类型定义</a> &#124;
+<a href="#func-members">函数</a>  </div>
+  <div class="headertitle">
+<div class="title">云知声简易协议数据通讯接口<div class="ingroups"><a class="el" href="group__uni__communication.html">云知声数据通讯协议</a></div></div>  </div>
+</div><!--header-->
+<div class="contents">
+<table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="nested-classes"></a>
+结构体</h2></td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structsucp__pack__t.html">sucp_pack_t</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">简易串口协议数据包定义  <a href="structsucp__pack__t.html#details">更多...</a><br /></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="typedef-members"></a>
+类型定义</h2></td></tr>
+<tr class="memitem:gaac8df8826ab046862d483223f2a3146b"><td class="memItemLeft" align="right" valign="top">typedef void(*&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__uni__sample__communication__inf.html#gaac8df8826ab046862d483223f2a3146b">_user_uni_sucp_recv</a>) (<a class="el" href="structsucp__pack__t.html">sucp_pack_t</a> *pack)</td></tr>
+<tr class="memdesc:gaac8df8826ab046862d483223f2a3146b"><td class="mdescLeft">&#160;</td><td class="mdescRight">接收数据回调函数定义  <a href="group__uni__sample__communication__inf.html#gaac8df8826ab046862d483223f2a3146b">更多...</a><br /></td></tr>
+<tr class="separator:gaac8df8826ab046862d483223f2a3146b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
+函数</h2></td></tr>
+<tr class="memitem:ga1f7600707efa28a7a5bfe3786b20ade1"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__uni__sample__communication__inf.html#ga1f7600707efa28a7a5bfe3786b20ade1">user_uni_sucp_init</a> (<a class="el" href="group__uni__sample__communication__inf.html#gaac8df8826ab046862d483223f2a3146b">_user_uni_sucp_recv</a> cb_recv)</td></tr>
+<tr class="memdesc:ga1f7600707efa28a7a5bfe3786b20ade1"><td class="mdescLeft">&#160;</td><td class="mdescRight">通讯初始化  <a href="group__uni__sample__communication__inf.html#ga1f7600707efa28a7a5bfe3786b20ade1">更多...</a><br /></td></tr>
+<tr class="separator:ga1f7600707efa28a7a5bfe3786b20ade1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga770b24b17172e0518a0c1dea0984afa3"><td class="memItemLeft" align="right" valign="top"><a id="ga770b24b17172e0518a0c1dea0984afa3"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__uni__sample__communication__inf.html#ga770b24b17172e0518a0c1dea0984afa3">user_uni_sucp_final</a> (void)</td></tr>
+<tr class="memdesc:ga770b24b17172e0518a0c1dea0984afa3"><td class="mdescLeft">&#160;</td><td class="mdescRight">通讯逆初始化 <br /></td></tr>
+<tr class="separator:ga770b24b17172e0518a0c1dea0984afa3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga10c1afdb62cee33313f843c5a0dd1397"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__uni__sample__communication__inf.html#ga10c1afdb62cee33313f843c5a0dd1397">user_uni_sucp_send</a> (uni_u8 cmd_code, uni_u8 reserve[2])</td></tr>
+<tr class="memdesc:ga10c1afdb62cee33313f843c5a0dd1397"><td class="mdescLeft">&#160;</td><td class="mdescRight">通讯数据发送  <a href="group__uni__sample__communication__inf.html#ga10c1afdb62cee33313f843c5a0dd1397">更多...</a><br /></td></tr>
+<tr class="separator:ga10c1afdb62cee33313f843c5a0dd1397"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table>
+<a name="details" id="details"></a><h2 class="groupheader">详细描述</h2>
+<h2 class="groupheader">类型定义说明</h2>
+<a id="gaac8df8826ab046862d483223f2a3146b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#gaac8df8826ab046862d483223f2a3146b">&#9670;&nbsp;</a></span>_user_uni_sucp_recv</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">typedef void(* _user_uni_sucp_recv) (<a class="el" href="structsucp__pack__t.html">sucp_pack_t</a> *pack)</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<dl class="params"><dt>参数</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">pack</td><td>接收到的数据包 </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<h2 class="groupheader">函数说明</h2>
+<a id="ga1f7600707efa28a7a5bfe3786b20ade1"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ga1f7600707efa28a7a5bfe3786b20ade1">&#9670;&nbsp;</a></span>user_uni_sucp_init()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int user_uni_sucp_init </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="group__uni__sample__communication__inf.html#gaac8df8826ab046862d483223f2a3146b">_user_uni_sucp_recv</a>&#160;</td>
+          <td class="paramname"><em>cb_recv</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<dl class="params"><dt>参数</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">cb_recv</td><td>接收数据回调函数 </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="retval"><dt>返回值</dt><dd>
+  <table class="retval">
+    <tr><td class="paramname">0</td><td>操作成功 </td></tr>
+    <tr><td class="paramname">-1</td><td>操作失败 </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="ga10c1afdb62cee33313f843c5a0dd1397"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ga10c1afdb62cee33313f843c5a0dd1397">&#9670;&nbsp;</a></span>user_uni_sucp_send()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int user_uni_sucp_send </td>
+          <td>(</td>
+          <td class="paramtype">uni_u8&#160;</td>
+          <td class="paramname"><em>cmd_code</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">uni_u8&#160;</td>
+          <td class="paramname"><em>reserve</em>[2]&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<dl class="params"><dt>参数</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">cmd_code</td><td>命令码 </td></tr>
+    <tr><td class="paramname">reserve</td><td>协议预留字节，固定长度为2 </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="retval"><dt>返回值</dt><dd>
+  <table class="retval">
+    <tr><td class="paramname">else</td><td>实际发送字符长度 </td></tr>
+    <tr><td class="paramname">-1</td><td>操作失败 </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+</div><!-- contents -->
+</body>
+</html>

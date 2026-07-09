@@ -1,0 +1,196 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "https://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=9"/>
+<meta name="generator" content="Doxygen 1.8.18"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>蜂鸟M离线方案开发指导手册: 定时器接口</title>
+<link href="tabs.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="jquery.js"></script>
+<script type="text/javascript" src="dynsections.js"></script>
+<link href="doxygen.css" rel="stylesheet" type="text/css" />
+</head>
+<body>
+<div id="top"><!-- do not remove this div, it is closed by doxygen! -->
+<div id="titlearea">
+<table cellspacing="0" cellpadding="0">
+ <tbody>
+ <tr style="height: 56px;">
+  <td id="projectalign" style="padding-left: 0.5em;">
+   <div id="projectname">蜂鸟M离线方案开发指导手册
+   &#160;<span id="projectnumber">v1.0.4</span>
+   </div>
+  </td>
+ </tr>
+ </tbody>
+</table>
+</div>
+<!-- end header part -->
+<!-- 制作者 Doxygen 1.8.18 -->
+<script type="text/javascript" src="menudata.js"></script>
+<script type="text/javascript" src="menu.js"></script>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:cf05388f2679ee054f2beb29a391d25f4e673ac3&amp;dn=gpl-2.0.txt GPL-v2 */
+$(function() {
+  initMenu('',false,false,'search.php','搜索');
+});
+/* @license-end */</script>
+<div id="main-nav"></div>
+</div><!-- top -->
+<div class="header">
+  <div class="summary">
+<a href="#func-members">函数</a>  </div>
+  <div class="headertitle">
+<div class="title">定时器接口<div class="ingroups"><a class="el" href="group__uni__timer.html">定时器</a></div></div>  </div>
+</div><!--header-->
+<div class="contents">
+<table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
+函数</h2></td></tr>
+<tr class="memitem:ga387a0bcd1fe9ed832c7b59a6916a1bd2"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__uni__timer__inf.html#ga387a0bcd1fe9ed832c7b59a6916a1bd2">user_timer_init</a> (<a class="el" href="group__uni__timer__def.html#ga2336a2d465e48fc3aba5c7b34edb7786">eTIMER_IDX</a> idx, uint32_t usec, bool single_shot, <a class="el" href="group__uni__timer__def.html#gad1bf9ba5ed3284e396d24d96bbd30bb9">usr_timer_callback</a> cb)</td></tr>
+<tr class="memdesc:ga387a0bcd1fe9ed832c7b59a6916a1bd2"><td class="mdescLeft">&#160;</td><td class="mdescRight">定时器初始化  <a href="group__uni__timer__inf.html#ga387a0bcd1fe9ed832c7b59a6916a1bd2">更多...</a><br /></td></tr>
+<tr class="separator:ga387a0bcd1fe9ed832c7b59a6916a1bd2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga6b16748e51ee0f7dfc1f6d0eefc0a0ae"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__uni__timer__inf.html#ga6b16748e51ee0f7dfc1f6d0eefc0a0ae">user_timer_start</a> (<a class="el" href="group__uni__timer__def.html#ga2336a2d465e48fc3aba5c7b34edb7786">eTIMER_IDX</a> idx)</td></tr>
+<tr class="memdesc:ga6b16748e51ee0f7dfc1f6d0eefc0a0ae"><td class="mdescLeft">&#160;</td><td class="mdescRight">启动定时器  <a href="group__uni__timer__inf.html#ga6b16748e51ee0f7dfc1f6d0eefc0a0ae">更多...</a><br /></td></tr>
+<tr class="separator:ga6b16748e51ee0f7dfc1f6d0eefc0a0ae"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga8ca96dac886c412113068c806c29f094"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__uni__timer__inf.html#ga8ca96dac886c412113068c806c29f094">user_timer_pause</a> (<a class="el" href="group__uni__timer__def.html#ga2336a2d465e48fc3aba5c7b34edb7786">eTIMER_IDX</a> idx)</td></tr>
+<tr class="memdesc:ga8ca96dac886c412113068c806c29f094"><td class="mdescLeft">&#160;</td><td class="mdescRight">暂停定时器计数  <a href="group__uni__timer__inf.html#ga8ca96dac886c412113068c806c29f094">更多...</a><br /></td></tr>
+<tr class="separator:ga8ca96dac886c412113068c806c29f094"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga2be02c0850329181bb8724d7a62f6c79"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__uni__timer__inf.html#ga2be02c0850329181bb8724d7a62f6c79">user_timer_resume</a> (<a class="el" href="group__uni__timer__def.html#ga2336a2d465e48fc3aba5c7b34edb7786">eTIMER_IDX</a> idx)</td></tr>
+<tr class="memdesc:ga2be02c0850329181bb8724d7a62f6c79"><td class="mdescLeft">&#160;</td><td class="mdescRight">重新使能定时器计数  <a href="group__uni__timer__inf.html#ga2be02c0850329181bb8724d7a62f6c79">更多...</a><br /></td></tr>
+<tr class="separator:ga2be02c0850329181bb8724d7a62f6c79"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table>
+<a name="details" id="details"></a><h2 class="groupheader">详细描述</h2>
+<h2 class="groupheader">函数说明</h2>
+<a id="ga387a0bcd1fe9ed832c7b59a6916a1bd2"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ga387a0bcd1fe9ed832c7b59a6916a1bd2">&#9670;&nbsp;</a></span>user_timer_init()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int user_timer_init </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="group__uni__timer__def.html#ga2336a2d465e48fc3aba5c7b34edb7786">eTIMER_IDX</a>&#160;</td>
+          <td class="paramname"><em>idx</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">uint32_t&#160;</td>
+          <td class="paramname"><em>usec</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>single_shot</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="group__uni__timer__def.html#gad1bf9ba5ed3284e396d24d96bbd30bb9">usr_timer_callback</a>&#160;</td>
+          <td class="paramname"><em>cb</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<dl class="params"><dt>参数</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">idx</td><td>定时器索引 </td></tr>
+    <tr><td class="paramname">usec</td><td>定时设置, 单位：微妙(us) </td></tr>
+    <tr><td class="paramname">single_shot</td><td>0: 连续模式，超时之后，定时器会重新装载计数值. 1: 单次模式, 超时之后，定时器停止工作。 </td></tr>
+    <tr><td class="paramname">cb</td><td>timer中断处理回调函数，会在中断处理中调用此函数</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="retval"><dt>返回值</dt><dd>
+  <table class="retval">
+    <tr><td class="paramname">0</td><td>操作成功 </td></tr>
+    <tr><td class="paramname">-1</td><td>操作失败 </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="ga8ca96dac886c412113068c806c29f094"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ga8ca96dac886c412113068c806c29f094">&#9670;&nbsp;</a></span>user_timer_pause()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void user_timer_pause </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="group__uni__timer__def.html#ga2336a2d465e48fc3aba5c7b34edb7786">eTIMER_IDX</a>&#160;</td>
+          <td class="paramname"><em>idx</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<dl class="params"><dt>参数</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">idx</td><td>定时器索引 </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="ga2be02c0850329181bb8724d7a62f6c79"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ga2be02c0850329181bb8724d7a62f6c79">&#9670;&nbsp;</a></span>user_timer_resume()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void user_timer_resume </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="group__uni__timer__def.html#ga2336a2d465e48fc3aba5c7b34edb7786">eTIMER_IDX</a>&#160;</td>
+          <td class="paramname"><em>idx</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<dl class="params"><dt>参数</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">idx</td><td>定时器索引 </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="ga6b16748e51ee0f7dfc1f6d0eefc0a0ae"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ga6b16748e51ee0f7dfc1f6d0eefc0a0ae">&#9670;&nbsp;</a></span>user_timer_start()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void user_timer_start </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="group__uni__timer__def.html#ga2336a2d465e48fc3aba5c7b34edb7786">eTIMER_IDX</a>&#160;</td>
+          <td class="paramname"><em>idx</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<dl class="params"><dt>参数</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">idx</td><td>定时器索引 </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+</div><!-- contents -->
+</body>
+</html>

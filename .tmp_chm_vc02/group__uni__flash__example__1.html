@@ -1,0 +1,101 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "https://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=9"/>
+<meta name="generator" content="Doxygen 1.8.18"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>蜂鸟M离线方案开发指导手册: hb_flash_example.c</title>
+<link href="tabs.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="jquery.js"></script>
+<script type="text/javascript" src="dynsections.js"></script>
+<link href="doxygen.css" rel="stylesheet" type="text/css" />
+</head>
+<body>
+<div id="top"><!-- do not remove this div, it is closed by doxygen! -->
+<div id="titlearea">
+<table cellspacing="0" cellpadding="0">
+ <tbody>
+ <tr style="height: 56px;">
+  <td id="projectalign" style="padding-left: 0.5em;">
+   <div id="projectname">蜂鸟M离线方案开发指导手册
+   &#160;<span id="projectnumber">v1.0.4</span>
+   </div>
+  </td>
+ </tr>
+ </tbody>
+</table>
+</div>
+<!-- end header part -->
+<!-- 制作者 Doxygen 1.8.18 -->
+<script type="text/javascript" src="menudata.js"></script>
+<script type="text/javascript" src="menu.js"></script>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:cf05388f2679ee054f2beb29a391d25f4e673ac3&amp;dn=gpl-2.0.txt GPL-v2 */
+$(function() {
+  initMenu('',false,false,'search.php','搜索');
+});
+/* @license-end */</script>
+<div id="main-nav"></div>
+</div><!-- top -->
+<div class="header">
+  <div class="headertitle">
+<div class="title">hb_flash_example.c<div class="ingroups"><a class="el" href="group__uni__flash.html">数据存储</a> &raquo; <a class="el" href="group__uni__flash__example.html">数据存储示例</a></div></div>  </div>
+</div><!--header-->
+<div class="contents">
+<dl class="section user"><dt></dt><dd></dd></dl>
+<p>可通过定义user/inc/user_config.h中的宏<a class="el" href="group__uni__config__demo__macro.html#ga234a8d36ebd8d152f3c487e19868578d">USER_RUN_DEMO_SELECT</a> 为<a class="el" href="group__uni__config__demo__macro.html#ga2fbf4d8a60c011f53044d583ddc8a2ef">USER_DEMO_FLASH</a> 运行示例程序 </p><div class="fragment"><div class="line"><span class="comment">/**************************************************************************</span></div>
+<div class="line"><span class="comment"> * Copyright (C) 2020-2020  Unisound</span></div>
+<div class="line"><span class="comment"> *</span></div>
+<div class="line"><span class="comment"> * This program is free software; you can redistribute it and/or modify</span></div>
+<div class="line"><span class="comment"> * it under the terms of the GNU General Public License as published by</span></div>
+<div class="line"><span class="comment"> * the Free Software Foundation; either version 2 of the License, or</span></div>
+<div class="line"><span class="comment"> * any later version.</span></div>
+<div class="line"><span class="comment"> *</span></div>
+<div class="line"><span class="comment"> * This program is distributed in the hope that it will be useful,</span></div>
+<div class="line"><span class="comment"> * but WITHOUT ANY WARRANTY; without even the implied warranty of</span></div>
+<div class="line"><span class="comment"> * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the</span></div>
+<div class="line"><span class="comment"> * GNU General Public License for more details.</span></div>
+<div class="line"><span class="comment"> *</span></div>
+<div class="line"><span class="comment"> * You should have received a copy of the GNU General Public License along</span></div>
+<div class="line"><span class="comment"> * with this program; if not, write to the Free Software Foundation, Inc.,</span></div>
+<div class="line"><span class="comment"> * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.</span></div>
+<div class="line"><span class="comment"> **************************************************************************</span></div>
+<div class="line"><span class="comment"> *</span></div>
+<div class="line"><span class="comment"> * Description : user_flash_example.c</span></div>
+<div class="line"><span class="comment"> * Author      : yuanshifeng@unisound.com</span></div>
+<div class="line"><span class="comment"> * Date        : 2020.04.25</span></div>
+<div class="line"><span class="comment"> *</span></div>
+<div class="line"><span class="comment"> **************************************************************************/</span></div>
+<div class="line"><span class="preprocessor">#include &quot;user_flash.h&quot;</span></div>
+<div class="line"> </div>
+<div class="line"><span class="preprocessor">#define TAG &quot;flash_example&quot;</span></div>
+<div class="line"> </div>
+<div class="line"><span class="preprocessor">#define BLOB_KEY_EXAMPLE_INT   &quot;EXAMPLE_INT&quot;</span></div>
+<div class="line"><span class="preprocessor">#define BLOB_TYPE_U32  uni_u32</span></div>
+<div class="line"> </div>
+<div class="line"><span class="keywordtype">int</span> hb_flash(<span class="keywordtype">void</span>) {</div>
+<div class="line">  BLOB_TYPE_U32 example_int = 0;</div>
+<div class="line">  <span class="keywordtype">int</span> save_len = 0;</div>
+<div class="line"> </div>
+<div class="line">  <span class="keywordflow">if</span> (0 != <a class="code" href="group__uni__flash__inf.html#gaad13ffb6718e50a9ca8710dee9fa9c82" title="flash初始化">user_flash_init</a>()) {</div>
+<div class="line">    LOGE(TAG, <span class="stringliteral">&quot;user_flash_init failed.&quot;</span>);</div>
+<div class="line">    <span class="keywordflow">return</span> -1;</div>
+<div class="line">  }</div>
+<div class="line">  <a class="code" href="group__uni__flash__inf.html#ga2d0294f811e7fda5f18f291ac899b2ba" title="读取输入键的值">user_flash_get_env_blob</a>(BLOB_KEY_EXAMPLE_INT, &amp;example_int,</div>
+<div class="line">                          <span class="keyword">sizeof</span>(BLOB_TYPE_U32), &amp;save_len);</div>
+<div class="line">  <span class="keywordflow">if</span> (save_len != <span class="keyword">sizeof</span>(BLOB_TYPE_U32)) {</div>
+<div class="line">    <span class="comment">//仅首次开机进入，发现flash中没有&quot;EXAMPLE_INT&quot;字段，保存一个88进去，待下次开机查看是否能直接读取出这个值。</span></div>
+<div class="line">    BLOB_TYPE_U32 set_int = 88;</div>
+<div class="line">    LOGT(TAG, <span class="stringliteral">&quot;cannot found %s in flash, save value %d into flash&quot;</span>, BLOB_KEY_EXAMPLE_INT, set_int);</div>
+<div class="line">    <a class="code" href="group__uni__flash__inf.html#gab5d4eca5c4afdca266efd4aecf6a55f1" title="保存键值数据对到flash">user_flash_set_env_blob</a>(BLOB_KEY_EXAMPLE_INT, &amp;set_int,<span class="keyword">sizeof</span>(BLOB_TYPE_U32));</div>
+<div class="line">  }</div>
+<div class="line">  <span class="keywordflow">if</span> (example_int &gt; 0) {</div>
+<div class="line">    <span class="comment">//打印读取flash中&quot;EXAMPLE_INT&quot;字段的值，读出88表示成功保存了值到flash中</span></div>
+<div class="line">    LOGT(TAG, <span class="stringliteral">&quot;read %s in flash success, value is %d&quot;</span>, BLOB_KEY_EXAMPLE_INT, example_int);</div>
+<div class="line">  }</div>
+<div class="line">  <span class="keywordflow">return</span> 0;</div>
+<div class="line">}</div>
+</div><!-- fragment --> </div><!-- contents -->
+</body>
+</html>

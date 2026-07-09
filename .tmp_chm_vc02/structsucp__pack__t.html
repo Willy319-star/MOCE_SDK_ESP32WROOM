@@ -1,0 +1,75 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "https://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=9"/>
+<meta name="generator" content="Doxygen 1.8.18"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>蜂鸟M离线方案开发指导手册: sucp_pack_t结构体 参考</title>
+<link href="tabs.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="jquery.js"></script>
+<script type="text/javascript" src="dynsections.js"></script>
+<link href="doxygen.css" rel="stylesheet" type="text/css" />
+</head>
+<body>
+<div id="top"><!-- do not remove this div, it is closed by doxygen! -->
+<div id="titlearea">
+<table cellspacing="0" cellpadding="0">
+ <tbody>
+ <tr style="height: 56px;">
+  <td id="projectalign" style="padding-left: 0.5em;">
+   <div id="projectname">蜂鸟M离线方案开发指导手册
+   &#160;<span id="projectnumber">v1.0.4</span>
+   </div>
+  </td>
+ </tr>
+ </tbody>
+</table>
+</div>
+<!-- end header part -->
+<!-- 制作者 Doxygen 1.8.18 -->
+<script type="text/javascript" src="menudata.js"></script>
+<script type="text/javascript" src="menu.js"></script>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:cf05388f2679ee054f2beb29a391d25f4e673ac3&amp;dn=gpl-2.0.txt GPL-v2 */
+$(function() {
+  initMenu('',false,false,'search.php','搜索');
+});
+/* @license-end */</script>
+<div id="main-nav"></div>
+</div><!-- top -->
+<div class="header">
+  <div class="summary">
+<a href="#pub-attribs">成员变量</a>  </div>
+  <div class="headertitle">
+<div class="title">sucp_pack_t结构体 参考<div class="ingroups"><a class="el" href="group__uni__communication.html">云知声数据通讯协议</a> &raquo; <a class="el" href="group__uni__sample__communication__inf.html">云知声简易协议数据通讯接口</a></div></div>  </div>
+</div><!--header-->
+<div class="contents">
+
+<p>简易串口协议数据包定义  
+</p>
+
+<p><code>#include &lt;<a class="el" href="user__uni__sucp_8h_source.html">user_uni_sucp.h</a>&gt;</code></p>
+<table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-attribs"></a>
+成员变量</h2></td></tr>
+<tr class="memitem:a4bd342667060f25961cdecde7fd50074"><td class="memItemLeft" align="right" valign="top"><a id="a4bd342667060f25961cdecde7fd50074"></a>
+uni_u8&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structsucp__pack__t.html#a4bd342667060f25961cdecde7fd50074">start_code</a></td></tr>
+<tr class="memdesc:a4bd342667060f25961cdecde7fd50074"><td class="mdescLeft">&#160;</td><td class="mdescRight">起始码用于同步，固定为0x5A <br /></td></tr>
+<tr class="separator:a4bd342667060f25961cdecde7fd50074"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a59e060c4ba448b976120fee2c8f1f7b1"><td class="memItemLeft" align="right" valign="top"><a id="a59e060c4ba448b976120fee2c8f1f7b1"></a>
+uni_u8&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structsucp__pack__t.html#a59e060c4ba448b976120fee2c8f1f7b1">cmd_code</a></td></tr>
+<tr class="memdesc:a59e060c4ba448b976120fee2c8f1f7b1"><td class="mdescLeft">&#160;</td><td class="mdescRight">命令码，用于传递指令信息 <br /></td></tr>
+<tr class="separator:a59e060c4ba448b976120fee2c8f1f7b1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2a9be22cbfc29680f097be9580ce9c45"><td class="memItemLeft" align="right" valign="top"><a id="a2a9be22cbfc29680f097be9580ce9c45"></a>
+uni_u8&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structsucp__pack__t.html#a2a9be22cbfc29680f097be9580ce9c45">reserve</a> [2]</td></tr>
+<tr class="memdesc:a2a9be22cbfc29680f097be9580ce9c45"><td class="mdescLeft">&#160;</td><td class="mdescRight">保留字用于扩展，未使用固定为0x00 <br /></td></tr>
+<tr class="separator:a2a9be22cbfc29680f097be9580ce9c45"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a98a79d506a5cade52f0173f8845e4295"><td class="memItemLeft" align="right" valign="top"><a id="a98a79d506a5cade52f0173f8845e4295"></a>
+uni_u8&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structsucp__pack__t.html#a98a79d506a5cade52f0173f8845e4295">checksum</a></td></tr>
+<tr class="memdesc:a98a79d506a5cade52f0173f8845e4295"><td class="mdescLeft">&#160;</td><td class="mdescRight">8位加法校验和 <br /></td></tr>
+<tr class="separator:a98a79d506a5cade52f0173f8845e4295"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table>
+</div><!-- contents -->
+</body>
+</html>

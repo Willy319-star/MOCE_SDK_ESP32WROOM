@@ -1,0 +1,694 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "https://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=9"/>
+<meta name="generator" content="Doxygen 1.8.18"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>蜂鸟M离线方案开发指导手册: 云知声简易协议数据通讯</title>
+<link href="tabs.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="jquery.js"></script>
+<script type="text/javascript" src="dynsections.js"></script>
+<link href="doxygen.css" rel="stylesheet" type="text/css" />
+</head>
+<body>
+<div id="top"><!-- do not remove this div, it is closed by doxygen! -->
+<div id="titlearea">
+<table cellspacing="0" cellpadding="0">
+ <tbody>
+ <tr style="height: 56px;">
+  <td id="projectalign" style="padding-left: 0.5em;">
+   <div id="projectname">蜂鸟M离线方案开发指导手册
+   &#160;<span id="projectnumber">v1.0.4</span>
+   </div>
+  </td>
+ </tr>
+ </tbody>
+</table>
+</div>
+<!-- end header part -->
+<!-- 制作者 Doxygen 1.8.18 -->
+<script type="text/javascript" src="menudata.js"></script>
+<script type="text/javascript" src="menu.js"></script>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:cf05388f2679ee054f2beb29a391d25f4e673ac3&amp;dn=gpl-2.0.txt GPL-v2 */
+$(function() {
+  initMenu('',false,false,'search.php','搜索');
+});
+/* @license-end */</script>
+<div id="main-nav"></div>
+</div><!-- top -->
+<div class="header">
+  <div class="headertitle">
+<div class="title">云知声简易协议数据通讯<div class="ingroups"><a class="el" href="group__uni__communication.html">云知声数据通讯协议</a></div></div>  </div>
+</div><!--header-->
+<div class="contents">
+<dl class="section user"><dt>云知声简易协议数据通讯说明:</dt><dd></dd></dl>
+<ol type="1">
+<li>需要定义user/inc/user_config.h中的宏<a class="el" href="group__uni__config__communication__macro.html#ga4e8e1ce809fd83e0fcc1df4ef5053e3e">USE_UNIONE_PROTOCOL</a> 设为1来启用此功能</li>
+</ol>
+<dl class="section user"><dt>协议说明:</dt><dd></dd></dl>
+<html>
+
+<head>
+<meta http-equiv=Content-Type content="text/html; charset=utf-8">
+<meta name=Generator content="Microsoft Word 15 (filtered)">
+<style>
+<!--
+ /* Font Definitions */
+ @font-face
+	{font-family:宋体;
+	panose-1:2 1 6 0 3 1 1 1 1 1;}
+@font-face
+	{font-family:黑体;
+	panose-1:2 1 6 9 6 1 1 1 1 1;}
+@font-face
+	{font-family:"Cambria Math";
+	panose-1:2 4 5 3 5 4 6 3 2 4;}
+@font-face
+	{font-family:Calibri;
+	panose-1:2 15 5 2 2 2 4 3 2 4;}
+@font-face
+	{font-family:"\@宋体";
+	panose-1:2 1 6 0 3 1 1 1 1 1;}
+@font-face
+	{font-family:"\@黑体";
+	panose-1:2 1 6 9 6 1 1 1 1 1;}
+ /* Style Definitions */
+ p.MsoNormal, li.MsoNormal, div.MsoNormal
+	{margin:0cm;
+	margin-bottom:.0001pt;
+	text-align:justify;
+	text-justify:inter-ideograph;
+	font-size:10.5pt;
+	font-family:"Calibri",sans-serif;}
+h1
+	{margin-top:17.0pt;
+	margin-right:0cm;
+	margin-bottom:16.5pt;
+	margin-left:21.6pt;
+	text-align:justify;
+	text-justify:inter-ideograph;
+	text-indent:-21.6pt;
+	line-height:240%;
+	page-break-after:avoid;
+	font-size:22.0pt;
+	font-family:"Calibri",sans-serif;
+	font-weight:bold;}
+h2
+	{margin-top:13.0pt;
+	margin-right:0cm;
+	margin-bottom:13.0pt;
+	margin-left:28.75pt;
+	text-align:justify;
+	text-justify:inter-ideograph;
+	text-indent:-28.75pt;
+	line-height:172%;
+	page-break-after:avoid;
+	font-size:16.0pt;
+	font-family:"Arial",sans-serif;
+	font-weight:bold;}
+h3
+	{margin-top:13.0pt;
+	margin-right:0cm;
+	margin-bottom:13.0pt;
+	margin-left:36.0pt;
+	text-align:justify;
+	text-justify:inter-ideograph;
+	text-indent:-36.0pt;
+	line-height:172%;
+	page-break-after:avoid;
+	font-size:16.0pt;
+	font-family:"Calibri",sans-serif;
+	font-weight:bold;}
+h4
+	{margin-top:14.0pt;
+	margin-right:0cm;
+	margin-bottom:14.5pt;
+	margin-left:43.2pt;
+	text-align:justify;
+	text-justify:inter-ideograph;
+	text-indent:-43.2pt;
+	line-height:155%;
+	page-break-after:avoid;
+	font-size:14.0pt;
+	font-family:"Arial",sans-serif;
+	font-weight:bold;}
+h5
+	{margin-top:14.0pt;
+	margin-right:0cm;
+	margin-bottom:14.5pt;
+	margin-left:50.4pt;
+	text-align:justify;
+	text-justify:inter-ideograph;
+	text-indent:-50.4pt;
+	line-height:155%;
+	page-break-after:avoid;
+	font-size:14.0pt;
+	font-family:"Calibri",sans-serif;
+	font-weight:bold;}
+h6
+	{margin-top:12.0pt;
+	margin-right:0cm;
+	margin-bottom:3.2pt;
+	margin-left:57.55pt;
+	text-align:justify;
+	text-justify:inter-ideograph;
+	text-indent:-57.55pt;
+	line-height:132%;
+	page-break-after:avoid;
+	font-size:12.0pt;
+	font-family:"Arial",sans-serif;
+	font-weight:bold;}
+p.MsoHeading7, li.MsoHeading7, div.MsoHeading7
+	{margin-top:12.0pt;
+	margin-right:0cm;
+	margin-bottom:3.2pt;
+	margin-left:64.8pt;
+	text-align:justify;
+	text-justify:inter-ideograph;
+	text-indent:-64.8pt;
+	line-height:132%;
+	page-break-after:avoid;
+	font-size:12.0pt;
+	font-family:"Calibri",sans-serif;
+	font-weight:bold;}
+p.MsoHeading8, li.MsoHeading8, div.MsoHeading8
+	{margin-top:12.0pt;
+	margin-right:0cm;
+	margin-bottom:3.2pt;
+	margin-left:72.0pt;
+	text-align:justify;
+	text-justify:inter-ideograph;
+	text-indent:-72.0pt;
+	line-height:132%;
+	page-break-after:avoid;
+	font-size:12.0pt;
+	font-family:"Arial",sans-serif;}
+p.MsoHeading9, li.MsoHeading9, div.MsoHeading9
+	{margin-top:12.0pt;
+	margin-right:0cm;
+	margin-bottom:3.2pt;
+	margin-left:79.15pt;
+	text-align:justify;
+	text-justify:inter-ideograph;
+	text-indent:-79.15pt;
+	line-height:132%;
+	page-break-after:avoid;
+	font-size:10.5pt;
+	font-family:"Arial",sans-serif;}
+p.MsoToc1, li.MsoToc1, div.MsoToc1
+	{margin:0cm;
+	margin-bottom:.0001pt;
+	text-align:justify;
+	text-justify:inter-ideograph;
+	font-size:10.5pt;
+	font-family:"Calibri",sans-serif;}
+p.MsoToc2, li.MsoToc2, div.MsoToc2
+	{margin-top:0cm;
+	margin-right:0cm;
+	margin-bottom:0cm;
+	margin-left:21.0pt;
+	margin-bottom:.0001pt;
+	text-align:justify;
+	text-justify:inter-ideograph;
+	font-size:10.5pt;
+	font-family:"Calibri",sans-serif;}
+p.MsoToc3, li.MsoToc3, div.MsoToc3
+	{margin-top:0cm;
+	margin-right:0cm;
+	margin-bottom:0cm;
+	margin-left:42.0pt;
+	margin-bottom:.0001pt;
+	text-align:justify;
+	text-justify:inter-ideograph;
+	font-size:10.5pt;
+	font-family:"Calibri",sans-serif;}
+p.MsoToc4, li.MsoToc4, div.MsoToc4
+	{margin-top:0cm;
+	margin-right:0cm;
+	margin-bottom:0cm;
+	margin-left:63.0pt;
+	margin-bottom:.0001pt;
+	text-align:justify;
+	text-justify:inter-ideograph;
+	font-size:10.5pt;
+	font-family:"Calibri",sans-serif;}
+p.MsoHeader, li.MsoHeader, div.MsoHeader
+	{margin:0cm;
+	margin-bottom:.0001pt;
+	text-align:justify;
+	text-justify:inter-ideograph;
+	layout-grid-mode:char;
+	border:none;
+	padding:0cm;
+	font-size:9.0pt;
+	font-family:"Calibri",sans-serif;}
+p.MsoFooter, li.MsoFooter, div.MsoFooter
+	{margin:0cm;
+	margin-bottom:.0001pt;
+	layout-grid-mode:char;
+	font-size:9.0pt;
+	font-family:"Calibri",sans-serif;}
+a:link, span.MsoHyperlink
+	{color:#0563C1;
+	text-decoration:underline;}
+a:visited, span.MsoHyperlinkFollowed
+	{color:#954F72;
+	text-decoration:underline;}
+p
+	{margin-right:0cm;
+	margin-left:0cm;
+	font-size:12.0pt;
+	font-family:宋体;}
+code
+	{font-family:"Courier New";}
+span.apple-converted-space
+	{mso-style-name:apple-converted-space;}
+.MsoChpDefault
+	{font-size:10.0pt;}
+ /* Page Definitions */
+ @page WordSection1
+	{size:595.3pt 841.9pt;
+	margin:72.0pt 90.0pt 72.0pt 90.0pt;
+	layout-grid:15.6pt;}
+div.WordSection1
+	{page:WordSection1;}
+ /* List Definitions */
+ ol
+	{margin-bottom:0cm;}
+ul
+	{margin-bottom:0cm;}
+-->
+</style>
+
+</head>
+
+<body lang=EN-US link="#0563C1" vlink="#954F72" style='text-justify-trim:punctuation'>
+
+<div class=WordSection1 style='layout-grid:15.6pt'>
+
+<p class=MsoNormal>&nbsp;</p>
+
+<p class=MsoNormal>&nbsp;</p>
+
+<p class=MsoNormal align=center style='text-align:center'><b><span lang=ZH-CN
+style='font-size:22.0pt;font-family:宋体'>云知声蜂鸟</span></b><b><span
+style='font-size:22.0pt'>UART</span></b><b><span lang=ZH-CN style='font-size:
+22.0pt;font-family:宋体'>简易通信协议接口文档</span></b></p>
+
+<p class=MsoNormal>&nbsp;</p>
+
+<p class=MsoNormal align=center style='text-align:center'><span
+style='font-size:18.0pt'>V1.0</span></p>
+
+<p class=MsoNormal>&nbsp;</p>
+
+<p class=MsoNormal align=center style='text-align:center'><span
+style='font-size:14.0pt'>2020</span><span lang=ZH-CN style='font-size:14.0pt;
+font-family:宋体'>年</span><span style='font-size:14.0pt'>6</span><span
+lang=ZH-CN style='font-size:14.0pt;font-family:宋体'>月</span></p>
+
+<p class=MsoNormal>&nbsp;</p>
+
+<p class=MsoNormal align=center style='text-align:center'><b><span lang=ZH-CN
+style='font-size:14.0pt;font-family:宋体'>修改记录</span></b></p>
+
+<div align=center>
+
+<table class=MsoTableGrid border=1 cellspacing=0 cellpadding=0 width=568
+ style='border-collapse:collapse;border:none'>
+ <tr>
+  <td width=76 valign=top style='width:57.25pt;border:solid #4F81BD 1.0pt;
+  border-right:solid #5B9BD5 1.0pt;background:#4F81BD;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=MsoNormal><span lang=ZH-CN style='font-family:宋体;color:white'>版本</span></p>
+  </td>
+  <td width=102 valign=top style='width:76.5pt;border-top:solid #4F81BD 1.0pt;
+  border-left:none;border-bottom:solid #4F81BD 1.0pt;border-right:solid #5B9BD5 1.0pt;
+  background:#4F81BD;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=MsoNormal><span lang=ZH-CN style='font-family:宋体;color:white'>修订日期</span></p>
+  </td>
+  <td width=107 valign=top style='width:80.25pt;border-top:solid #4F81BD 1.0pt;
+  border-left:none;border-bottom:solid #4F81BD 1.0pt;border-right:solid #5B9BD5 1.0pt;
+  background:#4F81BD;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=MsoNormal><span lang=ZH-CN style='font-family:宋体;color:white'>修订人员</span></p>
+  </td>
+  <td width=283 valign=top style='width:212.1pt;border:solid #4F81BD 1.0pt;
+  border-left:none;background:#4F81BD;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=MsoNormal><span lang=ZH-CN style='font-family:宋体;color:white'>修订纪要</span></p>
+  </td>
+ </tr>
+ <tr>
+  <td width=76 valign=top style='width:57.25pt;border-top:none;border-left:
+  solid #4F81BD 1.0pt;border-bottom:solid #4F81BD 1.0pt;border-right:solid #5B9BD5 1.0pt;
+  background:white;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=MsoNormal><span style='color:black'>V1.0</span></p>
+  </td>
+  <td width=102 valign=top style='width:76.5pt;border-top:none;border-left:
+  none;border-bottom:solid #4F81BD 1.0pt;border-right:solid #5B9BD5 1.0pt;
+  background:white;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=MsoNormal><span style='color:black'>2020.06.22</span></p>
+  </td>
+  <td width=107 valign=top style='width:80.25pt;border-top:none;border-left:
+  none;border-bottom:solid #4F81BD 1.0pt;border-right:solid #5B9BD5 1.0pt;
+  background:white;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=MsoNormal><span lang=ZH-CN style='font-family:宋体;color:black'>吴方方</span></p>
+  </td>
+  <td width=283 valign=top style='width:212.1pt;border-top:none;border-left:
+  none;border-bottom:solid #4F81BD 1.0pt;border-right:solid #4F81BD 1.0pt;
+  background:white;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=MsoNormal><span lang=ZH-CN style='font-family:宋体;color:black'>正式版本</span><span
+  style='color:black'>v1.0</span></p>
+  </td>
+ </tr>
+ <tr>
+  <td width=76 valign=top style='width:57.25pt;border-top:none;border-left:
+  solid #4F81BD 1.0pt;border-bottom:solid #4F81BD 1.0pt;border-right:solid #5B9BD5 1.0pt;
+  background:white;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=MsoNormal><span style='color:black'>&nbsp;</span></p>
+  </td>
+  <td width=102 valign=top style='width:76.5pt;border-top:none;border-left:
+  none;border-bottom:solid #4F81BD 1.0pt;border-right:solid #5B9BD5 1.0pt;
+  background:white;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=MsoNormal><span style='color:black'>&nbsp;</span></p>
+  </td>
+  <td width=107 valign=top style='width:80.25pt;border-top:none;border-left:
+  none;border-bottom:solid #4F81BD 1.0pt;border-right:solid #5B9BD5 1.0pt;
+  background:white;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=MsoNormal><span style='color:black'>&nbsp;</span></p>
+  </td>
+  <td width=283 valign=top style='width:212.1pt;border-top:none;border-left:
+  none;border-bottom:solid #4F81BD 1.0pt;border-right:solid #4F81BD 1.0pt;
+  background:white;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=MsoNormal><span style='color:black'>&nbsp;</span></p>
+  </td>
+ </tr>
+ <tr>
+  <td width=76 valign=top style='width:57.25pt;border-top:none;border-left:
+  solid #4F81BD 1.0pt;border-bottom:solid #4F81BD 1.0pt;border-right:solid #5B9BD5 1.0pt;
+  background:white;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=MsoNormal><span style='color:black'>&nbsp;</span></p>
+  </td>
+  <td width=102 valign=top style='width:76.5pt;border-top:none;border-left:
+  none;border-bottom:solid #4F81BD 1.0pt;border-right:solid #5B9BD5 1.0pt;
+  background:white;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=MsoNormal><span style='color:black'>&nbsp;</span></p>
+  </td>
+  <td width=107 valign=top style='width:80.25pt;border-top:none;border-left:
+  none;border-bottom:solid #4F81BD 1.0pt;border-right:solid #5B9BD5 1.0pt;
+  background:white;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=MsoNormal><span style='color:black'>&nbsp;</span></p>
+  </td>
+  <td width=283 valign=top style='width:212.1pt;border-top:none;border-left:
+  none;border-bottom:solid #4F81BD 1.0pt;border-right:solid #4F81BD 1.0pt;
+  background:white;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=MsoNormal><span style='color:black'>&nbsp;</span></p>
+  </td>
+ </tr>
+ <tr>
+  <td width=76 valign=top style='width:57.25pt;border-top:none;border-left:
+  solid #4F81BD 1.0pt;border-bottom:solid #4F81BD 1.0pt;border-right:solid #5B9BD5 1.0pt;
+  background:white;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=MsoNormal><span style='color:black'>&nbsp;</span></p>
+  </td>
+  <td width=102 valign=top style='width:76.5pt;border-top:none;border-left:
+  none;border-bottom:solid #4F81BD 1.0pt;border-right:solid #5B9BD5 1.0pt;
+  background:white;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=MsoNormal><span style='color:black'>&nbsp;</span></p>
+  </td>
+  <td width=107 valign=top style='width:80.25pt;border-top:none;border-left:
+  none;border-bottom:solid #4F81BD 1.0pt;border-right:solid #5B9BD5 1.0pt;
+  background:white;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=MsoNormal><span style='color:black'>&nbsp;</span></p>
+  </td>
+  <td width=283 valign=top style='width:212.1pt;border-top:none;border-left:
+  none;border-bottom:solid #4F81BD 1.0pt;border-right:solid #4F81BD 1.0pt;
+  background:white;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=MsoNormal><span style='color:black'>&nbsp;</span></p>
+  </td>
+ </tr>
+ <tr>
+  <td width=76 valign=top style='width:57.25pt;border-top:none;border-left:
+  solid #4F81BD 1.0pt;border-bottom:solid #4F81BD 1.0pt;border-right:solid #5B9BD5 1.0pt;
+  background:white;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=MsoNormal><span style='color:black'>&nbsp;</span></p>
+  </td>
+  <td width=102 valign=top style='width:76.5pt;border-top:none;border-left:
+  none;border-bottom:solid #4F81BD 1.0pt;border-right:solid #5B9BD5 1.0pt;
+  background:white;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=MsoNormal><span style='color:black'>&nbsp;</span></p>
+  </td>
+  <td width=107 valign=top style='width:80.25pt;border-top:none;border-left:
+  none;border-bottom:solid #4F81BD 1.0pt;border-right:solid #5B9BD5 1.0pt;
+  background:white;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=MsoNormal><span style='color:black'>&nbsp;</span></p>
+  </td>
+  <td width=283 valign=top style='width:212.1pt;border-top:none;border-left:
+  none;border-bottom:solid #4F81BD 1.0pt;border-right:solid #4F81BD 1.0pt;
+  background:white;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=MsoNormal><span style='color:black'>&nbsp;</span></p>
+  </td>
+ </tr>
+</table>
+
+</div>
+
+<p class=MsoNormal>&nbsp;</p>
+
+<p class=MsoNormal align=center style='text-align:center'><b><span lang=ZH-CN
+style='font-size:14.0pt;font-family:宋体'>文档目录</span></b></p>
+
+<p class=MsoToc1 align=center style='text-align:center'><a
+href="#_Toc43738347">1.<span style='color:windowtext;text-decoration:none'>.... </span><span
+lang=ZH-CN style='font-family:宋体'>概述</span><span style='color:windowtext;
+text-decoration:none'>.......................................................................................................................... </span><span style='color:windowtext;text-decoration:none'>1</span></a></p>
+
+<p class=MsoToc2 align=center style='text-align:center'><a href="#_Toc43738348">1.1.<span
+style='color:windowtext;text-decoration:none'>........ </span><span lang=ZH-CN
+style='font-family:宋体'>目的与受众</span><span style='color:windowtext;text-decoration:
+none'>................................................................................................. </span><span style='color:windowtext;text-decoration:none'>1</span></a></p>
+
+<p class=MsoToc2 align=center style='text-align:center'><a href="#_Toc43738349">1.2.<span
+style='color:windowtext;text-decoration:none'>........ </span><span lang=ZH-CN
+style='font-family:宋体'>简介</span><span style='color:windowtext;text-decoration:
+none'>............................................................................................................ </span><span style='color:windowtext;text-decoration:none'>1</span></a></p>
+
+<p class=MsoToc1 align=center style='text-align:center'><a href="#_Toc43738350">2.<span
+style='color:windowtext;text-decoration:none'>.... </span><span lang=ZH-CN
+style='font-family:宋体'>接口定义</span><span style='color:windowtext;text-decoration:
+none'>................................................................................................................... </span><span style='color:windowtext;text-decoration:none'>1</span></a></p>
+
+<p class=MsoToc2 align=center style='text-align:center'><a href="#_Toc43738351">2.1.<span
+style='color:windowtext;text-decoration:none'>........ </span>UART<span
+lang=ZH-CN style='font-family:宋体'>底层</span>API<span style='color:windowtext;
+text-decoration:none'>.............................................................................................. </span><span style='color:windowtext;text-decoration:none'>1</span></a></p>
+
+<p class=MsoToc3 align=center style='text-align:center'><a href="#_Toc43738352">2.1.1.<span
+style='color:windowtext;text-decoration:none'>..... </span>user_uni_sucp_init<span
+style='color:windowtext;text-decoration:none'>................................................................................. </span><span style='color:windowtext;text-decoration:none'>1</span></a></p>
+
+<p class=MsoToc3 align=center style='text-align:center'><a href="#_Toc43738353">2.1.2.<span
+style='color:windowtext;text-decoration:none'>..... </span>user_uni_sucp_final<span
+style='color:windowtext;text-decoration:none'>............................................................................... </span><span style='color:windowtext;text-decoration:none'>1</span></a></p>
+
+<p class=MsoToc3 align=center style='text-align:center'><a href="#_Toc43738354">2.1.3.<span
+style='color:windowtext;text-decoration:none'>..... </span>user_uni_sucp_send<span
+style='color:windowtext;text-decoration:none'>............................................................................... </span><span style='color:windowtext;text-decoration:none'>1</span></a></p>
+
+<p class=MsoToc3 align=center style='text-align:center'><a href="#_Toc43738355">2.1.4.<span
+style='color:windowtext;text-decoration:none'>..... </span>typedef void
+(*_user_uni_sucp_recv)(sucp_pack_t *pack)<span style='color:windowtext;
+text-decoration:none'>.......................... </span><span style='color:windowtext;text-decoration:none'>1</span></a></p>
+
+<p class=MsoToc1 align=center style='text-align:center'><a href="#_Toc43738356">3.<span
+style='color:windowtext;text-decoration:none'>.... </span>Protocol<span
+lang=ZH-CN style='font-family:宋体'>帧结构</span><span style='color:windowtext;
+text-decoration:none'>.......................................................................................................... </span><span style='color:windowtext;text-decoration:none'>1</span></a></p>
+
+<p class=MsoToc3 align=center style='text-align:center'><a href="#_Toc43738357">3.1.1.<span
+style='color:windowtext;text-decoration:none'>..... </span>Protocol layout<span
+style='color:windowtext;text-decoration:none'>...................................................................................... </span><span style='color:windowtext;text-decoration:none'>1</span></a></p>
+
+<p class=MsoToc3 align=center style='text-align:center'><a href="#_Toc43738358">3.1.2.<span
+style='color:windowtext;text-decoration:none'>..... </span>Protocol struct<span
+style='color:windowtext;text-decoration:none'>....................................................................................... </span><span style='color:windowtext;text-decoration:none'>1</span></a></p>
+
+<p class=MsoToc3 align=center style='text-align:center'><a href="#_Toc43738359">3.1.3.<span
+style='color:windowtext;text-decoration:none'>..... </span>Checksum<span
+lang=ZH-CN style='font-family:宋体'>算法实现</span><span style='color:windowtext;
+text-decoration:none'>............................................................................... </span><span style='color:windowtext;text-decoration:none'>1</span></a></p>
+
+<p class=MsoToc1 align=center style='text-align:center'><a href="#_Toc43738360">4.<span
+style='color:windowtext;text-decoration:none'>.... </span><span lang=ZH-CN
+style='font-family:宋体'>接口调用流程（请参考</span>demo<span lang=ZH-CN style='font-family:
+宋体'>代码</span>hb_uart_sucp.c<span lang=ZH-CN style='font-family:宋体'>）</span><span
+style='color:windowtext;text-decoration:none'>................................................... </span><span style='color:windowtext;text-decoration:none'>1</span></a></p>
+
+<p class=MsoNormal align=center style='text-align:center'>&nbsp;</p>
+
+<span style='font-size:10.5pt;font-family:"Calibri",sans-serif'><br clear=all
+style='page-break-before:always'>
+</span>
+
+<p class=MsoNormal>&nbsp;</p>
+
+<p class=MsoNormal>&nbsp;</p>
+
+<h1><a name="_Toc43738347">1.<span style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;
+</span><span lang=ZH-CN style='font-family:宋体'>概述</span></a></h1>
+
+<h2><span style='line-height:172%'>1.1.<span style='font:7.0pt "Times New Roman"'>
+</span></span> <a name="_Toc43738348"><span lang=ZH-CN style='font-family:黑体'>目的与受众</span></a></h2>
+
+<p class=MsoNormal style='text-indent:21.0pt'><span lang=ZH-CN
+style='font-family:宋体'>本文系云知声蜂鸟</span>M<span lang=ZH-CN style='font-family:
+宋体'>芯片</span>UART<span lang=ZH-CN style='font-family:宋体'>应用层简易通信串口协议，供内部开发人员和获授权客户开发使用，旨在为客户提供简单、通用的</span>UART<span
+lang=ZH-CN style='font-family:宋体'>通信协议规范。</span></p>
+
+<h2>1.2.<span style='font:7.0pt "Times New Roman"'> </span> <a
+name="_Toc43738349"><span lang=ZH-CN style='font-family:黑体'>简介</span></a></h2>
+
+<p class=MsoNormal style='text-indent:21.0pt'><span lang=ZH-CN
+style='font-family:宋体'>目标客户：</span></p>
+
+<p class=MsoNormal style='margin-left:0cm;text-indent:21.0pt'>一、<span
+lang=ZH-CN style='font-family:宋体'>已有自定义</span>UART<span lang=ZH-CN
+style='font-family:宋体'>通信协议客户，对此类型客户，开放</span>UART<span lang=ZH-CN
+style='font-family:宋体'>读写</span>API<span lang=ZH-CN style='font-family:宋体'>，客户可自行定制基于</span>UART<span
+lang=ZH-CN style='font-family:宋体'>的各类传输特性。</span></p>
+
+<p class=MsoNormal style='margin-left:0cm;text-indent:21.0pt'>二、<span
+lang=ZH-CN style='font-family:宋体'>尚未自定义</span>UART<span lang=ZH-CN
+style='font-family:宋体'>通信协议客户，对此类客户，开放一套完整的</span>UART<span lang=ZH-CN
+style='font-family:宋体'>通信协议，提供</span>API<span lang=ZH-CN style='font-family:
+宋体'>，实现串口通信。</span></p>
+
+<p class=MsoNormal>&nbsp;</p>
+
+<p class=MsoNormal style='text-indent:21.0pt'>UART<span lang=ZH-CN
+style='font-family:宋体'>协议特性：</span></p>
+
+<p class=MsoNormal style='margin-left:0cm;text-indent:21.0pt'>一、<span
+lang=ZH-CN style='font-family:宋体'>非可靠性协议包，无应答及重传机制；</span></p>
+
+<p class=MsoNormal style='margin-left:0cm;text-indent:21.0pt'>二、<span
+lang=ZH-CN style='font-family:宋体'>固定长度协议包，自动接收组包回调通知；</span></p>
+
+<p class=MsoNormal style='margin-left:0cm;text-indent:21.0pt'>三、8<span
+lang=ZH-CN style='font-family:宋体'>位</span>checksum<span lang=ZH-CN
+style='font-family:宋体'>校验和</span></p>
+
+<p class=MsoNormal>&nbsp;</p>
+
+<h1><a name="_Toc43738350">2.<span style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;
+</span><span lang=ZH-CN style='font-family:宋体'>接口定义</span></a></h1>
+
+<h2><a name="_Toc43738351">2.1.<span style='font:7.0pt "Times New Roman"'> </span>UART</a><span
+lang=ZH-CN style='font-family:黑体'>底层</span>API</h2>
+
+<p class=MsoNormal><span lang=ZH-CN style='font-family:宋体'>用于</span>UART<span
+lang=ZH-CN style='font-family:宋体'>底层驱动初始化，数据发送、接收</span></p>
+
+<h3><a name="_Toc43738352">2.1.1.<span style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;
+</span>user_uni_sucp_init</a></h3>
+
+<p class=MsoNormal><img width=430 height=108 id="图片 4"
+src="uart_protocol_sucp_image001.png"></p>
+
+<p class=MsoNormal><span lang=ZH-CN style='font-family:宋体'>该接口用于初始化简易串口协议并初始化串口，相关串口号、波特率等参数在</span>user_config.h<span
+lang=ZH-CN style='font-family:宋体'>中定义：</span></p>
+
+<p class=MsoNormal><img width=889 height=182 id="图片 8"
+src="uart_protocol_sucp_image002.png"></p>
+
+<p class=MsoNormal><span lang=ZH-CN style='font-family:宋体'>如需使用</span>SUCP<span
+lang=ZH-CN style='font-family:宋体'>协议，请将</span>USE_SAMPLE_PROTOCOL<span
+lang=ZH-CN style='font-family:宋体'>宏定义设置为</span>1<span lang=ZH-CN
+style='font-family:宋体'>，此时宏定义</span>USE_UNIONE_PROTOCOL<span lang=ZH-CN
+style='font-family:宋体'>必须为</span>0.</p>
+
+<p class=MsoNormal><span lang=ZH-CN style='font-family:宋体'>另外，如果宏定义</span>OPEN_ASR_EVENT_UCP<span
+lang=ZH-CN style='font-family:宋体'>设置为</span>1<span lang=ZH-CN style='font-family:
+宋体'>，则系统会在识别到任何语音指令后主动通过</span>SUCP<span lang=ZH-CN style='font-family:宋体'>协议发送对应的识别事件，</span>action<span
+lang=ZH-CN style='font-family:宋体'>和</span>cmd<span lang=ZH-CN style='font-family:
+宋体'>编码对应关系见</span>include/uni_cmd_code.h<span lang=ZH-CN style='font-family:
+宋体'>文件：</span></p>
+
+<p class=MsoNormal><img width=491 height=463 id="图片 9"
+src="uart_protocol_sucp_image003.png"></p>
+
+<h3><a name="_Toc43738353">2.1.2.<span style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;
+</span>user_uni_sucp_final</a></h3>
+
+<p class=MsoNormal><img width=275 height=69 id="图片 10"
+src="uart_protocol_sucp_image004.png"></p>
+
+<h3><a name="_Toc43738354">2.1.3.<span style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;
+</span>user_uni_sucp_send</a></h3>
+
+<p class=MsoNormal><img width=496 height=124 id="图片 11"
+src="uart_protocol_sucp_image005.png"></p>
+
+<p class=MsoNormal>SUCP<span lang=ZH-CN style='font-family:宋体'>协议有效负载由两部分组成，第一部分</span>cmd_code<span
+lang=ZH-CN style='font-family:宋体'>用于支持指令类型，第二部分是</span>reserve<span lang=ZH-CN
+style='font-family:宋体'>保留字，其中</span>cmd_code<span lang=ZH-CN style='font-family:
+宋体'>长度为</span>1<span lang=ZH-CN style='font-family:宋体'>字节，</span>reserve<span
+lang=ZH-CN style='font-family:宋体'>长度为</span>2<span lang=ZH-CN style='font-family:
+宋体'>字节。</span></p>
+
+<p class=MsoNormal><span lang=ZH-CN style='font-family:宋体'>当宏定义</span>OPEN_ASR_EVENT_UCP<span
+lang=ZH-CN style='font-family:宋体'>设置为</span>1<span lang=ZH-CN style='font-family:
+宋体'>时，系统自动发送语音指令对应</span>cmd<span lang=ZH-CN style='font-family:宋体'>，用户也可以调用该接口发送自定义的指令，建议自定义的</span>cmd_code<span
+lang=ZH-CN style='font-family:宋体'>大于</span>0x80<span lang=ZH-CN
+style='font-family:宋体'>，前</span>128<span lang=ZH-CN style='font-family:宋体'>个</span>ID<span
+lang=ZH-CN style='font-family:宋体'>留给系统默认指令。</span></p>
+
+<p class=MsoNormal>Reserve<span lang=ZH-CN style='font-family:宋体'>字节在系统指令中为</span>0x00<span
+lang=ZH-CN style='font-family:宋体'>未使用，用户自定义指令可以利用该字段携带指令扩展数据。</span></p>
+
+<h3><a name="_Toc43738355">2.1.4.<span style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;
+</span>typedef void (*_user_uni_sucp_recv)(sucp_pack_t *pack)</a></h3>
+
+<p class=MsoNormal><img width=460 height=77 id="图片 14"
+src="uart_protocol_sucp_image006.png"></p>
+
+<p class=MsoNormal><span lang=ZH-CN style='font-family:宋体'>该定义为数据包接收回调函数，当串口接收到一个数据包时会调用该函数接口，形参为数据包内容，用户可定义回调函数以接收该通知。</span></p>
+
+<h1><a name="_Toc43738356">3.<span style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;
+</span>Protocol</a><span lang=ZH-CN style='font-family:宋体'>帧结构</span></h1>
+
+<h3><a name="_Toc43738357">3.1.1.<span style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;
+</span>Protocol layout</a></h3>
+
+<p class=MsoNormal><img width=583 height=89 id="图片 12"
+src="uart_protocol_sucp_image007.png"></p>
+
+<h3><a name="_Toc43738358">3.1.2.<span style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;
+</span>Protocol struct</a></h3>
+
+<p class=MsoNormal align=left style='text-align:left'><img width=509
+height=141 id="图片 13" src="uart_protocol_sucp_image008.png"></p>
+
+<h3><a name="_Toc43738359">3.1.3.<span style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;
+</span>Checksum</a><span lang=ZH-CN style='font-family:宋体'>算法实现</span></h3>
+
+<p class=MsoNormal><img width=489 height=139 id="图片 15"
+src="uart_protocol_sucp_image009.png"></p>
+
+<p class=MsoNormal>Checksum<span lang=ZH-CN style='font-family:宋体'>算法使用单字节加法溢出方式计算，对端校验时请保证算法对齐。</span></p>
+
+<h1><a name="_Toc43738360">4.<span style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;
+</span><span lang=ZH-CN style='font-family:宋体'>接口调用流程（请参考</span>demo</a><span
+lang=ZH-CN style='font-family:宋体'>代码</span>hb_uart_sucp.c<span lang=ZH-CN
+style='font-family:宋体'>）</span></h1>
+
+<p class=MsoNormal align=left style='text-align:left'>&nbsp;</p>
+
+</div>
+
+</body>
+
+</html>
+ </div><!-- contents -->
+</body>
+</html>

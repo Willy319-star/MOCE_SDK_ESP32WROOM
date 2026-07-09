@@ -1,0 +1,551 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "https://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=9"/>
+<meta name="generator" content="Doxygen 1.8.18"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>蜂鸟M离线方案开发指导手册: 智能管家</title>
+<link href="tabs.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="jquery.js"></script>
+<script type="text/javascript" src="dynsections.js"></script>
+<link href="doxygen.css" rel="stylesheet" type="text/css" />
+</head>
+<body>
+<div id="top"><!-- do not remove this div, it is closed by doxygen! -->
+<div id="titlearea">
+<table cellspacing="0" cellpadding="0">
+ <tbody>
+ <tr style="height: 56px;">
+  <td id="projectalign" style="padding-left: 0.5em;">
+   <div id="projectname">蜂鸟M离线方案开发指导手册
+   &#160;<span id="projectnumber">v1.0.4</span>
+   </div>
+  </td>
+ </tr>
+ </tbody>
+</table>
+</div>
+<!-- end header part -->
+<!-- 制作者 Doxygen 1.8.18 -->
+<script type="text/javascript" src="menudata.js"></script>
+<script type="text/javascript" src="menu.js"></script>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:cf05388f2679ee054f2beb29a391d25f4e673ac3&amp;dn=gpl-2.0.txt GPL-v2 */
+$(function() {
+  initMenu('',false,false,'search.php','搜索');
+});
+/* @license-end */</script>
+<div id="main-nav"></div>
+</div><!-- top -->
+<div class="header">
+  <div class="headertitle">
+<div class="title">智能管家<div class="ingroups"><a class="el" href="group__uni__example.html">方案示例</a></div></div>  </div>
+</div><!--header-->
+<div class="contents">
+<dl class="section user"><dt></dt><dd></dd></dl>
+<p>可通过定义user/inc/user_config.h中的宏<a class="el" href="group__uni__config__demo__macro.html#ga234a8d36ebd8d152f3c487e19868578d">USER_RUN_DEMO_SELECT</a> 为<a class="el" href="group__uni__config__demo__macro.html#ga53c2b5853d53f4ada7af3c94dab3ec50">USER_DEMO_HOUSEKEEPER</a> 运行示例程序 </p><div class="fragment"><div class="line"><span class="comment">/**************************************************************************</span></div>
+<div class="line"><span class="comment"> * Copyright (C) 2017-2017  Unisound</span></div>
+<div class="line"><span class="comment"> *</span></div>
+<div class="line"><span class="comment"> * This program is free software; you can redistribute it and/or modify</span></div>
+<div class="line"><span class="comment"> * it under the terms of the GNU General Public License as published by</span></div>
+<div class="line"><span class="comment"> * the Free Software Foundation; either version 2 of the License, or</span></div>
+<div class="line"><span class="comment"> * any later version.</span></div>
+<div class="line"><span class="comment"> *</span></div>
+<div class="line"><span class="comment"> * This program is distributed in the hope that it will be useful,</span></div>
+<div class="line"><span class="comment"> * but WITHOUT ANY WARRANTY; without even the implied warranty of</span></div>
+<div class="line"><span class="comment"> * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the</span></div>
+<div class="line"><span class="comment"> * GNU General Public License for more details.</span></div>
+<div class="line"><span class="comment"> *</span></div>
+<div class="line"><span class="comment"> * You should have received a copy of the GNU General Public License along</span></div>
+<div class="line"><span class="comment"> * with this program; if not, write to the Free Software Foundation, Inc.,</span></div>
+<div class="line"><span class="comment"> * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.</span></div>
+<div class="line"><span class="comment"> **************************************************************************</span></div>
+<div class="line"><span class="comment"> *</span></div>
+<div class="line"><span class="comment"> * Description : hb_housekeeper.c</span></div>
+<div class="line"><span class="comment"> * Author      : wufangfang@unisound.com</span></div>
+<div class="line"><span class="comment"> * Date        : 2020.04.13</span></div>
+<div class="line"><span class="comment"> *</span></div>
+<div class="line"><span class="comment"> **************************************************************************/</span></div>
+<div class="line"><span class="preprocessor">#include &quot;unione.h&quot;</span></div>
+<div class="line"><span class="preprocessor">#include &quot;user_asr.h&quot;</span></div>
+<div class="line"><span class="preprocessor">#include &quot;user_player.h&quot;</span></div>
+<div class="line"><span class="preprocessor">#include &quot;uni_timer.h&quot;</span></div>
+<div class="line"><span class="preprocessor">#include &quot;housekeeper_irc.h&quot;</span></div>
+<div class="line"> </div>
+<div class="line"><span class="preprocessor">#define TAG &quot;hb_housekeeoer&quot;</span></div>
+<div class="line"> </div>
+<div class="line"><span class="preprocessor">#define AC_MATCH_TIMEOUT_MS (1000 * 20)</span></div>
+<div class="line"><span class="preprocessor">#define AC_MATCH_TIMER      eTIMER6</span></div>
+<div class="line"> </div>
+<div class="line"><span class="preprocessor">#define AC_MATCH_OK_REPLY   &quot;108&quot;</span></div>
+<div class="line"><span class="preprocessor">#define AC_MATCH_FAL1_REPLY &quot;109&quot;</span></div>
+<div class="line"><span class="preprocessor">#define AC_MATCH_FAL2_REPLY &quot;110&quot;</span></div>
+<div class="line"><span class="preprocessor">#define AC_MATCH_FAL3_REPLY &quot;111&quot;</span></div>
+<div class="line"><span class="preprocessor">#define AC_SCANING_REPLY    &quot;500&quot;</span></div>
+<div class="line"><span class="preprocessor">#define AC_POWER_OFF_REPLY  &quot;501&quot;</span></div>
+<div class="line"><span class="preprocessor">#define AC_SCAN_FAIL_REPLY  &quot;502&quot;</span></div>
+<div class="line"><span class="preprocessor">#define AC_MATCH_EXIT_REPLY &quot;503&quot;</span></div>
+<div class="line"><span class="preprocessor">#define AC_LAMP_EDGE_REPLY  &quot;7&quot;</span></div>
+<div class="line"> </div>
+<div class="line"><span class="keyword">typedef</span> <span class="keyword">enum</span> {</div>
+<div class="line">  AC_MATCH_FAL_0 = 0,</div>
+<div class="line">  AC_MATCH_FAL_1,</div>
+<div class="line">  AC_MATCH_FAL_2,</div>
+<div class="line">  AC_MATCH_FAL_3,</div>
+<div class="line">  AC_MATCH_FAL_MAX</div>
+<div class="line">}AC_MATCH_FAL_CNT;</div>
+<div class="line"> </div>
+<div class="line"><span class="keyword">static</span> AC_MATCH_FAL_CNT g_ac_match_fal_cnt = AC_MATCH_FAL_0;</div>
+<div class="line"><span class="keyword">static</span> TimerHandle g_ac_match_timer = -1;</div>
+<div class="line"><span class="keyword">static</span> uni_bool g_is_mute_mode = <span class="keyword">false</span>;</div>
+<div class="line"> </div>
+<div class="line"><span class="keyword">static</span> <span class="keywordtype">int</span> _ac_match_timeout_cb(<span class="keywordtype">void</span> *arg) {</div>
+<div class="line">  housekeeper_irc_ac_match_stop();</div>
+<div class="line">  <a class="code" href="group__uni__asr__inf.html#gaf0f590527f0ac999193eb4d557bf4ea2" title="使能超时自动退出识别模式">user_asr_timeout_enable</a>();</div>
+<div class="line">  <a class="code" href="group__uni__player__inf.html#ga4473e2cc3c6a07e170e10cf0c317dfe9" title="播放文件">user_player_play</a>(<a class="code" href="group__uni__event__def.html#gga307b45efe10d5edb14203b65a5130302a48c4e09df490d4ee7a71f011ef7f3f66" title="回复语播报">AUDIO_PLAY_REPLY</a>, AC_MATCH_EXIT_REPLY);</div>
+<div class="line">  <span class="keywordflow">return</span> TIMER_ERRNO_STOP_PERIODICAL;</div>
+<div class="line">}</div>
+<div class="line"> </div>
+<div class="line"><span class="keyword">static</span> <span class="keywordtype">int</span> _start_ac_match_timer(<span class="keywordtype">int</span> interval_msec) {</div>
+<div class="line">  g_ac_match_timer = TimerStart(interval_msec, TIMER_TYPE_ONESHOT,</div>
+<div class="line">                                _ac_match_timeout_cb, NULL);</div>
+<div class="line">  <span class="keywordflow">if</span> (g_ac_match_timer &lt;= 0) {</div>
+<div class="line">    LOGE(TAG, <span class="stringliteral">&quot;TimerStart failed.&quot;</span>);</div>
+<div class="line">    <span class="keywordflow">return</span> -1;</div>
+<div class="line">  }</div>
+<div class="line">  <span class="keywordflow">return</span> 0;</div>
+<div class="line">}</div>
+<div class="line"> </div>
+<div class="line"><span class="keyword">static</span> <span class="keywordtype">int</span> _stop_ac_match_timer(<span class="keywordtype">void</span>) {</div>
+<div class="line">  <span class="keywordflow">if</span> (g_ac_match_timer &gt; 0) {</div>
+<div class="line">    TimerStop(g_ac_match_timer);</div>
+<div class="line">    g_ac_match_timer = -1;</div>
+<div class="line">  }</div>
+<div class="line">  <span class="keywordflow">return</span> 0;</div>
+<div class="line">}</div>
+<div class="line"> </div>
+<div class="line"><span class="keywordtype">void</span> _cb_ac_match_result(uni_bool is_ok) {</div>
+<div class="line">  _stop_ac_match_timer();</div>
+<div class="line">  <span class="keywordflow">if</span> (is_ok) {</div>
+<div class="line">    housekeeper_irc_ac_match_stop();</div>
+<div class="line">    <a class="code" href="group__uni__asr__inf.html#gaf0f590527f0ac999193eb4d557bf4ea2" title="使能超时自动退出识别模式">user_asr_timeout_enable</a>();</div>
+<div class="line">    <a class="code" href="group__uni__player__inf.html#ga4473e2cc3c6a07e170e10cf0c317dfe9" title="播放文件">user_player_play</a>(<a class="code" href="group__uni__event__def.html#gga307b45efe10d5edb14203b65a5130302a48c4e09df490d4ee7a71f011ef7f3f66" title="回复语播报">AUDIO_PLAY_REPLY</a>, AC_MATCH_OK_REPLY);</div>
+<div class="line">  } <span class="keywordflow">else</span> {</div>
+<div class="line">    g_ac_match_fal_cnt++;</div>
+<div class="line">    <span class="keywordflow">if</span> (g_ac_match_fal_cnt &gt; AC_MATCH_FAL_3) {</div>
+<div class="line">      g_ac_match_fal_cnt = AC_MATCH_FAL_3;</div>
+<div class="line">    }</div>
+<div class="line">    <span class="keywordflow">switch</span> (g_ac_match_fal_cnt) {</div>
+<div class="line">      <span class="keywordflow">case</span> AC_MATCH_FAL_1:</div>
+<div class="line">        _start_ac_match_timer(AC_MATCH_TIMEOUT_MS + 4000);</div>
+<div class="line">        <a class="code" href="group__uni__player__inf.html#ga4473e2cc3c6a07e170e10cf0c317dfe9" title="播放文件">user_player_play</a>(<a class="code" href="group__uni__event__def.html#gga307b45efe10d5edb14203b65a5130302a48c4e09df490d4ee7a71f011ef7f3f66" title="回复语播报">AUDIO_PLAY_REPLY</a>, AC_MATCH_FAL1_REPLY);</div>
+<div class="line">        <span class="keywordflow">break</span>;</div>
+<div class="line">      <span class="keywordflow">case</span> AC_MATCH_FAL_2:</div>
+<div class="line">        _start_ac_match_timer(AC_MATCH_TIMEOUT_MS + 9000);</div>
+<div class="line">        <a class="code" href="group__uni__player__inf.html#ga4473e2cc3c6a07e170e10cf0c317dfe9" title="播放文件">user_player_play</a>(<a class="code" href="group__uni__event__def.html#gga307b45efe10d5edb14203b65a5130302a48c4e09df490d4ee7a71f011ef7f3f66" title="回复语播报">AUDIO_PLAY_REPLY</a>, AC_MATCH_FAL2_REPLY);</div>
+<div class="line">        <span class="keywordflow">break</span>;</div>
+<div class="line">      <span class="keywordflow">case</span> AC_MATCH_FAL_3:</div>
+<div class="line">        housekeeper_irc_ac_match_stop();</div>
+<div class="line">        <a class="code" href="group__uni__asr__inf.html#gaf0f590527f0ac999193eb4d557bf4ea2" title="使能超时自动退出识别模式">user_asr_timeout_enable</a>();</div>
+<div class="line">        <a class="code" href="group__uni__player__inf.html#ga4473e2cc3c6a07e170e10cf0c317dfe9" title="播放文件">user_player_play</a>(<a class="code" href="group__uni__event__def.html#gga307b45efe10d5edb14203b65a5130302a48c4e09df490d4ee7a71f011ef7f3f66" title="回复语播报">AUDIO_PLAY_REPLY</a>, AC_MATCH_FAL3_REPLY);</div>
+<div class="line">        <span class="keywordflow">break</span>;</div>
+<div class="line">      <span class="keywordflow">default</span>:</div>
+<div class="line">        <span class="keywordflow">break</span>;</div>
+<div class="line">    }</div>
+<div class="line">  }</div>
+<div class="line">}</div>
+<div class="line"> </div>
+<div class="line"><span class="keywordtype">void</span> _cb_ac_scan_failed(<span class="keywordtype">void</span>) {</div>
+<div class="line">  <span class="comment">/* don&#39;t need call housekeeper_irc_ac_scan_stop() at here */</span></div>
+<div class="line">  <a class="code" href="group__uni__asr__inf.html#gaf0f590527f0ac999193eb4d557bf4ea2" title="使能超时自动退出识别模式">user_asr_timeout_enable</a>();</div>
+<div class="line">  <a class="code" href="group__uni__player__inf.html#ga4473e2cc3c6a07e170e10cf0c317dfe9" title="播放文件">user_player_play</a>(<a class="code" href="group__uni__event__def.html#gga307b45efe10d5edb14203b65a5130302a48c4e09df490d4ee7a71f011ef7f3f66" title="回复语播报">AUDIO_PLAY_REPLY</a>, AC_SCAN_FAIL_REPLY);</div>
+<div class="line">}</div>
+<div class="line"> </div>
+<div class="line"><span class="keyword">static</span> <span class="keywordtype">int</span> _ac_match_replay(<a class="code" href="structevent__custom__setting__t.html" title="对应USER_CUSTOM_SETTING事件">event_custom_setting_t</a> *setting) {</div>
+<div class="line">  <span class="keywordflow">if</span> (0 != housekeeper_irc_ac_match_start()) {</div>
+<div class="line">    LOGE(TAG, <span class="stringliteral">&quot;housekeeper_irc_ac_match_start failed&quot;</span>);</div>
+<div class="line">    <span class="keywordflow">return</span> -1;</div>
+<div class="line">  }</div>
+<div class="line">  g_ac_match_fal_cnt = AC_MATCH_FAL_0;</div>
+<div class="line">  _start_ac_match_timer(AC_MATCH_TIMEOUT_MS + 1000);</div>
+<div class="line">  <a class="code" href="group__uni__asr__inf.html#ga0ed52984b825843f9625e6a94070f1cb" title="禁止超时自动退出识别模式">user_asr_timeout_disable</a>();</div>
+<div class="line">  <a class="code" href="group__uni__player__inf.html#ga8638ce40d50e8d08516925830d6dbd94" title="播放列表序号音频">user_player_reply_list_num</a>(setting-&gt;<a class="code" href="structevent__custom__setting__t.html#ac0ee5d49efd66093352c41ae73539cb8" title="回复语列表[1, 2, 3]，对应UDP平台上用户定义脚本中的回复语列表，在pcm_map.txt中可以找到对应关系">reply_files</a>, 0);</div>
+<div class="line">  <span class="keywordflow">return</span> 0;</div>
+<div class="line">}</div>
+<div class="line"> </div>
+<div class="line"><span class="keyword">static</span> <span class="keywordtype">int</span> _ac_restore_replay(<a class="code" href="structevent__custom__setting__t.html" title="对应USER_CUSTOM_SETTING事件">event_custom_setting_t</a> *setting) {</div>
+<div class="line">  <span class="keywordflow">if</span> (0 != housekeeper_irc_ac_restore()) {</div>
+<div class="line">    LOGE(TAG, <span class="stringliteral">&quot;housekeeper_irc_ac_restore failed&quot;</span>);</div>
+<div class="line">    <span class="keywordflow">return</span> -1;</div>
+<div class="line">  }</div>
+<div class="line">  <a class="code" href="group__uni__player__inf.html#ga1835960e52668ec97beea7937b4c619a" title="随机播放列表音频">user_player_reply_list_random</a>(setting-&gt;<a class="code" href="structevent__custom__setting__t.html#ac0ee5d49efd66093352c41ae73539cb8" title="回复语列表[1, 2, 3]，对应UDP平台上用户定义脚本中的回复语列表，在pcm_map.txt中可以找到对应关系">reply_files</a>);</div>
+<div class="line">  <span class="keywordflow">return</span> 0;</div>
+<div class="line">}</div>
+<div class="line"> </div>
+<div class="line"><span class="keyword">static</span> <span class="keywordtype">int</span> _lamp_on_replay(<a class="code" href="structevent__custom__setting__t.html" title="对应USER_CUSTOM_SETTING事件">event_custom_setting_t</a> *setting) {</div>
+<div class="line">  <span class="keywordflow">if</span> (0 != housekeeper_irc_set_lamp_state(<span class="keyword">true</span>)) {</div>
+<div class="line">    LOGE(TAG, <span class="stringliteral">&quot;housekeeper_irc_set_lamp_state failed&quot;</span>);</div>
+<div class="line">    <span class="keywordflow">return</span> -1;</div>
+<div class="line">  }</div>
+<div class="line">  <a class="code" href="group__uni__player__inf.html#ga1835960e52668ec97beea7937b4c619a" title="随机播放列表音频">user_player_reply_list_random</a>(setting-&gt;<a class="code" href="structevent__custom__setting__t.html#ac0ee5d49efd66093352c41ae73539cb8" title="回复语列表[1, 2, 3]，对应UDP平台上用户定义脚本中的回复语列表，在pcm_map.txt中可以找到对应关系">reply_files</a>);</div>
+<div class="line">  <span class="keywordflow">return</span> 0;</div>
+<div class="line">}</div>
+<div class="line"> </div>
+<div class="line"><span class="keyword">static</span> <span class="keywordtype">int</span> _lamp_off_replay(<a class="code" href="structevent__custom__setting__t.html" title="对应USER_CUSTOM_SETTING事件">event_custom_setting_t</a> *setting) {</div>
+<div class="line">  <span class="keywordflow">if</span> (0 != housekeeper_irc_set_lamp_state(<span class="keyword">false</span>)) {</div>
+<div class="line">    LOGE(TAG, <span class="stringliteral">&quot;housekeeper_irc_set_lamp_state failed&quot;</span>);</div>
+<div class="line">    <span class="keywordflow">return</span> -1;</div>
+<div class="line">  }</div>
+<div class="line">  <a class="code" href="group__uni__player__inf.html#ga1835960e52668ec97beea7937b4c619a" title="随机播放列表音频">user_player_reply_list_random</a>(setting-&gt;<a class="code" href="structevent__custom__setting__t.html#ac0ee5d49efd66093352c41ae73539cb8" title="回复语列表[1, 2, 3]，对应UDP平台上用户定义脚本中的回复语列表，在pcm_map.txt中可以找到对应关系">reply_files</a>);</div>
+<div class="line">  <span class="keywordflow">return</span> 0;</div>
+<div class="line">}</div>
+<div class="line"> </div>
+<div class="line"><span class="keyword">static</span> <span class="keywordtype">int</span> _lamp_inc_replay(<a class="code" href="structevent__custom__setting__t.html" title="对应USER_CUSTOM_SETTING事件">event_custom_setting_t</a> *setting) {</div>
+<div class="line">  LAMP_LEVEL level = housekeeper_irc_get_lamp_level();</div>
+<div class="line">  <span class="keywordflow">if</span> (0 != housekeeper_irc_lamp_bright_inc()) {</div>
+<div class="line">    LOGE(TAG, <span class="stringliteral">&quot;housekeeper_irc_lamp_bright_inc failed&quot;</span>);</div>
+<div class="line">    <span class="keywordflow">return</span> -1;</div>
+<div class="line">  }</div>
+<div class="line">  <span class="keywordflow">if</span> (LAMP_BRIGHT_HIGH == level) {</div>
+<div class="line">    <a class="code" href="group__uni__player__inf.html#ga4473e2cc3c6a07e170e10cf0c317dfe9" title="播放文件">user_player_play</a>(<a class="code" href="group__uni__event__def.html#gga307b45efe10d5edb14203b65a5130302a48c4e09df490d4ee7a71f011ef7f3f66" title="回复语播报">AUDIO_PLAY_REPLY</a>, AC_LAMP_EDGE_REPLY);</div>
+<div class="line">    <span class="keywordflow">return</span> 0;</div>
+<div class="line">  }</div>
+<div class="line">  <a class="code" href="group__uni__player__inf.html#ga1835960e52668ec97beea7937b4c619a" title="随机播放列表音频">user_player_reply_list_random</a>(setting-&gt;<a class="code" href="structevent__custom__setting__t.html#ac0ee5d49efd66093352c41ae73539cb8" title="回复语列表[1, 2, 3]，对应UDP平台上用户定义脚本中的回复语列表，在pcm_map.txt中可以找到对应关系">reply_files</a>);</div>
+<div class="line">  <span class="keywordflow">return</span> 0;</div>
+<div class="line">}</div>
+<div class="line"> </div>
+<div class="line"><span class="keyword">static</span> <span class="keywordtype">int</span> _lamp_dec_replay(<a class="code" href="structevent__custom__setting__t.html" title="对应USER_CUSTOM_SETTING事件">event_custom_setting_t</a> *setting) {</div>
+<div class="line">  LAMP_LEVEL level = housekeeper_irc_get_lamp_level();</div>
+<div class="line">  <span class="keywordflow">if</span> (0 != housekeeper_irc_lamp_bright_dec()) {</div>
+<div class="line">    LOGE(TAG, <span class="stringliteral">&quot;housekeeper_irc_lamp_bright_dec failed&quot;</span>);</div>
+<div class="line">    <span class="keywordflow">return</span> -1;</div>
+<div class="line">  }</div>
+<div class="line">  <span class="keywordflow">if</span> (LAMP_BRIGHT_LOW == level) {</div>
+<div class="line">    <a class="code" href="group__uni__player__inf.html#ga4473e2cc3c6a07e170e10cf0c317dfe9" title="播放文件">user_player_play</a>(<a class="code" href="group__uni__event__def.html#gga307b45efe10d5edb14203b65a5130302a48c4e09df490d4ee7a71f011ef7f3f66" title="回复语播报">AUDIO_PLAY_REPLY</a>, AC_LAMP_EDGE_REPLY);</div>
+<div class="line">    <span class="keywordflow">return</span> 0;</div>
+<div class="line">  }</div>
+<div class="line">  <a class="code" href="group__uni__player__inf.html#ga1835960e52668ec97beea7937b4c619a" title="随机播放列表音频">user_player_reply_list_random</a>(setting-&gt;<a class="code" href="structevent__custom__setting__t.html#ac0ee5d49efd66093352c41ae73539cb8" title="回复语列表[1, 2, 3]，对应UDP平台上用户定义脚本中的回复语列表，在pcm_map.txt中可以找到对应关系">reply_files</a>);</div>
+<div class="line">  <span class="keywordflow">return</span> 0;</div>
+<div class="line">}</div>
+<div class="line"> </div>
+<div class="line"><span class="keyword">static</span> <span class="keywordtype">int</span> _lamp_cmd_replay(<a class="code" href="structevent__custom__setting__t.html" title="对应USER_CUSTOM_SETTING事件">event_custom_setting_t</a> *setting) {</div>
+<div class="line">  <span class="keywordtype">int</span> ret = -1;</div>
+<div class="line">  <span class="keywordflow">if</span> (0 == uni_strcmp(setting-&gt;<a class="code" href="structevent__custom__setting__t.html#a116d7dc0d8de517af583917a27cd76b5" title="命令词意图，对应UDP平台上用户定义脚本中的action">cmd</a>, <span class="stringliteral">&quot;NightLampOn&quot;</span>)) {</div>
+<div class="line">    ret = _lamp_on_replay(setting);</div>
+<div class="line">  } <span class="keywordflow">else</span> <span class="keywordflow">if</span> (0 == uni_strcmp(setting-&gt;<a class="code" href="structevent__custom__setting__t.html#a116d7dc0d8de517af583917a27cd76b5" title="命令词意图，对应UDP平台上用户定义脚本中的action">cmd</a>, <span class="stringliteral">&quot;NightLampOff&quot;</span>)) {</div>
+<div class="line">    ret = _lamp_off_replay(setting);</div>
+<div class="line">  } <span class="keywordflow">else</span> <span class="keywordflow">if</span> (0 == uni_strcmp(setting-&gt;<a class="code" href="structevent__custom__setting__t.html#a116d7dc0d8de517af583917a27cd76b5" title="命令词意图，对应UDP平台上用户定义脚本中的action">cmd</a>, <span class="stringliteral">&quot;NightLampInc&quot;</span>)) {</div>
+<div class="line">    ret = _lamp_inc_replay(setting);</div>
+<div class="line">  } <span class="keywordflow">else</span> <span class="keywordflow">if</span> (0 == uni_strcmp(setting-&gt;<a class="code" href="structevent__custom__setting__t.html#a116d7dc0d8de517af583917a27cd76b5" title="命令词意图，对应UDP平台上用户定义脚本中的action">cmd</a>, <span class="stringliteral">&quot;NightLampDec&quot;</span>)) {</div>
+<div class="line">    ret = _lamp_dec_replay(setting);</div>
+<div class="line">  } <span class="keywordflow">else</span> {</div>
+<div class="line">    LOGE(TAG, <span class="stringliteral">&quot;unknown cmd: %s&quot;</span>, setting-&gt;<a class="code" href="structevent__custom__setting__t.html#a116d7dc0d8de517af583917a27cd76b5" title="命令词意图，对应UDP平台上用户定义脚本中的action">cmd</a>);</div>
+<div class="line">    <span class="keywordflow">return</span> -1;</div>
+<div class="line">  }</div>
+<div class="line">  <span class="keywordflow">return</span> ret;</div>
+<div class="line">}</div>
+<div class="line"> </div>
+<div class="line"><span class="keyword">static</span> <span class="keywordtype">int</span> _ac_power_replay(<a class="code" href="structevent__custom__setting__t.html" title="对应USER_CUSTOM_SETTING事件">event_custom_setting_t</a> *setting) {</div>
+<div class="line">  <span class="keywordtype">int</span> ret = -1;</div>
+<div class="line">  <span class="keywordflow">if</span> (0 == uni_strcmp(setting-&gt;<a class="code" href="structevent__custom__setting__t.html#a116d7dc0d8de517af583917a27cd76b5" title="命令词意图，对应UDP平台上用户定义脚本中的action">cmd</a>, <span class="stringliteral">&quot;ACTurnOn&quot;</span>)) {</div>
+<div class="line">    ret = housekeeper_irc_set_ac_state(<span class="keyword">true</span>);</div>
+<div class="line">  } <span class="keywordflow">else</span> <span class="keywordflow">if</span> (0 == uni_strcmp(setting-&gt;<a class="code" href="structevent__custom__setting__t.html#a116d7dc0d8de517af583917a27cd76b5" title="命令词意图，对应UDP平台上用户定义脚本中的action">cmd</a>, <span class="stringliteral">&quot;ACTurnOff&quot;</span>)) {</div>
+<div class="line">    ret = housekeeper_irc_set_ac_state(<span class="keyword">false</span>);</div>
+<div class="line">  } <span class="keywordflow">else</span> {</div>
+<div class="line">    LOGE(TAG, <span class="stringliteral">&quot;unknown cmd: %s&quot;</span>, setting-&gt;<a class="code" href="structevent__custom__setting__t.html#a116d7dc0d8de517af583917a27cd76b5" title="命令词意图，对应UDP平台上用户定义脚本中的action">cmd</a>);</div>
+<div class="line">    <span class="keywordflow">return</span> -1;</div>
+<div class="line">  }</div>
+<div class="line">  <span class="keywordflow">if</span> (0 != ret) {</div>
+<div class="line">    LOGE(TAG, <span class="stringliteral">&quot;housekeeper_irc_set_ac_state failed&quot;</span>);</div>
+<div class="line">    <span class="keywordflow">return</span> -1;</div>
+<div class="line">  }</div>
+<div class="line">  <span class="keywordflow">return</span> <a class="code" href="group__uni__player__inf.html#ga1835960e52668ec97beea7937b4c619a" title="随机播放列表音频">user_player_reply_list_random</a>(setting-&gt;<a class="code" href="structevent__custom__setting__t.html#ac0ee5d49efd66093352c41ae73539cb8" title="回复语列表[1, 2, 3]，对应UDP平台上用户定义脚本中的回复语列表，在pcm_map.txt中可以找到对应关系">reply_files</a>);</div>
+<div class="line">}</div>
+<div class="line"> </div>
+<div class="line"><span class="keyword">static</span> <span class="keywordtype">int</span> _ac_mode_replay(<a class="code" href="structevent__custom__setting__t.html" title="对应USER_CUSTOM_SETTING事件">event_custom_setting_t</a> *setting) {</div>
+<div class="line">  <span class="keywordtype">int</span> ret = -1;</div>
+<div class="line">  <span class="keywordflow">if</span> (!housekeeper_irc_get_ac_state()) {</div>
+<div class="line">    <span class="keywordflow">return</span> <a class="code" href="group__uni__player__inf.html#ga4473e2cc3c6a07e170e10cf0c317dfe9" title="播放文件">user_player_play</a>(<a class="code" href="group__uni__event__def.html#gga307b45efe10d5edb14203b65a5130302a48c4e09df490d4ee7a71f011ef7f3f66" title="回复语播报">AUDIO_PLAY_REPLY</a>, AC_POWER_OFF_REPLY);</div>
+<div class="line">  }</div>
+<div class="line">  <span class="keywordflow">if</span> (0 == uni_strcmp(setting-&gt;<a class="code" href="structevent__custom__setting__t.html#a116d7dc0d8de517af583917a27cd76b5" title="命令词意图，对应UDP平台上用户定义脚本中的action">cmd</a>, <span class="stringliteral">&quot;ACModeAuto&quot;</span>)) {</div>
+<div class="line">    ret = housekeeper_irc_set_ac_mode(AC_MODE_AUTO);</div>
+<div class="line">  } <span class="keywordflow">else</span> <span class="keywordflow">if</span> (0 == uni_strcmp(setting-&gt;<a class="code" href="structevent__custom__setting__t.html#a116d7dc0d8de517af583917a27cd76b5" title="命令词意图，对应UDP平台上用户定义脚本中的action">cmd</a>, <span class="stringliteral">&quot;ACModeCool&quot;</span>)) {</div>
+<div class="line">    ret = housekeeper_irc_set_ac_mode(AC_MODE_COOL);</div>
+<div class="line">  } <span class="keywordflow">else</span> <span class="keywordflow">if</span> (0 == uni_strcmp(setting-&gt;<a class="code" href="structevent__custom__setting__t.html#a116d7dc0d8de517af583917a27cd76b5" title="命令词意图，对应UDP平台上用户定义脚本中的action">cmd</a>, <span class="stringliteral">&quot;ACModeHeat&quot;</span>)) {</div>
+<div class="line">    ret = housekeeper_irc_set_ac_mode(AC_MODE_HEAT);</div>
+<div class="line">  } <span class="keywordflow">else</span> <span class="keywordflow">if</span> (0 == uni_strcmp(setting-&gt;<a class="code" href="structevent__custom__setting__t.html#a116d7dc0d8de517af583917a27cd76b5" title="命令词意图，对应UDP平台上用户定义脚本中的action">cmd</a>, <span class="stringliteral">&quot;ACModeDry&quot;</span>)) {</div>
+<div class="line">    ret = housekeeper_irc_set_ac_mode(AC_MODE_DRY);</div>
+<div class="line">  } <span class="keywordflow">else</span> <span class="keywordflow">if</span> (0 == uni_strcmp(setting-&gt;<a class="code" href="structevent__custom__setting__t.html#a116d7dc0d8de517af583917a27cd76b5" title="命令词意图，对应UDP平台上用户定义脚本中的action">cmd</a>, <span class="stringliteral">&quot;ACModeFan&quot;</span>)) {</div>
+<div class="line">    ret = housekeeper_irc_set_ac_mode(AC_MODE_FAN);</div>
+<div class="line">  } <span class="keywordflow">else</span> <span class="keywordflow">if</span> (0 == uni_strcmp(setting-&gt;<a class="code" href="structevent__custom__setting__t.html#a116d7dc0d8de517af583917a27cd76b5" title="命令词意图，对应UDP平台上用户定义脚本中的action">cmd</a>, <span class="stringliteral">&quot;ACModeSleep&quot;</span>)) {</div>
+<div class="line">    ret = housekeeper_irc_ac_sleep_mode();</div>
+<div class="line">  } <span class="keywordflow">else</span> {</div>
+<div class="line">    LOGE(TAG, <span class="stringliteral">&quot;unknown cmd: %s&quot;</span>, setting-&gt;<a class="code" href="structevent__custom__setting__t.html#a116d7dc0d8de517af583917a27cd76b5" title="命令词意图，对应UDP平台上用户定义脚本中的action">cmd</a>);</div>
+<div class="line">    <span class="keywordflow">return</span> -1;</div>
+<div class="line">  }</div>
+<div class="line">  <span class="keywordflow">if</span> (0 != ret) {</div>
+<div class="line">    LOGE(TAG, <span class="stringliteral">&quot;housekeeper_irc_set_ac_mode failed&quot;</span>);</div>
+<div class="line">    <span class="keywordflow">return</span> -1;</div>
+<div class="line">  }</div>
+<div class="line">  <span class="keywordflow">return</span> <a class="code" href="group__uni__player__inf.html#ga1835960e52668ec97beea7937b4c619a" title="随机播放列表音频">user_player_reply_list_random</a>(setting-&gt;<a class="code" href="structevent__custom__setting__t.html#ac0ee5d49efd66093352c41ae73539cb8" title="回复语列表[1, 2, 3]，对应UDP平台上用户定义脚本中的回复语列表，在pcm_map.txt中可以找到对应关系">reply_files</a>);</div>
+<div class="line">}</div>
+<div class="line"> </div>
+<div class="line"><span class="keyword">static</span> <span class="keywordtype">int</span> _ac_wind_replay(<a class="code" href="structevent__custom__setting__t.html" title="对应USER_CUSTOM_SETTING事件">event_custom_setting_t</a> *setting) {</div>
+<div class="line">  <span class="keywordtype">int</span> ret = -1;</div>
+<div class="line">  AC_WIND_SPEED speed = AC_WIND_INVALID;</div>
+<div class="line">  <span class="keywordflow">if</span> (!housekeeper_irc_get_ac_state()) {</div>
+<div class="line">    <span class="keywordflow">return</span> <a class="code" href="group__uni__player__inf.html#ga4473e2cc3c6a07e170e10cf0c317dfe9" title="播放文件">user_player_play</a>(<a class="code" href="group__uni__event__def.html#gga307b45efe10d5edb14203b65a5130302a48c4e09df490d4ee7a71f011ef7f3f66" title="回复语播报">AUDIO_PLAY_REPLY</a>, AC_POWER_OFF_REPLY);</div>
+<div class="line">  }</div>
+<div class="line">  <span class="keywordflow">if</span> (0 == uni_strcmp(setting-&gt;<a class="code" href="structevent__custom__setting__t.html#a116d7dc0d8de517af583917a27cd76b5" title="命令词意图，对应UDP平台上用户定义脚本中的action">cmd</a>, <span class="stringliteral">&quot;ACWindHigh&quot;</span>)) {</div>
+<div class="line">    ret = housekeeper_irc_set_ac_wind(AC_WIND_HIGH);</div>
+<div class="line">  } <span class="keywordflow">else</span> <span class="keywordflow">if</span> (0 == uni_strcmp(setting-&gt;<a class="code" href="structevent__custom__setting__t.html#a116d7dc0d8de517af583917a27cd76b5" title="命令词意图，对应UDP平台上用户定义脚本中的action">cmd</a>, <span class="stringliteral">&quot;ACWindMid&quot;</span>)) {</div>
+<div class="line">    ret = housekeeper_irc_set_ac_wind(AC_WIND_MID);</div>
+<div class="line">  } <span class="keywordflow">else</span> <span class="keywordflow">if</span> (0 == uni_strcmp(setting-&gt;<a class="code" href="structevent__custom__setting__t.html#a116d7dc0d8de517af583917a27cd76b5" title="命令词意图，对应UDP平台上用户定义脚本中的action">cmd</a>, <span class="stringliteral">&quot;ACWindLow&quot;</span>)) {</div>
+<div class="line">    ret = housekeeper_irc_set_ac_wind(AC_WIND_LOW);</div>
+<div class="line">  } <span class="keywordflow">else</span> <span class="keywordflow">if</span> (0 == uni_strcmp(setting-&gt;<a class="code" href="structevent__custom__setting__t.html#a116d7dc0d8de517af583917a27cd76b5" title="命令词意图，对应UDP平台上用户定义脚本中的action">cmd</a>, <span class="stringliteral">&quot;ACWindAuto&quot;</span>)) {</div>
+<div class="line">    ret = housekeeper_irc_set_ac_wind(AC_WIND_AUTO);</div>
+<div class="line">  } <span class="keywordflow">else</span> <span class="keywordflow">if</span> (0 == uni_strcmp(setting-&gt;<a class="code" href="structevent__custom__setting__t.html#a116d7dc0d8de517af583917a27cd76b5" title="命令词意图，对应UDP平台上用户定义脚本中的action">cmd</a>, <span class="stringliteral">&quot;ACWindInc&quot;</span>)) {</div>
+<div class="line">    speed = housekeeper_irc_get_ac_wind();</div>
+<div class="line">    <span class="keywordflow">if</span> (AC_WIND_HIGH == speed) {</div>
+<div class="line">      <span class="keywordflow">return</span> <a class="code" href="group__uni__player__inf.html#ga8638ce40d50e8d08516925830d6dbd94" title="播放列表序号音频">user_player_reply_list_num</a>(setting-&gt;<a class="code" href="structevent__custom__setting__t.html#ac0ee5d49efd66093352c41ae73539cb8" title="回复语列表[1, 2, 3]，对应UDP平台上用户定义脚本中的回复语列表，在pcm_map.txt中可以找到对应关系">reply_files</a>, 1);</div>
+<div class="line">    }</div>
+<div class="line">    ret = housekeeper_irc_ac_wind_inc();</div>
+<div class="line">  } <span class="keywordflow">else</span> <span class="keywordflow">if</span> (0 == uni_strcmp(setting-&gt;<a class="code" href="structevent__custom__setting__t.html#a116d7dc0d8de517af583917a27cd76b5" title="命令词意图，对应UDP平台上用户定义脚本中的action">cmd</a>, <span class="stringliteral">&quot;ACWindDec&quot;</span>)) {</div>
+<div class="line">    speed = housekeeper_irc_get_ac_wind();</div>
+<div class="line">    <span class="keywordflow">if</span> (AC_WIND_LOW == speed) {</div>
+<div class="line">      <span class="keywordflow">return</span> <a class="code" href="group__uni__player__inf.html#ga8638ce40d50e8d08516925830d6dbd94" title="播放列表序号音频">user_player_reply_list_num</a>(setting-&gt;<a class="code" href="structevent__custom__setting__t.html#ac0ee5d49efd66093352c41ae73539cb8" title="回复语列表[1, 2, 3]，对应UDP平台上用户定义脚本中的回复语列表，在pcm_map.txt中可以找到对应关系">reply_files</a>, 1);</div>
+<div class="line">    }</div>
+<div class="line">    ret = housekeeper_irc_ac_wind_dec();</div>
+<div class="line">  } <span class="keywordflow">else</span> {</div>
+<div class="line">    LOGE(TAG, <span class="stringliteral">&quot;unknown cmd: %s&quot;</span>, setting-&gt;<a class="code" href="structevent__custom__setting__t.html#a116d7dc0d8de517af583917a27cd76b5" title="命令词意图，对应UDP平台上用户定义脚本中的action">cmd</a>);</div>
+<div class="line">    <span class="keywordflow">return</span> -1;</div>
+<div class="line">  }</div>
+<div class="line">  <span class="keywordflow">if</span> (0 != ret) {</div>
+<div class="line">    LOGE(TAG, <span class="stringliteral">&quot;housekeeper_irc_set_ac_wind failed&quot;</span>);</div>
+<div class="line">    <span class="keywordflow">return</span> -1;</div>
+<div class="line">  }</div>
+<div class="line">  <span class="keywordflow">return</span> <a class="code" href="group__uni__player__inf.html#ga8638ce40d50e8d08516925830d6dbd94" title="播放列表序号音频">user_player_reply_list_num</a>(setting-&gt;<a class="code" href="structevent__custom__setting__t.html#ac0ee5d49efd66093352c41ae73539cb8" title="回复语列表[1, 2, 3]，对应UDP平台上用户定义脚本中的回复语列表，在pcm_map.txt中可以找到对应关系">reply_files</a>, 0);</div>
+<div class="line">}</div>
+<div class="line"> </div>
+<div class="line"><span class="keyword">static</span> <span class="keywordtype">int</span> _ac_temp_replay(<a class="code" href="structevent__custom__setting__t.html" title="对应USER_CUSTOM_SETTING事件">event_custom_setting_t</a> *setting) {</div>
+<div class="line">  <span class="keywordtype">int</span> ret = -1;</div>
+<div class="line">  AC_TMP_NUMBER tmp = AC_TMP_INVALID;</div>
+<div class="line">  <span class="keywordflow">if</span> (!housekeeper_irc_get_ac_state()) {</div>
+<div class="line">    <span class="keywordflow">return</span> <a class="code" href="group__uni__player__inf.html#ga4473e2cc3c6a07e170e10cf0c317dfe9" title="播放文件">user_player_play</a>(<a class="code" href="group__uni__event__def.html#gga307b45efe10d5edb14203b65a5130302a48c4e09df490d4ee7a71f011ef7f3f66" title="回复语播报">AUDIO_PLAY_REPLY</a>, AC_POWER_OFF_REPLY);</div>
+<div class="line">  }</div>
+<div class="line">  <span class="keywordflow">if</span> (0 == uni_strcmp(setting-&gt;<a class="code" href="structevent__custom__setting__t.html#a116d7dc0d8de517af583917a27cd76b5" title="命令词意图，对应UDP平台上用户定义脚本中的action">cmd</a>, <span class="stringliteral">&quot;ACTmp16&quot;</span>)) {</div>
+<div class="line">    ret = housekeeper_irc_set_ac_tmp(AC_TMP_16);</div>
+<div class="line">  } <span class="keywordflow">else</span> <span class="keywordflow">if</span> (0 == uni_strcmp(setting-&gt;<a class="code" href="structevent__custom__setting__t.html#a116d7dc0d8de517af583917a27cd76b5" title="命令词意图，对应UDP平台上用户定义脚本中的action">cmd</a>, <span class="stringliteral">&quot;ACTmp17&quot;</span>)) {</div>
+<div class="line">    ret = housekeeper_irc_set_ac_tmp(AC_TMP_17);</div>
+<div class="line">  } <span class="keywordflow">else</span> <span class="keywordflow">if</span> (0 == uni_strcmp(setting-&gt;<a class="code" href="structevent__custom__setting__t.html#a116d7dc0d8de517af583917a27cd76b5" title="命令词意图，对应UDP平台上用户定义脚本中的action">cmd</a>, <span class="stringliteral">&quot;ACTmp18&quot;</span>)) {</div>
+<div class="line">    ret = housekeeper_irc_set_ac_tmp(AC_TMP_18);</div>
+<div class="line">  } <span class="keywordflow">else</span> <span class="keywordflow">if</span> (0 == uni_strcmp(setting-&gt;<a class="code" href="structevent__custom__setting__t.html#a116d7dc0d8de517af583917a27cd76b5" title="命令词意图，对应UDP平台上用户定义脚本中的action">cmd</a>, <span class="stringliteral">&quot;ACTmp19&quot;</span>)) {</div>
+<div class="line">    ret = housekeeper_irc_set_ac_tmp(AC_TMP_19);</div>
+<div class="line">  } <span class="keywordflow">else</span> <span class="keywordflow">if</span> (0 == uni_strcmp(setting-&gt;<a class="code" href="structevent__custom__setting__t.html#a116d7dc0d8de517af583917a27cd76b5" title="命令词意图，对应UDP平台上用户定义脚本中的action">cmd</a>, <span class="stringliteral">&quot;ACTmp20&quot;</span>)) {</div>
+<div class="line">    ret = housekeeper_irc_set_ac_tmp(AC_TMP_20);</div>
+<div class="line">  } <span class="keywordflow">else</span> <span class="keywordflow">if</span> (0 == uni_strcmp(setting-&gt;<a class="code" href="structevent__custom__setting__t.html#a116d7dc0d8de517af583917a27cd76b5" title="命令词意图，对应UDP平台上用户定义脚本中的action">cmd</a>, <span class="stringliteral">&quot;ACTmp21&quot;</span>)) {</div>
+<div class="line">    ret = housekeeper_irc_set_ac_tmp(AC_TMP_21);</div>
+<div class="line">  } <span class="keywordflow">else</span> <span class="keywordflow">if</span> (0 == uni_strcmp(setting-&gt;<a class="code" href="structevent__custom__setting__t.html#a116d7dc0d8de517af583917a27cd76b5" title="命令词意图，对应UDP平台上用户定义脚本中的action">cmd</a>, <span class="stringliteral">&quot;ACTmp22&quot;</span>)) {</div>
+<div class="line">    ret = housekeeper_irc_set_ac_tmp(AC_TMP_22);</div>
+<div class="line">  } <span class="keywordflow">else</span> <span class="keywordflow">if</span> (0 == uni_strcmp(setting-&gt;<a class="code" href="structevent__custom__setting__t.html#a116d7dc0d8de517af583917a27cd76b5" title="命令词意图，对应UDP平台上用户定义脚本中的action">cmd</a>, <span class="stringliteral">&quot;ACTmp23&quot;</span>)) {</div>
+<div class="line">    ret = housekeeper_irc_set_ac_tmp(AC_TMP_23);</div>
+<div class="line">  } <span class="keywordflow">else</span> <span class="keywordflow">if</span> (0 == uni_strcmp(setting-&gt;<a class="code" href="structevent__custom__setting__t.html#a116d7dc0d8de517af583917a27cd76b5" title="命令词意图，对应UDP平台上用户定义脚本中的action">cmd</a>, <span class="stringliteral">&quot;ACTmp24&quot;</span>)) {</div>
+<div class="line">    ret = housekeeper_irc_set_ac_tmp(AC_TMP_24);</div>
+<div class="line">  } <span class="keywordflow">else</span> <span class="keywordflow">if</span> (0 == uni_strcmp(setting-&gt;<a class="code" href="structevent__custom__setting__t.html#a116d7dc0d8de517af583917a27cd76b5" title="命令词意图，对应UDP平台上用户定义脚本中的action">cmd</a>, <span class="stringliteral">&quot;ACTmp25&quot;</span>)) {</div>
+<div class="line">    ret = housekeeper_irc_set_ac_tmp(AC_TMP_25);</div>
+<div class="line">  } <span class="keywordflow">else</span> <span class="keywordflow">if</span> (0 == uni_strcmp(setting-&gt;<a class="code" href="structevent__custom__setting__t.html#a116d7dc0d8de517af583917a27cd76b5" title="命令词意图，对应UDP平台上用户定义脚本中的action">cmd</a>, <span class="stringliteral">&quot;ACTmp26&quot;</span>)) {</div>
+<div class="line">    ret = housekeeper_irc_set_ac_tmp(AC_TMP_26);</div>
+<div class="line">  } <span class="keywordflow">else</span> <span class="keywordflow">if</span> (0 == uni_strcmp(setting-&gt;<a class="code" href="structevent__custom__setting__t.html#a116d7dc0d8de517af583917a27cd76b5" title="命令词意图，对应UDP平台上用户定义脚本中的action">cmd</a>, <span class="stringliteral">&quot;ACTmp27&quot;</span>)) {</div>
+<div class="line">    ret = housekeeper_irc_set_ac_tmp(AC_TMP_27);</div>
+<div class="line">  } <span class="keywordflow">else</span> <span class="keywordflow">if</span> (0 == uni_strcmp(setting-&gt;<a class="code" href="structevent__custom__setting__t.html#a116d7dc0d8de517af583917a27cd76b5" title="命令词意图，对应UDP平台上用户定义脚本中的action">cmd</a>, <span class="stringliteral">&quot;ACTmp28&quot;</span>)) {</div>
+<div class="line">    ret = housekeeper_irc_set_ac_tmp(AC_TMP_28);</div>
+<div class="line">  } <span class="keywordflow">else</span> <span class="keywordflow">if</span> (0 == uni_strcmp(setting-&gt;<a class="code" href="structevent__custom__setting__t.html#a116d7dc0d8de517af583917a27cd76b5" title="命令词意图，对应UDP平台上用户定义脚本中的action">cmd</a>, <span class="stringliteral">&quot;ACTmp29&quot;</span>)) {</div>
+<div class="line">    ret = housekeeper_irc_set_ac_tmp(AC_TMP_29);</div>
+<div class="line">  } <span class="keywordflow">else</span> <span class="keywordflow">if</span> (0 == uni_strcmp(setting-&gt;<a class="code" href="structevent__custom__setting__t.html#a116d7dc0d8de517af583917a27cd76b5" title="命令词意图，对应UDP平台上用户定义脚本中的action">cmd</a>, <span class="stringliteral">&quot;ACTmp30&quot;</span>)) {</div>
+<div class="line">    ret = housekeeper_irc_set_ac_tmp(AC_TMP_30);</div>
+<div class="line">  } <span class="keywordflow">else</span> <span class="keywordflow">if</span> (0 == uni_strcmp(setting-&gt;<a class="code" href="structevent__custom__setting__t.html#a116d7dc0d8de517af583917a27cd76b5" title="命令词意图，对应UDP平台上用户定义脚本中的action">cmd</a>, <span class="stringliteral">&quot;ACTmpInc&quot;</span>)) {</div>
+<div class="line">    tmp = housekeeper_irc_get_ac_tmp();</div>
+<div class="line">    <span class="keywordflow">if</span> (AC_TMP_30 == tmp) {</div>
+<div class="line">      <span class="keywordflow">return</span> <a class="code" href="group__uni__player__inf.html#ga8638ce40d50e8d08516925830d6dbd94" title="播放列表序号音频">user_player_reply_list_num</a>(setting-&gt;<a class="code" href="structevent__custom__setting__t.html#ac0ee5d49efd66093352c41ae73539cb8" title="回复语列表[1, 2, 3]，对应UDP平台上用户定义脚本中的回复语列表，在pcm_map.txt中可以找到对应关系">reply_files</a>, 1);</div>
+<div class="line">    }</div>
+<div class="line">    ret = housekeeper_irc_ac_tmp_inc();</div>
+<div class="line">  } <span class="keywordflow">else</span> <span class="keywordflow">if</span> (0 == uni_strcmp(setting-&gt;<a class="code" href="structevent__custom__setting__t.html#a116d7dc0d8de517af583917a27cd76b5" title="命令词意图，对应UDP平台上用户定义脚本中的action">cmd</a>, <span class="stringliteral">&quot;ACTmpDec&quot;</span>)) {</div>
+<div class="line">    tmp = housekeeper_irc_get_ac_tmp();</div>
+<div class="line">    <span class="keywordflow">if</span> (AC_TMP_16 == tmp) {</div>
+<div class="line">      <span class="keywordflow">return</span> <a class="code" href="group__uni__player__inf.html#ga8638ce40d50e8d08516925830d6dbd94" title="播放列表序号音频">user_player_reply_list_num</a>(setting-&gt;<a class="code" href="structevent__custom__setting__t.html#ac0ee5d49efd66093352c41ae73539cb8" title="回复语列表[1, 2, 3]，对应UDP平台上用户定义脚本中的回复语列表，在pcm_map.txt中可以找到对应关系">reply_files</a>, 1);</div>
+<div class="line">    }</div>
+<div class="line">    ret = housekeeper_irc_ac_tmp_dec();</div>
+<div class="line">  } <span class="keywordflow">else</span> {</div>
+<div class="line">    LOGE(TAG, <span class="stringliteral">&quot;unknown cmd: %s&quot;</span>, setting-&gt;<a class="code" href="structevent__custom__setting__t.html#a116d7dc0d8de517af583917a27cd76b5" title="命令词意图，对应UDP平台上用户定义脚本中的action">cmd</a>);</div>
+<div class="line">    <span class="keywordflow">return</span> -1;</div>
+<div class="line">  }</div>
+<div class="line">  <span class="keywordflow">if</span> (0 != ret) {</div>
+<div class="line">    LOGE(TAG, <span class="stringliteral">&quot;housekeeper_irc_set_ac_tmp failed&quot;</span>);</div>
+<div class="line">    <span class="keywordflow">return</span> -1;</div>
+<div class="line">  }</div>
+<div class="line">  <span class="keywordflow">return</span> <a class="code" href="group__uni__player__inf.html#ga8638ce40d50e8d08516925830d6dbd94" title="播放列表序号音频">user_player_reply_list_num</a>(setting-&gt;<a class="code" href="structevent__custom__setting__t.html#ac0ee5d49efd66093352c41ae73539cb8" title="回复语列表[1, 2, 3]，对应UDP平台上用户定义脚本中的回复语列表，在pcm_map.txt中可以找到对应关系">reply_files</a>, 0);</div>
+<div class="line">}</div>
+<div class="line"> </div>
+<div class="line"><span class="keyword">static</span> <span class="keywordtype">int</span> _ac_swept_replay(<a class="code" href="structevent__custom__setting__t.html" title="对应USER_CUSTOM_SETTING事件">event_custom_setting_t</a> *setting) {</div>
+<div class="line">  <span class="keywordtype">int</span> ret = -1;</div>
+<div class="line">  <span class="keywordflow">if</span> (!housekeeper_irc_get_ac_state()) {</div>
+<div class="line">    <span class="keywordflow">return</span> <a class="code" href="group__uni__player__inf.html#ga4473e2cc3c6a07e170e10cf0c317dfe9" title="播放文件">user_player_play</a>(<a class="code" href="group__uni__event__def.html#gga307b45efe10d5edb14203b65a5130302a48c4e09df490d4ee7a71f011ef7f3f66" title="回复语播报">AUDIO_PLAY_REPLY</a>, AC_POWER_OFF_REPLY);</div>
+<div class="line">  }</div>
+<div class="line">  <span class="keywordflow">if</span> (0 == uni_strcmp(setting-&gt;<a class="code" href="structevent__custom__setting__t.html#a116d7dc0d8de517af583917a27cd76b5" title="命令词意图，对应UDP平台上用户定义脚本中的action">cmd</a>, <span class="stringliteral">&quot;ACSweptOn&quot;</span>)) {</div>
+<div class="line">    ret = housekeeper_irc_set_ac_swept(AC_SWEPT_ALL_ON);</div>
+<div class="line">  } <span class="keywordflow">else</span> <span class="keywordflow">if</span> (0 == uni_strcmp(setting-&gt;<a class="code" href="structevent__custom__setting__t.html#a116d7dc0d8de517af583917a27cd76b5" title="命令词意图，对应UDP平台上用户定义脚本中的action">cmd</a>, <span class="stringliteral">&quot;ACSweptOff&quot;</span>)) {</div>
+<div class="line">    ret = housekeeper_irc_set_ac_swept(AC_SWEPT_OFF);</div>
+<div class="line">  } <span class="keywordflow">else</span> <span class="keywordflow">if</span> (0 == uni_strcmp(setting-&gt;<a class="code" href="structevent__custom__setting__t.html#a116d7dc0d8de517af583917a27cd76b5" title="命令词意图，对应UDP平台上用户定义脚本中的action">cmd</a>, <span class="stringliteral">&quot;ACSweptVert&quot;</span>)) {</div>
+<div class="line">    ret = housekeeper_irc_set_ac_swept(AC_SWEPT_VERT_ON);</div>
+<div class="line">  } <span class="keywordflow">else</span> <span class="keywordflow">if</span> (0 == uni_strcmp(setting-&gt;<a class="code" href="structevent__custom__setting__t.html#a116d7dc0d8de517af583917a27cd76b5" title="命令词意图，对应UDP平台上用户定义脚本中的action">cmd</a>, <span class="stringliteral">&quot;ACSweptCross&quot;</span>)) {</div>
+<div class="line">    ret = housekeeper_irc_set_ac_swept(AC_SWEPT_CROSS_ON);</div>
+<div class="line">  } <span class="keywordflow">else</span> {</div>
+<div class="line">    LOGE(TAG, <span class="stringliteral">&quot;unknown cmd: %s&quot;</span>, setting-&gt;<a class="code" href="structevent__custom__setting__t.html#a116d7dc0d8de517af583917a27cd76b5" title="命令词意图，对应UDP平台上用户定义脚本中的action">cmd</a>);</div>
+<div class="line">    <span class="keywordflow">return</span> -1;</div>
+<div class="line">  }</div>
+<div class="line">  <span class="keywordflow">if</span> (0 != ret) {</div>
+<div class="line">    LOGE(TAG, <span class="stringliteral">&quot;housekeeper_irc_set_ac_swept failed&quot;</span>);</div>
+<div class="line">    <span class="keywordflow">return</span> -1;</div>
+<div class="line">  }</div>
+<div class="line">  <span class="keywordflow">return</span> <a class="code" href="group__uni__player__inf.html#ga1835960e52668ec97beea7937b4c619a" title="随机播放列表音频">user_player_reply_list_random</a>(setting-&gt;<a class="code" href="structevent__custom__setting__t.html#ac0ee5d49efd66093352c41ae73539cb8" title="回复语列表[1, 2, 3]，对应UDP平台上用户定义脚本中的回复语列表，在pcm_map.txt中可以找到对应关系">reply_files</a>);</div>
+<div class="line">}</div>
+<div class="line"> </div>
+<div class="line"><span class="keyword">static</span> <span class="keywordtype">int</span> _ac_scan_replay(<a class="code" href="structevent__custom__setting__t.html" title="对应USER_CUSTOM_SETTING事件">event_custom_setting_t</a> *setting) {</div>
+<div class="line">  <span class="keywordtype">int</span> ret = -1;</div>
+<div class="line">  <span class="keywordflow">if</span> (0 == uni_strcmp(setting-&gt;<a class="code" href="structevent__custom__setting__t.html#a116d7dc0d8de517af583917a27cd76b5" title="命令词意图，对应UDP平台上用户定义脚本中的action">cmd</a>, <span class="stringliteral">&quot;ACScanStart&quot;</span>)) {</div>
+<div class="line">    ret = housekeeper_irc_ac_scan_start();</div>
+<div class="line">    <span class="keywordflow">if</span> (0 == ret) {</div>
+<div class="line">      <a class="code" href="group__uni__asr__inf.html#ga0ed52984b825843f9625e6a94070f1cb" title="禁止超时自动退出识别模式">user_asr_timeout_disable</a>();</div>
+<div class="line">    }</div>
+<div class="line">  } <span class="keywordflow">else</span> <span class="keywordflow">if</span> (0 == uni_strcmp(setting-&gt;<a class="code" href="structevent__custom__setting__t.html#a116d7dc0d8de517af583917a27cd76b5" title="命令词意图，对应UDP平台上用户定义脚本中的action">cmd</a>, <span class="stringliteral">&quot;ACScanStop&quot;</span>)) {</div>
+<div class="line">    ret = housekeeper_irc_ac_scan_stop();</div>
+<div class="line">    <span class="keywordflow">if</span> (0 == ret) {</div>
+<div class="line">      <a class="code" href="group__uni__asr__inf.html#gaf0f590527f0ac999193eb4d557bf4ea2" title="使能超时自动退出识别模式">user_asr_timeout_enable</a>();</div>
+<div class="line">    }</div>
+<div class="line">  } <span class="keywordflow">else</span> {</div>
+<div class="line">    LOGE(TAG, <span class="stringliteral">&quot;unknown cmd: %s&quot;</span>, setting-&gt;<a class="code" href="structevent__custom__setting__t.html#a116d7dc0d8de517af583917a27cd76b5" title="命令词意图，对应UDP平台上用户定义脚本中的action">cmd</a>);</div>
+<div class="line">    <span class="keywordflow">return</span> -1;</div>
+<div class="line">  }</div>
+<div class="line">  <span class="keywordflow">if</span> (0 != ret) {</div>
+<div class="line">    LOGE(TAG, <span class="stringliteral">&quot;housekeeper_irc_ac_scan failed&quot;</span>);</div>
+<div class="line">    <span class="keywordflow">return</span> -1;</div>
+<div class="line">  }</div>
+<div class="line">  <span class="keywordflow">return</span> <a class="code" href="group__uni__player__inf.html#ga1835960e52668ec97beea7937b4c619a" title="随机播放列表音频">user_player_reply_list_random</a>(setting-&gt;<a class="code" href="structevent__custom__setting__t.html#ac0ee5d49efd66093352c41ae73539cb8" title="回复语列表[1, 2, 3]，对应UDP平台上用户定义脚本中的回复语列表，在pcm_map.txt中可以找到对应关系">reply_files</a>);</div>
+<div class="line">}</div>
+<div class="line"> </div>
+<div class="line"><span class="keyword">static</span> <span class="keywordtype">int</span> _speaker_mute_reply(<a class="code" href="structevent__custom__setting__t.html" title="对应USER_CUSTOM_SETTING事件">event_custom_setting_t</a> *setting) {</div>
+<div class="line">  g_is_mute_mode = <span class="keyword">true</span>;</div>
+<div class="line">  <span class="keywordflow">return</span> <a class="code" href="group__uni__player__inf.html#ga1835960e52668ec97beea7937b4c619a" title="随机播放列表音频">user_player_reply_list_random</a>(setting-&gt;<a class="code" href="structevent__custom__setting__t.html#ac0ee5d49efd66093352c41ae73539cb8" title="回复语列表[1, 2, 3]，对应UDP平台上用户定义脚本中的回复语列表，在pcm_map.txt中可以找到对应关系">reply_files</a>);</div>
+<div class="line">}</div>
+<div class="line"> </div>
+<div class="line"><span class="keyword">static</span> <span class="keywordtype">int</span> _speaker_unmute_reply(<a class="code" href="structevent__custom__setting__t.html" title="对应USER_CUSTOM_SETTING事件">event_custom_setting_t</a> *setting) {</div>
+<div class="line">  g_is_mute_mode = <span class="keyword">false</span>;</div>
+<div class="line">  <a class="code" href="group__uni__player__inf.html#gac189138d903b980ca4bfcf98b5264b78" title="系统退出无回复播报模式">user_player_shutup_exit</a>();</div>
+<div class="line">  <span class="keywordflow">return</span> <a class="code" href="group__uni__player__inf.html#ga1835960e52668ec97beea7937b4c619a" title="随机播放列表音频">user_player_reply_list_random</a>(setting-&gt;<a class="code" href="structevent__custom__setting__t.html#ac0ee5d49efd66093352c41ae73539cb8" title="回复语列表[1, 2, 3]，对应UDP平台上用户定义脚本中的回复语列表，在pcm_map.txt中可以找到对应关系">reply_files</a>);</div>
+<div class="line">}</div>
+<div class="line"> </div>
+<div class="line"><span class="keyword">static</span> <span class="keywordtype">void</span> _custom_setting_cb(<a class="code" href="group__uni__event__def.html#ga902502909694e32b6ffe17cc0486b71d" title="用户可订阅的事件类型">USER_EVENT_TYPE</a> event,</div>
+<div class="line">                                     <a class="code" href="unionuser__event__context__t.html" title="事件内容，共用体，根据事件类型具体处理">user_event_context_t</a> *context) {</div>
+<div class="line">  <a class="code" href="structevent__custom__setting__t.html" title="对应USER_CUSTOM_SETTING事件">event_custom_setting_t</a> *setting = NULL;</div>
+<div class="line">  uni_bool is_mute_mode = g_is_mute_mode;</div>
+<div class="line">  <span class="keywordtype">int</span> ret = -1;</div>
+<div class="line">  <span class="keywordflow">if</span> (context) {</div>
+<div class="line">    setting = &amp;context-&gt;<a class="code" href="unionuser__event__context__t.html#a43ba72e2ff7c14ac71980f10c32893a3" title="对应USER_CUSTOM_SETTING事件">custom_setting</a>;</div>
+<div class="line">    <span class="keywordflow">if</span> (housekeeper_irc_is_ac_scan()</div>
+<div class="line">      &amp;&amp; (0 != uni_strcmp(setting-&gt;<a class="code" href="structevent__custom__setting__t.html#a116d7dc0d8de517af583917a27cd76b5" title="命令词意图，对应UDP平台上用户定义脚本中的action">cmd</a>, <span class="stringliteral">&quot;ACScanStop&quot;</span>))) {</div>
+<div class="line">      housekeeper_irc_ac_scan_pause();</div>
+<div class="line">      <a class="code" href="group__uni__player__inf.html#ga4473e2cc3c6a07e170e10cf0c317dfe9" title="播放文件">user_player_play</a>(<a class="code" href="group__uni__event__def.html#gga307b45efe10d5edb14203b65a5130302a48c4e09df490d4ee7a71f011ef7f3f66" title="回复语播报">AUDIO_PLAY_REPLY</a>, AC_SCANING_REPLY);</div>
+<div class="line">      <span class="keywordflow">if</span> (is_mute_mode) {</div>
+<div class="line">        housekeeper_irc_lamp_blink();</div>
+<div class="line">      }</div>
+<div class="line">      return ;</div>
+<div class="line">    }</div>
+<div class="line">    <span class="keywordflow">if</span> (0 == uni_strcmp(setting-&gt;<a class="code" href="structevent__custom__setting__t.html#a116d7dc0d8de517af583917a27cd76b5" title="命令词意图，对应UDP平台上用户定义脚本中的action">cmd</a>, <span class="stringliteral">&quot;LearnMatchAC&quot;</span>)) {</div>
+<div class="line">      ret = _ac_match_replay(setting);</div>
+<div class="line">    } <span class="keywordflow">else</span> <span class="keywordflow">if</span> (0 == uni_strcmp(setting-&gt;<a class="code" href="structevent__custom__setting__t.html#a116d7dc0d8de517af583917a27cd76b5" title="命令词意图，对应UDP平台上用户定义脚本中的action">cmd</a>, <span class="stringliteral">&quot;SetRestore&quot;</span>)) {</div>
+<div class="line">      ret = _ac_restore_replay(setting);</div>
+<div class="line">    } <span class="keywordflow">else</span> <span class="keywordflow">if</span> (0 == uni_strcmp(setting-&gt;<a class="code" href="structevent__custom__setting__t.html#a116d7dc0d8de517af583917a27cd76b5" title="命令词意图，对应UDP平台上用户定义脚本中的action">cmd</a>, <span class="stringliteral">&quot;SpeakerMute&quot;</span>)) {</div>
+<div class="line">      ret = _speaker_mute_reply(setting);</div>
+<div class="line">    } <span class="keywordflow">else</span> <span class="keywordflow">if</span> (0 == uni_strcmp(setting-&gt;<a class="code" href="structevent__custom__setting__t.html#a116d7dc0d8de517af583917a27cd76b5" title="命令词意图，对应UDP平台上用户定义脚本中的action">cmd</a>, <span class="stringliteral">&quot;SpeakerUnmute&quot;</span>)) {</div>
+<div class="line">      ret = _speaker_unmute_reply(setting);</div>
+<div class="line">      is_mute_mode = <span class="keyword">false</span>;</div>
+<div class="line">    } <span class="keywordflow">else</span> <span class="keywordflow">if</span> (0 == uni_strncmp(setting-&gt;<a class="code" href="structevent__custom__setting__t.html#a116d7dc0d8de517af583917a27cd76b5" title="命令词意图，对应UDP平台上用户定义脚本中的action">cmd</a>, <span class="stringliteral">&quot;ACTurn&quot;</span>, uni_strlen(<span class="stringliteral">&quot;ACTurn&quot;</span>))) {</div>
+<div class="line">      ret = _ac_power_replay(setting);</div>
+<div class="line">    } <span class="keywordflow">else</span> <span class="keywordflow">if</span> (0 == uni_strncmp(setting-&gt;<a class="code" href="structevent__custom__setting__t.html#a116d7dc0d8de517af583917a27cd76b5" title="命令词意图，对应UDP平台上用户定义脚本中的action">cmd</a>, <span class="stringliteral">&quot;ACMode&quot;</span>, uni_strlen(<span class="stringliteral">&quot;ACMode&quot;</span>))) {</div>
+<div class="line">      ret = _ac_mode_replay(setting);</div>
+<div class="line">    } <span class="keywordflow">else</span> <span class="keywordflow">if</span> (0 == uni_strncmp(setting-&gt;<a class="code" href="structevent__custom__setting__t.html#a116d7dc0d8de517af583917a27cd76b5" title="命令词意图，对应UDP平台上用户定义脚本中的action">cmd</a>, <span class="stringliteral">&quot;ACWind&quot;</span>, uni_strlen(<span class="stringliteral">&quot;ACWind&quot;</span>))) {</div>
+<div class="line">      ret = _ac_wind_replay(setting);</div>
+<div class="line">    } <span class="keywordflow">else</span> <span class="keywordflow">if</span> (0 == uni_strncmp(setting-&gt;<a class="code" href="structevent__custom__setting__t.html#a116d7dc0d8de517af583917a27cd76b5" title="命令词意图，对应UDP平台上用户定义脚本中的action">cmd</a>, <span class="stringliteral">&quot;ACTmp&quot;</span>, uni_strlen(<span class="stringliteral">&quot;ACTmp&quot;</span>))) {</div>
+<div class="line">      ret = _ac_temp_replay(setting);</div>
+<div class="line">    } <span class="keywordflow">else</span> <span class="keywordflow">if</span> (0 == uni_strncmp(setting-&gt;<a class="code" href="structevent__custom__setting__t.html#a116d7dc0d8de517af583917a27cd76b5" title="命令词意图，对应UDP平台上用户定义脚本中的action">cmd</a>, <span class="stringliteral">&quot;ACSwept&quot;</span>, uni_strlen(<span class="stringliteral">&quot;ACSwept&quot;</span>))) {</div>
+<div class="line">      ret = _ac_swept_replay(setting);</div>
+<div class="line">    } <span class="keywordflow">else</span> <span class="keywordflow">if</span> (0 == uni_strncmp(setting-&gt;<a class="code" href="structevent__custom__setting__t.html#a116d7dc0d8de517af583917a27cd76b5" title="命令词意图，对应UDP平台上用户定义脚本中的action">cmd</a>, <span class="stringliteral">&quot;ACScan&quot;</span>, uni_strlen(<span class="stringliteral">&quot;ACScan&quot;</span>))) {</div>
+<div class="line">      ret = _ac_scan_replay(setting);</div>
+<div class="line">    } <span class="keywordflow">else</span> <span class="keywordflow">if</span> (0 == uni_strncmp(setting-&gt;<a class="code" href="structevent__custom__setting__t.html#a116d7dc0d8de517af583917a27cd76b5" title="命令词意图，对应UDP平台上用户定义脚本中的action">cmd</a>, <span class="stringliteral">&quot;NightLamp&quot;</span>, uni_strlen(<span class="stringliteral">&quot;NightLamp&quot;</span>))) {</div>
+<div class="line">      ret = _lamp_cmd_replay(setting);</div>
+<div class="line">    } <span class="keywordflow">else</span> {</div>
+<div class="line">      LOGE(TAG, <span class="stringliteral">&quot;unknown command : %s&quot;</span>, setting-&gt;<a class="code" href="structevent__custom__setting__t.html#a116d7dc0d8de517af583917a27cd76b5" title="命令词意图，对应UDP平台上用户定义脚本中的action">cmd</a>);</div>
+<div class="line">      ret = -1;</div>
+<div class="line">    }</div>
+<div class="line">    <span class="keywordflow">if</span> (is_mute_mode &amp;&amp; (0 == ret)) {</div>
+<div class="line">      housekeeper_irc_lamp_blink();</div>
+<div class="line">    }</div>
+<div class="line">  }</div>
+<div class="line">}</div>
+<div class="line"> </div>
+<div class="line"><span class="keyword">static</span> <span class="keywordtype">void</span> _goto_awakened_cb(<a class="code" href="group__uni__event__def.html#ga902502909694e32b6ffe17cc0486b71d" title="用户可订阅的事件类型">USER_EVENT_TYPE</a> event,</div>
+<div class="line">                                     <a class="code" href="unionuser__event__context__t.html" title="事件内容，共用体，根据事件类型具体处理">user_event_context_t</a> *context) {</div>
+<div class="line">  <a class="code" href="structevent__goto__awakend__t.html" title="对应USER_GOTO_AWAKENED事件">event_goto_awakend_t</a> *awkened = NULL;</div>
+<div class="line">  <span class="keywordflow">if</span> (context) {</div>
+<div class="line">    awkened = &amp;context-&gt;<a class="code" href="unionuser__event__context__t.html#a0a42907c149243b4090998fd50e2038f" title="对应USER_GOTO_AWAKENED事件">goto_awakend</a>;</div>
+<div class="line">    housekeeper_irc_ac_scan_pause();</div>
+<div class="line">    <a class="code" href="group__uni__player__inf.html#ga1835960e52668ec97beea7937b4c619a" title="随机播放列表音频">user_player_reply_list_random</a>(awkened-&gt;<a class="code" href="structevent__goto__awakend__t.html#a8e561a86d72841824a63ef0c6c3208c9" title="回复语列表[1, 2, 3]，对应UDP平台上用户定义脚本中的回复语列表，在pcm_map.txt中可以找到对应关系">reply_files</a>);</div>
+<div class="line">    <span class="keywordflow">if</span> (g_is_mute_mode &amp;&amp; <a class="code" href="group__uni__event__def.html#ggaad619614cc7faaad1f392c03a720641aaac1d30cbb9e9a3084860c811189e821d" title="语音识别指令触发">EVENT_TRIGGER_ASR</a> == awkened-&gt;<a class="code" href="structevent__goto__awakend__t.html#a7a368a2b09bb985b03a9765dfc71f824" title="触发来源">trigger</a>) {</div>
+<div class="line">      housekeeper_irc_lamp_blink();</div>
+<div class="line">    }</div>
+<div class="line">  }</div>
+<div class="line">}</div>
+<div class="line"> </div>
+<div class="line"><span class="keyword">static</span> <span class="keywordtype">void</span> _goto_sleeping_cb (<a class="code" href="group__uni__event__def.html#ga902502909694e32b6ffe17cc0486b71d" title="用户可订阅的事件类型">USER_EVENT_TYPE</a> event,</div>
+<div class="line">                                     <a class="code" href="unionuser__event__context__t.html" title="事件内容，共用体，根据事件类型具体处理">user_event_context_t</a> *context) {</div>
+<div class="line">  <a class="code" href="structevent__goto__sleeping__t.html" title="对应USER_GOTO_SLEEPING事件">event_goto_sleeping_t</a> *sleeping = NULL;</div>
+<div class="line">  <span class="keywordflow">if</span> (context) {</div>
+<div class="line">    sleeping = &amp;context-&gt;<a class="code" href="unionuser__event__context__t.html#a297b6e16967f2ab116c8c611e2370c2e" title="对应USER_GOTO_SLEEPING事件">goto_sleeping</a>;</div>
+<div class="line">    housekeeper_irc_ac_scan_stop();</div>
+<div class="line">    housekeeper_irc_ac_match_stop();</div>
+<div class="line">    <a class="code" href="group__uni__asr__inf.html#gaf0f590527f0ac999193eb4d557bf4ea2" title="使能超时自动退出识别模式">user_asr_timeout_enable</a>();</div>
+<div class="line">    <a class="code" href="group__uni__player__inf.html#ga1835960e52668ec97beea7937b4c619a" title="随机播放列表音频">user_player_reply_list_random</a>(sleeping-&gt;<a class="code" href="structevent__goto__sleeping__t.html#aaf8265deb711316c01228d347b0ac769" title="回复语列表[1, 2, 3]，对应UDP平台上用户定义脚本中的回复语列表，在pcm_map.txt中可以找到对应关系">reply_files</a>);</div>
+<div class="line">    <span class="keywordflow">if</span> (g_is_mute_mode &amp;&amp; <a class="code" href="group__uni__event__def.html#ggaad619614cc7faaad1f392c03a720641aaac1d30cbb9e9a3084860c811189e821d" title="语音识别指令触发">EVENT_TRIGGER_ASR</a> == sleeping-&gt;<a class="code" href="structevent__goto__sleeping__t.html#a584490f77754d1c6dc45bdc972b5a281" title="触发来源">trigger</a>) {</div>
+<div class="line">      housekeeper_irc_lamp_blink();</div>
+<div class="line">    }</div>
+<div class="line">  }</div>
+<div class="line">}</div>
+<div class="line"> </div>
+<div class="line"><span class="keyword">static</span> <span class="keywordtype">void</span> _audio_playend_cb (<a class="code" href="group__uni__event__def.html#ga902502909694e32b6ffe17cc0486b71d" title="用户可订阅的事件类型">USER_EVENT_TYPE</a> event,</div>
+<div class="line">                                     <a class="code" href="unionuser__event__context__t.html" title="事件内容，共用体，根据事件类型具体处理">user_event_context_t</a> *context) {</div>
+<div class="line">  housekeeper_irc_ac_scan_resume();</div>
+<div class="line">  <span class="keywordflow">if</span> (g_is_mute_mode) {</div>
+<div class="line">    <a class="code" href="group__uni__player__inf.html#ga11a025a5b1c09eb9ef4737088ee26965" title="系统进入无回复播报模式">user_player_shutup_mode</a>();</div>
+<div class="line">  }</div>
+<div class="line">}</div>
+<div class="line"> </div>
+<div class="line"><span class="keyword">static</span> <span class="keywordtype">void</span> _register_event_callback(<span class="keywordtype">void</span>) {</div>
+<div class="line">  <a class="code" href="group__uni__event__inf.html#ga02223c46639ad1880e53ad1e4a2c669d" title="订阅一个事件">user_event_subscribe_event</a>(<a class="code" href="group__uni__event__def.html#gga902502909694e32b6ffe17cc0486b71da49fa04fd990408f5d66b194e306dd379" title="识别到客户自定义的识别词时发送">USER_CUSTOM_SETTING</a>, _custom_setting_cb);</div>
+<div class="line">  <a class="code" href="group__uni__event__inf.html#ga02223c46639ad1880e53ad1e4a2c669d" title="订阅一个事件">user_event_subscribe_event</a>(<a class="code" href="group__uni__event__def.html#gga902502909694e32b6ffe17cc0486b71da6427287c5d673468f6b648f03985a3ce" title="进入识别状态（已唤醒）时发送">USER_GOTO_AWAKENED</a>, _goto_awakened_cb);</div>
+<div class="line">  <a class="code" href="group__uni__event__inf.html#ga02223c46639ad1880e53ad1e4a2c669d" title="订阅一个事件">user_event_subscribe_event</a>(<a class="code" href="group__uni__event__def.html#gga902502909694e32b6ffe17cc0486b71dac657cc02e4cdf099ae7c028dc2eb8d3d" title="进入待唤醒状态时发送">USER_GOTO_SLEEPING</a>, _goto_sleeping_cb);</div>
+<div class="line">  <a class="code" href="group__uni__event__inf.html#ga02223c46639ad1880e53ad1e4a2c669d" title="订阅一个事件">user_event_subscribe_event</a>(<a class="code" href="group__uni__event__def.html#gga902502909694e32b6ffe17cc0486b71dacedc5f6d926eeb7c3e1def77cad42ba8" title="音频播放完毕或被停止时发送">USER_AUDIO_PLAY_END</a>, _audio_playend_cb);</div>
+<div class="line">}</div>
+<div class="line"> </div>
+<div class="line"><span class="keywordtype">int</span> hb_housekeeper(<span class="keywordtype">void</span>) {</div>
+<div class="line">  <span class="keywordflow">if</span> (0 != housekeeper_irc_init(_cb_ac_match_result, _cb_ac_scan_failed)) {</div>
+<div class="line">    LOGE(TAG, <span class="stringliteral">&quot;user_uart_hb1688_init failed.&quot;</span>);</div>
+<div class="line">    <span class="keywordflow">return</span> -1;</div>
+<div class="line">  }</div>
+<div class="line">  _register_event_callback();</div>
+<div class="line">  <span class="keywordflow">return</span> 0;</div>
+<div class="line">}</div>
+<div class="line"> </div>
+</div><!-- fragment --> </div><!-- contents -->
+</body>
+</html>

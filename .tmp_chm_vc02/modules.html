@@ -1,0 +1,119 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "https://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=9"/>
+<meta name="generator" content="Doxygen 1.8.18"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>蜂鸟M离线方案开发指导手册: 模块</title>
+<link href="tabs.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="jquery.js"></script>
+<script type="text/javascript" src="dynsections.js"></script>
+<link href="doxygen.css" rel="stylesheet" type="text/css" />
+</head>
+<body>
+<div id="top"><!-- do not remove this div, it is closed by doxygen! -->
+<div id="titlearea">
+<table cellspacing="0" cellpadding="0">
+ <tbody>
+ <tr style="height: 56px;">
+  <td id="projectalign" style="padding-left: 0.5em;">
+   <div id="projectname">蜂鸟M离线方案开发指导手册
+   &#160;<span id="projectnumber">v1.0.4</span>
+   </div>
+  </td>
+ </tr>
+ </tbody>
+</table>
+</div>
+<!-- end header part -->
+<!-- 制作者 Doxygen 1.8.18 -->
+<script type="text/javascript" src="menudata.js"></script>
+<script type="text/javascript" src="menu.js"></script>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:cf05388f2679ee054f2beb29a391d25f4e673ac3&amp;dn=gpl-2.0.txt GPL-v2 */
+$(function() {
+  initMenu('',false,false,'search.php','搜索');
+});
+/* @license-end */</script>
+<div id="main-nav"></div>
+</div><!-- top -->
+<div class="header">
+  <div class="headertitle">
+<div class="title">模块</div>  </div>
+</div><!--header-->
+<div class="contents">
+<div class="textblock">这里列出了所有模块:</div><div class="directory">
+<div class="levels">[详情级别 <span onclick="javascript:toggleLevel(1);">1</span><span onclick="javascript:toggleLevel(2);">2</span><span onclick="javascript:toggleLevel(3);">3</span>]</div><table class="directory">
+<tr id="row_0_" class="even"><td class="entry"><span style="width:0px;display:inline-block;">&#160;</span><span id="arr_0_" class="arrow" onclick="toggleFolder('0_')">&#9660;</span><a class="el" href="group__uni__config__macro.html" target="_self">配置宏定义</a></td><td class="desc">配置宏定义参考user/inc/user_config.h </td></tr>
+<tr id="row_0_0_"><td class="entry"><span style="width:32px;display:inline-block;">&#160;</span><a class="el" href="group__uni__config__gpio__macro.html" target="_self">GPIO相关宏定义</a></td><td class="desc">GPIO settings </td></tr>
+<tr id="row_0_1_" class="even"><td class="entry"><span style="width:32px;display:inline-block;">&#160;</span><a class="el" href="group__uni__config__audio__macro.html" target="_self">audio相关宏定义</a></td><td class="desc">Audio player volume settings, default value means (5, 25, 50, 75, 100) </td></tr>
+<tr id="row_0_2_"><td class="entry"><span style="width:32px;display:inline-block;">&#160;</span><a class="el" href="group__uni__config__communication__macro.html" target="_self">通讯相关宏定义</a></td><td class="desc">Use Unione communication protocol settings, default USE B6/B7 pin, 115200, 8, 1, 0 </td></tr>
+<tr id="row_0_3_" class="even"><td class="entry"><span style="width:32px;display:inline-block;">&#160;</span><a class="el" href="group__uni__config__uart__macro.html" target="_self">串口相关宏定义</a></td><td class="desc">Custom UART settings, default USE B6/B7 pin, 19200, 8, 1, 0 Cannot use it if <a class="el" href="group__uni__config__communication__macro.html#ga4e8e1ce809fd83e0fcc1df4ef5053e3e" title="0: don&#39;t use, 1: use">USE_UNIONE_PROTOCOL</a> is 1, only one UART on HB-M board </td></tr>
+<tr id="row_0_4_"><td class="entry"><span style="width:32px;display:inline-block;">&#160;</span><a class="el" href="group__uni__config__asr__macro.html" target="_self">语音相关宏定义</a></td><td class="desc">Recognize configurations, default multiply dialogue and no AEC </td></tr>
+<tr id="row_0_5_" class="even"><td class="entry"><span style="width:32px;display:inline-block;">&#160;</span><a class="el" href="group__uni__config__demo__macro.html" target="_self">Demo相关宏定义</a></td><td class="desc">使用方法见详细描述 </td></tr>
+<tr id="row_1_"><td class="entry"><span style="width:0px;display:inline-block;">&#160;</span><span id="arr_1_" class="arrow" onclick="toggleFolder('1_')">&#9660;</span><a class="el" href="group__uni__player.html" target="_self">音频控制</a></td><td class="desc">音频控制接口参考user/inc/user_player.h </td></tr>
+<tr id="row_1_0_" class="even"><td class="entry"><span style="width:32px;display:inline-block;">&#160;</span><a class="el" href="group__uni__player__note.html" target="_self">音频控制说明</a></td><td class="desc"></td></tr>
+<tr id="row_1_1_"><td class="entry"><span style="width:32px;display:inline-block;">&#160;</span><a class="el" href="group__uni__player__inf.html" target="_self">音频控制接口</a></td><td class="desc"></td></tr>
+<tr id="row_1_2_" class="even"><td class="entry"><span style="width:16px;display:inline-block;">&#160;</span><span id="arr_1_2_" class="arrow" onclick="toggleFolder('1_2_')">&#9660;</span><a class="el" href="group__uni__player__example.html" target="_self">音频控制示例</a></td><td class="desc"></td></tr>
+<tr id="row_1_2_0_"><td class="entry"><span style="width:48px;display:inline-block;">&#160;</span><a class="el" href="group__uni__player__example__1.html" target="_self">hb_player.c</a></td><td class="desc"></td></tr>
+<tr id="row_2_" class="even"><td class="entry"><span style="width:0px;display:inline-block;">&#160;</span><span id="arr_2_" class="arrow" onclick="toggleFolder('2_')">&#9660;</span><a class="el" href="group__uni__asr.html" target="_self">语音控制</a></td><td class="desc">语音控制接口参考user/inc/user_asr.h </td></tr>
+<tr id="row_2_0_"><td class="entry"><span style="width:32px;display:inline-block;">&#160;</span><a class="el" href="group__uni__asr__note.html" target="_self">语音控制说明</a></td><td class="desc"></td></tr>
+<tr id="row_2_1_" class="even"><td class="entry"><span style="width:32px;display:inline-block;">&#160;</span><a class="el" href="group__uni__asr__inf.html" target="_self">语音控制接口</a></td><td class="desc"></td></tr>
+<tr id="row_2_2_"><td class="entry"><span style="width:16px;display:inline-block;">&#160;</span><span id="arr_2_2_" class="arrow" onclick="toggleFolder('2_2_')">&#9660;</span><a class="el" href="group__uni__asr__example.html" target="_self">音频控制示例</a></td><td class="desc"></td></tr>
+<tr id="row_2_2_0_" class="even"><td class="entry"><span style="width:48px;display:inline-block;">&#160;</span><a class="el" href="group__uni__asr__example__1.html" target="_self">hb_asr_control.c</a></td><td class="desc"></td></tr>
+<tr id="row_3_"><td class="entry"><span style="width:0px;display:inline-block;">&#160;</span><span id="arr_3_" class="arrow" onclick="toggleFolder('3_')">&#9660;</span><a class="el" href="group__uni__power.html" target="_self">功耗控制</a></td><td class="desc"></td></tr>
+<tr id="row_3_0_" class="even"><td class="entry"><span style="width:32px;display:inline-block;">&#160;</span><a class="el" href="group__uni__power__note.html" target="_self">功耗控制说明</a></td><td class="desc"></td></tr>
+<tr id="row_3_1_"><td class="entry"><span style="width:16px;display:inline-block;">&#160;</span><span id="arr_3_1_" class="arrow" onclick="toggleFolder('3_1_')">&#9660;</span><a class="el" href="group__uni__power__sleep.html" target="_self">低功耗模式</a></td><td class="desc"></td></tr>
+<tr id="row_3_1_0_" class="even"><td class="entry"><span style="width:48px;display:inline-block;">&#160;</span><a class="el" href="group__uni__power__sleep__example.html" target="_self">低功耗模式示例</a></td><td class="desc"></td></tr>
+<tr id="row_4_"><td class="entry"><span style="width:0px;display:inline-block;">&#160;</span><span id="arr_4_" class="arrow" onclick="toggleFolder('4_')">&#9660;</span><a class="el" href="group__uni__communication.html" target="_self">云知声数据通讯协议</a></td><td class="desc">云知声标准协议数据通讯接口参考user/inc/user_uni_ucp.h </td></tr>
+<tr id="row_4_0_" class="even"><td class="entry"><span style="width:32px;display:inline-block;">&#160;</span><a class="el" href="group__uni__communication__note.html" target="_self">云知声标准协议数据通讯</a></td><td class="desc"></td></tr>
+<tr id="row_4_1_"><td class="entry"><span style="width:32px;display:inline-block;">&#160;</span><a class="el" href="group__uni__communication__inf.html" target="_self">云知声标准协议数据通讯接口</a></td><td class="desc"></td></tr>
+<tr id="row_4_2_" class="even"><td class="entry"><span style="width:16px;display:inline-block;">&#160;</span><span id="arr_4_2_" class="arrow" onclick="toggleFolder('4_2_')">&#9660;</span><a class="el" href="group__uni__communication__example.html" target="_self">云知声标准协议数据通讯示例</a></td><td class="desc"></td></tr>
+<tr id="row_4_2_0_"><td class="entry"><span style="width:48px;display:inline-block;">&#160;</span><a class="el" href="group__uni__communication__example__1.html" target="_self">hb_uart_ucp.c</a></td><td class="desc"></td></tr>
+<tr id="row_4_3_" class="even"><td class="entry"><span style="width:32px;display:inline-block;">&#160;</span><a class="el" href="group__uni__communication__sucp__note.html" target="_self">云知声简易协议数据通讯</a></td><td class="desc"></td></tr>
+<tr id="row_4_4_"><td class="entry"><span style="width:32px;display:inline-block;">&#160;</span><a class="el" href="group__uni__sample__communication__inf.html" target="_self">云知声简易协议数据通讯接口</a></td><td class="desc"></td></tr>
+<tr id="row_4_5_" class="even"><td class="entry"><span style="width:16px;display:inline-block;">&#160;</span><span id="arr_4_5_" class="arrow" onclick="toggleFolder('4_5_')">&#9660;</span><a class="el" href="group__uni__communication__sucp__example.html" target="_self">云知声简易协议数据通讯示例</a></td><td class="desc"></td></tr>
+<tr id="row_4_5_0_"><td class="entry"><span style="width:48px;display:inline-block;">&#160;</span><a class="el" href="group__uni__communication__example__sucp.html" target="_self">hb_uart_sucp.c</a></td><td class="desc"></td></tr>
+<tr id="row_5_" class="even"><td class="entry"><span style="width:0px;display:inline-block;">&#160;</span><span id="arr_5_" class="arrow" onclick="toggleFolder('5_')">&#9660;</span><a class="el" href="group__uni__flash.html" target="_self">数据存储</a></td><td class="desc">数据存储接口参考user/inc/user_flash.h </td></tr>
+<tr id="row_5_0_"><td class="entry"><span style="width:32px;display:inline-block;">&#160;</span><a class="el" href="group__uni__flash__note.html" target="_self">数据存储说明</a></td><td class="desc"></td></tr>
+<tr id="row_5_1_" class="even"><td class="entry"><span style="width:32px;display:inline-block;">&#160;</span><a class="el" href="group__uni__flash__inf.html" target="_self">数据存储接口</a></td><td class="desc"></td></tr>
+<tr id="row_5_2_"><td class="entry"><span style="width:16px;display:inline-block;">&#160;</span><span id="arr_5_2_" class="arrow" onclick="toggleFolder('5_2_')">&#9660;</span><a class="el" href="group__uni__flash__example.html" target="_self">数据存储示例</a></td><td class="desc"></td></tr>
+<tr id="row_5_2_0_" class="even"><td class="entry"><span style="width:48px;display:inline-block;">&#160;</span><a class="el" href="group__uni__flash__example__1.html" target="_self">hb_flash_example.c</a></td><td class="desc"></td></tr>
+<tr id="row_6_"><td class="entry"><span style="width:0px;display:inline-block;">&#160;</span><span id="arr_6_" class="arrow" onclick="toggleFolder('6_')">&#9660;</span><a class="el" href="group__uni__uart.html" target="_self">串口收发</a></td><td class="desc">串口收发接口参考user/inc/user_uart.h </td></tr>
+<tr id="row_6_0_" class="even"><td class="entry"><span style="width:32px;display:inline-block;">&#160;</span><a class="el" href="group__uni__uart__note.html" target="_self">串口收发说明</a></td><td class="desc"></td></tr>
+<tr id="row_6_1_"><td class="entry"><span style="width:32px;display:inline-block;">&#160;</span><a class="el" href="group__uni__uart__inf.html" target="_self">串口收发接口</a></td><td class="desc"></td></tr>
+<tr id="row_6_2_" class="even"><td class="entry"><span style="width:16px;display:inline-block;">&#160;</span><span id="arr_6_2_" class="arrow" onclick="toggleFolder('6_2_')">&#9660;</span><a class="el" href="group__uni__uart__example.html" target="_self">串口收发示例</a></td><td class="desc"></td></tr>
+<tr id="row_6_2_0_"><td class="entry"><span style="width:48px;display:inline-block;">&#160;</span><a class="el" href="group__uni__uart__example__1.html" target="_self">hb_uart.c</a></td><td class="desc"></td></tr>
+<tr id="row_7_" class="even"><td class="entry"><span style="width:0px;display:inline-block;">&#160;</span><span id="arr_7_" class="arrow" onclick="toggleFolder('7_')">&#9660;</span><a class="el" href="group__uni__timer.html" target="_self">定时器</a></td><td class="desc">定时器接口参考user/inc/user_timer.h </td></tr>
+<tr id="row_7_0_"><td class="entry"><span style="width:32px;display:inline-block;">&#160;</span><a class="el" href="group__uni__timer__note.html" target="_self">定时器说明</a></td><td class="desc"></td></tr>
+<tr id="row_7_1_" class="even"><td class="entry"><span style="width:32px;display:inline-block;">&#160;</span><a class="el" href="group__uni__timer__inf.html" target="_self">定时器接口</a></td><td class="desc"></td></tr>
+<tr id="row_7_2_"><td class="entry"><span style="width:32px;display:inline-block;">&#160;</span><a class="el" href="group__uni__timer__def.html" target="_self">定时器类型定义</a></td><td class="desc"></td></tr>
+<tr id="row_7_3_" class="even"><td class="entry"><span style="width:16px;display:inline-block;">&#160;</span><span id="arr_7_3_" class="arrow" onclick="toggleFolder('7_3_')">&#9660;</span><a class="el" href="group__uni__timer__example.html" target="_self">定时器示例</a></td><td class="desc"></td></tr>
+<tr id="row_7_3_0_"><td class="entry"><span style="width:48px;display:inline-block;">&#160;</span><a class="el" href="group__timer__example1.html" target="_self">hb_sw_timers.c</a></td><td class="desc"></td></tr>
+<tr id="row_7_3_1_" class="even"><td class="entry"><span style="width:48px;display:inline-block;">&#160;</span><a class="el" href="group__timer__example2.html" target="_self">user_timer_buzzer.c</a></td><td class="desc"></td></tr>
+<tr id="row_8_"><td class="entry"><span style="width:0px;display:inline-block;">&#160;</span><span id="arr_8_" class="arrow" onclick="toggleFolder('8_')">&#9660;</span><a class="el" href="group__uni__gpio.html" target="_self">GPIO</a></td><td class="desc">GPIO接口参考user/inc/user_gpio.h </td></tr>
+<tr id="row_8_0_" class="even"><td class="entry"><span style="width:32px;display:inline-block;">&#160;</span><a class="el" href="group__uni__gpio__note.html" target="_self">GPIO说明</a></td><td class="desc"></td></tr>
+<tr id="row_8_1_"><td class="entry"><span style="width:32px;display:inline-block;">&#160;</span><a class="el" href="group__uni__gpio__inf.html" target="_self">GPIO相关接口</a></td><td class="desc"></td></tr>
+<tr id="row_8_2_" class="even"><td class="entry"><span style="width:32px;display:inline-block;">&#160;</span><a class="el" href="group__uni__gpio__def.html" target="_self">GPIO类型定义</a></td><td class="desc"></td></tr>
+<tr id="row_8_3_"><td class="entry"><span style="width:16px;display:inline-block;">&#160;</span><span id="arr_8_3_" class="arrow" onclick="toggleFolder('8_3_')">&#9660;</span><a class="el" href="group__uni__gpio__example.html" target="_self">GPIO示例</a></td><td class="desc"></td></tr>
+<tr id="row_8_3_0_" class="even"><td class="entry"><span style="width:48px;display:inline-block;">&#160;</span><a class="el" href="group__gpio__example1.html" target="_self">hb_gpio_adc.c</a></td><td class="desc"></td></tr>
+<tr id="row_8_3_1_"><td class="entry"><span style="width:48px;display:inline-block;">&#160;</span><a class="el" href="group__gpio__example2.html" target="_self">hb_gpio_key.c</a></td><td class="desc"></td></tr>
+<tr id="row_9_" class="even"><td class="entry"><span style="width:0px;display:inline-block;">&#160;</span><span id="arr_9_" class="arrow" onclick="toggleFolder('9_')">&#9660;</span><a class="el" href="group__uni__event.html" target="_self">Event事件</a></td><td class="desc">Event事件接口参考user/inc/user_event.h </td></tr>
+<tr id="row_9_0_"><td class="entry"><span style="width:32px;display:inline-block;">&#160;</span><a class="el" href="group__uni__event__note.html" target="_self">Event事件说明</a></td><td class="desc"></td></tr>
+<tr id="row_9_1_" class="even"><td class="entry"><span style="width:32px;display:inline-block;">&#160;</span><a class="el" href="group__uni__event__inf.html" target="_self">Event事件接口</a></td><td class="desc"></td></tr>
+<tr id="row_9_2_"><td class="entry"><span style="width:32px;display:inline-block;">&#160;</span><a class="el" href="group__uni__event__def.html" target="_self">Event事件类型定义</a></td><td class="desc"></td></tr>
+<tr id="row_10_" class="even"><td class="entry"><span style="width:0px;display:inline-block;">&#160;</span><span id="arr_10_" class="arrow" onclick="toggleFolder('10_')">&#9660;</span><a class="el" href="group__uni__pwm.html" target="_self">PWM</a></td><td class="desc">PWM接口参考user/inc/user_pwm.h </td></tr>
+<tr id="row_10_0_"><td class="entry"><span style="width:32px;display:inline-block;">&#160;</span><a class="el" href="group__uni__pwm__note.html" target="_self">PWM说明</a></td><td class="desc"></td></tr>
+<tr id="row_10_1_" class="even"><td class="entry"><span style="width:32px;display:inline-block;">&#160;</span><a class="el" href="group__uni__pwm__inf.html" target="_self">PWM相关接口</a></td><td class="desc"></td></tr>
+<tr id="row_10_2_"><td class="entry"><span style="width:32px;display:inline-block;">&#160;</span><a class="el" href="group__uni__pwm__def.html" target="_self">PWM类型定义</a></td><td class="desc"></td></tr>
+<tr id="row_10_3_" class="even"><td class="entry"><span style="width:16px;display:inline-block;">&#160;</span><span id="arr_10_3_" class="arrow" onclick="toggleFolder('10_3_')">&#9660;</span><a class="el" href="group__uni__pwm__example.html" target="_self">PWM示例</a></td><td class="desc"></td></tr>
+<tr id="row_10_3_0_"><td class="entry"><span style="width:48px;display:inline-block;">&#160;</span><a class="el" href="group__uni__pwm__example1.html" target="_self">hb_pwm_led.c</a></td><td class="desc"></td></tr>
+<tr id="row_11_" class="even"><td class="entry"><span style="width:0px;display:inline-block;">&#160;</span><span id="arr_11_" class="arrow" onclick="toggleFolder('11_')">&#9660;</span><a class="el" href="group__uni__example.html" target="_self">方案示例</a></td><td class="desc">示例代码位于目录user/src/examples/下 </td></tr>
+<tr id="row_11_0_"><td class="entry"><span style="width:32px;display:inline-block;">&#160;</span><a class="el" href="group__hb__smart__ac.html" target="_self">智能电风扇</a></td><td class="desc"></td></tr>
+<tr id="row_11_1_" class="even"><td class="entry"><span style="width:32px;display:inline-block;">&#160;</span><a class="el" href="group__hb__housekeeper.html" target="_self">智能管家</a></td><td class="desc"></td></tr>
+</table>
+</div><!-- directory -->
+</div><!-- contents -->
+</body>
+</html>

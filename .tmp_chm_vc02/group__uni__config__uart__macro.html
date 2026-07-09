@@ -1,0 +1,81 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "https://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=9"/>
+<meta name="generator" content="Doxygen 1.8.18"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>蜂鸟M离线方案开发指导手册: 串口相关宏定义</title>
+<link href="tabs.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="jquery.js"></script>
+<script type="text/javascript" src="dynsections.js"></script>
+<link href="doxygen.css" rel="stylesheet" type="text/css" />
+</head>
+<body>
+<div id="top"><!-- do not remove this div, it is closed by doxygen! -->
+<div id="titlearea">
+<table cellspacing="0" cellpadding="0">
+ <tbody>
+ <tr style="height: 56px;">
+  <td id="projectalign" style="padding-left: 0.5em;">
+   <div id="projectname">蜂鸟M离线方案开发指导手册
+   &#160;<span id="projectnumber">v1.0.4</span>
+   </div>
+  </td>
+ </tr>
+ </tbody>
+</table>
+</div>
+<!-- end header part -->
+<!-- 制作者 Doxygen 1.8.18 -->
+<script type="text/javascript" src="menudata.js"></script>
+<script type="text/javascript" src="menu.js"></script>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:cf05388f2679ee054f2beb29a391d25f4e673ac3&amp;dn=gpl-2.0.txt GPL-v2 */
+$(function() {
+  initMenu('',false,false,'search.php','搜索');
+});
+/* @license-end */</script>
+<div id="main-nav"></div>
+</div><!-- top -->
+<div class="header">
+  <div class="summary">
+<a href="#define-members">宏定义</a>  </div>
+  <div class="headertitle">
+<div class="title">串口相关宏定义<div class="ingroups"><a class="el" href="group__uni__config__macro.html">配置宏定义</a></div></div>  </div>
+</div><!--header-->
+<div class="contents">
+
+<p>Custom UART settings, default USE B6/B7 pin, 19200, 8, 1, 0 Cannot use it if <a class="el" href="group__uni__config__communication__macro.html#ga4e8e1ce809fd83e0fcc1df4ef5053e3e" title="0: don&#39;t use, 1: use">USE_UNIONE_PROTOCOL</a> is 1, only one UART on HB-M board  
+<a href="#details">更多...</a></p>
+<table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="define-members"></a>
+宏定义</h2></td></tr>
+<tr class="memitem:ga436a62c1b3904c1b826c0e88c1bf86c2"><td class="memItemLeft" align="right" valign="top"><a id="ga436a62c1b3904c1b826c0e88c1bf86c2"></a>
+#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__uni__config__uart__macro.html#ga436a62c1b3904c1b826c0e88c1bf86c2">USER_UART_DEVICE_NUM</a>&#160;&#160;&#160;1</td></tr>
+<tr class="memdesc:ga436a62c1b3904c1b826c0e88c1bf86c2"><td class="mdescLeft">&#160;</td><td class="mdescRight">Only 1 can be used on HB-M board <br /></td></tr>
+<tr class="separator:ga436a62c1b3904c1b826c0e88c1bf86c2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga24d7358640837334d04ff42208a12d80"><td class="memItemLeft" align="right" valign="top"><a id="ga24d7358640837334d04ff42208a12d80"></a>
+#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__uni__config__uart__macro.html#ga24d7358640837334d04ff42208a12d80">USER_UART_PIN_SELECT</a>&#160;&#160;&#160;0</td></tr>
+<tr class="memdesc:ga24d7358640837334d04ff42208a12d80"><td class="mdescLeft">&#160;</td><td class="mdescRight">0: B7/B6, 1: B0/B1, 2: B2/B3 <br /></td></tr>
+<tr class="separator:ga24d7358640837334d04ff42208a12d80"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga879c18f3fe004b689f18694756a900f6"><td class="memItemLeft" align="right" valign="top"><a id="ga879c18f3fe004b689f18694756a900f6"></a>
+#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__uni__config__uart__macro.html#ga879c18f3fe004b689f18694756a900f6">USER_UART_BAUD_RATE</a>&#160;&#160;&#160;19200</td></tr>
+<tr class="memdesc:ga879c18f3fe004b689f18694756a900f6"><td class="mdescLeft">&#160;</td><td class="mdescRight">4800/9600/19200/38400/57600/115200 <br /></td></tr>
+<tr class="separator:ga879c18f3fe004b689f18694756a900f6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:gaa790ae4531e8fb16808ee8b4261366df"><td class="memItemLeft" align="right" valign="top"><a id="gaa790ae4531e8fb16808ee8b4261366df"></a>
+#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__uni__config__uart__macro.html#gaa790ae4531e8fb16808ee8b4261366df">USER_UART_PARITY</a>&#160;&#160;&#160;0</td></tr>
+<tr class="memdesc:gaa790ae4531e8fb16808ee8b4261366df"><td class="mdescLeft">&#160;</td><td class="mdescRight">0: None, 1: Odd, 2: Even <br /></td></tr>
+<tr class="separator:gaa790ae4531e8fb16808ee8b4261366df"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga17bfd105e8bbea8a9b58c78e7109e460"><td class="memItemLeft" align="right" valign="top"><a id="ga17bfd105e8bbea8a9b58c78e7109e460"></a>
+#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__uni__config__uart__macro.html#ga17bfd105e8bbea8a9b58c78e7109e460">USER_UART_STOP_BIT</a>&#160;&#160;&#160;1</td></tr>
+<tr class="memdesc:ga17bfd105e8bbea8a9b58c78e7109e460"><td class="mdescLeft">&#160;</td><td class="mdescRight">1/2 <br /></td></tr>
+<tr class="separator:ga17bfd105e8bbea8a9b58c78e7109e460"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:gae7f4f36bd02d5628ff5626c1edd31930"><td class="memItemLeft" align="right" valign="top"><a id="gae7f4f36bd02d5628ff5626c1edd31930"></a>
+#define&#160;</td><td class="memItemRight" valign="bottom"><b>USER_UART_DATA_BIT</b>&#160;&#160;&#160;8</td></tr>
+<tr class="separator:gae7f4f36bd02d5628ff5626c1edd31930"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table>
+<a name="details" id="details"></a><h2 class="groupheader">详细描述</h2>
+</div><!-- contents -->
+</body>
+</html>

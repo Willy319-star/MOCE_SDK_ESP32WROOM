@@ -1,0 +1,424 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "https://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=9"/>
+<meta name="generator" content="Doxygen 1.8.18"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>蜂鸟M离线方案开发指导手册: PWM相关接口</title>
+<link href="tabs.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="jquery.js"></script>
+<script type="text/javascript" src="dynsections.js"></script>
+<link href="doxygen.css" rel="stylesheet" type="text/css" />
+</head>
+<body>
+<div id="top"><!-- do not remove this div, it is closed by doxygen! -->
+<div id="titlearea">
+<table cellspacing="0" cellpadding="0">
+ <tbody>
+ <tr style="height: 56px;">
+  <td id="projectalign" style="padding-left: 0.5em;">
+   <div id="projectname">蜂鸟M离线方案开发指导手册
+   &#160;<span id="projectnumber">v1.0.4</span>
+   </div>
+  </td>
+ </tr>
+ </tbody>
+</table>
+</div>
+<!-- end header part -->
+<!-- 制作者 Doxygen 1.8.18 -->
+<script type="text/javascript" src="menudata.js"></script>
+<script type="text/javascript" src="menu.js"></script>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:cf05388f2679ee054f2beb29a391d25f4e673ac3&amp;dn=gpl-2.0.txt GPL-v2 */
+$(function() {
+  initMenu('',false,false,'search.php','搜索');
+});
+/* @license-end */</script>
+<div id="main-nav"></div>
+</div><!-- top -->
+<div class="header">
+  <div class="summary">
+<a href="#func-members">函数</a>  </div>
+  <div class="headertitle">
+<div class="title">PWM相关接口<div class="ingroups"><a class="el" href="group__uni__pwm.html">PWM</a></div></div>  </div>
+</div><!--header-->
+<div class="contents">
+<table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
+函数</h2></td></tr>
+<tr class="memitem:ga2a33c5ae39256f9dd271f946f18b9c02"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__uni__pwm__inf.html#ga2a33c5ae39256f9dd271f946f18b9c02">user_pwm_init</a> (<a class="el" href="group__uni__pwm__def.html#gaa8017b41b719c5883a5ff5afa3f9b289">USER_PWM_NUM</a> num, uni_u32 hz, uni_bool is_high_duty)</td></tr>
+<tr class="memdesc:ga2a33c5ae39256f9dd271f946f18b9c02"><td class="mdescLeft">&#160;</td><td class="mdescRight">PWM初始化  <a href="group__uni__pwm__inf.html#ga2a33c5ae39256f9dd271f946f18b9c02">更多...</a><br /></td></tr>
+<tr class="separator:ga2a33c5ae39256f9dd271f946f18b9c02"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:gaa7dc5f6a134f570bc000daa1315dfa0f"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__uni__pwm__inf.html#gaa7dc5f6a134f570bc000daa1315dfa0f">user_pwm_final</a> (<a class="el" href="group__uni__pwm__def.html#gaa8017b41b719c5883a5ff5afa3f9b289">USER_PWM_NUM</a> num)</td></tr>
+<tr class="memdesc:gaa7dc5f6a134f570bc000daa1315dfa0f"><td class="mdescLeft">&#160;</td><td class="mdescRight">PWM反初始化  <a href="group__uni__pwm__inf.html#gaa7dc5f6a134f570bc000daa1315dfa0f">更多...</a><br /></td></tr>
+<tr class="separator:gaa7dc5f6a134f570bc000daa1315dfa0f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga9c3570393651dea1298227a84bcc33f4"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__uni__pwm__inf.html#ga9c3570393651dea1298227a84bcc33f4">user_pwm_start</a> (<a class="el" href="group__uni__pwm__def.html#gaa8017b41b719c5883a5ff5afa3f9b289">USER_PWM_NUM</a> num, uni_u8 duty)</td></tr>
+<tr class="memdesc:ga9c3570393651dea1298227a84bcc33f4"><td class="mdescLeft">&#160;</td><td class="mdescRight">开使PWM输出  <a href="group__uni__pwm__inf.html#ga9c3570393651dea1298227a84bcc33f4">更多...</a><br /></td></tr>
+<tr class="separator:ga9c3570393651dea1298227a84bcc33f4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga68e522b645964ba3b5d0d33beabeb4d7"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__uni__pwm__inf.html#ga68e522b645964ba3b5d0d33beabeb4d7">user_pwm_stop</a> (<a class="el" href="group__uni__pwm__def.html#gaa8017b41b719c5883a5ff5afa3f9b289">USER_PWM_NUM</a> num)</td></tr>
+<tr class="memdesc:ga68e522b645964ba3b5d0d33beabeb4d7"><td class="mdescLeft">&#160;</td><td class="mdescRight">停止PWM输出  <a href="group__uni__pwm__inf.html#ga68e522b645964ba3b5d0d33beabeb4d7">更多...</a><br /></td></tr>
+<tr class="separator:ga68e522b645964ba3b5d0d33beabeb4d7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:gaf405c4b93ab2fd1e77138a2cd90e26c1"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__uni__pwm__inf.html#gaf405c4b93ab2fd1e77138a2cd90e26c1">user_pwm_pause</a> (<a class="el" href="group__uni__pwm__def.html#gaa8017b41b719c5883a5ff5afa3f9b289">USER_PWM_NUM</a> num)</td></tr>
+<tr class="memdesc:gaf405c4b93ab2fd1e77138a2cd90e26c1"><td class="mdescLeft">&#160;</td><td class="mdescRight">暂停PWM输出  <a href="group__uni__pwm__inf.html#gaf405c4b93ab2fd1e77138a2cd90e26c1">更多...</a><br /></td></tr>
+<tr class="separator:gaf405c4b93ab2fd1e77138a2cd90e26c1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga55a4e61a66e15eda76fd3cc9383d994e"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__uni__pwm__inf.html#ga55a4e61a66e15eda76fd3cc9383d994e">user_pwm_resume</a> (<a class="el" href="group__uni__pwm__def.html#gaa8017b41b719c5883a5ff5afa3f9b289">USER_PWM_NUM</a> num)</td></tr>
+<tr class="memdesc:ga55a4e61a66e15eda76fd3cc9383d994e"><td class="mdescLeft">&#160;</td><td class="mdescRight">恢复PWM输出  <a href="group__uni__pwm__inf.html#ga55a4e61a66e15eda76fd3cc9383d994e">更多...</a><br /></td></tr>
+<tr class="separator:ga55a4e61a66e15eda76fd3cc9383d994e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:gaacfe251ab7522f69ee4a8d51fee49732"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__uni__pwm__inf.html#gaacfe251ab7522f69ee4a8d51fee49732">user_pwm_change_duty</a> (<a class="el" href="group__uni__pwm__def.html#gaa8017b41b719c5883a5ff5afa3f9b289">USER_PWM_NUM</a> num, uni_u8 duty)</td></tr>
+<tr class="memdesc:gaacfe251ab7522f69ee4a8d51fee49732"><td class="mdescLeft">&#160;</td><td class="mdescRight">PWM占空比切换  <a href="group__uni__pwm__inf.html#gaacfe251ab7522f69ee4a8d51fee49732">更多...</a><br /></td></tr>
+<tr class="separator:gaacfe251ab7522f69ee4a8d51fee49732"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:gad890e74b78c9fc4899254e2e70293df8"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__uni__pwm__inf.html#gad890e74b78c9fc4899254e2e70293df8">user_pwm_duty_inc</a> (<a class="el" href="group__uni__pwm__def.html#gaa8017b41b719c5883a5ff5afa3f9b289">USER_PWM_NUM</a> num, uni_u8 ch_duty)</td></tr>
+<tr class="memdesc:gad890e74b78c9fc4899254e2e70293df8"><td class="mdescLeft">&#160;</td><td class="mdescRight">PWM占空比增加  <a href="group__uni__pwm__inf.html#gad890e74b78c9fc4899254e2e70293df8">更多...</a><br /></td></tr>
+<tr class="separator:gad890e74b78c9fc4899254e2e70293df8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga26d661bba6789bf9e041138cc76b33a2"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__uni__pwm__inf.html#ga26d661bba6789bf9e041138cc76b33a2">user_pwm_duty_dec</a> (<a class="el" href="group__uni__pwm__def.html#gaa8017b41b719c5883a5ff5afa3f9b289">USER_PWM_NUM</a> num, uni_u8 ch_duty)</td></tr>
+<tr class="memdesc:ga26d661bba6789bf9e041138cc76b33a2"><td class="mdescLeft">&#160;</td><td class="mdescRight">PWM占空比减小  <a href="group__uni__pwm__inf.html#ga26d661bba6789bf9e041138cc76b33a2">更多...</a><br /></td></tr>
+<tr class="separator:ga26d661bba6789bf9e041138cc76b33a2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table>
+<a name="details" id="details"></a><h2 class="groupheader">详细描述</h2>
+<h2 class="groupheader">函数说明</h2>
+<a id="gaacfe251ab7522f69ee4a8d51fee49732"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#gaacfe251ab7522f69ee4a8d51fee49732">&#9670;&nbsp;</a></span>user_pwm_change_duty()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int user_pwm_change_duty </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="group__uni__pwm__def.html#gaa8017b41b719c5883a5ff5afa3f9b289">USER_PWM_NUM</a>&#160;</td>
+          <td class="paramname"><em>num</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">uni_u8&#160;</td>
+          <td class="paramname"><em>duty</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<dl class="params"><dt>参数</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">num</td><td>PWM管脚号 </td></tr>
+    <tr><td class="paramname">duty</td><td>占空比 </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="retval"><dt>返回值</dt><dd>
+  <table class="retval">
+    <tr><td class="paramname">0</td><td>操作成功 </td></tr>
+    <tr><td class="paramname">-1</td><td>操作失败 </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="ga26d661bba6789bf9e041138cc76b33a2"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ga26d661bba6789bf9e041138cc76b33a2">&#9670;&nbsp;</a></span>user_pwm_duty_dec()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int user_pwm_duty_dec </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="group__uni__pwm__def.html#gaa8017b41b719c5883a5ff5afa3f9b289">USER_PWM_NUM</a>&#160;</td>
+          <td class="paramname"><em>num</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">uni_u8&#160;</td>
+          <td class="paramname"><em>ch_duty</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<dl class="params"><dt>参数</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">num</td><td>PWM管脚号 </td></tr>
+    <tr><td class="paramname">ch_duty</td><td>减小的占空比 </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="retval"><dt>返回值</dt><dd>
+  <table class="retval">
+    <tr><td class="paramname">0</td><td>操作成功 </td></tr>
+    <tr><td class="paramname">-1</td><td>操作失败 </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="gad890e74b78c9fc4899254e2e70293df8"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#gad890e74b78c9fc4899254e2e70293df8">&#9670;&nbsp;</a></span>user_pwm_duty_inc()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int user_pwm_duty_inc </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="group__uni__pwm__def.html#gaa8017b41b719c5883a5ff5afa3f9b289">USER_PWM_NUM</a>&#160;</td>
+          <td class="paramname"><em>num</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">uni_u8&#160;</td>
+          <td class="paramname"><em>ch_duty</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<dl class="params"><dt>参数</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">num</td><td>PWM管脚号 </td></tr>
+    <tr><td class="paramname">ch_duty</td><td>增加的占空比 </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="retval"><dt>返回值</dt><dd>
+  <table class="retval">
+    <tr><td class="paramname">0</td><td>操作成功 </td></tr>
+    <tr><td class="paramname">-1</td><td>操作失败 </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="gaa7dc5f6a134f570bc000daa1315dfa0f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#gaa7dc5f6a134f570bc000daa1315dfa0f">&#9670;&nbsp;</a></span>user_pwm_final()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int user_pwm_final </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="group__uni__pwm__def.html#gaa8017b41b719c5883a5ff5afa3f9b289">USER_PWM_NUM</a>&#160;</td>
+          <td class="paramname"><em>num</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<dl class="params"><dt>参数</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">num</td><td>PWM管脚号 </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="retval"><dt>返回值</dt><dd>
+  <table class="retval">
+    <tr><td class="paramname">0</td><td>操作成功 </td></tr>
+    <tr><td class="paramname">-1</td><td>操作失败 </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="ga2a33c5ae39256f9dd271f946f18b9c02"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ga2a33c5ae39256f9dd271f946f18b9c02">&#9670;&nbsp;</a></span>user_pwm_init()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int user_pwm_init </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="group__uni__pwm__def.html#gaa8017b41b719c5883a5ff5afa3f9b289">USER_PWM_NUM</a>&#160;</td>
+          <td class="paramname"><em>num</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">uni_u32&#160;</td>
+          <td class="paramname"><em>hz</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">uni_bool&#160;</td>
+          <td class="paramname"><em>is_high_duty</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<dl class="params"><dt>参数</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">num</td><td>PWM管脚号 </td></tr>
+    <tr><td class="paramname">hz</td><td>频率 </td></tr>
+    <tr><td class="paramname">is_high_duty</td><td><em>TRUE</em> :占空比用高电平持续时间计算; <em>FALSE</em> :占空比用低电平持续时间计算 </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="retval"><dt>返回值</dt><dd>
+  <table class="retval">
+    <tr><td class="paramname">0</td><td>操作成功 </td></tr>
+    <tr><td class="paramname">-1</td><td>操作失败 </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="gaf405c4b93ab2fd1e77138a2cd90e26c1"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#gaf405c4b93ab2fd1e77138a2cd90e26c1">&#9670;&nbsp;</a></span>user_pwm_pause()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int user_pwm_pause </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="group__uni__pwm__def.html#gaa8017b41b719c5883a5ff5afa3f9b289">USER_PWM_NUM</a>&#160;</td>
+          <td class="paramname"><em>num</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<dl class="params"><dt>参数</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">num</td><td>PWM管脚号 </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="retval"><dt>返回值</dt><dd>
+  <table class="retval">
+    <tr><td class="paramname">0</td><td>操作成功 </td></tr>
+    <tr><td class="paramname">-1</td><td>操作失败 </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="ga55a4e61a66e15eda76fd3cc9383d994e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ga55a4e61a66e15eda76fd3cc9383d994e">&#9670;&nbsp;</a></span>user_pwm_resume()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int user_pwm_resume </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="group__uni__pwm__def.html#gaa8017b41b719c5883a5ff5afa3f9b289">USER_PWM_NUM</a>&#160;</td>
+          <td class="paramname"><em>num</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<dl class="params"><dt>参数</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">num</td><td>PWM管脚号 </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="retval"><dt>返回值</dt><dd>
+  <table class="retval">
+    <tr><td class="paramname">0</td><td>操作成功 </td></tr>
+    <tr><td class="paramname">-1</td><td>操作失败 </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="ga9c3570393651dea1298227a84bcc33f4"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ga9c3570393651dea1298227a84bcc33f4">&#9670;&nbsp;</a></span>user_pwm_start()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int user_pwm_start </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="group__uni__pwm__def.html#gaa8017b41b719c5883a5ff5afa3f9b289">USER_PWM_NUM</a>&#160;</td>
+          <td class="paramname"><em>num</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">uni_u8&#160;</td>
+          <td class="paramname"><em>duty</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<dl class="params"><dt>参数</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">num</td><td>PWM管脚号 </td></tr>
+    <tr><td class="paramname">duty</td><td>占空比 </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="retval"><dt>返回值</dt><dd>
+  <table class="retval">
+    <tr><td class="paramname">0</td><td>操作成功 </td></tr>
+    <tr><td class="paramname">-1</td><td>操作失败 </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="ga68e522b645964ba3b5d0d33beabeb4d7"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ga68e522b645964ba3b5d0d33beabeb4d7">&#9670;&nbsp;</a></span>user_pwm_stop()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int user_pwm_stop </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="group__uni__pwm__def.html#gaa8017b41b719c5883a5ff5afa3f9b289">USER_PWM_NUM</a>&#160;</td>
+          <td class="paramname"><em>num</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<dl class="params"><dt>参数</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">num</td><td>PWM管脚号 </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="retval"><dt>返回值</dt><dd>
+  <table class="retval">
+    <tr><td class="paramname">0</td><td>操作成功 </td></tr>
+    <tr><td class="paramname">-1</td><td>操作失败 </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+</div><!-- contents -->
+</body>
+</html>

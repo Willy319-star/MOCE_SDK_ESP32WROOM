@@ -1,0 +1,129 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "https://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=9"/>
+<meta name="generator" content="Doxygen 1.8.18"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>蜂鸟M离线方案开发指导手册: 低功耗模式示例</title>
+<link href="tabs.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="jquery.js"></script>
+<script type="text/javascript" src="dynsections.js"></script>
+<link href="doxygen.css" rel="stylesheet" type="text/css" />
+</head>
+<body>
+<div id="top"><!-- do not remove this div, it is closed by doxygen! -->
+<div id="titlearea">
+<table cellspacing="0" cellpadding="0">
+ <tbody>
+ <tr style="height: 56px;">
+  <td id="projectalign" style="padding-left: 0.5em;">
+   <div id="projectname">蜂鸟M离线方案开发指导手册
+   &#160;<span id="projectnumber">v1.0.4</span>
+   </div>
+  </td>
+ </tr>
+ </tbody>
+</table>
+</div>
+<!-- end header part -->
+<!-- 制作者 Doxygen 1.8.18 -->
+<script type="text/javascript" src="menudata.js"></script>
+<script type="text/javascript" src="menu.js"></script>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:cf05388f2679ee054f2beb29a391d25f4e673ac3&amp;dn=gpl-2.0.txt GPL-v2 */
+$(function() {
+  initMenu('',false,false,'search.php','搜索');
+});
+/* @license-end */</script>
+<div id="main-nav"></div>
+</div><!-- top -->
+<div class="header">
+  <div class="headertitle">
+<div class="title">低功耗模式示例<div class="ingroups"><a class="el" href="group__uni__power.html">功耗控制</a> &raquo; <a class="el" href="group__uni__power__sleep.html">低功耗模式</a></div></div>  </div>
+</div><!--header-->
+<div class="contents">
+<dl class="section user"><dt></dt><dd></dd></dl>
+<p>可通过定义user/inc/user_config.h中的宏<a class="el" href="group__uni__config__demo__macro.html#ga234a8d36ebd8d152f3c487e19868578d">USER_RUN_DEMO_SELECT</a> 为<a class="el" href="group__uni__config__demo__macro.html#gab2ac58d37bc7c3c01adf94ae71fefb90">USER_DEMO_POWER_SLEEP</a> 运行示例程序 </p><div class="fragment"><div class="line"><span class="comment">/**************************************************************************</span></div>
+<div class="line"><span class="comment"> * Copyright (C) 2017-2017  Unisound</span></div>
+<div class="line"><span class="comment"> *</span></div>
+<div class="line"><span class="comment"> * This program is free software; you can redistribute it and/or modify</span></div>
+<div class="line"><span class="comment"> * it under the terms of the GNU General Public License as published by</span></div>
+<div class="line"><span class="comment"> * the Free Software Foundation; either version 2 of the License, or</span></div>
+<div class="line"><span class="comment"> * any later version.</span></div>
+<div class="line"><span class="comment"> *</span></div>
+<div class="line"><span class="comment"> * This program is distributed in the hope that it will be useful,</span></div>
+<div class="line"><span class="comment"> * but WITHOUT ANY WARRANTY; without even the implied warranty of</span></div>
+<div class="line"><span class="comment"> * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the</span></div>
+<div class="line"><span class="comment"> * GNU General Public License for more details.</span></div>
+<div class="line"><span class="comment"> *</span></div>
+<div class="line"><span class="comment"> * You should have received a copy of the GNU General Public License along</span></div>
+<div class="line"><span class="comment"> * with this program; if not, write to the Free Software Foundation, Inc.,</span></div>
+<div class="line"><span class="comment"> * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.</span></div>
+<div class="line"><span class="comment"> **************************************************************************</span></div>
+<div class="line"><span class="comment"> *</span></div>
+<div class="line"><span class="comment"> * Description : hb_power_sleep.c</span></div>
+<div class="line"><span class="comment"> * Author      : wangzhicheng@unisound.com</span></div>
+<div class="line"><span class="comment"> * Date        : 2020.07.23</span></div>
+<div class="line"><span class="comment"> *</span></div>
+<div class="line"><span class="comment"> **************************************************************************/</span></div>
+<div class="line"><span class="preprocessor">#include &quot;user_gpio.h&quot;</span></div>
+<div class="line"><span class="preprocessor">#include &quot;user_digital_keys.h&quot;</span></div>
+<div class="line"><span class="preprocessor">#include &quot;uni_hal_power.h&quot;</span></div>
+<div class="line"><span class="preprocessor">#include &quot;user_asr.h&quot;</span></div>
+<div class="line"> </div>
+<div class="line"><span class="preprocessor">#define TAG &quot;hb_power_sleep&quot;</span></div>
+<div class="line"> </div>
+<div class="line"><span class="comment">/* 本demo使用GPIO A26作为功耗模式的检测pin，拉低时进入低功耗模式，拉高时唤醒 */</span></div>
+<div class="line"><span class="preprocessor">#define KEY_GPIO_POWER_WAKEUP_NUM   GPIO_NUM_A26</span></div>
+<div class="line"> </div>
+<div class="line"><span class="keyword">static</span> <span class="keywordtype">void</span> _wakeup_cb(<span class="keywordtype">int</span> flag) {</div>
+<div class="line">  <span class="comment">/* interrupt cb: cann&#39;t use LOGX */</span></div>
+<div class="line">  uni_printf(<span class="stringliteral">&quot;deepsleep wake up!!!\n&quot;</span>);</div>
+<div class="line">}</div>
+<div class="line"> </div>
+<div class="line"><span class="keyword">static</span> <span class="keywordtype">void</span> _gpio_trigger_process(<span class="keywordtype">void</span> *args) {</div>
+<div class="line">  <span class="keywordtype">int</span> value;</div>
+<div class="line">  <span class="keywordflow">while</span> (1) {</div>
+<div class="line">    value = <a class="code" href="group__uni__gpio__inf.html#gaeb2fb86366e9b816de71d64d1ee8fa25" title="获取GPIO端口值">user_gpio_get_value</a>(KEY_GPIO_POWER_WAKEUP_NUM);</div>
+<div class="line">    uni_msleep(50);</div>
+<div class="line">    <span class="keywordflow">if</span> (<a class="code" href="group__uni__gpio__inf.html#gaeb2fb86366e9b816de71d64d1ee8fa25" title="获取GPIO端口值">user_gpio_get_value</a>(KEY_GPIO_POWER_WAKEUP_NUM) != value) {</div>
+<div class="line">      LOGT(TAG, <span class="stringliteral">&quot;pin jittery !!!\n&quot;</span>);</div>
+<div class="line">      uni_msleep(100);</div>
+<div class="line">      <span class="keywordflow">continue</span>;</div>
+<div class="line">    }</div>
+<div class="line">    <span class="keywordflow">if</span> (!value) {</div>
+<div class="line">      LOGT(TAG, <span class="stringliteral">&quot;go to sleep !!!\n&quot;</span>);</div>
+<div class="line">      uni_hal_enterdeepsleep(_wakeup_cb, WAKEUP_GPIOA26, WAKEUP_GPIOPOSE);</div>
+<div class="line">      LOGT(TAG, <span class="stringliteral">&quot;sleep to wakeup !!!\n&quot;</span>);</div>
+<div class="line">    }</div>
+<div class="line">  }</div>
+<div class="line">}</div>
+<div class="line"> </div>
+<div class="line"><span class="keyword">static</span> Result _create_gpio_trigger_thread(<span class="keywordtype">void</span>) {</div>
+<div class="line">  thread_param param;</div>
+<div class="line">  uni_memset(&amp;param, 0, <span class="keyword">sizeof</span>(param));</div>
+<div class="line">  param.stack_size = STACK_NORMAL_SIZE;</div>
+<div class="line">  param.priority = OS_PRIORITY_LOW;</div>
+<div class="line">  uni_pthread_t pid;</div>
+<div class="line">  uni_strncpy(param.task_name, <span class="stringliteral">&quot;gpio_trigger&quot;</span>, <span class="keyword">sizeof</span>(param.task_name) - 1);</div>
+<div class="line">  <span class="keywordflow">if</span> (0 != uni_pthread_create(&amp;pid, &amp;param,</div>
+<div class="line">                              _gpio_trigger_process, NULL)) {</div>
+<div class="line">    LOGE(TAG, <span class="stringliteral">&quot;create thread failed&quot;</span>);</div>
+<div class="line">    <span class="keywordflow">return</span> E_FAILED;</div>
+<div class="line">  }</div>
+<div class="line">  uni_pthread_detach(pid);</div>
+<div class="line">  <span class="keywordflow">return</span> E_OK;</div>
+<div class="line">}</div>
+<div class="line"> </div>
+<div class="line"><span class="keyword">static</span> <span class="keywordtype">void</span> _gpio_init(<span class="keywordtype">void</span>) {</div>
+<div class="line">  <a class="code" href="group__uni__gpio__inf.html#ga723df1589dae08fc7a847f66a999a2d8" title="设置GPIO工作模式">user_gpio_set_mode</a>(KEY_GPIO_POWER_WAKEUP_NUM, GPIO_MODE_IN);</div>
+<div class="line">  _create_gpio_trigger_thread();</div>
+<div class="line">}</div>
+<div class="line"> </div>
+<div class="line"><span class="keywordtype">int</span> hb_power_sleep(<span class="keywordtype">void</span>) {</div>
+<div class="line">  _gpio_init();</div>
+<div class="line">}</div>
+</div><!-- fragment --> </div><!-- contents -->
+</body>
+</html>

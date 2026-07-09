@@ -1,0 +1,117 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "https://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=9"/>
+<meta name="generator" content="Doxygen 1.8.18"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>蜂鸟M离线方案开发指导手册: Z:/Hummingbird_M/unione_lite_app_hb_m/user/inc/user_pwm.h 源文件</title>
+<link href="tabs.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="jquery.js"></script>
+<script type="text/javascript" src="dynsections.js"></script>
+<link href="doxygen.css" rel="stylesheet" type="text/css" />
+</head>
+<body>
+<div id="top"><!-- do not remove this div, it is closed by doxygen! -->
+<div id="titlearea">
+<table cellspacing="0" cellpadding="0">
+ <tbody>
+ <tr style="height: 56px;">
+  <td id="projectalign" style="padding-left: 0.5em;">
+   <div id="projectname">蜂鸟M离线方案开发指导手册
+   &#160;<span id="projectnumber">v1.0.4</span>
+   </div>
+  </td>
+ </tr>
+ </tbody>
+</table>
+</div>
+<!-- end header part -->
+<!-- 制作者 Doxygen 1.8.18 -->
+<script type="text/javascript" src="menudata.js"></script>
+<script type="text/javascript" src="menu.js"></script>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:cf05388f2679ee054f2beb29a391d25f4e673ac3&amp;dn=gpl-2.0.txt GPL-v2 */
+$(function() {
+  initMenu('',false,false,'search.php','搜索');
+});
+/* @license-end */</script>
+<div id="main-nav"></div>
+<div id="nav-path" class="navpath">
+  <ul>
+<li class="navelem"><a class="el" href="dir_dea77078256a025a760a4b07b937c99b.html">Hummingbird_M</a></li><li class="navelem"><a class="el" href="dir_b24818e8206cdce570ff3dc5fbc2b706.html">unione_lite_app_hb_m</a></li><li class="navelem"><a class="el" href="dir_9aa875ca4c9e753c17b9b0b545e3fff2.html">user</a></li><li class="navelem"><a class="el" href="dir_c9e3dff02d1317b03796beddd6a42f4a.html">inc</a></li>  </ul>
+</div>
+</div><!-- top -->
+<div class="header">
+  <div class="headertitle">
+<div class="title">user_pwm.h</div>  </div>
+</div><!--header-->
+<div class="contents">
+<div class="fragment"><div class="line"><a name="l00001"></a><span class="lineno">    1</span>&#160;<span class="comment">/**************************************************************************</span></div>
+<div class="line"><a name="l00002"></a><span class="lineno">    2</span>&#160;<span class="comment"> * Copyright (C) 2017-2017  Unisound</span></div>
+<div class="line"><a name="l00003"></a><span class="lineno">    3</span>&#160;<span class="comment"> *</span></div>
+<div class="line"><a name="l00004"></a><span class="lineno">    4</span>&#160;<span class="comment"> * This program is free software; you can redistribute it and/or modify</span></div>
+<div class="line"><a name="l00005"></a><span class="lineno">    5</span>&#160;<span class="comment"> * it under the terms of the GNU General Public License as published by</span></div>
+<div class="line"><a name="l00006"></a><span class="lineno">    6</span>&#160;<span class="comment"> * the Free Software Foundation; either version 2 of the License, or</span></div>
+<div class="line"><a name="l00007"></a><span class="lineno">    7</span>&#160;<span class="comment"> * any later version.</span></div>
+<div class="line"><a name="l00008"></a><span class="lineno">    8</span>&#160;<span class="comment"> *</span></div>
+<div class="line"><a name="l00009"></a><span class="lineno">    9</span>&#160;<span class="comment"> * This program is distributed in the hope that it will be useful,</span></div>
+<div class="line"><a name="l00010"></a><span class="lineno">   10</span>&#160;<span class="comment"> * but WITHOUT ANY WARRANTY; without even the implied warranty of</span></div>
+<div class="line"><a name="l00011"></a><span class="lineno">   11</span>&#160;<span class="comment"> * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the</span></div>
+<div class="line"><a name="l00012"></a><span class="lineno">   12</span>&#160;<span class="comment"> * GNU General Public License for more details.</span></div>
+<div class="line"><a name="l00013"></a><span class="lineno">   13</span>&#160;<span class="comment"> *</span></div>
+<div class="line"><a name="l00014"></a><span class="lineno">   14</span>&#160;<span class="comment"> * You should have received a copy of the GNU General Public License along</span></div>
+<div class="line"><a name="l00015"></a><span class="lineno">   15</span>&#160;<span class="comment"> * with this program; if not, write to the Free Software Foundation, Inc.,</span></div>
+<div class="line"><a name="l00016"></a><span class="lineno">   16</span>&#160;<span class="comment"> * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.</span></div>
+<div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160;<span class="comment"> **************************************************************************</span></div>
+<div class="line"><a name="l00018"></a><span class="lineno">   18</span>&#160;<span class="comment"> *</span></div>
+<div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160;<span class="comment"> * Description : user_pwm.h</span></div>
+<div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160;<span class="comment"> * Author      : wufangfang@unisound.com</span></div>
+<div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160;<span class="comment"> * Date        : 2020.04.26</span></div>
+<div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160;<span class="comment"> *</span></div>
+<div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160;<span class="comment"> **************************************************************************/</span></div>
+<div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160;<span class="preprocessor">#ifndef USER_INC_USER_PWM_H_</span></div>
+<div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160;<span class="preprocessor">#define USER_INC_USER_PWM_H_</span></div>
+<div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160;  </div>
+<div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160;<span class="preprocessor">#ifdef __cplusplus</span></div>
+<div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160;  <span class="keyword">extern</span> <span class="stringliteral">&quot;C&quot;</span> {</div>
+<div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160;<span class="preprocessor">#endif</span></div>
+<div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160;  </div>
+<div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160;<span class="preprocessor">#include &quot;unione.h&quot;</span></div>
+<div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160; </div>
+<div class="line"><a name="l00036"></a><span class="lineno"><a class="line" href="group__uni__pwm__def.html#gaa8017b41b719c5883a5ff5afa3f9b289">   36</a></span>&#160;<span class="keyword">typedef</span> <span class="keyword">enum</span> {</div>
+<div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160;  PWM_NUM_1_A27 = 0,</div>
+<div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160;  PWM_NUM_1_B0,</div>
+<div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160;  <a class="code" href="group__uni__pwm__def.html#ggaa8017b41b719c5883a5ff5afa3f9b289a0696edf4c3055f3f0b8f25c8e4fbc3ea" title="PWM 1 only 1 pin work a time">PWM_NUM_1_B2</a>,      </div>
+<div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160;  <a class="code" href="group__uni__pwm__def.html#ggaa8017b41b719c5883a5ff5afa3f9b289a5d20f1663ea3a290c06c4e9187a4429c" title="used for PA enable, don&#39;t use it on HB-M demo board">PWM_NUM_2_A28</a>,     </div>
+<div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160;  PWM_NUM_2_B1,</div>
+<div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160;  <a class="code" href="group__uni__pwm__def.html#ggaa8017b41b719c5883a5ff5afa3f9b289a4ac220ca8d393ea5a96034117590264d" title="PWM 2 only 1 pin work a time">PWM_NUM_2_B3</a>,      </div>
+<div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160;  PWM_NUM_MAX</div>
+<div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160;}<a class="code" href="group__uni__pwm__def.html#gaa8017b41b719c5883a5ff5afa3f9b289">USER_PWM_NUM</a>;</div>
+<div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160; </div>
+<div class="line"><a name="l00057"></a><span class="lineno"><a class="line" href="group__uni__pwm__inf.html#ga2a33c5ae39256f9dd271f946f18b9c02">   57</a></span>&#160;<span class="keywordtype">int</span> <a class="code" href="group__uni__pwm__inf.html#ga2a33c5ae39256f9dd271f946f18b9c02" title="PWM初始化">user_pwm_init</a>(<a class="code" href="group__uni__pwm__def.html#gaa8017b41b719c5883a5ff5afa3f9b289">USER_PWM_NUM</a> num, uni_u32 hz, uni_bool is_high_duty);</div>
+<div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160; </div>
+<div class="line"><a name="l00065"></a><span class="lineno"><a class="line" href="group__uni__pwm__inf.html#gaa7dc5f6a134f570bc000daa1315dfa0f">   65</a></span>&#160;<span class="keywordtype">int</span> <a class="code" href="group__uni__pwm__inf.html#gaa7dc5f6a134f570bc000daa1315dfa0f" title="PWM反初始化">user_pwm_final</a>(<a class="code" href="group__uni__pwm__def.html#gaa8017b41b719c5883a5ff5afa3f9b289">USER_PWM_NUM</a> num);</div>
+<div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160; </div>
+<div class="line"><a name="l00074"></a><span class="lineno"><a class="line" href="group__uni__pwm__inf.html#ga9c3570393651dea1298227a84bcc33f4">   74</a></span>&#160;<span class="keywordtype">int</span> <a class="code" href="group__uni__pwm__inf.html#ga9c3570393651dea1298227a84bcc33f4" title="开使PWM输出">user_pwm_start</a>(<a class="code" href="group__uni__pwm__def.html#gaa8017b41b719c5883a5ff5afa3f9b289">USER_PWM_NUM</a> num, uni_u8 duty);</div>
+<div class="line"><a name="l00075"></a><span class="lineno">   75</span>&#160; </div>
+<div class="line"><a name="l00082"></a><span class="lineno"><a class="line" href="group__uni__pwm__inf.html#ga68e522b645964ba3b5d0d33beabeb4d7">   82</a></span>&#160;<span class="keywordtype">int</span> <a class="code" href="group__uni__pwm__inf.html#ga68e522b645964ba3b5d0d33beabeb4d7" title="停止PWM输出">user_pwm_stop</a>(<a class="code" href="group__uni__pwm__def.html#gaa8017b41b719c5883a5ff5afa3f9b289">USER_PWM_NUM</a> num);</div>
+<div class="line"><a name="l00083"></a><span class="lineno">   83</span>&#160; </div>
+<div class="line"><a name="l00090"></a><span class="lineno"><a class="line" href="group__uni__pwm__inf.html#gaf405c4b93ab2fd1e77138a2cd90e26c1">   90</a></span>&#160;<span class="keywordtype">int</span> <a class="code" href="group__uni__pwm__inf.html#gaf405c4b93ab2fd1e77138a2cd90e26c1" title="暂停PWM输出">user_pwm_pause</a>(<a class="code" href="group__uni__pwm__def.html#gaa8017b41b719c5883a5ff5afa3f9b289">USER_PWM_NUM</a> num);</div>
+<div class="line"><a name="l00091"></a><span class="lineno">   91</span>&#160; </div>
+<div class="line"><a name="l00098"></a><span class="lineno"><a class="line" href="group__uni__pwm__inf.html#ga55a4e61a66e15eda76fd3cc9383d994e">   98</a></span>&#160;<span class="keywordtype">int</span> <a class="code" href="group__uni__pwm__inf.html#ga55a4e61a66e15eda76fd3cc9383d994e" title="恢复PWM输出">user_pwm_resume</a>(<a class="code" href="group__uni__pwm__def.html#gaa8017b41b719c5883a5ff5afa3f9b289">USER_PWM_NUM</a> num);</div>
+<div class="line"><a name="l00099"></a><span class="lineno">   99</span>&#160; </div>
+<div class="line"><a name="l00107"></a><span class="lineno"><a class="line" href="group__uni__pwm__inf.html#gaacfe251ab7522f69ee4a8d51fee49732">  107</a></span>&#160;<span class="keywordtype">int</span> <a class="code" href="group__uni__pwm__inf.html#gaacfe251ab7522f69ee4a8d51fee49732" title="PWM占空比切换">user_pwm_change_duty</a>(<a class="code" href="group__uni__pwm__def.html#gaa8017b41b719c5883a5ff5afa3f9b289">USER_PWM_NUM</a> num, uni_u8 duty);</div>
+<div class="line"><a name="l00108"></a><span class="lineno">  108</span>&#160; </div>
+<div class="line"><a name="l00116"></a><span class="lineno"><a class="line" href="group__uni__pwm__inf.html#gad890e74b78c9fc4899254e2e70293df8">  116</a></span>&#160;<span class="keywordtype">int</span> <a class="code" href="group__uni__pwm__inf.html#gad890e74b78c9fc4899254e2e70293df8" title="PWM占空比增加">user_pwm_duty_inc</a>(<a class="code" href="group__uni__pwm__def.html#gaa8017b41b719c5883a5ff5afa3f9b289">USER_PWM_NUM</a> num, uni_u8 ch_duty);</div>
+<div class="line"><a name="l00117"></a><span class="lineno">  117</span>&#160; </div>
+<div class="line"><a name="l00125"></a><span class="lineno"><a class="line" href="group__uni__pwm__inf.html#ga26d661bba6789bf9e041138cc76b33a2">  125</a></span>&#160;<span class="keywordtype">int</span> <a class="code" href="group__uni__pwm__inf.html#ga26d661bba6789bf9e041138cc76b33a2" title="PWM占空比减小">user_pwm_duty_dec</a>(<a class="code" href="group__uni__pwm__def.html#gaa8017b41b719c5883a5ff5afa3f9b289">USER_PWM_NUM</a> num, uni_u8 ch_duty);</div>
+<div class="line"><a name="l00126"></a><span class="lineno">  126</span>&#160; </div>
+<div class="line"><a name="l00129"></a><span class="lineno">  129</span>&#160;<span class="preprocessor">#ifdef __cplusplus</span></div>
+<div class="line"><a name="l00130"></a><span class="lineno">  130</span>&#160;}</div>
+<div class="line"><a name="l00131"></a><span class="lineno">  131</span>&#160;<span class="preprocessor">#endif</span></div>
+<div class="line"><a name="l00132"></a><span class="lineno">  132</span>&#160; </div>
+<div class="line"><a name="l00133"></a><span class="lineno">  133</span>&#160;<span class="preprocessor">#endif</span></div>
+</div><!-- fragment --></div><!-- contents -->
+</body>
+</html>

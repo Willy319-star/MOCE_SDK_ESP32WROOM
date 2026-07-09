@@ -1,0 +1,118 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "https://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=9"/>
+<meta name="generator" content="Doxygen 1.8.18"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>蜂鸟M离线方案开发指导手册: Z:/Hummingbird_M/unione_lite_app_hb_m/user/inc/user_player.h 源文件</title>
+<link href="tabs.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="jquery.js"></script>
+<script type="text/javascript" src="dynsections.js"></script>
+<link href="doxygen.css" rel="stylesheet" type="text/css" />
+</head>
+<body>
+<div id="top"><!-- do not remove this div, it is closed by doxygen! -->
+<div id="titlearea">
+<table cellspacing="0" cellpadding="0">
+ <tbody>
+ <tr style="height: 56px;">
+  <td id="projectalign" style="padding-left: 0.5em;">
+   <div id="projectname">蜂鸟M离线方案开发指导手册
+   &#160;<span id="projectnumber">v1.0.4</span>
+   </div>
+  </td>
+ </tr>
+ </tbody>
+</table>
+</div>
+<!-- end header part -->
+<!-- 制作者 Doxygen 1.8.18 -->
+<script type="text/javascript" src="menudata.js"></script>
+<script type="text/javascript" src="menu.js"></script>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:cf05388f2679ee054f2beb29a391d25f4e673ac3&amp;dn=gpl-2.0.txt GPL-v2 */
+$(function() {
+  initMenu('',false,false,'search.php','搜索');
+});
+/* @license-end */</script>
+<div id="main-nav"></div>
+<div id="nav-path" class="navpath">
+  <ul>
+<li class="navelem"><a class="el" href="dir_dea77078256a025a760a4b07b937c99b.html">Hummingbird_M</a></li><li class="navelem"><a class="el" href="dir_b24818e8206cdce570ff3dc5fbc2b706.html">unione_lite_app_hb_m</a></li><li class="navelem"><a class="el" href="dir_9aa875ca4c9e753c17b9b0b545e3fff2.html">user</a></li><li class="navelem"><a class="el" href="dir_c9e3dff02d1317b03796beddd6a42f4a.html">inc</a></li>  </ul>
+</div>
+</div><!-- top -->
+<div class="header">
+  <div class="headertitle">
+<div class="title">user_player.h</div>  </div>
+</div><!--header-->
+<div class="contents">
+<div class="fragment"><div class="line"><a name="l00001"></a><span class="lineno">    1</span>&#160;<span class="comment">/**************************************************************************</span></div>
+<div class="line"><a name="l00002"></a><span class="lineno">    2</span>&#160;<span class="comment"> * Copyright (C) 2017-2017  Unisound</span></div>
+<div class="line"><a name="l00003"></a><span class="lineno">    3</span>&#160;<span class="comment"> *</span></div>
+<div class="line"><a name="l00004"></a><span class="lineno">    4</span>&#160;<span class="comment"> * This program is free software; you can redistribute it and/or modify</span></div>
+<div class="line"><a name="l00005"></a><span class="lineno">    5</span>&#160;<span class="comment"> * it under the terms of the GNU General Public License as published by</span></div>
+<div class="line"><a name="l00006"></a><span class="lineno">    6</span>&#160;<span class="comment"> * the Free Software Foundation; either version 2 of the License, or</span></div>
+<div class="line"><a name="l00007"></a><span class="lineno">    7</span>&#160;<span class="comment"> * any later version.</span></div>
+<div class="line"><a name="l00008"></a><span class="lineno">    8</span>&#160;<span class="comment"> *</span></div>
+<div class="line"><a name="l00009"></a><span class="lineno">    9</span>&#160;<span class="comment"> * This program is distributed in the hope that it will be useful,</span></div>
+<div class="line"><a name="l00010"></a><span class="lineno">   10</span>&#160;<span class="comment"> * but WITHOUT ANY WARRANTY; without even the implied warranty of</span></div>
+<div class="line"><a name="l00011"></a><span class="lineno">   11</span>&#160;<span class="comment"> * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the</span></div>
+<div class="line"><a name="l00012"></a><span class="lineno">   12</span>&#160;<span class="comment"> * GNU General Public License for more details.</span></div>
+<div class="line"><a name="l00013"></a><span class="lineno">   13</span>&#160;<span class="comment"> *</span></div>
+<div class="line"><a name="l00014"></a><span class="lineno">   14</span>&#160;<span class="comment"> * You should have received a copy of the GNU General Public License along</span></div>
+<div class="line"><a name="l00015"></a><span class="lineno">   15</span>&#160;<span class="comment"> * with this program; if not, write to the Free Software Foundation, Inc.,</span></div>
+<div class="line"><a name="l00016"></a><span class="lineno">   16</span>&#160;<span class="comment"> * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.</span></div>
+<div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160;<span class="comment"> **************************************************************************</span></div>
+<div class="line"><a name="l00018"></a><span class="lineno">   18</span>&#160;<span class="comment"> *</span></div>
+<div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160;<span class="comment"> * Description : user_player.h</span></div>
+<div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160;<span class="comment"> * Author      : wufangfang@unisound.com</span></div>
+<div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160;<span class="comment"> * Date        : 2020.04.07</span></div>
+<div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160;<span class="comment"> *</span></div>
+<div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160;<span class="comment"> **************************************************************************/</span></div>
+<div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160;<span class="preprocessor">#ifndef USER_INC_USER_PLAYER_H_</span></div>
+<div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160;<span class="preprocessor">#define USER_INC_USER_PLAYER_H_</span></div>
+<div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160; </div>
+<div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160;<span class="preprocessor">#ifdef __cplusplus</span></div>
+<div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160;<span class="keyword">extern</span> <span class="stringliteral">&quot;C&quot;</span> {</div>
+<div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160;<span class="preprocessor">#endif</span></div>
+<div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160; </div>
+<div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160;<span class="preprocessor">#include &quot;unione.h&quot;</span></div>
+<div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160;<span class="preprocessor">#include &quot;user_event.h&quot;</span></div>
+<div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160; </div>
+<div class="line"><a name="l00044"></a><span class="lineno"><a class="line" href="group__uni__player__inf.html#ga4473e2cc3c6a07e170e10cf0c317dfe9">   44</a></span>&#160;<span class="keywordtype">int</span> <a class="code" href="group__uni__player__inf.html#ga4473e2cc3c6a07e170e10cf0c317dfe9" title="播放文件">user_player_play</a>(<a class="code" href="group__uni__event__def.html#ga307b45efe10d5edb14203b65a5130302" title="音频播放类型枚举（目前只支持AUDIO_PLAY_REPLY）">AUDIO_PLAY_TYPE</a> type, <span class="keyword">const</span> <span class="keywordtype">char</span> *file);</div>
+<div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160; </div>
+<div class="line"><a name="l00053"></a><span class="lineno"><a class="line" href="group__uni__player__inf.html#ga8638ce40d50e8d08516925830d6dbd94">   53</a></span>&#160;<span class="keywordtype">int</span> <a class="code" href="group__uni__player__inf.html#ga8638ce40d50e8d08516925830d6dbd94" title="播放列表序号音频">user_player_reply_list_num</a>(<span class="keyword">const</span> <span class="keywordtype">char</span> *file_list, <span class="keywordtype">int</span> num);</div>
+<div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160; </div>
+<div class="line"><a name="l00061"></a><span class="lineno"><a class="line" href="group__uni__player__inf.html#ga1835960e52668ec97beea7937b4c619a">   61</a></span>&#160;<span class="keywordtype">int</span> <a class="code" href="group__uni__player__inf.html#ga1835960e52668ec97beea7937b4c619a" title="随机播放列表音频">user_player_reply_list_random</a>(<span class="keyword">const</span> <span class="keywordtype">char</span> *file_list);</div>
+<div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160; </div>
+<div class="line"><a name="l00069"></a><span class="lineno"><a class="line" href="group__uni__player__inf.html#ga27521c012137d0e8c32ce68eaa4828e9">   69</a></span>&#160;<span class="keywordtype">int</span> <a class="code" href="group__uni__player__inf.html#ga27521c012137d0e8c32ce68eaa4828e9" title="顺序播放列表中所有音频">user_player_reply_list_in_order</a>(<span class="keyword">const</span> <span class="keywordtype">char</span> *file_list);</div>
+<div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160; </div>
+<div class="line"><a name="l00077"></a><span class="lineno"><a class="line" href="group__uni__player__inf.html#ga15a00832af5304fbb06650bf461e087e">   77</a></span>&#160;<span class="keywordtype">int</span> <a class="code" href="group__uni__player__inf.html#ga15a00832af5304fbb06650bf461e087e" title="停止播放">user_player_stop</a>(<a class="code" href="group__uni__event__def.html#ga307b45efe10d5edb14203b65a5130302" title="音频播放类型枚举（目前只支持AUDIO_PLAY_REPLY）">AUDIO_PLAY_TYPE</a> type);</div>
+<div class="line"><a name="l00078"></a><span class="lineno">   78</span>&#160; </div>
+<div class="line"><a name="l00082"></a><span class="lineno"><a class="line" href="group__uni__player__inf.html#ga55d7758461c676131b77d4177686f4c4">   82</a></span>&#160;<span class="keywordtype">int</span> <a class="code" href="group__uni__player__inf.html#ga55d7758461c676131b77d4177686f4c4" title="设置最小音量">user_player_set_volume_min</a>(<span class="keywordtype">void</span>);</div>
+<div class="line"><a name="l00083"></a><span class="lineno">   83</span>&#160; </div>
+<div class="line"><a name="l00087"></a><span class="lineno"><a class="line" href="group__uni__player__inf.html#gae603648a4e8db0fb69fa8bdd25ef05df">   87</a></span>&#160;<span class="keywordtype">int</span> <a class="code" href="group__uni__player__inf.html#gae603648a4e8db0fb69fa8bdd25ef05df" title="设置最大音量">user_player_set_volume_max</a>(<span class="keywordtype">void</span>);</div>
+<div class="line"><a name="l00088"></a><span class="lineno">   88</span>&#160; </div>
+<div class="line"><a name="l00092"></a><span class="lineno"><a class="line" href="group__uni__player__inf.html#ga35cb9ee64f99957205b157f49a964dfe">   92</a></span>&#160;<span class="keywordtype">int</span> <a class="code" href="group__uni__player__inf.html#ga35cb9ee64f99957205b157f49a964dfe" title="设置中等音量">user_player_set_volume_mid</a>(<span class="keywordtype">void</span>);</div>
+<div class="line"><a name="l00093"></a><span class="lineno">   93</span>&#160; </div>
+<div class="line"><a name="l00097"></a><span class="lineno"><a class="line" href="group__uni__player__inf.html#ga1c2747205a3d1978c8f0b8350518f56e">   97</a></span>&#160;<span class="keywordtype">int</span> <a class="code" href="group__uni__player__inf.html#ga1c2747205a3d1978c8f0b8350518f56e" title="增加音量">user_player_set_volume_up</a>(<span class="keywordtype">void</span>);</div>
+<div class="line"><a name="l00098"></a><span class="lineno">   98</span>&#160; </div>
+<div class="line"><a name="l00102"></a><span class="lineno"><a class="line" href="group__uni__player__inf.html#ga0f199afec71fe2f57dc4ba5e2e4819da">  102</a></span>&#160;<span class="keywordtype">int</span> <a class="code" href="group__uni__player__inf.html#ga0f199afec71fe2f57dc4ba5e2e4819da" title="减小音量">user_player_set_volume_down</a>(<span class="keywordtype">void</span>);</div>
+<div class="line"><a name="l00103"></a><span class="lineno">  103</span>&#160; </div>
+<div class="line"><a name="l00107"></a><span class="lineno"><a class="line" href="group__uni__player__inf.html#gadaedc08722caea58197700eb1799d32a">  107</a></span>&#160;<span class="keywordtype">int</span> <a class="code" href="group__uni__player__inf.html#gadaedc08722caea58197700eb1799d32a" title="设置喇叭静音">user_player_speaker_mute</a>(<span class="keywordtype">void</span>);</div>
+<div class="line"><a name="l00108"></a><span class="lineno">  108</span>&#160; </div>
+<div class="line"><a name="l00112"></a><span class="lineno"><a class="line" href="group__uni__player__inf.html#gada2f10e7ab7b44195359350a547a70ae">  112</a></span>&#160;<span class="keywordtype">int</span> <a class="code" href="group__uni__player__inf.html#gada2f10e7ab7b44195359350a547a70ae" title="取消设置喇叭静音">user_player_speaker_unmute</a>(<span class="keywordtype">void</span>);</div>
+<div class="line"><a name="l00113"></a><span class="lineno">  113</span>&#160; </div>
+<div class="line"><a name="l00117"></a><span class="lineno"><a class="line" href="group__uni__player__inf.html#ga11a025a5b1c09eb9ef4737088ee26965">  117</a></span>&#160;<span class="keywordtype">int</span> <a class="code" href="group__uni__player__inf.html#ga11a025a5b1c09eb9ef4737088ee26965" title="系统进入无回复播报模式">user_player_shutup_mode</a>(<span class="keywordtype">void</span>);</div>
+<div class="line"><a name="l00118"></a><span class="lineno">  118</span>&#160; </div>
+<div class="line"><a name="l00122"></a><span class="lineno"><a class="line" href="group__uni__player__inf.html#gac189138d903b980ca4bfcf98b5264b78">  122</a></span>&#160;<span class="keywordtype">int</span> <a class="code" href="group__uni__player__inf.html#gac189138d903b980ca4bfcf98b5264b78" title="系统退出无回复播报模式">user_player_shutup_exit</a>(<span class="keywordtype">void</span>);</div>
+<div class="line"><a name="l00123"></a><span class="lineno">  123</span>&#160; </div>
+<div class="line"><a name="l00126"></a><span class="lineno">  126</span>&#160;<span class="preprocessor">#ifdef __cplusplus</span></div>
+<div class="line"><a name="l00127"></a><span class="lineno">  127</span>&#160;}</div>
+<div class="line"><a name="l00128"></a><span class="lineno">  128</span>&#160;<span class="preprocessor">#endif</span></div>
+<div class="line"><a name="l00129"></a><span class="lineno">  129</span>&#160;<span class="preprocessor">#endif</span></div>
+<div class="line"><a name="l00130"></a><span class="lineno">  130</span>&#160; </div>
+</div><!-- fragment --></div><!-- contents -->
+</body>
+</html>

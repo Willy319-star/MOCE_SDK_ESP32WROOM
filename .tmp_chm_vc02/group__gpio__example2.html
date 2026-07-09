@@ -1,0 +1,120 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "https://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=9"/>
+<meta name="generator" content="Doxygen 1.8.18"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>蜂鸟M离线方案开发指导手册: hb_gpio_key.c</title>
+<link href="tabs.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="jquery.js"></script>
+<script type="text/javascript" src="dynsections.js"></script>
+<link href="doxygen.css" rel="stylesheet" type="text/css" />
+</head>
+<body>
+<div id="top"><!-- do not remove this div, it is closed by doxygen! -->
+<div id="titlearea">
+<table cellspacing="0" cellpadding="0">
+ <tbody>
+ <tr style="height: 56px;">
+  <td id="projectalign" style="padding-left: 0.5em;">
+   <div id="projectname">蜂鸟M离线方案开发指导手册
+   &#160;<span id="projectnumber">v1.0.4</span>
+   </div>
+  </td>
+ </tr>
+ </tbody>
+</table>
+</div>
+<!-- end header part -->
+<!-- 制作者 Doxygen 1.8.18 -->
+<script type="text/javascript" src="menudata.js"></script>
+<script type="text/javascript" src="menu.js"></script>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:cf05388f2679ee054f2beb29a391d25f4e673ac3&amp;dn=gpl-2.0.txt GPL-v2 */
+$(function() {
+  initMenu('',false,false,'search.php','搜索');
+});
+/* @license-end */</script>
+<div id="main-nav"></div>
+</div><!-- top -->
+<div class="header">
+  <div class="headertitle">
+<div class="title">hb_gpio_key.c<div class="ingroups"><a class="el" href="group__uni__gpio.html">GPIO</a> &raquo; <a class="el" href="group__uni__gpio__example.html">GPIO示例</a></div></div>  </div>
+</div><!--header-->
+<div class="contents">
+<dl class="section user"><dt></dt><dd></dd></dl>
+<p>可通过定义user/inc/user_config.h中的宏<a class="el" href="group__uni__config__demo__macro.html#ga234a8d36ebd8d152f3c487e19868578d">USER_RUN_DEMO_SELECT</a> 为<a class="el" href="group__uni__config__demo__macro.html#ga886bba14f078121bb622c51be2669bd3">USER_DEMO_KEY_WAKEUP</a> 运行示例程序 </p><div class="fragment"><div class="line"><span class="comment">/**************************************************************************</span></div>
+<div class="line"><span class="comment"> * Copyright (C) 2017-2017  Unisound</span></div>
+<div class="line"><span class="comment"> *</span></div>
+<div class="line"><span class="comment"> * This program is free software; you can redistribute it and/or modify</span></div>
+<div class="line"><span class="comment"> * it under the terms of the GNU General Public License as published by</span></div>
+<div class="line"><span class="comment"> * the Free Software Foundation; either version 2 of the License, or</span></div>
+<div class="line"><span class="comment"> * any later version.</span></div>
+<div class="line"><span class="comment"> *</span></div>
+<div class="line"><span class="comment"> * This program is distributed in the hope that it will be useful,</span></div>
+<div class="line"><span class="comment"> * but WITHOUT ANY WARRANTY; without even the implied warranty of</span></div>
+<div class="line"><span class="comment"> * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the</span></div>
+<div class="line"><span class="comment"> * GNU General Public License for more details.</span></div>
+<div class="line"><span class="comment"> *</span></div>
+<div class="line"><span class="comment"> * You should have received a copy of the GNU General Public License along</span></div>
+<div class="line"><span class="comment"> * with this program; if not, write to the Free Software Foundation, Inc.,</span></div>
+<div class="line"><span class="comment"> * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.</span></div>
+<div class="line"><span class="comment"> **************************************************************************</span></div>
+<div class="line"><span class="comment"> *</span></div>
+<div class="line"><span class="comment"> * Description : hb_gpio_key.c</span></div>
+<div class="line"><span class="comment"> * Author      : wufangfang@unisound.com</span></div>
+<div class="line"><span class="comment"> * Date        : 2020.04.25</span></div>
+<div class="line"><span class="comment"> *</span></div>
+<div class="line"><span class="comment"> **************************************************************************/</span></div>
+<div class="line"><span class="preprocessor">#include &quot;user_gpio.h&quot;</span></div>
+<div class="line"><span class="preprocessor">#include &quot;user_digital_keys.h&quot;</span></div>
+<div class="line"><span class="preprocessor">#include &quot;user_asr.h&quot;</span></div>
+<div class="line"> </div>
+<div class="line"><span class="preprocessor">#define TAG &quot;hb_gpio_key&quot;</span></div>
+<div class="line"> </div>
+<div class="line"><span class="preprocessor">#define USE_DIGITAL_KEYS_DRIVER  1  //1: user user_digital_keys driver, 0: user user_gpio directly</span></div>
+<div class="line">                                    <span class="comment">// if 0 will send wakeup event in interrupt fuction,</span></div>
+<div class="line">                                    <span class="comment">// it will crush because that&#39;s a long process,</span></div>
+<div class="line">                                    <span class="comment">// so 0 is a demo show how to use GPIO directly only</span></div>
+<div class="line">                                    <span class="comment">// donn&#39;t use it on your code</span></div>
+<div class="line"> </div>
+<div class="line"><span class="preprocessor">#define KEY_GPIO_NUM  GPIO_NUM_A25  // &quot;MISO&quot; on demo board</span></div>
+<div class="line"> </div>
+<div class="line"><span class="preprocessor">#if USE_DIGITAL_KEYS_DRIVER</span></div>
+<div class="line"> </div>
+<div class="line"><span class="keywordtype">void</span> _key_interrupt_cb(<a class="code" href="group__uni__gpio__def.html#gab98b40805939a8489960247300b6043a" title="GPIO号">GPIO_NUMBER</a> num) {</div>
+<div class="line">  <a class="code" href="group__uni__asr__inf.html#gaa5fd4ce869fea62e88398b5c4bc48cad" title="进入唤醒状态">user_asr_goto_awakend</a>();</div>
+<div class="line">}</div>
+<div class="line"> </div>
+<div class="line"><span class="keywordtype">int</span> user_key_wakeup(<span class="keywordtype">void</span>) {</div>
+<div class="line">  user_digital_keys_init(GPIO_INT_POS_EDGE);</div>
+<div class="line">  <span class="keywordflow">return</span> user_digital_keys_register_key(KEY_GPIO_NUM, _key_interrupt_cb);</div>
+<div class="line">}</div>
+<div class="line"> </div>
+<div class="line"><span class="preprocessor">#else</span></div>
+<div class="line"> </div>
+<div class="line"><span class="keyword">static</span> <span class="keywordtype">void</span> _key_interrupt_cb(<a class="code" href="group__uni__gpio__def.html#gab98b40805939a8489960247300b6043a" title="GPIO号">GPIO_NUMBER</a> num, uni_bool is_high) {</div>
+<div class="line">  <a class="code" href="group__uni__asr__inf.html#gaa5fd4ce869fea62e88398b5c4bc48cad" title="进入唤醒状态">user_asr_goto_awakend</a>();</div>
+<div class="line">}</div>
+<div class="line"> </div>
+<div class="line"><span class="keywordtype">int</span> hb_key_wakeup(<span class="keywordtype">void</span>) {</div>
+<div class="line">  <a class="code" href="group__uni__gpio__inf.html#gaed630c4a7949f960914f5b4398b1996f" title="GPIO初始化">user_gpio_init</a>();</div>
+<div class="line">  <span class="keywordflow">if</span> (0 != <a class="code" href="group__uni__gpio__inf.html#ga723df1589dae08fc7a847f66a999a2d8" title="设置GPIO工作模式">user_gpio_set_mode</a>(KEY_GPIO_NUM, GPIO_MODE_IN)) {</div>
+<div class="line">    LOGE(TAG, <span class="stringliteral">&quot;user_gpio_set_mode failed.&quot;</span>);</div>
+<div class="line">    <span class="keywordflow">return</span> -1;</div>
+<div class="line">  }</div>
+<div class="line">  <a class="code" href="group__uni__gpio__inf.html#ga7901ff5cc1ad6bd600770400fd298dba" title="设置GPIO pull模式">user_gpio_set_pull_mode</a>(KEY_GPIO_NUM, GPIO_PULL_UP_DOWN);</div>
+<div class="line">  <span class="keywordflow">if</span> (0 != <a class="code" href="group__uni__gpio__inf.html#ga4844d8972c5fe3679b059b7ee9656fd1" title="注册GPIO中断">user_gpio_set_interrupt</a>(KEY_GPIO_NUM, GPIO_INT_POS_EDGE,</div>
+<div class="line">                                   _key_interrupt_cb)) {</div>
+<div class="line">    LOGE(TAG, <span class="stringliteral">&quot;user_gpio_set_interrupt failed.&quot;</span>);</div>
+<div class="line">    <span class="keywordflow">return</span> -1;</div>
+<div class="line">  }</div>
+<div class="line">  <a class="code" href="group__uni__gpio__inf.html#gaa90aa3d7b5feb1be9d6773f5d103a097" title="使能GPIO中断">user_gpio_interrupt_enable</a>();</div>
+<div class="line">}</div>
+<div class="line"> </div>
+<div class="line"><span class="preprocessor">#endif</span></div>
+<div class="line"> </div>
+</div><!-- fragment --> </div><!-- contents -->
+</body>
+</html>

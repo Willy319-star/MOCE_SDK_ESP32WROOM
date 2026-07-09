@@ -1,0 +1,520 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "https://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=9"/>
+<meta name="generator" content="Doxygen 1.8.18"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>蜂鸟M离线方案开发指导手册: 7、二次开发</title>
+<link href="tabs.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="jquery.js"></script>
+<script type="text/javascript" src="dynsections.js"></script>
+<link href="doxygen.css" rel="stylesheet" type="text/css" />
+</head>
+<body>
+<div id="top"><!-- do not remove this div, it is closed by doxygen! -->
+<div id="titlearea">
+<table cellspacing="0" cellpadding="0">
+ <tbody>
+ <tr style="height: 56px;">
+  <td id="projectalign" style="padding-left: 0.5em;">
+   <div id="projectname">蜂鸟M离线方案开发指导手册
+   &#160;<span id="projectnumber">v1.0.4</span>
+   </div>
+  </td>
+ </tr>
+ </tbody>
+</table>
+</div>
+<!-- end header part -->
+<!-- 制作者 Doxygen 1.8.18 -->
+<script type="text/javascript" src="menudata.js"></script>
+<script type="text/javascript" src="menu.js"></script>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:cf05388f2679ee054f2beb29a391d25f4e673ac3&amp;dn=gpl-2.0.txt GPL-v2 */
+$(function() {
+  initMenu('',false,false,'search.php','搜索');
+});
+/* @license-end */</script>
+<div id="main-nav"></div>
+</div><!-- top -->
+<div class="PageDoc"><div class="header">
+  <div class="headertitle">
+<div class="title">7、二次开发 </div>  </div>
+</div><!--header-->
+<div class="contents">
+<div class="textblock"><html>
+
+<head>
+<meta http-equiv=Content-Type content="text/html; charset=utf-8">
+<meta name=Generator content="Microsoft Word 15 (filtered)">
+<style>
+<!--
+ /* Font Definitions */
+ @font-face
+	{font-family:"Cambria Math";
+	panose-1:2 4 5 3 5 4 6 3 2 4;}
+@font-face
+	{font-family:等线;
+	panose-1:2 1 6 0 3 1 1 1 1 1;}
+@font-face
+	{font-family:"\@等线";
+	panose-1:2 1 6 0 3 1 1 1 1 1;}
+ /* Style Definitions */
+ p.MsoNormal, li.MsoNormal, div.MsoNormal
+	{margin-top:0cm;
+	margin-right:0cm;
+	margin-bottom:8.0pt;
+	margin-left:0cm;
+	text-align:justify;
+	text-justify:inter-ideograph;
+	line-height:107%;
+	font-size:10.5pt;
+	font-family:等线;}
+h2
+	{mso-style-link:"标题 2 字符";
+	margin-top:13.0pt;
+	margin-right:0cm;
+	margin-bottom:13.0pt;
+	margin-left:0cm;
+	text-align:justify;
+	text-justify:inter-ideograph;
+	line-height:173%;
+	page-break-after:avoid;
+	font-size:14.0pt;
+	font-family:"等线 Light";}
+h3
+	{mso-style-link:"标题 3 字符";
+	margin-top:13.0pt;
+	margin-right:0cm;
+	margin-bottom:13.0pt;
+	margin-left:0cm;
+	text-align:justify;
+	text-justify:inter-ideograph;
+	line-height:173%;
+	page-break-after:avoid;
+	font-size:10.5pt;
+	font-family:等线;}
+p.MsoListParagraph, li.MsoListParagraph, div.MsoListParagraph
+	{margin-top:0cm;
+	margin-right:0cm;
+	margin-bottom:8.0pt;
+	margin-left:0cm;
+	text-align:justify;
+	text-justify:inter-ideograph;
+	text-indent:21.0pt;
+	line-height:107%;
+	font-size:10.5pt;
+	font-family:等线;}
+span.3
+	{mso-style-name:"标题 3 字符";
+	mso-style-link:"标题 3";
+	font-weight:bold;}
+span.2
+	{mso-style-name:"标题 2 字符";
+	mso-style-link:"标题 2";
+	font-family:"等线 Light";
+	font-weight:bold;}
+.MsoChpDefault
+	{font-size:10.0pt;
+	font-family:等线;}
+.MsoPapDefault
+	{margin-bottom:8.0pt;
+	line-height:107%;}
+ /* Page Definitions */
+ @page WordSection1
+	{size:595.3pt 841.9pt;
+	margin:72.0pt 90.0pt 72.0pt 90.0pt;
+	layout-grid:15.6pt;}
+div.WordSection1
+	{page:WordSection1;}
+-->
+</style>
+
+</head>
+
+<body lang=EN-US style='word-wrap:break-word;text-justify-trim:punctuation'>
+
+<div class=WordSection1 style='layout-grid:15.6pt'>
+
+<h2><a name="_Hlk38893314"><span style='font-family:"Times New Roman",serif'>1.</span></a><span
+lang=ZH-CN style='font-family:等线'>运行一个</span><span style='font-family:"Times New Roman",serif'>Demo</span><span
+lang=ZH-CN style='font-family:等线'>示例</span></h2>
+
+<p class=MsoNormal style='text-indent:21.0pt'><span lang=ZH-CN
+style='font-size:9.0pt;line-height:107%'>为方便用户二次开发，源码中提供了大量的示例</span><span
+style='font-size:9.0pt;line-height:107%;font-family:"Times New Roman",serif'>Demo</span><span
+lang=ZH-CN style='font-size:9.0pt;line-height:107%'>，以供参考，相关源码可在</span><span
+style='font-size:9.0pt;line-height:107%;font-family:"Times New Roman",serif'>“user\src\examples”</span><span
+lang=ZH-CN style='font-size:9.0pt;line-height:107%'>路径下找到。</span></p>
+
+<p class=MsoNormal style='text-indent:21.0pt'><span lang=ZH-CN
+style='font-size:9.0pt;line-height:107%'>如果想要运行一个已有</span><span
+style='font-size:9.0pt;line-height:107%;font-family:"Times New Roman",serif'>Demo</span><span
+lang=ZH-CN style='font-size:9.0pt;line-height:107%'>，可通过配置</span><span
+style='font-size:9.0pt;line-height:107%;font-family:"Times New Roman",serif'>“user\inc\user_config.h”</span><span
+lang=ZH-CN style='font-size:9.0pt;line-height:107%'>内的宏定义来选择</span><span
+style='font-size:9.0pt;line-height:107%;font-family:"Times New Roman",serif'>Demo</span><span
+lang=ZH-CN style='font-size:9.0pt;line-height:107%'>功能，如运行</span><span
+style='font-size:9.0pt;line-height:107%;font-family:"Times New Roman",serif'>ASR</span><span
+lang=ZH-CN style='font-size:9.0pt;line-height:107%'>控制相关示例，需修改两个宏定义如下：</span></p>
+
+<p class=MsoNormal style='text-indent:21.0pt'><span style='font-size:9.0pt;
+line-height:107%;font-family:"Times New Roman",serif'>&nbsp;</span></p>
+
+<p class=MsoNormal style='margin-left:21.0pt;text-indent:21.0pt'><span
+style='font-size:9.0pt;line-height:107%;font-family:"Times New Roman",serif'>#define
+USER_RUN_DEMO         1                                                      //
+1</span><span lang=ZH-CN style='font-size:9.0pt;line-height:107%'>：打开</span><span
+style='font-size:9.0pt;line-height:107%;font-family:"Times New Roman",serif'>Demo</span><span
+lang=ZH-CN style='font-size:9.0pt;line-height:107%'>功能</span></p>
+
+<p class=MsoNormal style='margin-left:21.0pt;text-indent:21.0pt'><span
+style='font-size:9.0pt;line-height:107%;font-family:"Times New Roman",serif'>#define
+USER_RUN_DEMO_SELECT  USER_DEMO_ASR_CONTROL       // </span><span lang=ZH-CN
+style='font-size:9.0pt;line-height:107%'>选择</span><span style='font-size:9.0pt;
+line-height:107%;font-family:"Times New Roman",serif'>ASR</span><span
+lang=ZH-CN style='font-size:9.0pt;line-height:107%'>控制</span><span
+style='font-size:9.0pt;line-height:107%;font-family:"Times New Roman",serif'>Demo</span></p>
+
+<p class=MsoNormal style='text-indent:21.0pt'><span style='font-size:9.0pt;
+line-height:107%;font-family:"Times New Roman",serif'>&nbsp;</span></p>
+
+<p class=MsoNormal><span style='font-size:9.0pt;line-height:107%;font-family:
+"Times New Roman",serif'>         </span><span lang=ZH-CN style='font-size:
+9.0pt;line-height:107%'>然后，运行</span><span style='font-size:9.0pt;line-height:
+107%;font-family:"Times New Roman",serif'>./build.sh</span><span lang=ZH-CN
+style='font-size:9.0pt;line-height:107%'>脚本，编译生成固件，烧录后重启开发板即可测试，默认唤醒词为</span><span
+style='font-size:9.0pt;line-height:107%;font-family:"Times New Roman",serif'>“</span><span
+lang=ZH-CN style='font-size:9.0pt;line-height:107%'>你好魔方</span><span
+style='font-size:9.0pt;line-height:107%;font-family:"Times New Roman",serif'>”</span><span
+lang=ZH-CN style='font-size:9.0pt;line-height:107%'>。</span></p>
+
+<h2><span style='font-family:"Times New Roman",serif'>2.</span><span
+lang=ZH-CN style='font-family:等线'>主动重置机制</span></h2>
+
+<p class=MsoNormal style='text-indent:21.0pt'><span lang=ZH-CN
+style='font-size:9.0pt;line-height:107%'>在一些常供电（特别是不易上下电）的产品上，如果二次开发过程中的漏洞未被测出而流至终端客户处，可能会出现使用一段时间后语音功能异常且难以重启恢复的问题，此时建议加上系统主动重置的处理机制，本方案提供了具体的参考实现，可在</span><span
+style='font-size:9.0pt;line-height:107%;font-family:"Times New Roman",serif'>“user\inc\user_config.h”</span><span
+lang=ZH-CN style='font-size:9.0pt;line-height:107%'>中通过配置</span><span
+style='font-size:9.0pt;line-height:107%;font-family:"Times New Roman",serif'>AUTO_RESET_TIME</span><span
+lang=ZH-CN style='font-size:9.0pt;line-height:107%'>宏来使用，保证最终产品的鲁棒性。</span></p>
+
+<h2><span style='font-family:"Times New Roman",serif'>3.user_main()</span><span
+lang=ZH-CN style='font-family:等线'>入口函数</span></h2>
+
+<p class=MsoNormal style='text-indent:21.0pt'><span style='font-size:9.0pt;
+line-height:107%;font-family:"Times New Roman",serif'>user_main()</span><span
+lang=ZH-CN style='font-size:9.0pt;line-height:107%'>接口是</span><span
+style='font-size:9.0pt;line-height:107%;font-family:"Times New Roman",serif'>USER</span><span
+lang=ZH-CN style='font-size:9.0pt;line-height:107%'>层二次开发入口函数，相当于系统中的</span><span
+style='font-size:9.0pt;line-height:107%;font-family:"Times New Roman",serif'>main</span><span
+lang=ZH-CN style='font-size:9.0pt;line-height:107%'>函数，定制化代码需加入到</span><span
+style='font-size:9.0pt;line-height:107%;font-family:"Times New Roman",serif'>user_main()</span><span
+lang=ZH-CN style='font-size:9.0pt;line-height:107%'>函数中以编译运行，该函数可在</span><span
+style='font-size:9.0pt;line-height:107%;font-family:"Times New Roman",serif'>“user\src\user_main.c”</span><span
+lang=ZH-CN style='font-size:9.0pt;line-height:107%'>中找到。</span></p>
+
+<p class=MsoNormal style='text-indent:21.0pt'><span lang=ZH-CN
+style='font-size:9.0pt;line-height:107%'>从架构上看，该函数会在系初始化完毕后自动被调用，调用完毕后开始播放开机启动欢迎语，并开始进入循环等待实现</span><span
+style='font-size:9.0pt;line-height:107%;font-family:"Times New Roman",serif'>watch
+dog</span><span lang=ZH-CN style='font-size:9.0pt;line-height:107%'>喂狗操作，因此，作为一个限制，</span><span
+style='font-size:9.0pt;line-height:107%;font-family:"Times New Roman",serif'>user_main()</span><span
+lang=ZH-CN style='font-size:9.0pt;line-height:107%'>函数内代码不能是阻塞的，建议该函数中仅仅做系统初始化和事件注册操作，具体实现，可以参考</span><span
+style='font-size:9.0pt;line-height:107%;font-family:"Times New Roman",serif'>Demo</span><span
+lang=ZH-CN style='font-size:9.0pt;line-height:107%'>程序：</span><span
+style='font-size:9.0pt;line-height:107%;font-family:"Times New Roman",serif'>user\src\examples\
+hb_smart_ac.c</span><span lang=ZH-CN style='font-size:9.0pt;line-height:107%'>。</span></p>
+
+<h2><span style='font-family:"Times New Roman",serif'>4.</span><span
+lang=ZH-CN style='font-family:等线'>第一个定制程序</span></h2>
+
+<p class=MsoNormal><span style='font-family:"Times New Roman",serif'>       </span><span
+lang=ZH-CN style='font-size:9.0pt;line-height:107%'>以下代码，作为一个简单示例，实现了用户定制的语音识别指令的打印：</span></p>
+
+<p class=MsoNormal><span style='font-size:9.0pt;line-height:107%;font-family:
+"Times New Roman",serif'>&nbsp;</span></p>
+
+<p class=MsoNormal style='margin-left:21.0pt'><span style='font-size:9.0pt;
+line-height:107%;font-family:"Times New Roman",serif'>static void
+_custom_setting_cb(USER_EVENT_TYPE event,</span></p>
+
+<p class=MsoNormal style='margin-left:21.0pt'><span style='font-size:9.0pt;
+line-height:107%;font-family:"Times New Roman",serif'>                         
+user_event_context_t *context) {</span></p>
+
+<p class=MsoNormal style='margin-left:21.0pt'><span style='font-size:9.0pt;
+line-height:107%;font-family:"Times New Roman",serif'>  event_custom_setting_t
+*setting = NULL;</span></p>
+
+<p class=MsoNormal style='margin-left:21.0pt'><span style='font-size:9.0pt;
+line-height:107%;font-family:"Times New Roman",serif'>  if (context) {</span></p>
+
+<p class=MsoNormal style='margin-left:21.0pt'><span style='font-size:9.0pt;
+line-height:107%;font-family:"Times New Roman",serif'>    setting =
+&amp;context-&gt;custom_setting;</span></p>
+
+<p class=MsoNormal style='margin-left:21.0pt'><span style='font-size:9.0pt;
+line-height:107%;font-family:"Times New Roman",serif'>   
+printf(&quot;Action:     %s\n&quot;, setting-&gt;cmd);         // </span><span
+lang=ZH-CN style='font-size:9.0pt;line-height:107%'>对应</span><span
+style='font-size:9.0pt;line-height:107%;font-family:"Times New Roman",serif'>UDP</span><span
+lang=ZH-CN style='font-size:9.0pt;line-height:107%'>平台定制基本</span><span
+style='font-size:9.0pt;line-height:107%;font-family:"Times New Roman",serif'>action</span></p>
+
+<p class=MsoNormal style='margin-left:21.0pt'><span style='font-size:9.0pt;
+line-height:107%;font-family:"Times New Roman",serif'>    printf(&quot;ASR
+word:   %s\n&quot;, setting-&gt;word_str);    // </span><span lang=ZH-CN
+style='font-size:9.0pt;line-height:107%'>识别词</span></p>
+
+<p class=MsoNormal style='margin-left:21.0pt'><span style='font-size:9.0pt;
+line-height:107%;font-family:"Times New Roman",serif'>    printf(&quot;Reply
+list: %s\n&quot;, setting-&gt;reply_files);      // UDP</span><span lang=ZH-CN
+style='font-size:9.0pt;line-height:107%'>平台定制回复语编号列表</span><span
+style='font-size:9.0pt;line-height:107%;font-family:"Times New Roman",serif'>[1,
+2]</span></p>
+
+<p class=MsoNormal style='margin-left:21.0pt'><span style='font-size:9.0pt;
+line-height:107%;font-family:"Times New Roman",serif'>   
+user_player_reply_list_random(setting-&gt;reply_files);// </span><span
+lang=ZH-CN style='font-size:9.0pt;line-height:107%'>随机播放一条回复语</span></p>
+
+<p class=MsoNormal style='margin-left:21.0pt'><span style='font-size:9.0pt;
+line-height:107%;font-family:"Times New Roman",serif'>  }</span></p>
+
+<p class=MsoNormal style='margin-left:21.0pt'><span style='font-size:9.0pt;
+line-height:107%;font-family:"Times New Roman",serif'>}</span></p>
+
+<p class=MsoNormal style='margin-left:21.0pt'><span style='font-size:9.0pt;
+line-height:107%;font-family:"Times New Roman",serif'>&nbsp;</span></p>
+
+<p class=MsoNormal style='margin-left:21.0pt'><span style='font-size:9.0pt;
+line-height:107%;font-family:"Times New Roman",serif'>static void
+_register_event_callback(void) {</span></p>
+
+<p class=MsoNormal style='margin-left:21.0pt'><span style='font-size:9.0pt;
+line-height:107%;font-family:"Times New Roman",serif'> 
+user_event_subscribe_event(USER_CUSTOM_SETTING, _custom_setting_cb);</span></p>
+
+<p class=MsoNormal style='margin-left:21.0pt'><span style='font-size:9.0pt;
+line-height:107%;font-family:"Times New Roman",serif'>}</span></p>
+
+<p class=MsoNormal style='margin-left:21.0pt'><span style='font-size:9.0pt;
+line-height:107%;font-family:"Times New Roman",serif'>&nbsp;</span></p>
+
+<p class=MsoNormal style='margin-left:21.0pt'><span style='font-size:9.0pt;
+line-height:107%;font-family:"Times New Roman",serif'>int user_main(void) {</span></p>
+
+<p class=MsoNormal style='margin-left:21.0pt'><span style='font-size:9.0pt;
+line-height:107%;font-family:"Times New Roman",serif'>  printf(&quot;Hello
+World !\n&quot;);</span></p>
+
+<p class=MsoNormal style='margin-left:21.0pt'><span style='font-size:9.0pt;
+line-height:107%;font-family:"Times New Roman",serif'> 
+_register_event_callback();   // </span><span lang=ZH-CN style='font-size:9.0pt;
+line-height:107%'>注册事件回调</span></p>
+
+<p class=MsoNormal style='margin-left:21.0pt'><span style='font-size:9.0pt;
+line-height:107%;font-family:"Times New Roman",serif'>  return 0;</span></p>
+
+<p class=MsoNormal style='margin-left:21.0pt'><span style='font-size:9.0pt;
+line-height:107%;font-family:"Times New Roman",serif'>}</span></p>
+
+<p class=MsoNormal><span style='font-size:9.0pt;line-height:107%;font-family:
+"Times New Roman",serif'>&nbsp;</span></p>
+
+<p class=MsoNormal style='margin-left:21.0pt'><span lang=ZH-CN
+style='font-size:9.0pt;line-height:107%'>运行后说</span><span style='font-size:
+9.0pt;line-height:107%;font-family:"Times New Roman",serif'>“</span><span
+lang=ZH-CN style='font-size:9.0pt;line-height:107%'>你好魔方</span><span
+style='font-size:9.0pt;line-height:107%;font-family:"Times New Roman",serif'>”</span><span
+lang=ZH-CN style='font-size:9.0pt;line-height:107%'>唤醒设备，然后说</span><span
+style='font-size:9.0pt;line-height:107%;font-family:"Times New Roman",serif'>“</span><span
+lang=ZH-CN style='font-size:9.0pt;line-height:107%'>打开风扇</span><span
+style='font-size:9.0pt;line-height:107%;font-family:"Times New Roman",serif'>”</span><span
+lang=ZH-CN style='font-size:9.0pt;line-height:107%'>打印结果为：</span></p>
+
+<p class=MsoNormal style='margin-left:21.0pt'><span style='font-size:9.0pt;
+line-height:107%;font-family:"Times New Roman",serif'>                   Hello
+World !</span></p>
+
+<p class=MsoNormal style='margin-left:21.0pt'><span style='font-size:9.0pt;
+line-height:107%;font-family:"Times New Roman",serif'>                   Action:     
+ac_power_on</span></p>
+
+<p class=MsoNormal style='margin-left:21.0pt'><span style='font-size:9.0pt;
+line-height:107%;font-family:"Times New Roman",serif'>                   ASR
+word:   </span><span lang=ZH-CN style='font-size:9.0pt;line-height:107%'>打开风扇</span></p>
+
+<p class=MsoNormal style='margin-left:21.0pt'><span style='font-size:9.0pt;
+line-height:107%;font-family:"Times New Roman",serif'>                   Reply
+list:    [104, 105, 106]</span></p>
+
+<p class=MsoNormal style='margin-left:21.0pt'><span lang=ZH-CN
+style='font-size:9.0pt;line-height:107%'>然后设备播报回复语可能是一下三条其中一条（根据当前设备状态）：</span></p>
+
+<p class=MsoNormal style='margin-left:21.0pt'><span style='font-size:9.0pt;
+line-height:107%;font-family:"Times New Roman",serif'>                   “</span><span
+lang=ZH-CN style='font-size:9.0pt;line-height:107%'>已为您打开风扇，当前为自然风</span><span
+style='font-size:9.0pt;line-height:107%;font-family:"Times New Roman",serif'>”</span></p>
+
+<p class=MsoNormal style='margin-left:21.0pt'><span style='font-size:9.0pt;
+line-height:107%;font-family:"Times New Roman",serif'>                   “</span><span
+lang=ZH-CN style='font-size:9.0pt;line-height:107%'>已为您打开风扇，当前为正常风</span><span
+style='font-size:9.0pt;line-height:107%;font-family:"Times New Roman",serif'>”</span></p>
+
+<p class=MsoNormal style='margin-left:42.0pt;text-indent:21.0pt'><span
+style='font-size:9.0pt;line-height:107%;font-family:"Times New Roman",serif'>“</span><span
+lang=ZH-CN style='font-size:9.0pt;line-height:107%'>已为您打开风扇，当前为睡眠风</span><span
+style='font-size:9.0pt;line-height:107%;font-family:"Times New Roman",serif'>”</span></p>
+
+<h2><span style='font-family:"Times New Roman",serif'>5.</span><span
+lang=ZH-CN style='font-family:等线'>串口</span><span style='font-family:"Times New Roman",serif'>LOG</span><span
+lang=ZH-CN style='font-family:等线'>调试</span></h2>
+
+<p class=MsoNormal style='margin-left:21.0pt'><span lang=ZH-CN
+style='font-size:9.0pt;line-height:107%'>由于芯片本身只有</span><span style='font-size:
+9.0pt;line-height:107%;font-family:"Times New Roman",serif'>1</span><span
+lang=ZH-CN style='font-size:9.0pt;line-height:107%'>个硬件</span><span
+style='font-size:9.0pt;line-height:107%;font-family:"Times New Roman",serif'>UART</span><span
+lang=ZH-CN style='font-size:9.0pt;line-height:107%'>，默认定义用于外设通信，因此增加</span><span
+style='font-size:9.0pt;line-height:107%;font-family:"Times New Roman",serif'>Software
+UART</span><span lang=ZH-CN style='font-size:9.0pt;line-height:107%'>功能，设置</span><span
+style='font-size:9.0pt;line-height:107%;font-family:"Times New Roman",serif'>B8</span><span
+lang=ZH-CN style='font-size:9.0pt;line-height:107%'>引脚为</span><span
+style='font-size:9.0pt;line-height:107%;font-family:"Times New Roman",serif'>log</span><span
+lang=ZH-CN style='font-size:9.0pt;line-height:107%'>输出</span><span
+style='font-size:9.0pt;line-height:107%;font-family:"Times New Roman",serif'>Tx</span><span
+lang=ZH-CN style='font-size:9.0pt;line-height:107%'>端口，在开发板上丝印为</span><span
+style='font-size:9.0pt;line-height:107%;font-family:"Times New Roman",serif'>“B8”</span><span
+lang=ZH-CN style='font-size:9.0pt;line-height:107%'>，连接</span><span
+style='font-size:9.0pt;line-height:107%;font-family:"Times New Roman",serif'>PC</span><span
+lang=ZH-CN style='font-size:9.0pt;line-height:107%'>后使用常见串口工具（如</span><span
+style='font-size:9.0pt;line-height:107%;font-family:"Times New Roman",serif'>putty</span><span
+lang=ZH-CN style='font-size:9.0pt;line-height:107%'>、</span><span
+style='font-size:9.0pt;line-height:107%;font-family:"Times New Roman",serif'>xshell</span><span
+lang=ZH-CN style='font-size:9.0pt;line-height:107%'>、</span><span
+style='font-size:9.0pt;line-height:107%;font-family:"Times New Roman",serif'>secureCRT</span><span
+lang=ZH-CN style='font-size:9.0pt;line-height:107%'>等），配置波特率</span><span
+style='font-size:9.0pt;line-height:107%;font-family:"Times New Roman",serif'>
+(57600bps)</span><span lang=ZH-CN style='font-size:9.0pt;line-height:107%'>、数据位</span><span
+style='font-size:9.0pt;line-height:107%;font-family:"Times New Roman",serif'>
+(8)</span><span lang=ZH-CN style='font-size:9.0pt;line-height:107%'>、停止位</span><span
+style='font-size:9.0pt;line-height:107%;font-family:"Times New Roman",serif'>
+(1)</span><span lang=ZH-CN style='font-size:9.0pt;line-height:107%'>、校验</span><span
+style='font-size:9.0pt;line-height:107%;font-family:"Times New Roman",serif'>
+(None)</span><span lang=ZH-CN style='font-size:9.0pt;line-height:107%'>即可。</span></p>
+
+<p class=MsoListParagraph align=center style='margin-left:24.0pt;text-align:
+center;text-indent:0cm'><span style='font-size:9.0pt;line-height:107%;
+font-family:"Times New Roman",serif'><img width=553 height=419 id="图片 38"
+src="eckf7_image001.jpg"></span></p>
+
+<p class=MsoNormal style='margin-left:21.0pt'><span style='font-size:9.0pt;
+line-height:107%;font-family:"Times New Roman",serif'>TX</span><span
+lang=ZH-CN style='font-size:9.0pt;line-height:107%'>连接串口调试器</span><span
+style='font-size:9.0pt;line-height:107%;font-family:"Times New Roman",serif'>RX</span><span
+lang=ZH-CN style='font-size:9.0pt;line-height:107%'>，</span><span
+style='font-size:9.0pt;line-height:107%;font-family:"Times New Roman",serif'>GND</span><span
+lang=ZH-CN style='font-size:9.0pt;line-height:107%'>连接</span><span
+style='font-size:9.0pt;line-height:107%;font-family:"Times New Roman",serif'>GND(</span><span
+lang=ZH-CN style='font-size:9.0pt;line-height:107%'>开发板上只有</span><span
+style='font-size:9.0pt;line-height:107%;font-family:"Times New Roman",serif'>1</span><span
+lang=ZH-CN style='font-size:9.0pt;line-height:107%'>个</span><span
+style='font-size:9.0pt;line-height:107%;font-family:"Times New Roman",serif'>GND</span><span
+lang=ZH-CN style='font-size:9.0pt;line-height:107%'>接口，为方便烧录和调试，可以将烧录器和串口调试器连接在同一台电脑或</span><span
+style='font-size:9.0pt;line-height:107%;font-family:"Times New Roman",serif'>USB
+Hub</span><span lang=ZH-CN style='font-size:9.0pt;line-height:107%'>上，以保持共地，则串口调试器只需连接</span><span
+style='font-size:9.0pt;line-height:107%;font-family:"Times New Roman",serif'>Tx</span><span
+lang=ZH-CN style='font-size:9.0pt;line-height:107%'>（</span><span
+style='font-size:9.0pt;line-height:107%;font-family:"Times New Roman",serif'>B8</span><span
+lang=ZH-CN style='font-size:9.0pt;line-height:107%'>）引脚即可</span><span
+style='font-size:9.0pt;line-height:107%;font-family:"Times New Roman",serif'>)</span><span
+lang=ZH-CN style='font-size:9.0pt;line-height:107%'>，设备上电后，可在串口工具中观察到如下启动信息：</span></p>
+
+<p class=MsoNormal align=center style='margin-left:21.0pt;text-align:center'><span
+style='font-size:9.0pt;line-height:107%;font-family:"Times New Roman",serif'><img
+width=499 height=58 id="图片 128" src="eckf7_image002.png"></span></p>
+
+<p class=MsoNormal style='margin-left:21.0pt'><span lang=ZH-CN
+style='font-size:9.0pt;line-height:107%;color:red'>注：在连接</span><span
+style='font-size:9.0pt;line-height:107%;font-family:"Times New Roman",serif;
+color:red'>PC</span><span lang=ZH-CN style='font-size:9.0pt;line-height:107%;
+color:red'>进行调试时，如需掉电重启，请将端口串口调试器与主控板连接后掉电重启，否则可能由于串口调试器漏掉输入使开发板进入低电压模式无法掉电重启。</span></p>
+
+<h2><span style='font-family:"Times New Roman",serif'>6.</span><span
+lang=ZH-CN style='font-family:等线'>调整指令阈值</span></h2>
+
+<p class=MsoNormal align=left style='text-align:left;text-indent:18.0pt'><span
+lang=ZH-CN style='font-size:9.0pt;line-height:107%'>用户自定义离线控制指令，修改后的指令会使用默认的阈值，出现响应难或者误响应率偏高的问题。蜂鸟芯片支持方案阈值的自主计算，用户在使用某个指令时，可以根据自己项目的要求进行调整。</span></p>
+
+<p class=MsoNormal align=left style='text-align:left;text-indent:18.0pt'><span
+style='font-size:9.0pt;line-height:107%;font-family:"Times New Roman",serif'>&nbsp;</span></p>
+
+<p class=MsoNormal align=left style='text-align:left;text-indent:18.0pt'><span
+lang=ZH-CN style='font-size:9.0pt;line-height:107%'>指令的阈值配置文件名为</span><span
+style='font-size:9.0pt;line-height:107%;font-family:"Times New Roman",serif'>aik_debug.json</span><span
+lang=ZH-CN style='font-size:9.0pt;line-height:107%'>或</span><span
+style='font-size:9.0pt;line-height:107%;font-family:"Times New Roman",serif'>aik_release.json</span><span
+lang=ZH-CN style='font-size:9.0pt;line-height:107%'>，前者对应的是</span><span
+style='font-size:9.0pt;line-height:107%;font-family:"Times New Roman",serif'>debug</span><span
+lang=ZH-CN style='font-size:9.0pt;line-height:107%'>固件，修改后者对应的是</span><span
+style='font-size:9.0pt;line-height:107%;font-family:"Times New Roman",serif'>release</span><span
+lang=ZH-CN style='font-size:9.0pt;line-height:107%'>固件。</span><span lang=ZH-CN
+style='font-size:9.0pt;line-height:107%;font-family:"Times New Roman",serif'> </span><span
+lang=ZH-CN style='font-size:9.0pt;line-height:107%'>当设备类型为“通用”时，文件路径为</span><span
+style='font-size:9.0pt;line-height:107%;font-family:"Times New Roman",serif'>tools/scripts</span><span
+lang=ZH-CN style='font-size:9.0pt;line-height:107%'>下；当设备类型为“智能语音红外控制器”时，文件路径为</span><span
+style='font-size:9.0pt;line-height:107%;font-family:"Times New Roman",serif'>user/src/examples/res_housekeeper</span><span
+lang=ZH-CN style='font-size:9.0pt;line-height:107%'>下；其他品类的阈值配置文件请到</span><span
+style='font-size:9.0pt;line-height:107%;font-family:"Times New Roman",serif'>user/src/examples/res_xxx</span><span
+lang=ZH-CN style='font-size:9.0pt;line-height:107%'>路径下对应修改。</span></p>
+
+<p class=MsoNormal align=left style='text-align:left'><span style='font-family:
+"Times New Roman",serif'>&nbsp;</span></p>
+
+<h3><span style='font-family:"Times New Roman",serif'>6.1 </span><span
+lang=ZH-CN>命令词阈值调整</span></h3>
+
+<p class=MsoNormal align=left style='text-align:left;text-indent:18.0pt'><span
+lang=ZH-CN style='font-size:9.0pt;line-height:107%'>图中示例代码，左侧为默认阈值配置，当需要把命令词</span><span
+style='font-size:9.0pt;line-height:107%;font-family:"Times New Roman",serif'>“</span><span
+lang=ZH-CN style='font-size:9.0pt;line-height:107%'>开机</span><span
+style='font-size:9.0pt;line-height:107%;font-family:"Times New Roman",serif'>”</span><span
+lang=ZH-CN style='font-size:9.0pt;line-height:107%'>的误识别率设为</span><span
+style='font-size:9.0pt;line-height:107%;font-family:"Times New Roman",serif'>0.05</span><span
+lang=ZH-CN style='font-size:9.0pt;line-height:107%'>次</span><span
+style='font-size:9.0pt;line-height:107%;font-family:"Times New Roman",serif'>/</span><span
+lang=ZH-CN style='font-size:9.0pt;line-height:107%'>分，命令词</span><span
+style='font-size:9.0pt;line-height:107%;font-family:"Times New Roman",serif'>“</span><span
+lang=ZH-CN style='font-size:9.0pt;line-height:107%'>关机</span><span
+style='font-size:9.0pt;line-height:107%;font-family:"Times New Roman",serif'>”</span><span
+lang=ZH-CN style='font-size:9.0pt;line-height:107%'>误识别率设为</span><span
+style='font-size:9.0pt;line-height:107%;font-family:"Times New Roman",serif'>0.2</span><span
+lang=ZH-CN style='font-size:9.0pt;line-height:107%'>次</span><span
+style='font-size:9.0pt;line-height:107%;font-family:"Times New Roman",serif'>/</span><span
+lang=ZH-CN style='font-size:9.0pt;line-height:107%'>分，在</span><span
+style='font-size:9.0pt;line-height:107%;font-family:"Times New Roman",serif'>&quot;command&quot;</span><span
+lang=ZH-CN style='font-size:9.0pt;line-height:107%'>字段下新增</span><span
+style='font-size:9.0pt;line-height:107%;font-family:"Times New Roman",serif'>&quot;command_custom&quot;</span><span
+lang=ZH-CN style='font-size:9.0pt;line-height:107%'>字段，里面填入需要设置的命令词和对应阈值要求即可，参考改动如图。保存后，运行</span><span
+style='font-size:9.0pt;line-height:107%;font-family:"Times New Roman",serif'>build.sh</span><span
+lang=ZH-CN style='font-size:9.0pt;line-height:107%'>生成新的</span><span
+style='font-size:9.0pt;line-height:107%;font-family:"Times New Roman",serif'>bin</span><span
+lang=ZH-CN style='font-size:9.0pt;line-height:107%'>文件，则完成了对命令词的阈值调整。</span></p>
+
+<p class=MsoNormal align=center style='text-align:center'><img width=554
+height=184 id="图片 147" src="eckf7_image003.jpg"></p>
+
+<p class=MsoNormal align=left style='text-align:left'><span style='font-family:
+"Times New Roman",serif'>&nbsp;</span></p>
+
+</div>
+
+</body>
+
+</html>
+ </div></div><!-- contents -->
+</div><!-- PageDoc -->
+</body>
+</html>

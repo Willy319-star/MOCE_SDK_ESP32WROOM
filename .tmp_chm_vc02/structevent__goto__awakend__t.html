@@ -1,0 +1,75 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "https://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=9"/>
+<meta name="generator" content="Doxygen 1.8.18"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>蜂鸟M离线方案开发指导手册: event_goto_awakend_t结构体 参考</title>
+<link href="tabs.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="jquery.js"></script>
+<script type="text/javascript" src="dynsections.js"></script>
+<link href="doxygen.css" rel="stylesheet" type="text/css" />
+</head>
+<body>
+<div id="top"><!-- do not remove this div, it is closed by doxygen! -->
+<div id="titlearea">
+<table cellspacing="0" cellpadding="0">
+ <tbody>
+ <tr style="height: 56px;">
+  <td id="projectalign" style="padding-left: 0.5em;">
+   <div id="projectname">蜂鸟M离线方案开发指导手册
+   &#160;<span id="projectnumber">v1.0.4</span>
+   </div>
+  </td>
+ </tr>
+ </tbody>
+</table>
+</div>
+<!-- end header part -->
+<!-- 制作者 Doxygen 1.8.18 -->
+<script type="text/javascript" src="menudata.js"></script>
+<script type="text/javascript" src="menu.js"></script>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:cf05388f2679ee054f2beb29a391d25f4e673ac3&amp;dn=gpl-2.0.txt GPL-v2 */
+$(function() {
+  initMenu('',false,false,'search.php','搜索');
+});
+/* @license-end */</script>
+<div id="main-nav"></div>
+</div><!-- top -->
+<div class="header">
+  <div class="summary">
+<a href="#pub-attribs">成员变量</a>  </div>
+  <div class="headertitle">
+<div class="title">event_goto_awakend_t结构体 参考<div class="ingroups"><a class="el" href="group__uni__event.html">Event事件</a> &raquo; <a class="el" href="group__uni__event__def.html">Event事件类型定义</a></div></div>  </div>
+</div><!--header-->
+<div class="contents">
+
+<p>对应USER_GOTO_AWAKENED事件  
+</p>
+
+<p><code>#include &lt;<a class="el" href="user__event_8h_source.html">user_event.h</a>&gt;</code></p>
+<table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-attribs"></a>
+成员变量</h2></td></tr>
+<tr class="memitem:a7a368a2b09bb985b03a9765dfc71f824"><td class="memItemLeft" align="right" valign="top"><a id="a7a368a2b09bb985b03a9765dfc71f824"></a>
+<a class="el" href="group__uni__event__def.html#gaad619614cc7faaad1f392c03a720641a">EVENT_TRIGGER</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structevent__goto__awakend__t.html#a7a368a2b09bb985b03a9765dfc71f824">trigger</a></td></tr>
+<tr class="memdesc:a7a368a2b09bb985b03a9765dfc71f824"><td class="mdescLeft">&#160;</td><td class="mdescRight">触发来源 <br /></td></tr>
+<tr class="separator:a7a368a2b09bb985b03a9765dfc71f824"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2a5293812804bce1aeb044e538a40dc9"><td class="memItemLeft" align="right" valign="top"><a id="a2a5293812804bce1aeb044e538a40dc9"></a>
+char *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structevent__goto__awakend__t.html#a2a5293812804bce1aeb044e538a40dc9">cmd</a></td></tr>
+<tr class="memdesc:a2a5293812804bce1aeb044e538a40dc9"><td class="mdescLeft">&#160;</td><td class="mdescRight">命令词意图，对应UDP平台上用户定义脚本中的action <br /></td></tr>
+<tr class="separator:a2a5293812804bce1aeb044e538a40dc9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a618a6abdfcfe7cbe6aa8cb2d10e5a525"><td class="memItemLeft" align="right" valign="top"><a id="a618a6abdfcfe7cbe6aa8cb2d10e5a525"></a>
+char *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structevent__goto__awakend__t.html#a618a6abdfcfe7cbe6aa8cb2d10e5a525">word_str</a></td></tr>
+<tr class="memdesc:a618a6abdfcfe7cbe6aa8cb2d10e5a525"><td class="mdescLeft">&#160;</td><td class="mdescRight">识别到的命令词 <br /></td></tr>
+<tr class="separator:a618a6abdfcfe7cbe6aa8cb2d10e5a525"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8e561a86d72841824a63ef0c6c3208c9"><td class="memItemLeft" align="right" valign="top"><a id="a8e561a86d72841824a63ef0c6c3208c9"></a>
+char *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structevent__goto__awakend__t.html#a8e561a86d72841824a63ef0c6c3208c9">reply_files</a></td></tr>
+<tr class="memdesc:a8e561a86d72841824a63ef0c6c3208c9"><td class="mdescLeft">&#160;</td><td class="mdescRight">回复语列表[1, 2, 3]，对应UDP平台上用户定义脚本中的回复语列表，在pcm_map.txt中可以找到对应关系 <br /></td></tr>
+<tr class="separator:a8e561a86d72841824a63ef0c6c3208c9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table>
+</div><!-- contents -->
+</body>
+</html>

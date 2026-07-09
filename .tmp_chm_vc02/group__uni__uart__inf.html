@@ -1,0 +1,168 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "https://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=9"/>
+<meta name="generator" content="Doxygen 1.8.18"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>蜂鸟M离线方案开发指导手册: 串口收发接口</title>
+<link href="tabs.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="jquery.js"></script>
+<script type="text/javascript" src="dynsections.js"></script>
+<link href="doxygen.css" rel="stylesheet" type="text/css" />
+</head>
+<body>
+<div id="top"><!-- do not remove this div, it is closed by doxygen! -->
+<div id="titlearea">
+<table cellspacing="0" cellpadding="0">
+ <tbody>
+ <tr style="height: 56px;">
+  <td id="projectalign" style="padding-left: 0.5em;">
+   <div id="projectname">蜂鸟M离线方案开发指导手册
+   &#160;<span id="projectnumber">v1.0.4</span>
+   </div>
+  </td>
+ </tr>
+ </tbody>
+</table>
+</div>
+<!-- end header part -->
+<!-- 制作者 Doxygen 1.8.18 -->
+<script type="text/javascript" src="menudata.js"></script>
+<script type="text/javascript" src="menu.js"></script>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:cf05388f2679ee054f2beb29a391d25f4e673ac3&amp;dn=gpl-2.0.txt GPL-v2 */
+$(function() {
+  initMenu('',false,false,'search.php','搜索');
+});
+/* @license-end */</script>
+<div id="main-nav"></div>
+</div><!-- top -->
+<div class="header">
+  <div class="summary">
+<a href="#typedef-members">类型定义</a> &#124;
+<a href="#func-members">函数</a>  </div>
+  <div class="headertitle">
+<div class="title">串口收发接口<div class="ingroups"><a class="el" href="group__uni__uart.html">串口收发</a></div></div>  </div>
+</div><!--header-->
+<div class="contents">
+<table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="typedef-members"></a>
+类型定义</h2></td></tr>
+<tr class="memitem:gad9a2d93ed594a966a4699c9026960b71"><td class="memItemLeft" align="right" valign="top">typedef void(*&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__uni__uart__inf.html#gad9a2d93ed594a966a4699c9026960b71">_user_uart_recv</a>) (char *buf, int len)</td></tr>
+<tr class="memdesc:gad9a2d93ed594a966a4699c9026960b71"><td class="mdescLeft">&#160;</td><td class="mdescRight">接收数据回调函数定义  <a href="group__uni__uart__inf.html#gad9a2d93ed594a966a4699c9026960b71">更多...</a><br /></td></tr>
+<tr class="separator:gad9a2d93ed594a966a4699c9026960b71"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
+函数</h2></td></tr>
+<tr class="memitem:ga7311320ff7ced3bff8625610aaa4c64a"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__uni__uart__inf.html#ga7311320ff7ced3bff8625610aaa4c64a">user_uart_init</a> (<a class="el" href="group__uni__uart__inf.html#gad9a2d93ed594a966a4699c9026960b71">_user_uart_recv</a> cb_recv)</td></tr>
+<tr class="memdesc:ga7311320ff7ced3bff8625610aaa4c64a"><td class="mdescLeft">&#160;</td><td class="mdescRight">串口初始化  <a href="group__uni__uart__inf.html#ga7311320ff7ced3bff8625610aaa4c64a">更多...</a><br /></td></tr>
+<tr class="separator:ga7311320ff7ced3bff8625610aaa4c64a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga40f6b3ecd697784494ca1b20d414b558"><td class="memItemLeft" align="right" valign="top"><a id="ga40f6b3ecd697784494ca1b20d414b558"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__uni__uart__inf.html#ga40f6b3ecd697784494ca1b20d414b558">user_uart_final</a> (void)</td></tr>
+<tr class="memdesc:ga40f6b3ecd697784494ca1b20d414b558"><td class="mdescLeft">&#160;</td><td class="mdescRight">串口逆初始化 <br /></td></tr>
+<tr class="separator:ga40f6b3ecd697784494ca1b20d414b558"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga73f50c3250d36a374016f449e882e9aa"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__uni__uart__inf.html#ga73f50c3250d36a374016f449e882e9aa">user_uart_send</a> (const char *buf, int len)</td></tr>
+<tr class="memdesc:ga73f50c3250d36a374016f449e882e9aa"><td class="mdescLeft">&#160;</td><td class="mdescRight">串口数据发送  <a href="group__uni__uart__inf.html#ga73f50c3250d36a374016f449e882e9aa">更多...</a><br /></td></tr>
+<tr class="separator:ga73f50c3250d36a374016f449e882e9aa"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table>
+<a name="details" id="details"></a><h2 class="groupheader">详细描述</h2>
+<h2 class="groupheader">类型定义说明</h2>
+<a id="gad9a2d93ed594a966a4699c9026960b71"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#gad9a2d93ed594a966a4699c9026960b71">&#9670;&nbsp;</a></span>_user_uart_recv</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">typedef void(* _user_uart_recv) (char *buf, int len)</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<dl class="params"><dt>参数</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">buf</td><td>接收字符指针 </td></tr>
+    <tr><td class="paramname">len</td><td>接收字符长度 </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<h2 class="groupheader">函数说明</h2>
+<a id="ga7311320ff7ced3bff8625610aaa4c64a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ga7311320ff7ced3bff8625610aaa4c64a">&#9670;&nbsp;</a></span>user_uart_init()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int user_uart_init </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="group__uni__uart__inf.html#gad9a2d93ed594a966a4699c9026960b71">_user_uart_recv</a>&#160;</td>
+          <td class="paramname"><em>cb_recv</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<dl class="params"><dt>参数</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">cb_recv</td><td>接收数据回调函数 </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="retval"><dt>返回值</dt><dd>
+  <table class="retval">
+    <tr><td class="paramname">0</td><td>操作成功 </td></tr>
+    <tr><td class="paramname">-1</td><td>操作失败 </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="ga73f50c3250d36a374016f449e882e9aa"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ga73f50c3250d36a374016f449e882e9aa">&#9670;&nbsp;</a></span>user_uart_send()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int user_uart_send </td>
+          <td>(</td>
+          <td class="paramtype">const char *&#160;</td>
+          <td class="paramname"><em>buf</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>len</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<dl class="params"><dt>参数</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">buf</td><td>发送字符指针 </td></tr>
+    <tr><td class="paramname">len</td><td>发送字符长度 </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="retval"><dt>返回值</dt><dd>
+  <table class="retval">
+    <tr><td class="paramname">else</td><td>实际发送字符长度 </td></tr>
+    <tr><td class="paramname">-1</td><td>操作失败 </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+</div><!-- contents -->
+</body>
+</html>

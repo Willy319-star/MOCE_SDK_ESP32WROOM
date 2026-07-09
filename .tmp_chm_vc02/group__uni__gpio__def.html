@@ -1,0 +1,168 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "https://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=9"/>
+<meta name="generator" content="Doxygen 1.8.18"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>蜂鸟M离线方案开发指导手册: GPIO类型定义</title>
+<link href="tabs.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="jquery.js"></script>
+<script type="text/javascript" src="dynsections.js"></script>
+<link href="doxygen.css" rel="stylesheet" type="text/css" />
+</head>
+<body>
+<div id="top"><!-- do not remove this div, it is closed by doxygen! -->
+<div id="titlearea">
+<table cellspacing="0" cellpadding="0">
+ <tbody>
+ <tr style="height: 56px;">
+  <td id="projectalign" style="padding-left: 0.5em;">
+   <div id="projectname">蜂鸟M离线方案开发指导手册
+   &#160;<span id="projectnumber">v1.0.4</span>
+   </div>
+  </td>
+ </tr>
+ </tbody>
+</table>
+</div>
+<!-- end header part -->
+<!-- 制作者 Doxygen 1.8.18 -->
+<script type="text/javascript" src="menudata.js"></script>
+<script type="text/javascript" src="menu.js"></script>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:cf05388f2679ee054f2beb29a391d25f4e673ac3&amp;dn=gpl-2.0.txt GPL-v2 */
+$(function() {
+  initMenu('',false,false,'search.php','搜索');
+});
+/* @license-end */</script>
+<div id="main-nav"></div>
+</div><!-- top -->
+<div class="header">
+  <div class="summary">
+<a href="#typedef-members">类型定义</a> &#124;
+<a href="#enum-members">枚举</a>  </div>
+  <div class="headertitle">
+<div class="title">GPIO类型定义<div class="ingroups"><a class="el" href="group__uni__gpio.html">GPIO</a></div></div>  </div>
+</div><!--header-->
+<div class="contents">
+<table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="typedef-members"></a>
+类型定义</h2></td></tr>
+<tr class="memitem:gac732f5445a1e94252c37f79061db47b6"><td class="memItemLeft" align="right" valign="top">typedef void(*&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__uni__gpio__def.html#gac732f5445a1e94252c37f79061db47b6">_gpio_interrupt_cb</a>) (<a class="el" href="group__uni__gpio__def.html#gab98b40805939a8489960247300b6043a">GPIO_NUMBER</a> num, uni_bool is_high)</td></tr>
+<tr class="memdesc:gac732f5445a1e94252c37f79061db47b6"><td class="mdescLeft">&#160;</td><td class="mdescRight">中断回调函数  <a href="group__uni__gpio__def.html#gac732f5445a1e94252c37f79061db47b6">更多...</a><br /></td></tr>
+<tr class="separator:gac732f5445a1e94252c37f79061db47b6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="enum-members"></a>
+枚举</h2></td></tr>
+<tr class="memitem:gab98b40805939a8489960247300b6043a"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__uni__gpio__def.html#gab98b40805939a8489960247300b6043a">GPIO_NUMBER</a> { <br />
+&#160;&#160;<a class="el" href="group__uni__gpio__def.html#ggab98b40805939a8489960247300b6043aadd7d6d0160c90c2af8a719759e5ae4e5">GPIO_NUM_A25</a> = 0, 
+<a class="el" href="group__uni__gpio__def.html#ggab98b40805939a8489960247300b6043aa47caba26ac21e763450d1abbaab0fb27">GPIO_NUM_A26</a>, 
+<a class="el" href="group__uni__gpio__def.html#ggab98b40805939a8489960247300b6043aa1d3dcb39f62859e227523223eb3bab65">GPIO_NUM_A27</a>, 
+<a class="el" href="group__uni__gpio__def.html#ggab98b40805939a8489960247300b6043aa58afb74cd62e1f773496ce8152953d37">GPIO_NUM_A28</a>, 
+<br />
+&#160;&#160;<a class="el" href="group__uni__gpio__def.html#ggab98b40805939a8489960247300b6043aaaa947ad568e20e520f5beabf61325cd6">GPIO_NUM_B0</a>, 
+<a class="el" href="group__uni__gpio__def.html#ggab98b40805939a8489960247300b6043aa3d0996dbb14d6bfe3afc752634cfecc2">GPIO_NUM_B1</a>, 
+<a class="el" href="group__uni__gpio__def.html#ggab98b40805939a8489960247300b6043aa57fec5a50c9a3d08b329ce4f3366587d">GPIO_NUM_B2</a>, 
+<a class="el" href="group__uni__gpio__def.html#ggab98b40805939a8489960247300b6043aa632acb792707a046b34c0fd2016d2c46">GPIO_NUM_B3</a>, 
+<br />
+&#160;&#160;<a class="el" href="group__uni__gpio__def.html#ggab98b40805939a8489960247300b6043aa75c1fa6f4193ff8240f648cf0fabd885">GPIO_NUM_B6</a>, 
+<a class="el" href="group__uni__gpio__def.html#ggab98b40805939a8489960247300b6043aa4ca8f96fa59d77a4ca73c70d4cc8408c">GPIO_NUM_B7</a>, 
+<a class="el" href="group__uni__gpio__def.html#ggab98b40805939a8489960247300b6043aafbb52339495ba31244a753cedde4ddcc">GPIO_NUM_B8</a>, 
+<b>GPIO_NUM_MAX</b>
+<br />
+ }</td></tr>
+<tr class="memdesc:gab98b40805939a8489960247300b6043a"><td class="mdescLeft">&#160;</td><td class="mdescRight">GPIO号  <a href="group__uni__gpio__def.html#gab98b40805939a8489960247300b6043a">更多...</a><br /></td></tr>
+<tr class="separator:gab98b40805939a8489960247300b6043a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga201df5e2845212d28c89e2cf3fdaa642"><td class="memItemLeft" align="right" valign="top"><a id="ga201df5e2845212d28c89e2cf3fdaa642"></a>enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__uni__gpio__def.html#ga201df5e2845212d28c89e2cf3fdaa642">GPIO_MODE</a> { <br />
+&#160;&#160;<b>GPIO_MODE_IN</b> = 0, 
+<b>GPIO_MODE_OUT</b>, 
+<b>GPIO_MODE_ADC</b>, 
+<b>GPIO_MODE_PWM</b>, 
+<br />
+&#160;&#160;<b>GPIO_MODE_UART</b>, 
+<b>GPIO_MODE_I2C</b>, 
+<b>GPIO_MODE_SPI</b>, 
+<b>GPIO_MODE_MAX</b>
+<br />
+ }</td></tr>
+<tr class="memdesc:ga201df5e2845212d28c89e2cf3fdaa642"><td class="mdescLeft">&#160;</td><td class="mdescRight">GPIO模式 <br /></td></tr>
+<tr class="separator:ga201df5e2845212d28c89e2cf3fdaa642"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga20b0a645d2008266af0f9aefc7a745ae"><td class="memItemLeft" align="right" valign="top"><a id="ga20b0a645d2008266af0f9aefc7a745ae"></a>enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__uni__gpio__def.html#ga20b0a645d2008266af0f9aefc7a745ae">GPIO_PULL_MODE</a> { <b>GPIO_PULL_UP</b>, 
+<b>GPIO_PULL_DOWN</b>, 
+<b>GPIO_PULL_UP_DOWN</b>
+ }</td></tr>
+<tr class="memdesc:ga20b0a645d2008266af0f9aefc7a745ae"><td class="mdescLeft">&#160;</td><td class="mdescRight">GPIO PU/PD模式选择 <br /></td></tr>
+<tr class="separator:ga20b0a645d2008266af0f9aefc7a745ae"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga6f9e27f786736a857f19c93ab7f7ebba"><td class="memItemLeft" align="right" valign="top"><a id="ga6f9e27f786736a857f19c93ab7f7ebba"></a>enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__uni__gpio__def.html#ga6f9e27f786736a857f19c93ab7f7ebba">GPIO_INT_TYPE</a> { <b>GPIO_INT_NEG_EDGE</b>, 
+<b>GPIO_INT_POS_EDGE</b>, 
+<b>GPIO_INT_BOTH_EDGE</b>
+ }</td></tr>
+<tr class="memdesc:ga6f9e27f786736a857f19c93ab7f7ebba"><td class="mdescLeft">&#160;</td><td class="mdescRight">GPIO 中断方式选择 <br /></td></tr>
+<tr class="separator:ga6f9e27f786736a857f19c93ab7f7ebba"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table>
+<a name="details" id="details"></a><h2 class="groupheader">详细描述</h2>
+<h2 class="groupheader">类型定义说明</h2>
+<a id="gac732f5445a1e94252c37f79061db47b6"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#gac732f5445a1e94252c37f79061db47b6">&#9670;&nbsp;</a></span>_gpio_interrupt_cb</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">typedef void(* _gpio_interrupt_cb) (<a class="el" href="group__uni__gpio__def.html#gab98b40805939a8489960247300b6043a">GPIO_NUMBER</a> num, uni_bool is_high)</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<dl class="params"><dt>参数</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">num</td><td>中断io号 </td></tr>
+    <tr><td class="paramname">is_high</td><td>是否高电平 </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<h2 class="groupheader">枚举类型说明</h2>
+<a id="gab98b40805939a8489960247300b6043a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#gab98b40805939a8489960247300b6043a">&#9670;&nbsp;</a></span>GPIO_NUMBER</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">enum <a class="el" href="group__uni__gpio__def.html#gab98b40805939a8489960247300b6043a">GPIO_NUMBER</a></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<table class="fieldtable">
+<tr><th colspan="2">枚举值</th></tr><tr><td class="fieldname"><a id="ggab98b40805939a8489960247300b6043aadd7d6d0160c90c2af8a719759e5ae4e5"></a>GPIO_NUM_A25&#160;</td><td class="fielddoc"><p>可用于SPI-MISO / ADC / DMIC-DATA </p>
+</td></tr>
+<tr><td class="fieldname"><a id="ggab98b40805939a8489960247300b6043aa47caba26ac21e763450d1abbaab0fb27"></a>GPIO_NUM_A26&#160;</td><td class="fielddoc"><p>可用于SPI-CLK / ADC / DMIC-CLK </p>
+</td></tr>
+<tr><td class="fieldname"><a id="ggab98b40805939a8489960247300b6043aa1d3dcb39f62859e227523223eb3bab65"></a>GPIO_NUM_A27&#160;</td><td class="fielddoc"><p>可用于SPI-MOSI / PWM / ADC </p>
+</td></tr>
+<tr><td class="fieldname"><a id="ggab98b40805939a8489960247300b6043aa58afb74cd62e1f773496ce8152953d37"></a>GPIO_NUM_A28&#160;</td><td class="fielddoc"><p>已占用，PA使能控制（喇叭功放静音） </p>
+</td></tr>
+<tr><td class="fieldname"><a id="ggab98b40805939a8489960247300b6043aaaa947ad568e20e520f5beabf61325cd6"></a>GPIO_NUM_B0&#160;</td><td class="fielddoc"><p>已占用，SW-CLK（烧录器接口） </p>
+</td></tr>
+<tr><td class="fieldname"><a id="ggab98b40805939a8489960247300b6043aa3d0996dbb14d6bfe3afc752634cfecc2"></a>GPIO_NUM_B1&#160;</td><td class="fielddoc"><p>已占用，SW-DATA（烧录器接口） </p>
+</td></tr>
+<tr><td class="fieldname"><a id="ggab98b40805939a8489960247300b6043aa57fec5a50c9a3d08b329ce4f3366587d"></a>GPIO_NUM_B2&#160;</td><td class="fielddoc"><p>可用于UART1-TX / PWM / I2C-SCL </p>
+</td></tr>
+<tr><td class="fieldname"><a id="ggab98b40805939a8489960247300b6043aa632acb792707a046b34c0fd2016d2c46"></a>GPIO_NUM_B3&#160;</td><td class="fielddoc"><p>可用于UART1-RX / PWM / I2C-SDA </p>
+</td></tr>
+<tr><td class="fieldname"><a id="ggab98b40805939a8489960247300b6043aa75c1fa6f4193ff8240f648cf0fabd885"></a>GPIO_NUM_B6&#160;</td><td class="fielddoc"><p>UART1-RX（外设串口通信接收脚），不使能UART时可用做GPIO </p>
+</td></tr>
+<tr><td class="fieldname"><a id="ggab98b40805939a8489960247300b6043aa4ca8f96fa59d77a4ca73c70d4cc8408c"></a>GPIO_NUM_B7&#160;</td><td class="fielddoc"><p>UART1-TX（外设串口通信发送脚），不使能UART是可用做GPIO </p>
+</td></tr>
+<tr><td class="fieldname"><a id="ggab98b40805939a8489960247300b6043aafbb52339495ba31244a753cedde4ddcc"></a>GPIO_NUM_B8&#160;</td><td class="fielddoc"><p>已占用，虚拟Software UART-TX（Log输出引脚，波特率115200） </p>
+</td></tr>
+</table>
+
+</div>
+</div>
+</div><!-- contents -->
+</body>
+</html>

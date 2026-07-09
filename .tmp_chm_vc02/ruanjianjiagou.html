@@ -1,0 +1,708 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "https://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=9"/>
+<meta name="generator" content="Doxygen 1.8.18"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>蜂鸟M离线方案开发指导手册: 6、软件架构</title>
+<link href="tabs.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="jquery.js"></script>
+<script type="text/javascript" src="dynsections.js"></script>
+<link href="doxygen.css" rel="stylesheet" type="text/css" />
+</head>
+<body>
+<div id="top"><!-- do not remove this div, it is closed by doxygen! -->
+<div id="titlearea">
+<table cellspacing="0" cellpadding="0">
+ <tbody>
+ <tr style="height: 56px;">
+  <td id="projectalign" style="padding-left: 0.5em;">
+   <div id="projectname">蜂鸟M离线方案开发指导手册
+   &#160;<span id="projectnumber">v1.0.4</span>
+   </div>
+  </td>
+ </tr>
+ </tbody>
+</table>
+</div>
+<!-- end header part -->
+<!-- 制作者 Doxygen 1.8.18 -->
+<script type="text/javascript" src="menudata.js"></script>
+<script type="text/javascript" src="menu.js"></script>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:cf05388f2679ee054f2beb29a391d25f4e673ac3&amp;dn=gpl-2.0.txt GPL-v2 */
+$(function() {
+  initMenu('',false,false,'search.php','搜索');
+});
+/* @license-end */</script>
+<div id="main-nav"></div>
+</div><!-- top -->
+<div class="PageDoc"><div class="header">
+  <div class="headertitle">
+<div class="title">6、软件架构 </div>  </div>
+</div><!--header-->
+<div class="contents">
+<div class="textblock"><html>
+
+<head>
+<meta http-equiv=Content-Type content="text/html; charset=utf-8">
+<meta name=Generator content="Microsoft Word 15 (filtered)">
+<style>
+<!--
+ /* Font Definitions */
+ @font-face
+	{font-family:Wingdings;
+	panose-1:5 0 0 0 0 0 0 0 0 0;}
+@font-face
+	{font-family:宋体;
+	panose-1:2 1 6 0 3 1 1 1 1 1;}
+@font-face
+	{font-family:"Cambria Math";
+	panose-1:2 4 5 3 5 4 6 3 2 4;}
+@font-face
+	{font-family:等线;
+	panose-1:2 1 6 0 3 1 1 1 1 1;}
+@font-face
+	{font-family:"\@等线";
+	panose-1:2 1 6 0 3 1 1 1 1 1;}
+@font-face
+	{font-family:"\@宋体";
+	panose-1:2 1 6 0 3 1 1 1 1 1;}
+ /* Style Definitions */
+ p.MsoNormal, li.MsoNormal, div.MsoNormal
+	{margin:0cm;
+	margin-bottom:.0001pt;
+	text-align:justify;
+	text-justify:inter-ideograph;
+	font-size:10.5pt;
+	font-family:等线;}
+h2
+	{mso-style-link:"标题 2 字符";
+	margin-top:13.0pt;
+	margin-right:0cm;
+	margin-bottom:13.0pt;
+	margin-left:0cm;
+	text-align:justify;
+	text-justify:inter-ideograph;
+	line-height:173%;
+	page-break-after:avoid;
+	font-size:16.0pt;
+	font-family:"等线 Light";}
+h3
+	{mso-style-link:"标题 3 字符";
+	margin-top:13.0pt;
+	margin-right:0cm;
+	margin-bottom:13.0pt;
+	margin-left:0cm;
+	text-align:justify;
+	text-justify:inter-ideograph;
+	line-height:173%;
+	page-break-after:avoid;
+	font-size:15.0pt;
+	font-family:等线;}
+p.MsoHeader, li.MsoHeader, div.MsoHeader
+	{mso-style-link:"页眉 字符";
+	margin:0cm;
+	margin-bottom:.0001pt;
+	text-align:center;
+	layout-grid-mode:char;
+	border:none;
+	padding:0cm;
+	font-size:9.0pt;
+	font-family:等线;}
+p.MsoFooter, li.MsoFooter, div.MsoFooter
+	{mso-style-link:"页脚 字符";
+	margin:0cm;
+	margin-bottom:.0001pt;
+	layout-grid-mode:char;
+	font-size:9.0pt;
+	font-family:等线;}
+p.MsoListParagraph, li.MsoListParagraph, div.MsoListParagraph
+	{margin:0cm;
+	margin-bottom:.0001pt;
+	text-align:justify;
+	text-justify:inter-ideograph;
+	text-indent:21.0pt;
+	font-size:10.5pt;
+	font-family:等线;}
+span.3
+	{mso-style-name:"标题 3 字符";
+	mso-style-link:"标题 3";
+	font-weight:bold;}
+span.a
+	{mso-style-name:"页眉 字符";
+	mso-style-link:页眉;}
+span.a0
+	{mso-style-name:"页脚 字符";
+	mso-style-link:页脚;}
+span.2
+	{mso-style-name:"标题 2 字符";
+	mso-style-link:"标题 2";
+	font-family:"等线 Light";
+	font-weight:bold;}
+.MsoChpDefault
+	{font-size:10.0pt;
+	font-family:等线;}
+ /* Page Definitions */
+ @page WordSection1
+	{size:595.3pt 841.9pt;
+	margin:72.0pt 90.0pt 72.0pt 90.0pt;
+	layout-grid:15.6pt;}
+div.WordSection1
+	{page:WordSection1;}
+ /* List Definitions */
+ ol
+	{margin-bottom:0cm;}
+ul
+	{margin-bottom:0cm;}
+-->
+</style>
+
+</head>
+
+<body lang=EN-US style='text-justify-trim:punctuation'>
+
+<div class=WordSection1 style='layout-grid:15.6pt'>
+
+<h2><a name="_Toc35600598"><span style='font-size:12.0pt;line-height:173%;
+font-family:"Times New Roman",serif'>1.</span></a><span lang=ZH-CN
+style='font-size:12.0pt;line-height:173%;font-family:等线'>软件架构</span></h2>
+
+<p class=MsoNormal><span style='font-size:9.0pt;font-family:"Times New Roman",serif'>         </span><span
+lang=ZH-CN style='font-size:9.0pt'>蜂鸟</span><span style='font-size:9.0pt;
+font-family:"Times New Roman",serif'>M</span><span lang=ZH-CN style='font-size:
+9.0pt'>芯片源码框架采用分层设计，各个层次完成特定的功能封装，最终为二次开发提供</span><span style='font-size:9.0pt;
+font-family:"Times New Roman",serif'>user</span><span lang=ZH-CN
+style='font-size:9.0pt'>层功能接口，基本框架结构如下图所示：</span></p>
+
+<p class=MsoNormal align=center style='text-align:center'><span
+style='font-size:9.0pt;font-family:"Times New Roman",serif'><img width=346
+height=431 id="图片 9" src="rjjg6_image001.png"></span></p>
+
+<p class=MsoNormal><span style='font-size:9.0pt;font-family:"Times New Roman",serif'>         </span><span
+lang=ZH-CN style='font-size:9.0pt'>各个层次功能描述如下：</span></p>
+
+<p class=MsoListParagraph style='margin-left:42.0pt;text-indent:-21.0pt'><span
+style='font-size:9.0pt;font-family:Wingdings'>ü<span style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;
+</span></span><b><span style='font-size:9.0pt;font-family:"Times New Roman",serif'>HAL</span></b><b><span
+lang=ZH-CN style='font-size:9.0pt'>层</span></b><span lang=ZH-CN
+style='font-size:9.0pt'>：提供包括线程调度、内存管理、信号量系统级统一接口，以及</span><span
+style='font-size:9.0pt;font-family:"Times New Roman",serif'>Audio</span><span
+lang=ZH-CN style='font-size:9.0pt'>、</span><span style='font-size:9.0pt;
+font-family:"Times New Roman",serif'>Record</span><span lang=ZH-CN
+style='font-size:9.0pt'>、</span><span style='font-size:9.0pt;font-family:"Times New Roman",serif'>GPIO</span><span
+lang=ZH-CN style='font-size:9.0pt'>、</span><span style='font-size:9.0pt;
+font-family:"Times New Roman",serif'>Timer</span><span lang=ZH-CN
+style='font-size:9.0pt'>、</span><span style='font-size:9.0pt;font-family:"Times New Roman",serif'>I2C</span><span
+lang=ZH-CN style='font-size:9.0pt'>等外设驱动统一接口；</span></p>
+
+<p class=MsoListParagraph style='margin-left:42.0pt;text-indent:-21.0pt'><span
+style='font-size:9.0pt;font-family:Wingdings'>ü<span style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;
+</span></span><b><span style='font-size:9.0pt;font-family:"Times New Roman",serif'>UTILS</span></b><b><span
+lang=ZH-CN style='font-size:9.0pt'>层</span></b><span lang=ZH-CN
+style='font-size:9.0pt'>：提供常用的工具集代码，包括如：事件队列、</span><span style='font-size:
+9.0pt;font-family:"Times New Roman",serif'>Ring Buffer</span><span lang=ZH-CN
+style='font-size:9.0pt'>、</span><span style='font-size:9.0pt;font-family:"Times New Roman",serif'>List</span><span
+lang=ZH-CN style='font-size:9.0pt'>、状态机、</span><span style='font-size:9.0pt;
+font-family:"Times New Roman",serif'>Hash</span><span lang=ZH-CN
+style='font-size:9.0pt'>运算、</span><span style='font-size:9.0pt;font-family:
+"Times New Roman",serif'>Json</span><span lang=ZH-CN style='font-size:9.0pt'>解析等，供</span><span
+style='font-size:9.0pt;font-family:"Times New Roman",serif'>SDK</span><span
+lang=ZH-CN style='font-size:9.0pt'>及应用层使用；</span></p>
+
+<p class=MsoListParagraph style='margin-left:42.0pt;text-indent:-21.0pt'><span
+style='font-size:9.0pt;font-family:Wingdings'>ü<span style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;
+</span></span><b><span style='font-size:9.0pt;font-family:"Times New Roman",serif'>SDK</span></b><b><span
+lang=ZH-CN style='font-size:9.0pt'>层：</span></b><span lang=ZH-CN
+style='font-size:9.0pt'>提供核心功能接口，如：</span><span style='font-size:9.0pt;
+font-family:"Times New Roman",serif'>Audio Play</span><span lang=ZH-CN
+style='font-size:9.0pt'>、</span><span style='font-size:9.0pt;font-family:"Times New Roman",serif'>MP3
+</span><span lang=ZH-CN style='font-size:9.0pt'>解码、语音识别等；</span></p>
+
+<p class=MsoListParagraph style='margin-left:42.0pt;text-indent:-21.0pt'><span
+style='font-size:9.0pt;font-family:Wingdings'>ü<span style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;
+</span></span><b><span style='font-size:9.0pt;font-family:"Times New Roman",serif'>APP</span></b><b><span
+lang=ZH-CN style='font-size:9.0pt'>层：</span></b><span lang=ZH-CN
+style='font-size:9.0pt'>语音识别基础业务功能实现，其核心由一个事件调度和状态机构成，将语音识别业务抽象成</span><span
+style='font-size:9.0pt;font-family:"Times New Roman",serif'>wakeup</span><span
+lang=ZH-CN style='font-size:9.0pt'>、</span><span style='font-size:9.0pt;
+font-family:"Times New Roman",serif'>settings</span><span lang=ZH-CN
+style='font-size:9.0pt'>、</span><span style='font-size:9.0pt;font-family:"Times New Roman",serif'>music</span><span
+lang=ZH-CN style='font-size:9.0pt'>、</span><span style='font-size:9.0pt;
+font-family:"Times New Roman",serif'>watchdog</span><span lang=ZH-CN
+style='font-size:9.0pt'>等不同的</span><span style='font-size:9.0pt;font-family:
+"Times New Roman",serif'>session</span><span lang=ZH-CN style='font-size:9.0pt'>，每个</span><span
+style='font-size:9.0pt;font-family:"Times New Roman",serif'>session</span><span
+lang=ZH-CN style='font-size:9.0pt'>维护一个状态机，根据</span><span style='font-size:
+9.0pt;font-family:"Times New Roman",serif'>SDK</span><span lang=ZH-CN
+style='font-size:9.0pt'>层的识别结果事件驱动状态机运行，最终实现语音识别、播报业务逻辑；</span></p>
+
+<p class=MsoListParagraph style='margin-left:42.0pt;text-indent:-21.0pt'><span
+style='font-size:9.0pt;font-family:Wingdings'>ü<span style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;
+</span></span><b><span style='font-size:9.0pt;font-family:"Times New Roman",serif'>USER</span></b><b><span
+lang=ZH-CN style='font-size:9.0pt'>层：</span></b><span lang=ZH-CN
+style='font-size:9.0pt'>提供用户二次开发接口，包括语音识别、音频播放的控制接口，以及</span><span
+style='font-size:9.0pt;font-family:"Times New Roman",serif'>GPIO</span><span
+lang=ZH-CN style='font-size:9.0pt'>、</span><span style='font-size:9.0pt;
+font-family:"Times New Roman",serif'>UART</span><span lang=ZH-CN
+style='font-size:9.0pt'>、</span><span style='font-size:9.0pt;font-family:"Times New Roman",serif'>Flash</span><span
+lang=ZH-CN style='font-size:9.0pt'>、</span><span style='font-size:9.0pt;
+font-family:"Times New Roman",serif'>I2C</span><span lang=ZH-CN
+style='font-size:9.0pt'>、</span><span style='font-size:9.0pt;font-family:"Times New Roman",serif'>Timer</span><span
+lang=ZH-CN style='font-size:9.0pt'>等常用的外设驱动接口，还提供了</span><span
+style='font-size:9.0pt;font-family:"Times New Roman",serif'>UCP</span><span
+lang=ZH-CN style='font-size:9.0pt'>通用串口协议。</span></p>
+
+<h2><span style='font-size:12.0pt;line-height:173%;font-family:"Times New Roman",serif'>2.</span><span
+lang=ZH-CN style='font-size:12.0pt;line-height:173%;font-family:等线'>源码目录结构</span></h2>
+
+<p class=MsoNormal><span style='font-size:9.0pt;font-family:"Times New Roman",serif'>         </span><span
+lang=ZH-CN style='font-size:9.0pt'>源码各个文件功能如下所示：</span></p>
+
+<p class=MsoNormal><span style='font-size:9.0pt;font-family:"Times New Roman",serif'>         </span></p>
+
+<p class=MsoNormal><span style='font-size:8.0pt;font-family:"Times New Roman",serif'>├──
+build --------------------------------------&gt; Makefile</span><span
+lang=ZH-CN style='font-size:8.0pt'>系统</span></p>
+
+<p class=MsoNormal><span style='font-size:8.0pt;font-family:"Times New Roman",serif'>├──
+build.sh -----------------------------------&gt; </span><span lang=ZH-CN
+style='font-size:8.0pt'>编译脚本</span></p>
+
+<p class=MsoNormal><span style='font-size:8.0pt;font-family:"Times New Roman",serif'>├──
+ci.yml -------------------------------------&gt; </span><span lang=ZH-CN
+style='font-size:8.0pt'>自动化平台构建脚本，对用户无用</span></p>
+
+<p class=MsoNormal><span style='font-size:8.0pt;font-family:"Times New Roman",serif'>├──
+include ------------------------------------&gt; </span><span lang=ZH-CN
+style='font-size:8.0pt'>语音识别引擎及其他自动化生成外部头文件，不可修改</span></p>
+
+<p class=MsoNormal><span style='font-size:8.0pt;font-family:"Times New Roman",serif'>├──
+lib ----------------------------------------&gt; </span><span lang=ZH-CN
+style='font-size:8.0pt'>语音识别引擎及其他底层驱动库</span></p>
+
+<p class=MsoNormal><span style='font-size:8.0pt;font-family:"Times New Roman",serif'>├──
+middleware ---------------------------------&gt; RTOS</span><span lang=ZH-CN
+style='font-size:8.0pt'>系统</span></p>
+
+<p class=MsoNormal><span style='font-size:8.0pt;font-family:"Times New Roman",serif'>├──
+nds32-ae210p.ld ----------------------------&gt; </span><span lang=ZH-CN
+style='font-size:8.0pt'>链接信息脚本，不可修改</span></p>
+
+<p class=MsoNormal><span style='font-size:8.0pt;font-family:"Times New Roman",serif'>├──
+nds32-ae210p.sag ---------------------------&gt; </span><span lang=ZH-CN
+style='font-size:8.0pt'>内存段分布配置，不可修改</span></p>
+
+<p class=MsoNormal><span style='font-size:8.0pt;font-family:"Times New Roman",serif'>├──
+readme.txt ---------------------------------&gt; </span><span lang=ZH-CN
+style='font-size:8.0pt'>发布版本信息</span></p>
+
+<p class=MsoNormal><span style='font-size:8.0pt;font-family:"Times New Roman",serif'>├──
+src ----------------------------------------&gt; </span><span lang=ZH-CN
+style='font-size:8.0pt'>架构代码文件夹</span></p>
+
+<p class=MsoNormal><span style='font-size:8.0pt;font-family:"Times New Roman",serif'>│&nbsp;&nbsp;
+├── app ------------------------------------&gt; APP</span><span lang=ZH-CN
+style='font-size:8.0pt'>层代码文件夹</span></p>
+
+<p class=MsoNormal><span style='font-size:8.0pt;font-family:"Times New Roman",serif'>│&nbsp;&nbsp;
+│&nbsp;&nbsp; ├── inc</span></p>
+
+<p class=MsoNormal><span style='font-size:8.0pt;font-family:"Times New Roman",serif'>│&nbsp;&nbsp;
+│&nbsp;&nbsp; └── src</span></p>
+
+<p class=MsoNormal><span style='font-size:8.0pt;font-family:"Times New Roman",serif'>│&nbsp;&nbsp;
+│&nbsp;&nbsp;     ├── main.c -------------------------&gt; </span><span
+lang=ZH-CN style='font-size:8.0pt'>系统启动主程序，</span><span style='font-size:8.0pt;
+font-family:"Times New Roman",serif'>main</span><span lang=ZH-CN
+style='font-size:8.0pt'>函数入口</span></p>
+
+<p class=MsoNormal><span style='font-size:8.0pt;font-family:"Times New Roman",serif'>│&nbsp;&nbsp;
+│&nbsp;&nbsp;     ├── sessions -----------------------&gt; sessions</span><span
+lang=ZH-CN style='font-size:8.0pt'>代码文件夹</span></p>
+
+<p class=MsoNormal><span style='font-size:8.0pt;font-family:"Times New Roman",serif'>│&nbsp;&nbsp;
+│&nbsp;&nbsp;     │&nbsp;&nbsp; ├── uni_setting_session.c ------&gt; setting</span><span
+lang=ZH-CN style='font-size:8.0pt'>类事件处理</span><span style='font-size:8.0pt;
+font-family:"Times New Roman",serif'>session</span></p>
+
+<p class=MsoNormal><span style='font-size:8.0pt;font-family:"Times New Roman",serif'>│&nbsp;&nbsp;
+│&nbsp;&nbsp;     │&nbsp;&nbsp; ├── uni_wakeup_session.c -------&gt; wakeup</span><span
+lang=ZH-CN style='font-size:8.0pt'>类事件处理</span><span style='font-size:8.0pt;
+font-family:"Times New Roman",serif'>session</span></p>
+
+<p class=MsoNormal><span style='font-size:8.0pt;font-family:"Times New Roman",serif'>│&nbsp;&nbsp;
+│&nbsp;&nbsp;     │&nbsp;&nbsp; └── uni_watchdog_session.c -----&gt; watchdog</span><span
+lang=ZH-CN style='font-size:8.0pt'>事件处理</span><span style='font-size:8.0pt;
+font-family:"Times New Roman",serif'>session</span></p>
+
+<p class=MsoNormal><span style='font-size:8.0pt;font-family:"Times New Roman",serif'>│&nbsp;&nbsp;
+│&nbsp;&nbsp;     ├── uni_record_save.c --------------&gt; </span><span
+lang=ZH-CN style='font-size:8.0pt'>录音保存功能实现，蜂鸟</span><span style='font-size:
+8.0pt;font-family:"Times New Roman",serif'>M</span><span lang=ZH-CN
+style='font-size:8.0pt'>暂不支持</span></p>
+
+<p class=MsoNormal><span style='font-size:8.0pt;font-family:"Times New Roman",serif'>│&nbsp;&nbsp;
+│&nbsp;&nbsp;     ├── uni_session.c ------------------&gt; </span><span
+lang=ZH-CN style='font-size:8.0pt'>创建释放</span><span style='font-size:8.0pt;
+font-family:"Times New Roman",serif'>session</span><span lang=ZH-CN
+style='font-size:8.0pt'>对象</span></p>
+
+<p class=MsoNormal><span style='font-size:8.0pt;font-family:"Times New Roman",serif'>│&nbsp;&nbsp;
+│&nbsp;&nbsp;     ├── uni_session_manage.c -----------&gt; </span><span
+lang=ZH-CN style='font-size:8.0pt'>管理</span><span style='font-size:8.0pt;
+font-family:"Times New Roman",serif'>session</span><span lang=ZH-CN
+style='font-size:8.0pt'>注册</span></p>
+
+<p class=MsoNormal><span style='font-size:8.0pt;font-family:"Times New Roman",serif'>│&nbsp;&nbsp;
+│&nbsp;&nbsp;     └── uni_user_meeting.c -------------&gt; APP</span><span
+lang=ZH-CN style='font-size:8.0pt'>层与</span><span style='font-size:8.0pt;
+font-family:"Times New Roman",serif'>USER</span><span lang=ZH-CN
+style='font-size:8.0pt'>层交互接口</span></p>
+
+<p class=MsoNormal><span style='font-size:8.0pt;font-family:"Times New Roman",serif'>│&nbsp;&nbsp;
+├── hal ------------------------------------&gt; HAL</span><span lang=ZH-CN
+style='font-size:8.0pt'>层实现代码</span></p>
+
+<p class=MsoNormal><span style='font-size:8.0pt;font-family:"Times New Roman",serif'>│&nbsp;&nbsp;
+├── sdk ------------------------------------&gt; SDK</span><span lang=ZH-CN
+style='font-size:8.0pt'>层实现代码</span></p>
+
+<p class=MsoNormal><span style='font-size:8.0pt;font-family:"Times New Roman",serif'>│&nbsp;&nbsp;
+│&nbsp;&nbsp; ├── audio ------------------------------&gt; Audio</span><span
+lang=ZH-CN style='font-size:8.0pt'>播放器</span></p>
+
+<p class=MsoNormal><span style='font-size:8.0pt;font-family:"Times New Roman",serif'>│&nbsp;&nbsp;
+│&nbsp;&nbsp; ├── idle_detect ------------------------&gt; </span><span
+lang=ZH-CN style='font-size:8.0pt'>设备空闲计时管理</span></p>
+
+<p class=MsoNormal><span style='font-size:8.0pt;font-family:"Times New Roman",serif'>│&nbsp;&nbsp;
+│&nbsp;&nbsp; ├── player -----------------------------&gt; MP3</span><span
+lang=ZH-CN style='font-size:8.0pt'>解码器</span></p>
+
+<p class=MsoNormal><span style='font-size:8.0pt;font-family:"Times New Roman",serif'>│&nbsp;&nbsp;
+│&nbsp;&nbsp; └── vui --------------------------------&gt; </span><span
+lang=ZH-CN style='font-size:8.0pt'>语音识别功能</span></p>
+
+<p class=MsoNormal><span style='font-size:8.0pt;font-family:"Times New Roman",serif'>│&nbsp;&nbsp;
+└── utils ----------------------------------&gt; UTILS</span><span lang=ZH-CN
+style='font-size:8.0pt'>层实现代码</span></p>
+
+<p class=MsoNormal><span style='font-size:8.0pt;font-family:"Times New Roman",serif'>│&nbsp;&nbsp;    
+├── arpt -------------------------------&gt; ARPT</span><span lang=ZH-CN
+style='font-size:8.0pt'>自动化测试工具</span></p>
+
+<p class=MsoNormal><span style='font-size:8.0pt;font-family:"Times New Roman",serif'>│&nbsp;&nbsp;    
+├── auto_string ------------------------&gt; </span><span lang=ZH-CN
+style='font-size:8.0pt'>变长字符串</span></p>
+
+<p class=MsoNormal><span style='font-size:8.0pt;font-family:"Times New Roman",serif'>│&nbsp;&nbsp;    
+├── bitmap -----------------------------&gt; </span><span lang=ZH-CN
+style='font-size:8.0pt'>二值状态变量集合</span></p>
+
+<p class=MsoNormal><span style='font-size:8.0pt;font-family:"Times New Roman",serif'>│&nbsp;&nbsp;    
+├── black_board ------------------------&gt; </span><span lang=ZH-CN
+style='font-size:8.0pt'>系统状态管理</span></p>
+
+<p class=MsoNormal><span style='font-size:8.0pt;font-family:"Times New Roman",serif'>│&nbsp;&nbsp;    
+├── cJSON ------------------------------&gt; JSON</span><span lang=ZH-CN
+style='font-size:8.0pt'>格式解析</span></p>
+
+<p class=MsoNormal><span style='font-size:8.0pt;font-family:"Times New Roman",serif'>│&nbsp;&nbsp;    
+├── config -----------------------------&gt; config.bin</span><span lang=ZH-CN
+style='font-size:8.0pt'>文件内容解析</span></p>
+
+<p class=MsoNormal><span style='font-size:8.0pt;font-family:"Times New Roman",serif'>│&nbsp;&nbsp;    
+├── crc16 ------------------------------&gt; CRC16</span><span lang=ZH-CN
+style='font-size:8.0pt'>算法</span></p>
+
+<p class=MsoNormal><span style='font-size:8.0pt;font-family:"Times New Roman",serif'>│&nbsp;&nbsp;    
+├── data_buf ---------------------------&gt; </span><span lang=ZH-CN
+style='font-size:8.0pt'>一个不用互斥锁管理的</span><span style='font-size:8.0pt;
+font-family:"Times New Roman",serif'>Ring Buffer</span></p>
+
+<p class=MsoNormal><span style='font-size:8.0pt;font-family:"Times New Roman",serif'>│&nbsp;&nbsp;    
+├── event ------------------------------&gt; </span><span lang=ZH-CN
+style='font-size:8.0pt'>创建事件对象</span></p>
+
+<p class=MsoNormal><span style='font-size:8.0pt;font-family:"Times New Roman",serif'>│&nbsp;&nbsp;    
+├── event_list -------------------------&gt; </span><span lang=ZH-CN
+style='font-size:8.0pt'>事件队列</span></p>
+
+<p class=MsoNormal><span style='font-size:8.0pt;font-family:"Times New Roman",serif'>│&nbsp;&nbsp;    
+├── event_route ------------------------&gt; </span><span lang=ZH-CN
+style='font-size:8.0pt'>事件分发</span></p>
+
+<p class=MsoNormal><span style='font-size:8.0pt;font-family:"Times New Roman",serif'>│&nbsp;&nbsp;    
+├── float2string -----------------------&gt; </span><span lang=ZH-CN
+style='font-size:8.0pt'>浮点转字符串，用于无</span><span style='font-size:8.0pt;
+font-family:"Times New Roman",serif'>float</span><span lang=ZH-CN
+style='font-size:8.0pt'>类型打印能力的</span><span style='font-size:8.0pt;font-family:
+"Times New Roman",serif'>printf</span></p>
+
+<p class=MsoNormal><span style='font-size:8.0pt;font-family:"Times New Roman",serif'>│&nbsp;&nbsp;    
+├── fsm --------------------------------&gt; </span><span lang=ZH-CN
+style='font-size:8.0pt'>状态机</span></p>
+
+<p class=MsoNormal><span style='font-size:8.0pt;font-family:"Times New Roman",serif'>│&nbsp;&nbsp;    
+├── hash -------------------------------&gt; </span><span lang=ZH-CN
+style='font-size:8.0pt'>一个简易</span><span style='font-size:8.0pt;font-family:
+"Times New Roman",serif'>HASH</span><span lang=ZH-CN style='font-size:8.0pt'>算法</span></p>
+
+<p class=MsoNormal><span style='font-size:8.0pt;font-family:"Times New Roman",serif'>│&nbsp;&nbsp;    
+├── interruptable_sleep ----------------&gt; </span><span lang=ZH-CN
+style='font-size:8.0pt'>非阻塞的</span><span style='font-size:8.0pt;font-family:
+"Times New Roman",serif'>sleep</span><span lang=ZH-CN style='font-size:8.0pt'>方式</span></p>
+
+<p class=MsoNormal><span style='font-size:8.0pt;font-family:"Times New Roman",serif'>│&nbsp;&nbsp;    
+├── list -------------------------------&gt; </span><span lang=ZH-CN
+style='font-size:8.0pt'>通用链表</span></p>
+
+<p class=MsoNormal><span style='font-size:8.0pt;font-family:"Times New Roman",serif'>│&nbsp;&nbsp;    
+├── log --------------------------------&gt; </span><span lang=ZH-CN
+style='font-size:8.0pt'>带等级控制的</span><span style='font-size:8.0pt;font-family:
+"Times New Roman",serif'>LOG</span><span lang=ZH-CN style='font-size:8.0pt'>输出接口</span></p>
+
+<p class=MsoNormal><span style='font-size:8.0pt;font-family:"Times New Roman",serif'>│&nbsp;&nbsp;    
+├── string -----------------------------&gt; </span><span lang=ZH-CN
+style='font-size:8.0pt'>一套简易的</span><span style='font-size:8.0pt;font-family:
+"Times New Roman",serif'>string</span><span lang=ZH-CN style='font-size:8.0pt'>操作接口</span></p>
+
+<p class=MsoNormal><span style='font-size:8.0pt;font-family:"Times New Roman",serif'>│&nbsp;&nbsp;    
+├── timer ------------------------------&gt; </span><span lang=ZH-CN
+style='font-size:8.0pt'>基于</span><span style='font-size:8.0pt;font-family:"Times New Roman",serif'>RTOS</span><span
+lang=ZH-CN style='font-size:8.0pt'>系统的</span><span style='font-size:8.0pt;
+font-family:"Times New Roman",serif'>Timer</span></p>
+
+<p class=MsoNormal><span style='font-size:8.0pt;font-family:"Times New Roman",serif'>│&nbsp;&nbsp;    
+└── uart -------------------------------&gt; </span><span lang=ZH-CN
+style='font-size:8.0pt'>通用的</span><span style='font-size:8.0pt;font-family:
+"Times New Roman",serif'>UART</span><span lang=ZH-CN style='font-size:8.0pt'>接口</span></p>
+
+<p class=MsoNormal><span style='font-size:8.0pt;font-family:"Times New Roman",serif'>├──
+startup ------------------------------------&gt; </span><span lang=ZH-CN
+style='font-size:8.0pt'>芯片启动代码，不可修改</span></p>
+
+<p class=MsoNormal><span style='font-size:8.0pt;font-family:"Times New Roman",serif'>├──
+tools --------------------------------------&gt; </span><span lang=ZH-CN
+style='font-size:8.0pt'>自动化构建工具</span></p>
+
+<p class=MsoNormal><span style='font-size:8.0pt;font-family:"Times New Roman",serif'>│&nbsp;&nbsp;
+└── scripts --------------------------------&gt; </span><span lang=ZH-CN
+style='font-size:8.0pt'>自动化构建脚本</span></p>
+
+<p class=MsoNormal><span style='font-size:8.0pt;font-family:"Times New Roman",serif'>│&nbsp;&nbsp;    
+├── aik_debug.json ---------------------&gt; Debug</span><span lang=ZH-CN
+style='font-size:8.0pt'>固件对应的</span><span style='font-size:8.0pt;font-family:
+"Times New Roman",serif'>AIK</span><span lang=ZH-CN style='font-size:8.0pt'>配置文件</span></p>
+
+<p class=MsoNormal><span style='font-size:8.0pt;font-family:"Times New Roman",serif'>│&nbsp;&nbsp;    
+├── aik_release.json -------------------&gt; Release</span><span lang=ZH-CN
+style='font-size:8.0pt'>固件对应的</span><span style='font-size:8.0pt;font-family:
+"Times New Roman",serif'>AIK</span><span lang=ZH-CN style='font-size:8.0pt'>配置文件</span></p>
+
+<p class=MsoNormal><span style='font-size:8.0pt;font-family:"Times New Roman",serif'>│&nbsp;&nbsp;    
+├── asrfix.dat -------------------------&gt; </span><span lang=ZH-CN
+style='font-size:8.0pt'>声学模型</span></p>
+
+<p class=MsoNormal><span style='font-size:8.0pt;font-family:"Times New Roman",serif'>│&nbsp;&nbsp;    
+├── cmd_reply_data.json ----------------&gt; UDP</span><span lang=ZH-CN
+style='font-size:8.0pt'>平台用户定制命令词和回复语信息</span></p>
+
+<p class=MsoNormal><span style='font-size:8.0pt;font-family:"Times New Roman",serif'>│&nbsp;&nbsp;    
+├── config_debug.bin -------------------&gt; Debug</span><span lang=ZH-CN
+style='font-size:8.0pt'>固件对应的应用配置文件</span></p>
+
+<p class=MsoNormal><span style='font-size:8.0pt;font-family:"Times New Roman",serif'>│&nbsp;&nbsp;    
+├── config_release.bin -----------------&gt; Release</span><span lang=ZH-CN
+style='font-size:8.0pt'>固件对应的应用配置文件</span></p>
+
+<p class=MsoNormal><span style='font-size:8.0pt;font-family:"Times New Roman",serif'>│&nbsp;&nbsp;    
+├── custom_config.json -----------------&gt; UDP</span><span lang=ZH-CN
+style='font-size:8.0pt'>平台用户定制系统配置信息</span></p>
+
+<p class=MsoNormal><span style='font-size:8.0pt;font-family:"Times New Roman",serif'>│&nbsp;&nbsp;    
+├── default_tones ----------------------&gt; </span><span lang=ZH-CN
+style='font-size:8.0pt'>默认保底音频文件文件夹</span></p>
+
+<p class=MsoNormal><span style='font-size:8.0pt;font-family:"Times New Roman",serif'>│&nbsp;&nbsp;    
+├── grammar.dat ------------------------&gt; </span><span lang=ZH-CN
+style='font-size:8.0pt'>语法模型</span></p>
+
+<p class=MsoNormal><span style='font-size:8.0pt;font-family:"Times New Roman",serif'>│&nbsp;&nbsp;    
+├── grammar_jsgf.zip -------------------&gt; </span><span lang=ZH-CN
+style='font-size:8.0pt'>语法模型对应的构建脚本</span></p>
+
+<p class=MsoNormal><span style='font-size:8.0pt;font-family:"Times New Roman",serif'>│&nbsp;&nbsp;    
+├── grammar.zip ------------------------&gt; </span><span lang=ZH-CN
+style='font-size:8.0pt'>语法模型文件压缩包</span></p>
+
+<p class=MsoNormal><span style='font-size:8.0pt;font-family:"Times New Roman",serif'>│&nbsp;&nbsp;    
+├── input.txt --------------------------&gt; </span><span lang=ZH-CN
+style='font-size:8.0pt'>用户定制回复语列表</span></p>
+
+<p class=MsoNormal><span style='font-size:8.0pt;font-family:"Times New Roman",serif'>│&nbsp;&nbsp;    
+├── pcm.bin ----------------------------&gt; MP3</span><span lang=ZH-CN
+style='font-size:8.0pt'>音频</span><span style='font-size:8.0pt;font-family:"Times New Roman",serif'>flash</span><span
+lang=ZH-CN style='font-size:8.0pt'>固件，自动生成的中间文件</span></p>
+
+<p class=MsoNormal><span style='font-size:8.0pt;font-family:"Times New Roman",serif'>│&nbsp;&nbsp;    
+├── pcm_map.txt ------------------------&gt; MP3</span><span lang=ZH-CN
+style='font-size:8.0pt'>音频文件名及内容列表</span></p>
+
+<p class=MsoNormal><span style='font-size:8.0pt;font-family:"Times New Roman",serif'>│&nbsp;&nbsp;    
+├── res_build_tool.py ------------------&gt; </span><span lang=ZH-CN
+style='font-size:8.0pt'>自动化构建脚本</span></p>
+
+<p class=MsoNormal><span style='font-size:8.0pt;font-family:"Times New Roman",serif'>│&nbsp;&nbsp;    
+├── thresh.dat -------------------------&gt; </span><span lang=ZH-CN
+style='font-size:8.0pt'>唤醒词阈值推荐表</span></p>
+
+<p class=MsoNormal><span style='font-size:8.0pt;font-family:"Times New Roman",serif'>│&nbsp;&nbsp;    
+├── tones ------------------------------&gt; MP3</span><span lang=ZH-CN
+style='font-size:8.0pt'>音频文件夹</span></p>
+
+<p class=MsoNormal><span style='font-size:8.0pt;font-family:"Times New Roman",serif'>│&nbsp;&nbsp;    
+└── wav_tones --------------------------&gt; WAV</span><span lang=ZH-CN
+style='font-size:8.0pt'>音频文件夹，自动转换到</span><span style='font-size:8.0pt;
+font-family:"Times New Roman",serif'>tones</span></p>
+
+<p class=MsoNormal><span style='font-size:8.0pt;font-family:"Times New Roman",serif'>├──
+uni_ci.yml ---------------------------------&gt; </span><span lang=ZH-CN
+style='font-size:8.0pt'>构建平台脚本，对用户无用</span></p>
+
+<p class=MsoNormal><span style='font-size:8.0pt;font-family:"Times New Roman",serif'>└──
+user ---------------------------------------&gt; USER</span><span lang=ZH-CN
+style='font-size:8.0pt'>层实现代码</span></p>
+
+<p class=MsoNormal><span style='font-size:8.0pt;font-family:"Times New Roman",serif'>   
+├── inc</span></p>
+
+<p class=MsoNormal><span style='font-size:8.0pt;font-family:"Times New Roman",serif'>   
+│&nbsp;&nbsp; ├── unione.h ---------------------------&gt; USER</span><span
+lang=ZH-CN style='font-size:8.0pt'>层使用的底层头文件</span></p>
+
+<p class=MsoNormal><span style='font-size:8.0pt;font-family:"Times New Roman",serif'>   
+│&nbsp;&nbsp; ├── user_config.h ----------------------&gt; USER</span><span
+lang=ZH-CN style='font-size:8.0pt'>可配置项，包括串口、音量等</span></p>
+
+<p class=MsoNormal><span style='font-size:8.0pt;font-family:"Times New Roman",serif'>   
+└── src</span></p>
+
+<p class=MsoNormal><span style='font-size:8.0pt;font-family:"Times New Roman",serif'>       
+├── examples ---------------------------&gt; </span><span lang=ZH-CN
+style='font-size:8.0pt'>包含个别</span><span style='font-size:8.0pt;font-family:
+"Times New Roman",serif'>USER</span><span lang=ZH-CN style='font-size:8.0pt'>模块的示例代码</span></p>
+
+<p class=MsoNormal><span style='font-size:8.0pt;font-family:"Times New Roman",serif'>       
+├── user_asr.c -------------------------&gt; </span><span lang=ZH-CN
+style='font-size:8.0pt'>语音识别控制接口</span></p>
+
+<p class=MsoNormal><span style='font-size:8.0pt;font-family:"Times New Roman",serif'>       
+├── user_event.c -----------------------&gt; USER</span><span lang=ZH-CN
+style='font-size:8.0pt'>事件分发机制，底层调用</span><span style='font-size:8.0pt;
+font-family:"Times New Roman",serif'>USER</span><span lang=ZH-CN
+style='font-size:8.0pt'>注册的事件回调函数</span></p>
+
+<p class=MsoNormal><span style='font-size:8.0pt;font-family:"Times New Roman",serif'>       
+├── user_file.c ------------------------&gt; SD</span><span lang=ZH-CN
+style='font-size:8.0pt'>卡文件系统操作接口，蜂鸟</span><span style='font-size:8.0pt;
+font-family:"Times New Roman",serif'>M</span><span lang=ZH-CN style='font-size:
+8.0pt'>暂不支持</span></p>
+
+<p class=MsoNormal><span style='font-size:8.0pt;font-family:"Times New Roman",serif'>       
+├── user_flash.c -----------------------&gt; Flash</span><span lang=ZH-CN
+style='font-size:8.0pt'>操作接口</span></p>
+
+<p class=MsoNormal><span style='font-size:8.0pt;font-family:"Times New Roman",serif'>       
+├── user_gpio.c ------------------------&gt; GPIO</span><span lang=ZH-CN
+style='font-size:8.0pt'>操作接口</span></p>
+
+<p class=MsoNormal><span style='font-size:8.0pt;font-family:"Times New Roman",serif'>       
+├── user_main.c ------------------------&gt; </span><span lang=ZH-CN
+style='font-size:8.0pt'>用户代码入口，参考示例实现</span><span style='font-size:8.0pt;
+font-family:"Times New Roman",serif'>user_main()</span><span lang=ZH-CN
+style='font-size:8.0pt'>接口以增加业务逻辑</span></p>
+
+<p class=MsoNormal><span style='font-size:8.0pt;font-family:"Times New Roman",serif'>       
+├── user_player.c ----------------------&gt; </span><span lang=ZH-CN
+style='font-size:8.0pt'>音频播放控制接口</span></p>
+
+<p class=MsoNormal><span style='font-size:8.0pt;font-family:"Times New Roman",serif'>       
+├── user_power.c -----------------------&gt; </span><span lang=ZH-CN
+style='font-size:8.0pt'>功耗操作接口，蜂鸟</span><span style='font-size:8.0pt;
+font-family:"Times New Roman",serif'>M</span><span lang=ZH-CN style='font-size:
+8.0pt'>暂不支持</span></p>
+
+<p class=MsoNormal><span style='font-size:8.0pt;font-family:"Times New Roman",serif'>       
+├── user_pwm.c -------------------------&gt; PWM</span><span lang=ZH-CN
+style='font-size:8.0pt'>操作接口</span></p>
+
+<p class=MsoNormal><span style='font-size:8.0pt;font-family:"Times New Roman",serif'>       
+├── user_record.c ----------------------&gt; </span><span lang=ZH-CN
+style='font-size:8.0pt'>录音控制接口，蜂鸟</span><span style='font-size:8.0pt;
+font-family:"Times New Roman",serif'>M</span><span lang=ZH-CN style='font-size:
+8.0pt'>暂不支持</span></p>
+
+<p class=MsoNormal><span style='font-size:8.0pt;font-family:"Times New Roman",serif'>       
+├── user_timer.c -----------------------&gt; Timer</span><span lang=ZH-CN
+style='font-size:8.0pt'>操作接口</span></p>
+
+<p class=MsoNormal><span style='font-size:8.0pt;font-family:"Times New Roman",serif'>       
+├── user_uart.c ------------------------&gt; UART</span><span lang=ZH-CN
+style='font-size:8.0pt'>操作接口</span></p>
+
+<p class=MsoNormal><span style='font-size:8.0pt;font-family:"Times New Roman",serif'>       
+└── user_uni_ucp.c ---------------------&gt; </span><span lang=ZH-CN
+style='font-size:8.0pt'>通用串口协议操作接口</span></p>
+
+<h2><span style='font-size:12.0pt;line-height:173%;font-family:"Times New Roman",serif'>3.APP</span><span
+lang=ZH-CN style='font-size:12.0pt;line-height:173%;font-family:等线'>层</span><span
+style='font-size:12.0pt;line-height:173%;font-family:"Times New Roman",serif'>session</span><span
+lang=ZH-CN style='font-size:12.0pt;line-height:173%;font-family:等线'>状态机</span></h2>
+
+<p class=MsoNormal><span style='font-size:9.0pt;font-family:"Times New Roman",serif'>         </span><span
+lang=ZH-CN style='font-size:9.0pt'>为保证代码业务逻辑的额可扩展性和健壮性，在</span><span
+style='font-size:9.0pt;font-family:"Times New Roman",serif'>APP</span><span
+lang=ZH-CN style='font-size:9.0pt'>层设计中使用了事件分发和状态机的机制，每个</span><span
+style='font-size:9.0pt;font-family:"Times New Roman",serif'>session</span><span
+lang=ZH-CN style='font-size:9.0pt'>都维护一个独立的状态机，底层事件分发后，根据各个</span><span
+style='font-size:9.0pt;font-family:"Times New Roman",serif'>session</span><span
+lang=ZH-CN style='font-size:9.0pt'>状态机的状态激发对应</span><span style='font-size:
+9.0pt;font-family:"Times New Roman",serif'>session</span><span lang=ZH-CN
+style='font-size:9.0pt'>的事件处理，如此一直运行下去。</span></p>
+
+<p class=MsoNormal><span style='font-size:9.0pt;font-family:"Times New Roman",serif'>         </span><span
+lang=ZH-CN style='font-size:9.0pt'>代码中使用的是</span><span lang=ZH-CN
+style='font-size:9.0pt;color:#333333;background:white'>有限状态机</span><span
+style='font-size:9.0pt;font-family:"Times New Roman",serif;color:#333333;
+background:white'>,</span><span lang=ZH-CN style='font-size:9.0pt;color:#333333;
+background:white'>也称为</span><span style='font-size:9.0pt;font-family:"Times New Roman",serif;
+color:#333333;background:white'>FSM(Finite State Machine)</span><span
+lang=ZH-CN style='font-size:9.0pt;color:#333333;background:white'>，其在任意时刻都处于有限状态集合中的某一状态。当其获得一个输入事件时，将从当前状态转换到另一个状态，或者仍然保持在当前状态。任何一个</span><span
+style='font-size:9.0pt;font-family:"Times New Roman",serif;color:#333333;
+background:white'>FSM</span><span lang=ZH-CN style='font-size:9.0pt;color:#333333;
+background:white'>都可以用状态转换图来描述：</span></p>
+
+<p class=MsoNormal align=center style='text-align:center'><span
+style='font-size:9.0pt;font-family:"Times New Roman",serif'><img width=484
+height=283 id="图片 2" src="rjjg6_image002.png"></span></p>
+
+<p class=MsoNormal><span style='font-size:9.0pt;font-family:"Times New Roman",serif'>         </span><span
+lang=ZH-CN style='font-size:9.0pt'>在二次开发时，并不需要关心</span><span style='font-size:
+9.0pt;font-family:"Times New Roman",serif'>APP</span><span lang=ZH-CN
+style='font-size:9.0pt'>层的实现，</span><span style='font-size:9.0pt;font-family:
+"Times New Roman",serif'>USER</span><span lang=ZH-CN style='font-size:9.0pt'>层已经将各个功能模块控制接口封装，调用</span><span
+style='font-size:9.0pt;font-family:"Times New Roman",serif'>USER</span><span
+lang=ZH-CN style='font-size:9.0pt'>层接口会自动触发状态机运转，从而实现定制功能。</span></p>
+
+</div>
+
+</body>
+
+</html>
+ </div></div><!-- contents -->
+</div><!-- PageDoc -->
+</body>
+</html>

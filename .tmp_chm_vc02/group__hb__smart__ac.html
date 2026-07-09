@@ -1,0 +1,314 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "https://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=9"/>
+<meta name="generator" content="Doxygen 1.8.18"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>蜂鸟M离线方案开发指导手册: 智能电风扇</title>
+<link href="tabs.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="jquery.js"></script>
+<script type="text/javascript" src="dynsections.js"></script>
+<link href="doxygen.css" rel="stylesheet" type="text/css" />
+</head>
+<body>
+<div id="top"><!-- do not remove this div, it is closed by doxygen! -->
+<div id="titlearea">
+<table cellspacing="0" cellpadding="0">
+ <tbody>
+ <tr style="height: 56px;">
+  <td id="projectalign" style="padding-left: 0.5em;">
+   <div id="projectname">蜂鸟M离线方案开发指导手册
+   &#160;<span id="projectnumber">v1.0.4</span>
+   </div>
+  </td>
+ </tr>
+ </tbody>
+</table>
+</div>
+<!-- end header part -->
+<!-- 制作者 Doxygen 1.8.18 -->
+<script type="text/javascript" src="menudata.js"></script>
+<script type="text/javascript" src="menu.js"></script>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:cf05388f2679ee054f2beb29a391d25f4e673ac3&amp;dn=gpl-2.0.txt GPL-v2 */
+$(function() {
+  initMenu('',false,false,'search.php','搜索');
+});
+/* @license-end */</script>
+<div id="main-nav"></div>
+</div><!-- top -->
+<div class="header">
+  <div class="headertitle">
+<div class="title">智能电风扇<div class="ingroups"><a class="el" href="group__uni__example.html">方案示例</a></div></div>  </div>
+</div><!--header-->
+<div class="contents">
+<dl class="section user"><dt></dt><dd></dd></dl>
+<p>可通过定义user/inc/user_config.h中的宏<a class="el" href="group__uni__config__demo__macro.html#ga234a8d36ebd8d152f3c487e19868578d">USER_RUN_DEMO_SELECT</a> 为<a class="el" href="group__uni__config__demo__macro.html#gaa74782b27dbb3f578717fe5b288e9337">USER_DEMO_SMART_AC</a> 运行示例程序 </p><div class="fragment"><div class="line"><span class="comment">/**************************************************************************</span></div>
+<div class="line"><span class="comment"> * Copyright (C) 2017-2017  Unisound</span></div>
+<div class="line"><span class="comment"> *</span></div>
+<div class="line"><span class="comment"> * This program is free software; you can redistribute it and/or modify</span></div>
+<div class="line"><span class="comment"> * it under the terms of the GNU General Public License as published by</span></div>
+<div class="line"><span class="comment"> * the Free Software Foundation; either version 2 of the License, or</span></div>
+<div class="line"><span class="comment"> * any later version.</span></div>
+<div class="line"><span class="comment"> *</span></div>
+<div class="line"><span class="comment"> * This program is distributed in the hope that it will be useful,</span></div>
+<div class="line"><span class="comment"> * but WITHOUT ANY WARRANTY; without even the implied warranty of</span></div>
+<div class="line"><span class="comment"> * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the</span></div>
+<div class="line"><span class="comment"> * GNU General Public License for more details.</span></div>
+<div class="line"><span class="comment"> *</span></div>
+<div class="line"><span class="comment"> * You should have received a copy of the GNU General Public License along</span></div>
+<div class="line"><span class="comment"> * with this program; if not, write to the Free Software Foundation, Inc.,</span></div>
+<div class="line"><span class="comment"> * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.</span></div>
+<div class="line"><span class="comment"> **************************************************************************</span></div>
+<div class="line"><span class="comment"> *</span></div>
+<div class="line"><span class="comment"> * Description : hb_smart_ac.c</span></div>
+<div class="line"><span class="comment"> * Author      : wufangfang@unisound.com</span></div>
+<div class="line"><span class="comment"> * Date        : 2020.04.03</span></div>
+<div class="line"><span class="comment"> *</span></div>
+<div class="line"><span class="comment"> **************************************************************************/</span></div>
+<div class="line"><span class="preprocessor">#include &quot;unione.h&quot;</span></div>
+<div class="line"><span class="preprocessor">#include &quot;ac_device_simulator.h&quot;</span></div>
+<div class="line"><span class="preprocessor">#include &quot;user_asr.h&quot;</span></div>
+<div class="line"><span class="preprocessor">#include &quot;user_player.h&quot;</span></div>
+<div class="line"> </div>
+<div class="line"><span class="preprocessor">#define TAG &quot;smart_ac&quot;</span></div>
+<div class="line"> </div>
+<div class="line"><span class="keyword">static</span> <span class="keywordtype">char</span> g_power_off_reply[32] = {0};</div>
+<div class="line"><span class="keyword">static</span> <span class="keywordtype">int</span> _ac_power_replay(<a class="code" href="structevent__custom__setting__t.html" title="对应USER_CUSTOM_SETTING事件">event_custom_setting_t</a> *setting) {</div>
+<div class="line">  eAcSate state = eACSTATE_UNKONWN;</div>
+<div class="line">  eAcWindMode mode = eACMODE_UNKONWN;</div>
+<div class="line">  <span class="keywordflow">if</span> (0 == uni_strcmp(setting-&gt;<a class="code" href="structevent__custom__setting__t.html#a116d7dc0d8de517af583917a27cd76b5" title="命令词意图，对应UDP平台上用户定义脚本中的action">cmd</a>, <span class="stringliteral">&quot;ac_power_on&quot;</span>)) {</div>
+<div class="line">    state = AcDeviceSetState(eACSTATE_ON);</div>
+<div class="line">  } <span class="keywordflow">else</span> <span class="keywordflow">if</span> (0 == uni_strcmp(setting-&gt;<a class="code" href="structevent__custom__setting__t.html#a116d7dc0d8de517af583917a27cd76b5" title="命令词意图，对应UDP平台上用户定义脚本中的action">cmd</a>, <span class="stringliteral">&quot;ac_power_off&quot;</span>)) {</div>
+<div class="line">    state = AcDeviceSetState(eACSTATE_OFF);</div>
+<div class="line">  } <span class="keywordflow">else</span> {</div>
+<div class="line">    LOGE(TAG, <span class="stringliteral">&quot;unknown cmd: %s&quot;</span>, setting-&gt;<a class="code" href="structevent__custom__setting__t.html#a116d7dc0d8de517af583917a27cd76b5" title="命令词意图，对应UDP平台上用户定义脚本中的action">cmd</a>);</div>
+<div class="line">    <span class="keywordflow">return</span> -1;</div>
+<div class="line">  }</div>
+<div class="line">  LOGT(TAG, <span class="stringliteral">&quot;AC power state: %d&quot;</span>, state);</div>
+<div class="line">  <span class="keywordflow">if</span> (eACSTATE_OFF == state) {</div>
+<div class="line">    uni_strncpy(g_power_off_reply, setting-&gt;<a class="code" href="structevent__custom__setting__t.html#ac0ee5d49efd66093352c41ae73539cb8" title="回复语列表[1, 2, 3]，对应UDP平台上用户定义脚本中的回复语列表，在pcm_map.txt中可以找到对应关系">reply_files</a>, <span class="keyword">sizeof</span>(g_power_off_reply) - 1);</div>
+<div class="line">    <span class="keywordflow">return</span> <a class="code" href="group__uni__asr__inf.html#gab4cc6b45df69f8d1cc6bfc1092a8a9a2" title="进入睡眠状态">user_asr_goto_sleep</a>();</div>
+<div class="line">  } <span class="keywordflow">else</span> <span class="keywordflow">if</span> (eACSTATE_ON == state) {</div>
+<div class="line">    mode = AcDeviceGetWindMode();</div>
+<div class="line">    <span class="keywordflow">switch</span> (mode) {</div>
+<div class="line">      <span class="keywordflow">case</span> eACMODE_NATURE:</div>
+<div class="line">        <span class="keywordflow">return</span> <a class="code" href="group__uni__player__inf.html#ga8638ce40d50e8d08516925830d6dbd94" title="播放列表序号音频">user_player_reply_list_num</a>(setting-&gt;<a class="code" href="structevent__custom__setting__t.html#ac0ee5d49efd66093352c41ae73539cb8" title="回复语列表[1, 2, 3]，对应UDP平台上用户定义脚本中的回复语列表，在pcm_map.txt中可以找到对应关系">reply_files</a>, 0);</div>
+<div class="line">      <span class="keywordflow">case</span> eACMODE_NORMAL:</div>
+<div class="line">        <span class="keywordflow">return</span> <a class="code" href="group__uni__player__inf.html#ga8638ce40d50e8d08516925830d6dbd94" title="播放列表序号音频">user_player_reply_list_num</a>(setting-&gt;<a class="code" href="structevent__custom__setting__t.html#ac0ee5d49efd66093352c41ae73539cb8" title="回复语列表[1, 2, 3]，对应UDP平台上用户定义脚本中的回复语列表，在pcm_map.txt中可以找到对应关系">reply_files</a>, 1);</div>
+<div class="line">      <span class="keywordflow">case</span> eACMODE_SLEEP:</div>
+<div class="line">        <span class="keywordflow">return</span> <a class="code" href="group__uni__player__inf.html#ga8638ce40d50e8d08516925830d6dbd94" title="播放列表序号音频">user_player_reply_list_num</a>(setting-&gt;<a class="code" href="structevent__custom__setting__t.html#ac0ee5d49efd66093352c41ae73539cb8" title="回复语列表[1, 2, 3]，对应UDP平台上用户定义脚本中的回复语列表，在pcm_map.txt中可以找到对应关系">reply_files</a>, 2);</div>
+<div class="line">      <span class="keywordflow">default</span>:</div>
+<div class="line">        LOGE(TAG, <span class="stringliteral">&quot;Unknown mode: %d&quot;</span>, mode);</div>
+<div class="line">        <span class="keywordflow">break</span>;</div>
+<div class="line">    }</div>
+<div class="line">  } <span class="keywordflow">else</span> {</div>
+<div class="line">    LOGE(TAG, <span class="stringliteral">&quot;invalid AC state: %d&quot;</span>, state);</div>
+<div class="line">  }</div>
+<div class="line">  <span class="keywordflow">return</span> -1;</div>
+<div class="line">}</div>
+<div class="line"> </div>
+<div class="line"><span class="keyword">static</span> <span class="keywordtype">int</span> _ac_off_replay(<span class="keywordtype">void</span>) {</div>
+<div class="line"><span class="preprocessor">#ifdef DEFAULT_PCM_WAKEUP</span></div>
+<div class="line">  <span class="keywordflow">return</span> <a class="code" href="group__uni__player__inf.html#ga8638ce40d50e8d08516925830d6dbd94" title="播放列表序号音频">user_player_reply_list_num</a>(DEFAULT_PCM_WAKEUP, 0);</div>
+<div class="line"><span class="preprocessor">#else</span></div>
+<div class="line">  <span class="keywordflow">return</span> <a class="code" href="group__uni__player__inf.html#ga1835960e52668ec97beea7937b4c619a" title="随机播放列表音频">user_player_reply_list_random</a>(HI_AC_OFF);</div>
+<div class="line"><span class="preprocessor">#endif</span></div>
+<div class="line">}</div>
+<div class="line"> </div>
+<div class="line"><span class="keyword">static</span> <span class="keywordtype">int</span> _ac_speed_replay(<a class="code" href="structevent__custom__setting__t.html" title="对应USER_CUSTOM_SETTING事件">event_custom_setting_t</a> *setting) {</div>
+<div class="line">  eAcSate state = AcDeviceGetState();</div>
+<div class="line">  eAcWindSpeed speed = eAcWindSpeed_UNKONWN;</div>
+<div class="line">  <span class="keywordflow">if</span> (eACSTATE_ON != state) {</div>
+<div class="line">    <span class="keywordflow">return</span> _ac_off_replay();</div>
+<div class="line">  }</div>
+<div class="line">  <span class="keywordflow">if</span> (0 == uni_strcmp(setting-&gt;<a class="code" href="structevent__custom__setting__t.html#a116d7dc0d8de517af583917a27cd76b5" title="命令词意图，对应UDP平台上用户定义脚本中的action">cmd</a>, <span class="stringliteral">&quot;ac_speed_1&quot;</span>)) {</div>
+<div class="line">    speed = AcDeviceSetWindSpeed(eAcWindSpeed_1);</div>
+<div class="line">  } <span class="keywordflow">else</span> <span class="keywordflow">if</span> (0 == uni_strcmp(setting-&gt;<a class="code" href="structevent__custom__setting__t.html#a116d7dc0d8de517af583917a27cd76b5" title="命令词意图，对应UDP平台上用户定义脚本中的action">cmd</a>, <span class="stringliteral">&quot;ac_speed_2&quot;</span>)) {</div>
+<div class="line">    speed = AcDeviceSetWindSpeed(eAcWindSpeed_2);</div>
+<div class="line">  } <span class="keywordflow">else</span> <span class="keywordflow">if</span> (0 == uni_strcmp(setting-&gt;<a class="code" href="structevent__custom__setting__t.html#a116d7dc0d8de517af583917a27cd76b5" title="命令词意图，对应UDP平台上用户定义脚本中的action">cmd</a>, <span class="stringliteral">&quot;ac_speed_3&quot;</span>)) {</div>
+<div class="line">    speed = AcDeviceSetWindSpeed(eAcWindSpeed_3);</div>
+<div class="line">  } <span class="keywordflow">else</span> <span class="keywordflow">if</span> (0 == uni_strcmp(setting-&gt;<a class="code" href="structevent__custom__setting__t.html#a116d7dc0d8de517af583917a27cd76b5" title="命令词意图，对应UDP平台上用户定义脚本中的action">cmd</a>, <span class="stringliteral">&quot;ac_speed_inc&quot;</span>)) {</div>
+<div class="line">    speed = AcDeviceGetWindSpeed();</div>
+<div class="line">    <span class="keywordflow">if</span> (eAcWindSpeed_3 == speed) {</div>
+<div class="line">      <span class="keywordflow">return</span> <a class="code" href="group__uni__player__inf.html#ga8638ce40d50e8d08516925830d6dbd94" title="播放列表序号音频">user_player_reply_list_num</a>(setting-&gt;<a class="code" href="structevent__custom__setting__t.html#ac0ee5d49efd66093352c41ae73539cb8" title="回复语列表[1, 2, 3]，对应UDP平台上用户定义脚本中的回复语列表，在pcm_map.txt中可以找到对应关系">reply_files</a>, 1);</div>
+<div class="line">    }</div>
+<div class="line">    speed = AcDeviceWindSpeedInc();</div>
+<div class="line">    <span class="keywordflow">return</span> <a class="code" href="group__uni__player__inf.html#ga8638ce40d50e8d08516925830d6dbd94" title="播放列表序号音频">user_player_reply_list_num</a>(setting-&gt;<a class="code" href="structevent__custom__setting__t.html#ac0ee5d49efd66093352c41ae73539cb8" title="回复语列表[1, 2, 3]，对应UDP平台上用户定义脚本中的回复语列表，在pcm_map.txt中可以找到对应关系">reply_files</a>, 0);</div>
+<div class="line">  } <span class="keywordflow">else</span> <span class="keywordflow">if</span> (0 == uni_strcmp(setting-&gt;<a class="code" href="structevent__custom__setting__t.html#a116d7dc0d8de517af583917a27cd76b5" title="命令词意图，对应UDP平台上用户定义脚本中的action">cmd</a>, <span class="stringliteral">&quot;ac_speed_dec&quot;</span>)) {</div>
+<div class="line">    speed = AcDeviceGetWindSpeed();</div>
+<div class="line">    <span class="keywordflow">if</span> (eAcWindSpeed_1 == speed) {</div>
+<div class="line">      <span class="keywordflow">return</span> <a class="code" href="group__uni__player__inf.html#ga8638ce40d50e8d08516925830d6dbd94" title="播放列表序号音频">user_player_reply_list_num</a>(setting-&gt;<a class="code" href="structevent__custom__setting__t.html#ac0ee5d49efd66093352c41ae73539cb8" title="回复语列表[1, 2, 3]，对应UDP平台上用户定义脚本中的回复语列表，在pcm_map.txt中可以找到对应关系">reply_files</a>, 1);</div>
+<div class="line">    }</div>
+<div class="line">    speed = AcDeviceWindSpeedDec();</div>
+<div class="line">    <span class="keywordflow">return</span> <a class="code" href="group__uni__player__inf.html#ga8638ce40d50e8d08516925830d6dbd94" title="播放列表序号音频">user_player_reply_list_num</a>(setting-&gt;<a class="code" href="structevent__custom__setting__t.html#ac0ee5d49efd66093352c41ae73539cb8" title="回复语列表[1, 2, 3]，对应UDP平台上用户定义脚本中的回复语列表，在pcm_map.txt中可以找到对应关系">reply_files</a>, 0);</div>
+<div class="line">  } <span class="keywordflow">else</span> {</div>
+<div class="line">    LOGE(TAG, <span class="stringliteral">&quot;unknown cmd: %s&quot;</span>, setting-&gt;<a class="code" href="structevent__custom__setting__t.html#a116d7dc0d8de517af583917a27cd76b5" title="命令词意图，对应UDP平台上用户定义脚本中的action">cmd</a>);</div>
+<div class="line">    <span class="keywordflow">return</span> -1;</div>
+<div class="line">  }</div>
+<div class="line">  LOGT(TAG, <span class="stringliteral">&quot;AC speed state: %d&quot;</span>, speed);</div>
+<div class="line">  <span class="keywordflow">return</span> <a class="code" href="group__uni__player__inf.html#ga1835960e52668ec97beea7937b4c619a" title="随机播放列表音频">user_player_reply_list_random</a>(setting-&gt;<a class="code" href="structevent__custom__setting__t.html#ac0ee5d49efd66093352c41ae73539cb8" title="回复语列表[1, 2, 3]，对应UDP平台上用户定义脚本中的回复语列表，在pcm_map.txt中可以找到对应关系">reply_files</a>);</div>
+<div class="line">}</div>
+<div class="line"> </div>
+<div class="line"><span class="keyword">static</span> <span class="keywordtype">int</span> _ac_mode_replay(<a class="code" href="structevent__custom__setting__t.html" title="对应USER_CUSTOM_SETTING事件">event_custom_setting_t</a> *setting) {</div>
+<div class="line">  eAcSate state = AcDeviceGetState();</div>
+<div class="line">  eAcWindMode mode = eACMODE_UNKONWN;</div>
+<div class="line">  <span class="keywordflow">if</span> (eACSTATE_ON != state) {</div>
+<div class="line">    <span class="keywordflow">return</span> _ac_off_replay();</div>
+<div class="line">  }</div>
+<div class="line">  <span class="keywordflow">if</span> (0 == uni_strcmp(setting-&gt;<a class="code" href="structevent__custom__setting__t.html#a116d7dc0d8de517af583917a27cd76b5" title="命令词意图，对应UDP平台上用户定义脚本中的action">cmd</a>, <span class="stringliteral">&quot;ac_mode_nat&quot;</span>)) {</div>
+<div class="line">    mode = AcDeviceSetWindMode(eACMODE_NATURE);</div>
+<div class="line">  } <span class="keywordflow">else</span> <span class="keywordflow">if</span> (0 == uni_strcmp(setting-&gt;<a class="code" href="structevent__custom__setting__t.html#a116d7dc0d8de517af583917a27cd76b5" title="命令词意图，对应UDP平台上用户定义脚本中的action">cmd</a>, <span class="stringliteral">&quot;ac_mode_nor&quot;</span>)) {</div>
+<div class="line">    mode = AcDeviceSetWindMode(eACMODE_NORMAL);</div>
+<div class="line">  } <span class="keywordflow">else</span> <span class="keywordflow">if</span> (0 == uni_strcmp(setting-&gt;<a class="code" href="structevent__custom__setting__t.html#a116d7dc0d8de517af583917a27cd76b5" title="命令词意图，对应UDP平台上用户定义脚本中的action">cmd</a>, <span class="stringliteral">&quot;ac_mode_sleep&quot;</span>)) {</div>
+<div class="line">    mode = AcDeviceSetWindMode(eACMODE_SLEEP);</div>
+<div class="line">  } <span class="keywordflow">else</span> {</div>
+<div class="line">    LOGE(TAG, <span class="stringliteral">&quot;unknown cmd: %s&quot;</span>, setting-&gt;<a class="code" href="structevent__custom__setting__t.html#a116d7dc0d8de517af583917a27cd76b5" title="命令词意图，对应UDP平台上用户定义脚本中的action">cmd</a>);</div>
+<div class="line">    <span class="keywordflow">return</span> -1;</div>
+<div class="line">  }</div>
+<div class="line">  LOGT(TAG, <span class="stringliteral">&quot;AC mode state: %d&quot;</span>, mode);</div>
+<div class="line">  <span class="keywordflow">return</span> <a class="code" href="group__uni__player__inf.html#ga1835960e52668ec97beea7937b4c619a" title="随机播放列表音频">user_player_reply_list_random</a>(setting-&gt;<a class="code" href="structevent__custom__setting__t.html#ac0ee5d49efd66093352c41ae73539cb8" title="回复语列表[1, 2, 3]，对应UDP平台上用户定义脚本中的回复语列表，在pcm_map.txt中可以找到对应关系">reply_files</a>);</div>
+<div class="line">}</div>
+<div class="line"> </div>
+<div class="line"><span class="keyword">static</span> <span class="keywordtype">int</span> _timer_change_replay(eAcTimer timer, <span class="keyword">const</span> <span class="keywordtype">char</span> *file_list) {</div>
+<div class="line">  <span class="keywordflow">switch</span> (timer) {</div>
+<div class="line">    <span class="keywordflow">case</span> eACTIMER_1HR:</div>
+<div class="line">      <span class="keywordflow">return</span> <a class="code" href="group__uni__player__inf.html#ga8638ce40d50e8d08516925830d6dbd94" title="播放列表序号音频">user_player_reply_list_num</a>(file_list, 0);</div>
+<div class="line">    <span class="keywordflow">case</span> eACTIMER_2HR:</div>
+<div class="line">      <span class="keywordflow">return</span> <a class="code" href="group__uni__player__inf.html#ga8638ce40d50e8d08516925830d6dbd94" title="播放列表序号音频">user_player_reply_list_num</a>(file_list, 1);</div>
+<div class="line">    <span class="keywordflow">case</span> eACTIMER_4HR:</div>
+<div class="line">      <span class="keywordflow">return</span> <a class="code" href="group__uni__player__inf.html#ga8638ce40d50e8d08516925830d6dbd94" title="播放列表序号音频">user_player_reply_list_num</a>(file_list, 2);</div>
+<div class="line">    <span class="keywordflow">case</span> eACTIMER_8HR:</div>
+<div class="line">      <span class="keywordflow">return</span> <a class="code" href="group__uni__player__inf.html#ga8638ce40d50e8d08516925830d6dbd94" title="播放列表序号音频">user_player_reply_list_num</a>(file_list, 3);</div>
+<div class="line">    <span class="keywordflow">default</span>:</div>
+<div class="line">      <span class="keywordflow">break</span>;</div>
+<div class="line">  }</div>
+<div class="line">  <span class="keywordflow">return</span> -1;</div>
+<div class="line">}</div>
+<div class="line"> </div>
+<div class="line"><span class="keyword">static</span> <span class="keywordtype">int</span> _ac_timing_replay(<a class="code" href="structevent__custom__setting__t.html" title="对应USER_CUSTOM_SETTING事件">event_custom_setting_t</a> *setting) {</div>
+<div class="line">  eAcSate state = AcDeviceGetState();</div>
+<div class="line">  eAcTimer timer = eACTIMER_UNKONWN;</div>
+<div class="line">  <span class="keywordflow">if</span> (eACSTATE_ON != state) {</div>
+<div class="line">    <span class="keywordflow">return</span> _ac_off_replay();</div>
+<div class="line">  }</div>
+<div class="line">  <span class="keywordflow">if</span> (0 == uni_strcmp(setting-&gt;<a class="code" href="structevent__custom__setting__t.html#a116d7dc0d8de517af583917a27cd76b5" title="命令词意图，对应UDP平台上用户定义脚本中的action">cmd</a>, <span class="stringliteral">&quot;ac_timing_1hr&quot;</span>)) {</div>
+<div class="line">    timer = AcDeviceSetTimer(eACTIMER_1HR);</div>
+<div class="line">  } <span class="keywordflow">else</span> <span class="keywordflow">if</span> (0 == uni_strcmp(setting-&gt;<a class="code" href="structevent__custom__setting__t.html#a116d7dc0d8de517af583917a27cd76b5" title="命令词意图，对应UDP平台上用户定义脚本中的action">cmd</a>, <span class="stringliteral">&quot;ac_timing_2hr&quot;</span>)) {</div>
+<div class="line">    timer = AcDeviceSetTimer(eACTIMER_2HR);</div>
+<div class="line">  } <span class="keywordflow">else</span> <span class="keywordflow">if</span> (0 == uni_strcmp(setting-&gt;<a class="code" href="structevent__custom__setting__t.html#a116d7dc0d8de517af583917a27cd76b5" title="命令词意图，对应UDP平台上用户定义脚本中的action">cmd</a>, <span class="stringliteral">&quot;ac_timing_4hr&quot;</span>)) {</div>
+<div class="line">    timer = AcDeviceSetTimer(eACTIMER_4HR);</div>
+<div class="line">  } <span class="keywordflow">else</span> <span class="keywordflow">if</span> (0 == uni_strcmp(setting-&gt;<a class="code" href="structevent__custom__setting__t.html#a116d7dc0d8de517af583917a27cd76b5" title="命令词意图，对应UDP平台上用户定义脚本中的action">cmd</a>, <span class="stringliteral">&quot;ac_timing_8hr&quot;</span>)) {</div>
+<div class="line">    timer = AcDeviceSetTimer(eACTIMER_8HR);</div>
+<div class="line">  } <span class="keywordflow">else</span> <span class="keywordflow">if</span> (0 == uni_strcmp(setting-&gt;<a class="code" href="structevent__custom__setting__t.html#a116d7dc0d8de517af583917a27cd76b5" title="命令词意图，对应UDP平台上用户定义脚本中的action">cmd</a>, <span class="stringliteral">&quot;ac_timing_cancel&quot;</span>)) {</div>
+<div class="line">    timer = AcDeviceSetTimer(eACTIMER_NONE);</div>
+<div class="line">  } <span class="keywordflow">else</span> <span class="keywordflow">if</span> (0 == uni_strcmp(setting-&gt;<a class="code" href="structevent__custom__setting__t.html#a116d7dc0d8de517af583917a27cd76b5" title="命令词意图，对应UDP平台上用户定义脚本中的action">cmd</a>, <span class="stringliteral">&quot;ac_timing_inc&quot;</span>)) {</div>
+<div class="line">    timer = AcDeviceTimerInc();</div>
+<div class="line">    <span class="keywordflow">return</span> _timer_change_replay(timer, setting-&gt;<a class="code" href="structevent__custom__setting__t.html#ac0ee5d49efd66093352c41ae73539cb8" title="回复语列表[1, 2, 3]，对应UDP平台上用户定义脚本中的回复语列表，在pcm_map.txt中可以找到对应关系">reply_files</a>);</div>
+<div class="line">  } <span class="keywordflow">else</span> <span class="keywordflow">if</span> (0 == uni_strcmp(setting-&gt;<a class="code" href="structevent__custom__setting__t.html#a116d7dc0d8de517af583917a27cd76b5" title="命令词意图，对应UDP平台上用户定义脚本中的action">cmd</a>, <span class="stringliteral">&quot;ac_timing_dec&quot;</span>)) {</div>
+<div class="line">    timer = AcDeviceTimerDec();</div>
+<div class="line">    <span class="keywordflow">return</span> _timer_change_replay(timer, setting-&gt;<a class="code" href="structevent__custom__setting__t.html#ac0ee5d49efd66093352c41ae73539cb8" title="回复语列表[1, 2, 3]，对应UDP平台上用户定义脚本中的回复语列表，在pcm_map.txt中可以找到对应关系">reply_files</a>);</div>
+<div class="line">  } <span class="keywordflow">else</span> {</div>
+<div class="line">    LOGE(TAG, <span class="stringliteral">&quot;unknown cmd: %s&quot;</span>, setting-&gt;<a class="code" href="structevent__custom__setting__t.html#a116d7dc0d8de517af583917a27cd76b5" title="命令词意图，对应UDP平台上用户定义脚本中的action">cmd</a>);</div>
+<div class="line">    <span class="keywordflow">return</span> -1;</div>
+<div class="line">  }</div>
+<div class="line">  LOGT(TAG, <span class="stringliteral">&quot;AC timer state: %d&quot;</span>, timer);</div>
+<div class="line">  <span class="keywordflow">return</span> <a class="code" href="group__uni__player__inf.html#ga1835960e52668ec97beea7937b4c619a" title="随机播放列表音频">user_player_reply_list_random</a>(setting-&gt;<a class="code" href="structevent__custom__setting__t.html#ac0ee5d49efd66093352c41ae73539cb8" title="回复语列表[1, 2, 3]，对应UDP平台上用户定义脚本中的回复语列表，在pcm_map.txt中可以找到对应关系">reply_files</a>);</div>
+<div class="line">}</div>
+<div class="line"> </div>
+<div class="line"><span class="keyword">static</span> <span class="keywordtype">int</span> _ac_shake_replay(<a class="code" href="structevent__custom__setting__t.html" title="对应USER_CUSTOM_SETTING事件">event_custom_setting_t</a> *setting) {</div>
+<div class="line">  eAcSate state = AcDeviceGetState();</div>
+<div class="line">  eAcShake shake = eACSHAKE_UNKONWN;</div>
+<div class="line">  <span class="keywordflow">if</span> (eACSTATE_ON != state) {</div>
+<div class="line">    <span class="keywordflow">return</span> _ac_off_replay();</div>
+<div class="line">  }</div>
+<div class="line">  <span class="keywordflow">if</span> (0 == uni_strcmp(setting-&gt;<a class="code" href="structevent__custom__setting__t.html#a116d7dc0d8de517af583917a27cd76b5" title="命令词意图，对应UDP平台上用户定义脚本中的action">cmd</a>, <span class="stringliteral">&quot;ac_shake_on&quot;</span>)) {</div>
+<div class="line">    shake = AcDeviceSetShakeState(eACSHAKE_ON);</div>
+<div class="line">  } <span class="keywordflow">else</span> <span class="keywordflow">if</span> (0 == uni_strcmp(setting-&gt;<a class="code" href="structevent__custom__setting__t.html#a116d7dc0d8de517af583917a27cd76b5" title="命令词意图，对应UDP平台上用户定义脚本中的action">cmd</a>, <span class="stringliteral">&quot;ac_shake_off&quot;</span>)) {</div>
+<div class="line">    shake = AcDeviceSetShakeState(eACSHAKE_OFF);</div>
+<div class="line">  } <span class="keywordflow">else</span> {</div>
+<div class="line">    LOGE(TAG, <span class="stringliteral">&quot;unknown cmd: %s&quot;</span>, setting-&gt;<a class="code" href="structevent__custom__setting__t.html#a116d7dc0d8de517af583917a27cd76b5" title="命令词意图，对应UDP平台上用户定义脚本中的action">cmd</a>);</div>
+<div class="line">    <span class="keywordflow">return</span> -1;</div>
+<div class="line">  }</div>
+<div class="line">  LOGT(TAG, <span class="stringliteral">&quot;AC shake state: %d&quot;</span>, shake);</div>
+<div class="line">  <span class="keywordflow">return</span> <a class="code" href="group__uni__player__inf.html#ga1835960e52668ec97beea7937b4c619a" title="随机播放列表音频">user_player_reply_list_random</a>(setting-&gt;<a class="code" href="structevent__custom__setting__t.html#ac0ee5d49efd66093352c41ae73539cb8" title="回复语列表[1, 2, 3]，对应UDP平台上用户定义脚本中的回复语列表，在pcm_map.txt中可以找到对应关系">reply_files</a>);</div>
+<div class="line">}</div>
+<div class="line"> </div>
+<div class="line"><span class="keyword">static</span> <span class="keywordtype">void</span> _custom_setting_cb(<a class="code" href="group__uni__event__def.html#ga902502909694e32b6ffe17cc0486b71d" title="用户可订阅的事件类型">USER_EVENT_TYPE</a> event,</div>
+<div class="line">                                     <a class="code" href="unionuser__event__context__t.html" title="事件内容，共用体，根据事件类型具体处理">user_event_context_t</a> *context) {</div>
+<div class="line">  <a class="code" href="structevent__custom__setting__t.html" title="对应USER_CUSTOM_SETTING事件">event_custom_setting_t</a> *setting = NULL;</div>
+<div class="line">  <span class="keywordflow">if</span> (context) {</div>
+<div class="line">    setting = &amp;context-&gt;<a class="code" href="unionuser__event__context__t.html#a43ba72e2ff7c14ac71980f10c32893a3" title="对应USER_CUSTOM_SETTING事件">custom_setting</a>;</div>
+<div class="line">    <span class="keywordflow">if</span> (NULL != uni_strstr(setting-&gt;<a class="code" href="structevent__custom__setting__t.html#a116d7dc0d8de517af583917a27cd76b5" title="命令词意图，对应UDP平台上用户定义脚本中的action">cmd</a>, <span class="stringliteral">&quot;ac_power&quot;</span>)) {</div>
+<div class="line">      _ac_power_replay(setting);</div>
+<div class="line">    } <span class="keywordflow">else</span> <span class="keywordflow">if</span> (NULL != uni_strstr(setting-&gt;<a class="code" href="structevent__custom__setting__t.html#a116d7dc0d8de517af583917a27cd76b5" title="命令词意图，对应UDP平台上用户定义脚本中的action">cmd</a>, <span class="stringliteral">&quot;ac_speed&quot;</span>)) {</div>
+<div class="line">      _ac_speed_replay(setting);</div>
+<div class="line">    } <span class="keywordflow">else</span> <span class="keywordflow">if</span> (NULL != uni_strstr(setting-&gt;<a class="code" href="structevent__custom__setting__t.html#a116d7dc0d8de517af583917a27cd76b5" title="命令词意图，对应UDP平台上用户定义脚本中的action">cmd</a>, <span class="stringliteral">&quot;ac_mode&quot;</span>)) {</div>
+<div class="line">      _ac_mode_replay(setting);</div>
+<div class="line">    } <span class="keywordflow">else</span> <span class="keywordflow">if</span> (NULL != uni_strstr(setting-&gt;<a class="code" href="structevent__custom__setting__t.html#a116d7dc0d8de517af583917a27cd76b5" title="命令词意图，对应UDP平台上用户定义脚本中的action">cmd</a>, <span class="stringliteral">&quot;ac_timing&quot;</span>)) {</div>
+<div class="line">      _ac_timing_replay(setting);</div>
+<div class="line">    } <span class="keywordflow">else</span> <span class="keywordflow">if</span> (NULL != uni_strstr(setting-&gt;<a class="code" href="structevent__custom__setting__t.html#a116d7dc0d8de517af583917a27cd76b5" title="命令词意图，对应UDP平台上用户定义脚本中的action">cmd</a>, <span class="stringliteral">&quot;ac_shake&quot;</span>)) {</div>
+<div class="line">      _ac_shake_replay(setting);</div>
+<div class="line">    } <span class="keywordflow">else</span> {</div>
+<div class="line">      <span class="comment">/* don&#39;t reply if other setting command */</span></div>
+<div class="line">    }</div>
+<div class="line">  }</div>
+<div class="line">}</div>
+<div class="line"> </div>
+<div class="line"><span class="keyword">static</span> <span class="keywordtype">void</span> _goto_awakend_cb(<a class="code" href="group__uni__event__def.html#ga902502909694e32b6ffe17cc0486b71d" title="用户可订阅的事件类型">USER_EVENT_TYPE</a> event,</div>
+<div class="line">                                     <a class="code" href="unionuser__event__context__t.html" title="事件内容，共用体，根据事件类型具体处理">user_event_context_t</a> *context) {</div>
+<div class="line">  <a class="code" href="structevent__goto__awakend__t.html" title="对应USER_GOTO_AWAKENED事件">event_goto_awakend_t</a> *awakend = NULL;</div>
+<div class="line">  <span class="keywordflow">if</span> (context) {</div>
+<div class="line">    awakend = &amp;context-&gt;<a class="code" href="unionuser__event__context__t.html#a0a42907c149243b4090998fd50e2038f" title="对应USER_GOTO_AWAKENED事件">goto_awakend</a>;</div>
+<div class="line">    <span class="keywordflow">if</span> (<a class="code" href="group__uni__event__def.html#ggaad619614cc7faaad1f392c03a720641aaac1d30cbb9e9a3084860c811189e821d" title="语音识别指令触发">EVENT_TRIGGER_ASR</a> == awakend-&gt;<a class="code" href="structevent__goto__awakend__t.html#a7a368a2b09bb985b03a9765dfc71f824" title="触发来源">trigger</a>) {</div>
+<div class="line">      LOGT(TAG, <span class="stringliteral">&quot;ASR command: %s -&gt; %s -&gt; %s&quot;</span>, awakend-&gt;<a class="code" href="structevent__goto__awakend__t.html#a2a5293812804bce1aeb044e538a40dc9" title="命令词意图，对应UDP平台上用户定义脚本中的action">cmd</a>, awakend-&gt;<a class="code" href="structevent__goto__awakend__t.html#a618a6abdfcfe7cbe6aa8cb2d10e5a525" title="识别到的命令词">word_str</a>, awakend-&gt;<a class="code" href="structevent__goto__awakend__t.html#a8e561a86d72841824a63ef0c6c3208c9" title="回复语列表[1, 2, 3]，对应UDP平台上用户定义脚本中的回复语列表，在pcm_map.txt中可以找到对应关系">reply_files</a>);</div>
+<div class="line">    } <span class="keywordflow">else</span> {</div>
+<div class="line">      LOGT(TAG, <span class="stringliteral">&quot;External command: %s&quot;</span>, awakend-&gt;<a class="code" href="structevent__goto__awakend__t.html#a8e561a86d72841824a63ef0c6c3208c9" title="回复语列表[1, 2, 3]，对应UDP平台上用户定义脚本中的回复语列表，在pcm_map.txt中可以找到对应关系">reply_files</a>);</div>
+<div class="line">    }</div>
+<div class="line">    <span class="keywordflow">if</span> (awakend-&gt;<a class="code" href="structevent__goto__awakend__t.html#a8e561a86d72841824a63ef0c6c3208c9" title="回复语列表[1, 2, 3]，对应UDP平台上用户定义脚本中的回复语列表，在pcm_map.txt中可以找到对应关系">reply_files</a>) {</div>
+<div class="line">      <span class="keywordflow">if</span>(eACSTATE_ON == AcDeviceGetState()) {</div>
+<div class="line">        <a class="code" href="group__uni__player__inf.html#ga8638ce40d50e8d08516925830d6dbd94" title="播放列表序号音频">user_player_reply_list_num</a>(awakend-&gt;<a class="code" href="structevent__goto__awakend__t.html#a8e561a86d72841824a63ef0c6c3208c9" title="回复语列表[1, 2, 3]，对应UDP平台上用户定义脚本中的回复语列表，在pcm_map.txt中可以找到对应关系">reply_files</a>, 1);</div>
+<div class="line">      } <span class="keywordflow">else</span> {</div>
+<div class="line">        <a class="code" href="group__uni__player__inf.html#ga8638ce40d50e8d08516925830d6dbd94" title="播放列表序号音频">user_player_reply_list_num</a>(awakend-&gt;<a class="code" href="structevent__goto__awakend__t.html#a8e561a86d72841824a63ef0c6c3208c9" title="回复语列表[1, 2, 3]，对应UDP平台上用户定义脚本中的回复语列表，在pcm_map.txt中可以找到对应关系">reply_files</a>, 0);</div>
+<div class="line">      }</div>
+<div class="line">    }</div>
+<div class="line">  }</div>
+<div class="line">}</div>
+<div class="line"> </div>
+<div class="line"><span class="keyword">static</span> <span class="keywordtype">void</span> _goto_sleeping_cb (<a class="code" href="group__uni__event__def.html#ga902502909694e32b6ffe17cc0486b71d" title="用户可订阅的事件类型">USER_EVENT_TYPE</a> event,</div>
+<div class="line">                                     <a class="code" href="unionuser__event__context__t.html" title="事件内容，共用体，根据事件类型具体处理">user_event_context_t</a> *context) {</div>
+<div class="line">  <a class="code" href="structevent__goto__sleeping__t.html" title="对应USER_GOTO_SLEEPING事件">event_goto_sleeping_t</a> *sleeping = NULL;</div>
+<div class="line">  <span class="keywordflow">if</span> (context) {</div>
+<div class="line">    sleeping = &amp;context-&gt;<a class="code" href="unionuser__event__context__t.html#a297b6e16967f2ab116c8c611e2370c2e" title="对应USER_GOTO_SLEEPING事件">goto_sleeping</a>;</div>
+<div class="line">    <span class="keywordflow">if</span> (<a class="code" href="group__uni__event__def.html#ggaad619614cc7faaad1f392c03a720641aaac1d30cbb9e9a3084860c811189e821d" title="语音识别指令触发">EVENT_TRIGGER_ASR</a> == sleeping-&gt;<a class="code" href="structevent__goto__sleeping__t.html#a584490f77754d1c6dc45bdc972b5a281" title="触发来源">trigger</a>) {</div>
+<div class="line">      LOGT(TAG, <span class="stringliteral">&quot;ASR command: %s -&gt; %s -&gt; %s&quot;</span>, sleeping-&gt;<a class="code" href="structevent__goto__sleeping__t.html#a8e50b83c8ebc566897ce84a0e21cb844" title="命令词意图，对应UDP平台上用户定义脚本中的action">cmd</a>, sleeping-&gt;<a class="code" href="structevent__goto__sleeping__t.html#a20f40aea69cb6cb94e0057db8090454b" title="识别到的命令词">word_str</a>,</div>
+<div class="line">                                               sleeping-&gt;<a class="code" href="structevent__goto__sleeping__t.html#aaf8265deb711316c01228d347b0ac769" title="回复语列表[1, 2, 3]，对应UDP平台上用户定义脚本中的回复语列表，在pcm_map.txt中可以找到对应关系">reply_files</a>);</div>
+<div class="line">    } <span class="keywordflow">else</span> {</div>
+<div class="line">      LOGT(TAG, <span class="stringliteral">&quot;External command: %s&quot;</span>, sleeping-&gt;<a class="code" href="structevent__goto__sleeping__t.html#aaf8265deb711316c01228d347b0ac769" title="回复语列表[1, 2, 3]，对应UDP平台上用户定义脚本中的回复语列表，在pcm_map.txt中可以找到对应关系">reply_files</a>);</div>
+<div class="line">    }</div>
+<div class="line">    <span class="keywordflow">if</span> (sleeping-&gt;<a class="code" href="structevent__goto__sleeping__t.html#aaf8265deb711316c01228d347b0ac769" title="回复语列表[1, 2, 3]，对应UDP平台上用户定义脚本中的回复语列表，在pcm_map.txt中可以找到对应关系">reply_files</a>) {</div>
+<div class="line">      <span class="keywordflow">if</span>(<a class="code" href="group__uni__event__def.html#ggaad619614cc7faaad1f392c03a720641aa57515bbf17697fe6ef85b8202128bc4c" title="用户接口主动触发">EVENT_TRIGGER_USER</a> == sleeping-&gt;<a class="code" href="structevent__goto__sleeping__t.html#a584490f77754d1c6dc45bdc972b5a281" title="触发来源">trigger</a>) {</div>
+<div class="line">        <a class="code" href="group__uni__player__inf.html#ga1835960e52668ec97beea7937b4c619a" title="随机播放列表音频">user_player_reply_list_random</a>(g_power_off_reply);</div>
+<div class="line">      } <span class="keywordflow">else</span> {</div>
+<div class="line">        <a class="code" href="group__uni__player__inf.html#ga1835960e52668ec97beea7937b4c619a" title="随机播放列表音频">user_player_reply_list_random</a>(sleeping-&gt;<a class="code" href="structevent__goto__sleeping__t.html#aaf8265deb711316c01228d347b0ac769" title="回复语列表[1, 2, 3]，对应UDP平台上用户定义脚本中的回复语列表，在pcm_map.txt中可以找到对应关系">reply_files</a>);</div>
+<div class="line">      }</div>
+<div class="line">    }</div>
+<div class="line">  }</div>
+<div class="line">}</div>
+<div class="line"> </div>
+<div class="line"><span class="keyword">static</span> <span class="keywordtype">void</span> _register_event_callback(<span class="keywordtype">void</span>) {</div>
+<div class="line">  <a class="code" href="group__uni__event__inf.html#ga02223c46639ad1880e53ad1e4a2c669d" title="订阅一个事件">user_event_subscribe_event</a>(<a class="code" href="group__uni__event__def.html#gga902502909694e32b6ffe17cc0486b71da49fa04fd990408f5d66b194e306dd379" title="识别到客户自定义的识别词时发送">USER_CUSTOM_SETTING</a>, _custom_setting_cb);</div>
+<div class="line">  <a class="code" href="group__uni__event__inf.html#ga02223c46639ad1880e53ad1e4a2c669d" title="订阅一个事件">user_event_subscribe_event</a>(<a class="code" href="group__uni__event__def.html#gga902502909694e32b6ffe17cc0486b71da6427287c5d673468f6b648f03985a3ce" title="进入识别状态（已唤醒）时发送">USER_GOTO_AWAKENED</a>, _goto_awakend_cb);</div>
+<div class="line">  <a class="code" href="group__uni__event__inf.html#ga02223c46639ad1880e53ad1e4a2c669d" title="订阅一个事件">user_event_subscribe_event</a>(<a class="code" href="group__uni__event__def.html#gga902502909694e32b6ffe17cc0486b71dac657cc02e4cdf099ae7c028dc2eb8d3d" title="进入待唤醒状态时发送">USER_GOTO_SLEEPING</a>, _goto_sleeping_cb);</div>
+<div class="line">}</div>
+<div class="line"> </div>
+<div class="line"><span class="keywordtype">int</span> hb_smart_ac(<span class="keywordtype">void</span>) {</div>
+<div class="line">  AcDeviceInit();</div>
+<div class="line">  _register_event_callback();</div>
+<div class="line">  <span class="keywordflow">return</span> 0;</div>
+<div class="line">}</div>
+<div class="line"> </div>
+</div><!-- fragment --> </div><!-- contents -->
+</body>
+</html>

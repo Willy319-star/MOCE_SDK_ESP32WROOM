@@ -1,0 +1,458 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "https://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=9"/>
+<meta name="generator" content="Doxygen 1.8.18"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>蜂鸟M离线方案开发指导手册: GPIO相关接口</title>
+<link href="tabs.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="jquery.js"></script>
+<script type="text/javascript" src="dynsections.js"></script>
+<link href="doxygen.css" rel="stylesheet" type="text/css" />
+</head>
+<body>
+<div id="top"><!-- do not remove this div, it is closed by doxygen! -->
+<div id="titlearea">
+<table cellspacing="0" cellpadding="0">
+ <tbody>
+ <tr style="height: 56px;">
+  <td id="projectalign" style="padding-left: 0.5em;">
+   <div id="projectname">蜂鸟M离线方案开发指导手册
+   &#160;<span id="projectnumber">v1.0.4</span>
+   </div>
+  </td>
+ </tr>
+ </tbody>
+</table>
+</div>
+<!-- end header part -->
+<!-- 制作者 Doxygen 1.8.18 -->
+<script type="text/javascript" src="menudata.js"></script>
+<script type="text/javascript" src="menu.js"></script>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:cf05388f2679ee054f2beb29a391d25f4e673ac3&amp;dn=gpl-2.0.txt GPL-v2 */
+$(function() {
+  initMenu('',false,false,'search.php','搜索');
+});
+/* @license-end */</script>
+<div id="main-nav"></div>
+</div><!-- top -->
+<div class="header">
+  <div class="summary">
+<a href="#func-members">函数</a>  </div>
+  <div class="headertitle">
+<div class="title">GPIO相关接口<div class="ingroups"><a class="el" href="group__uni__gpio.html">GPIO</a></div></div>  </div>
+</div><!--header-->
+<div class="contents">
+<table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
+函数</h2></td></tr>
+<tr class="memitem:gaed630c4a7949f960914f5b4398b1996f"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__uni__gpio__inf.html#gaed630c4a7949f960914f5b4398b1996f">user_gpio_init</a> (void)</td></tr>
+<tr class="memdesc:gaed630c4a7949f960914f5b4398b1996f"><td class="mdescLeft">&#160;</td><td class="mdescRight">GPIO初始化  <a href="group__uni__gpio__inf.html#gaed630c4a7949f960914f5b4398b1996f">更多...</a><br /></td></tr>
+<tr class="separator:gaed630c4a7949f960914f5b4398b1996f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga6a998752d2d162a7c2bc3d7d5368833c"><td class="memItemLeft" align="right" valign="top"><a id="ga6a998752d2d162a7c2bc3d7d5368833c"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__uni__gpio__inf.html#ga6a998752d2d162a7c2bc3d7d5368833c">user_gpio_final</a> (void)</td></tr>
+<tr class="memdesc:ga6a998752d2d162a7c2bc3d7d5368833c"><td class="mdescLeft">&#160;</td><td class="mdescRight">GPIO反初始化 <br /></td></tr>
+<tr class="separator:ga6a998752d2d162a7c2bc3d7d5368833c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga723df1589dae08fc7a847f66a999a2d8"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__uni__gpio__inf.html#ga723df1589dae08fc7a847f66a999a2d8">user_gpio_set_mode</a> (<a class="el" href="group__uni__gpio__def.html#gab98b40805939a8489960247300b6043a">GPIO_NUMBER</a> num, <a class="el" href="group__uni__gpio__def.html#ga201df5e2845212d28c89e2cf3fdaa642">GPIO_MODE</a> mode)</td></tr>
+<tr class="memdesc:ga723df1589dae08fc7a847f66a999a2d8"><td class="mdescLeft">&#160;</td><td class="mdescRight">设置GPIO工作模式  <a href="group__uni__gpio__inf.html#ga723df1589dae08fc7a847f66a999a2d8">更多...</a><br /></td></tr>
+<tr class="separator:ga723df1589dae08fc7a847f66a999a2d8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga7901ff5cc1ad6bd600770400fd298dba"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__uni__gpio__inf.html#ga7901ff5cc1ad6bd600770400fd298dba">user_gpio_set_pull_mode</a> (<a class="el" href="group__uni__gpio__def.html#gab98b40805939a8489960247300b6043a">GPIO_NUMBER</a> num, <a class="el" href="group__uni__gpio__def.html#ga20b0a645d2008266af0f9aefc7a745ae">GPIO_PULL_MODE</a> mode)</td></tr>
+<tr class="memdesc:ga7901ff5cc1ad6bd600770400fd298dba"><td class="mdescLeft">&#160;</td><td class="mdescRight">设置GPIO pull模式  <a href="group__uni__gpio__inf.html#ga7901ff5cc1ad6bd600770400fd298dba">更多...</a><br /></td></tr>
+<tr class="separator:ga7901ff5cc1ad6bd600770400fd298dba"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:gad55c8bdb99d85eb520175ef09c70bcc8"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__uni__gpio__inf.html#gad55c8bdb99d85eb520175ef09c70bcc8">user_gpio_set_value</a> (<a class="el" href="group__uni__gpio__def.html#gab98b40805939a8489960247300b6043a">GPIO_NUMBER</a> num, int val)</td></tr>
+<tr class="memdesc:gad55c8bdb99d85eb520175ef09c70bcc8"><td class="mdescLeft">&#160;</td><td class="mdescRight">设置GPIO端口数值  <a href="group__uni__gpio__inf.html#gad55c8bdb99d85eb520175ef09c70bcc8">更多...</a><br /></td></tr>
+<tr class="separator:gad55c8bdb99d85eb520175ef09c70bcc8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:gaeb2fb86366e9b816de71d64d1ee8fa25"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__uni__gpio__inf.html#gaeb2fb86366e9b816de71d64d1ee8fa25">user_gpio_get_value</a> (<a class="el" href="group__uni__gpio__def.html#gab98b40805939a8489960247300b6043a">GPIO_NUMBER</a> num)</td></tr>
+<tr class="memdesc:gaeb2fb86366e9b816de71d64d1ee8fa25"><td class="mdescLeft">&#160;</td><td class="mdescRight">获取GPIO端口值  <a href="group__uni__gpio__inf.html#gaeb2fb86366e9b816de71d64d1ee8fa25">更多...</a><br /></td></tr>
+<tr class="separator:gaeb2fb86366e9b816de71d64d1ee8fa25"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:gaa90aa3d7b5feb1be9d6773f5d103a097"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__uni__gpio__inf.html#gaa90aa3d7b5feb1be9d6773f5d103a097">user_gpio_interrupt_enable</a> (void)</td></tr>
+<tr class="memdesc:gaa90aa3d7b5feb1be9d6773f5d103a097"><td class="mdescLeft">&#160;</td><td class="mdescRight">使能GPIO中断  <a href="group__uni__gpio__inf.html#gaa90aa3d7b5feb1be9d6773f5d103a097">更多...</a><br /></td></tr>
+<tr class="separator:gaa90aa3d7b5feb1be9d6773f5d103a097"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga0b29c0339e374085d048368cf1c35b47"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__uni__gpio__inf.html#ga0b29c0339e374085d048368cf1c35b47">user_gpio_interrupt_disable</a> (void)</td></tr>
+<tr class="memdesc:ga0b29c0339e374085d048368cf1c35b47"><td class="mdescLeft">&#160;</td><td class="mdescRight">关闭GPIO中断  <a href="group__uni__gpio__inf.html#ga0b29c0339e374085d048368cf1c35b47">更多...</a><br /></td></tr>
+<tr class="separator:ga0b29c0339e374085d048368cf1c35b47"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga4844d8972c5fe3679b059b7ee9656fd1"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__uni__gpio__inf.html#ga4844d8972c5fe3679b059b7ee9656fd1">user_gpio_set_interrupt</a> (<a class="el" href="group__uni__gpio__def.html#gab98b40805939a8489960247300b6043a">GPIO_NUMBER</a> num, <a class="el" href="group__uni__gpio__def.html#ga6f9e27f786736a857f19c93ab7f7ebba">GPIO_INT_TYPE</a> type, <a class="el" href="group__uni__gpio__def.html#gac732f5445a1e94252c37f79061db47b6">_gpio_interrupt_cb</a> cb)</td></tr>
+<tr class="memdesc:ga4844d8972c5fe3679b059b7ee9656fd1"><td class="mdescLeft">&#160;</td><td class="mdescRight">注册GPIO中断  <a href="group__uni__gpio__inf.html#ga4844d8972c5fe3679b059b7ee9656fd1">更多...</a><br /></td></tr>
+<tr class="separator:ga4844d8972c5fe3679b059b7ee9656fd1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:gaa0fa04582d1b4a471cba7edd0bd83fed"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__uni__gpio__inf.html#gaa0fa04582d1b4a471cba7edd0bd83fed">user_gpio_clear_interrupt</a> (<a class="el" href="group__uni__gpio__def.html#gab98b40805939a8489960247300b6043a">GPIO_NUMBER</a> num)</td></tr>
+<tr class="memdesc:gaa0fa04582d1b4a471cba7edd0bd83fed"><td class="mdescLeft">&#160;</td><td class="mdescRight">注销GPIO中断注册回调函数  <a href="group__uni__gpio__inf.html#gaa0fa04582d1b4a471cba7edd0bd83fed">更多...</a><br /></td></tr>
+<tr class="separator:gaa0fa04582d1b4a471cba7edd0bd83fed"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga2f687fffb0fcee88f2b5f2005aaa5af9"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__uni__gpio__inf.html#ga2f687fffb0fcee88f2b5f2005aaa5af9">user_sw_timer_gpio_pulse</a> (<a class="el" href="group__uni__gpio__def.html#gab98b40805939a8489960247300b6043a">GPIO_NUMBER</a> num, int cycle, int times, int def_val)</td></tr>
+<tr class="memdesc:ga2f687fffb0fcee88f2b5f2005aaa5af9"><td class="mdescLeft">&#160;</td><td class="mdescRight">设置GPIO端口输出定时脉冲  <a href="group__uni__gpio__inf.html#ga2f687fffb0fcee88f2b5f2005aaa5af9">更多...</a><br /></td></tr>
+<tr class="separator:ga2f687fffb0fcee88f2b5f2005aaa5af9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table>
+<a name="details" id="details"></a><h2 class="groupheader">详细描述</h2>
+<h2 class="groupheader">函数说明</h2>
+<a id="gaa0fa04582d1b4a471cba7edd0bd83fed"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#gaa0fa04582d1b4a471cba7edd0bd83fed">&#9670;&nbsp;</a></span>user_gpio_clear_interrupt()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int user_gpio_clear_interrupt </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="group__uni__gpio__def.html#gab98b40805939a8489960247300b6043a">GPIO_NUMBER</a>&#160;</td>
+          <td class="paramname"><em>num</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<dl class="params"><dt>参数</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">num</td><td>GPIO端口号 </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="retval"><dt>返回值</dt><dd>
+  <table class="retval">
+    <tr><td class="paramname">0</td><td>操作成功 </td></tr>
+    <tr><td class="paramname">-1</td><td>操作失败 </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="gaeb2fb86366e9b816de71d64d1ee8fa25"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#gaeb2fb86366e9b816de71d64d1ee8fa25">&#9670;&nbsp;</a></span>user_gpio_get_value()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int user_gpio_get_value </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="group__uni__gpio__def.html#gab98b40805939a8489960247300b6043a">GPIO_NUMBER</a>&#160;</td>
+          <td class="paramname"><em>num</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<dl class="params"><dt>参数</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">num</td><td>GPIO端口号 </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="retval"><dt>返回值</dt><dd>
+  <table class="retval">
+    <tr><td class="paramname">else</td><td>读取数值 </td></tr>
+    <tr><td class="paramname">-1</td><td>操作失败 </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="gaed630c4a7949f960914f5b4398b1996f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#gaed630c4a7949f960914f5b4398b1996f">&#9670;&nbsp;</a></span>user_gpio_init()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int user_gpio_init </td>
+          <td>(</td>
+          <td class="paramtype">void&#160;</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<dl class="retval"><dt>返回值</dt><dd>
+  <table class="retval">
+    <tr><td class="paramname">0</td><td>操作成功 </td></tr>
+    <tr><td class="paramname">-1</td><td>操作失败 </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="ga0b29c0339e374085d048368cf1c35b47"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ga0b29c0339e374085d048368cf1c35b47">&#9670;&nbsp;</a></span>user_gpio_interrupt_disable()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int user_gpio_interrupt_disable </td>
+          <td>(</td>
+          <td class="paramtype">void&#160;</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<dl class="retval"><dt>返回值</dt><dd>
+  <table class="retval">
+    <tr><td class="paramname">0</td><td>操作成功 </td></tr>
+    <tr><td class="paramname">-1</td><td>操作失败 </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="gaa90aa3d7b5feb1be9d6773f5d103a097"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#gaa90aa3d7b5feb1be9d6773f5d103a097">&#9670;&nbsp;</a></span>user_gpio_interrupt_enable()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int user_gpio_interrupt_enable </td>
+          <td>(</td>
+          <td class="paramtype">void&#160;</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<dl class="retval"><dt>返回值</dt><dd>
+  <table class="retval">
+    <tr><td class="paramname">0</td><td>操作成功 </td></tr>
+    <tr><td class="paramname">-1</td><td>操作失败 </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="ga4844d8972c5fe3679b059b7ee9656fd1"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ga4844d8972c5fe3679b059b7ee9656fd1">&#9670;&nbsp;</a></span>user_gpio_set_interrupt()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int user_gpio_set_interrupt </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="group__uni__gpio__def.html#gab98b40805939a8489960247300b6043a">GPIO_NUMBER</a>&#160;</td>
+          <td class="paramname"><em>num</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="group__uni__gpio__def.html#ga6f9e27f786736a857f19c93ab7f7ebba">GPIO_INT_TYPE</a>&#160;</td>
+          <td class="paramname"><em>type</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="group__uni__gpio__def.html#gac732f5445a1e94252c37f79061db47b6">_gpio_interrupt_cb</a>&#160;</td>
+          <td class="paramname"><em>cb</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<dl class="params"><dt>参数</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">num</td><td>GPIO端口号 </td></tr>
+    <tr><td class="paramname">type</td><td>GPIO电平跳变模式 </td></tr>
+    <tr><td class="paramname">cb</td><td>中断处理回调函数 </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="retval"><dt>返回值</dt><dd>
+  <table class="retval">
+    <tr><td class="paramname">0</td><td>操作成功 </td></tr>
+    <tr><td class="paramname">-1</td><td>操作失败 </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="ga723df1589dae08fc7a847f66a999a2d8"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ga723df1589dae08fc7a847f66a999a2d8">&#9670;&nbsp;</a></span>user_gpio_set_mode()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int user_gpio_set_mode </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="group__uni__gpio__def.html#gab98b40805939a8489960247300b6043a">GPIO_NUMBER</a>&#160;</td>
+          <td class="paramname"><em>num</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="group__uni__gpio__def.html#ga201df5e2845212d28c89e2cf3fdaa642">GPIO_MODE</a>&#160;</td>
+          <td class="paramname"><em>mode</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<dl class="params"><dt>参数</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">num</td><td>GPIO端口号 </td></tr>
+    <tr><td class="paramname">mode</td><td>GPIO工作模式 </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="retval"><dt>返回值</dt><dd>
+  <table class="retval">
+    <tr><td class="paramname">0</td><td>操作成功 </td></tr>
+    <tr><td class="paramname">-1</td><td>操作失败 </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="ga7901ff5cc1ad6bd600770400fd298dba"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ga7901ff5cc1ad6bd600770400fd298dba">&#9670;&nbsp;</a></span>user_gpio_set_pull_mode()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int user_gpio_set_pull_mode </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="group__uni__gpio__def.html#gab98b40805939a8489960247300b6043a">GPIO_NUMBER</a>&#160;</td>
+          <td class="paramname"><em>num</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="group__uni__gpio__def.html#ga20b0a645d2008266af0f9aefc7a745ae">GPIO_PULL_MODE</a>&#160;</td>
+          <td class="paramname"><em>mode</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<dl class="params"><dt>参数</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">num</td><td>GPIO端口号 </td></tr>
+    <tr><td class="paramname">mode</td><td>GPIO pull模式 </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="retval"><dt>返回值</dt><dd>
+  <table class="retval">
+    <tr><td class="paramname">0</td><td>操作成功 </td></tr>
+    <tr><td class="paramname">-1</td><td>操作失败 </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="gad55c8bdb99d85eb520175ef09c70bcc8"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#gad55c8bdb99d85eb520175ef09c70bcc8">&#9670;&nbsp;</a></span>user_gpio_set_value()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int user_gpio_set_value </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="group__uni__gpio__def.html#gab98b40805939a8489960247300b6043a">GPIO_NUMBER</a>&#160;</td>
+          <td class="paramname"><em>num</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>val</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<dl class="params"><dt>参数</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">num</td><td>GPIO端口号 </td></tr>
+    <tr><td class="paramname">val</td><td>0 or 1 </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="retval"><dt>返回值</dt><dd>
+  <table class="retval">
+    <tr><td class="paramname">0</td><td>操作成功 </td></tr>
+    <tr><td class="paramname">-1</td><td>操作失败 </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="ga2f687fffb0fcee88f2b5f2005aaa5af9"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ga2f687fffb0fcee88f2b5f2005aaa5af9">&#9670;&nbsp;</a></span>user_sw_timer_gpio_pulse()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int user_sw_timer_gpio_pulse </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="group__uni__gpio__def.html#gab98b40805939a8489960247300b6043a">GPIO_NUMBER</a>&#160;</td>
+          <td class="paramname"><em>num</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>cycle</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>times</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>def_val</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<dl class="params"><dt>参数</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">num</td><td>GPIO端口号 </td></tr>
+    <tr><td class="paramname">cycle</td><td>脉冲周期 </td></tr>
+    <tr><td class="paramname">times</td><td>脉冲次数 </td></tr>
+    <tr><td class="paramname">def_val</td><td>0 or 1，脉冲结束持续电平 </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="retval"><dt>返回值</dt><dd>
+  <table class="retval">
+    <tr><td class="paramname">0</td><td>操作成功 </td></tr>
+    <tr><td class="paramname">-1</td><td>操作失败 </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+</div><!-- contents -->
+</body>
+</html>

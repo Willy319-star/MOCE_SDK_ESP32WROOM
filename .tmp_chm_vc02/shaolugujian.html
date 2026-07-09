@@ -1,0 +1,584 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "https://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=9"/>
+<meta name="generator" content="Doxygen 1.8.18"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>蜂鸟M离线方案开发指导手册: 4、烧录固件</title>
+<link href="tabs.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="jquery.js"></script>
+<script type="text/javascript" src="dynsections.js"></script>
+<link href="doxygen.css" rel="stylesheet" type="text/css" />
+</head>
+<body>
+<div id="top"><!-- do not remove this div, it is closed by doxygen! -->
+<div id="titlearea">
+<table cellspacing="0" cellpadding="0">
+ <tbody>
+ <tr style="height: 56px;">
+  <td id="projectalign" style="padding-left: 0.5em;">
+   <div id="projectname">蜂鸟M离线方案开发指导手册
+   &#160;<span id="projectnumber">v1.0.4</span>
+   </div>
+  </td>
+ </tr>
+ </tbody>
+</table>
+</div>
+<!-- end header part -->
+<!-- 制作者 Doxygen 1.8.18 -->
+<script type="text/javascript" src="menudata.js"></script>
+<script type="text/javascript" src="menu.js"></script>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:cf05388f2679ee054f2beb29a391d25f4e673ac3&amp;dn=gpl-2.0.txt GPL-v2 */
+$(function() {
+  initMenu('',false,false,'search.php','搜索');
+});
+/* @license-end */</script>
+<div id="main-nav"></div>
+</div><!-- top -->
+<div class="PageDoc"><div class="header">
+  <div class="headertitle">
+<div class="title">4、烧录固件 </div>  </div>
+</div><!--header-->
+<div class="contents">
+<div class="textblock"><html>
+
+<head>
+<meta http-equiv=Content-Type content="text/html; charset=utf-8">
+<meta name=Generator content="Microsoft Word 15 (filtered)">
+<style>
+<!--
+ /* Font Definitions */
+ @font-face
+	{font-family:Wingdings;
+	panose-1:5 0 0 0 0 0 0 0 0 0;}
+@font-face
+	{font-family:宋体;
+	panose-1:2 1 6 0 3 1 1 1 1 1;}
+@font-face
+	{font-family:"Cambria Math";
+	panose-1:2 4 5 3 5 4 6 3 2 4;}
+@font-face
+	{font-family:等线;
+	panose-1:2 1 6 0 3 1 1 1 1 1;}
+@font-face
+	{font-family:Calibri;
+	panose-1:2 15 5 2 2 2 4 3 2 4;}
+@font-face
+	{font-family:"\@等线";
+	panose-1:2 1 6 0 3 1 1 1 1 1;}
+@font-face
+	{font-family:"\@宋体";
+	panose-1:2 1 6 0 3 1 1 1 1 1;}
+ /* Style Definitions */
+ p.MsoNormal, li.MsoNormal, div.MsoNormal
+	{margin:0cm;
+	text-align:justify;
+	text-justify:inter-ideograph;
+	font-size:10.5pt;
+	font-family:"Calibri",sans-serif;}
+h2
+	{mso-style-link:"标题 2 字符";
+	margin-top:13.0pt;
+	margin-right:0cm;
+	margin-bottom:13.0pt;
+	margin-left:0cm;
+	text-align:justify;
+	text-justify:inter-ideograph;
+	line-height:173%;
+	page-break-after:avoid;
+	font-size:12.0pt;
+	font-family:"Times New Roman",serif;}
+h3
+	{mso-style-link:"标题 3 字符";
+	margin-top:13.0pt;
+	margin-right:0cm;
+	margin-bottom:13.0pt;
+	margin-left:0cm;
+	text-align:justify;
+	text-justify:inter-ideograph;
+	line-height:173%;
+	page-break-after:avoid;
+	font-size:16.0pt;
+	font-family:"Calibri",sans-serif;}
+h4
+	{mso-style-link:"标题 4 字符";
+	margin-top:14.0pt;
+	margin-right:0cm;
+	margin-bottom:14.5pt;
+	margin-left:0cm;
+	text-align:justify;
+	text-justify:inter-ideograph;
+	line-height:156%;
+	page-break-after:avoid;
+	font-size:14.0pt;
+	font-family:"Calibri Light",sans-serif;}
+p.MsoListParagraph, li.MsoListParagraph, div.MsoListParagraph
+	{margin:0cm;
+	text-align:justify;
+	text-justify:inter-ideograph;
+	text-indent:21.0pt;
+	font-size:10.5pt;
+	font-family:"Calibri",sans-serif;}
+span.2
+	{mso-style-name:"标题 2 字符";
+	mso-style-link:"标题 2";
+	font-family:"Times New Roman",serif;
+	font-weight:bold;}
+span.3
+	{mso-style-name:"标题 3 字符";
+	mso-style-link:"标题 3";
+	font-weight:bold;}
+span.4
+	{mso-style-name:"标题 4 字符";
+	mso-style-link:"标题 4";
+	font-family:"Calibri Light",sans-serif;
+	font-weight:bold;}
+.MsoChpDefault
+	{font-size:10.0pt;}
+ /* Page Definitions */
+ @page WordSection1
+	{size:595.3pt 841.9pt;
+	margin:72.0pt 90.0pt 72.0pt 90.0pt;
+	layout-grid:15.6pt;}
+div.WordSection1
+	{page:WordSection1;}
+ /* List Definitions */
+ ol
+	{margin-bottom:0cm;}
+ul
+	{margin-bottom:0cm;}
+-->
+</style>
+
+</head>
+
+<body lang=EN-US style='word-wrap:break-word;text-justify-trim:punctuation'>
+
+<div class=WordSection1 style='layout-grid:15.6pt'>
+
+<h2 style='margin:0cm;line-height:172%'><a name="_Toc35612013">1. </a><span
+lang=ZH-CN style='font-family:等线'>文件介绍</span></h2>
+
+<p class=MsoNormal style='margin-left:36.0pt;text-indent:-18.0pt'><span
+style='font-size:9.0pt;font-family:"Arial",sans-serif'>•<span style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span><span lang=ZH-CN style='font-size:9.0pt;font-family:等线'>产品的软件烧录包下载成功后，解压文件，可以看到如下方文件目录</span></p>
+
+<p class=MsoNormal align=center style='text-align:center'><span
+style='font-size:9.0pt;font-family:"Times New Roman",serif'><img width=367
+height=101 id="图片 12" src="slgj4_image001.png"></span><span style='font-size:
+9.0pt;font-family:"Times New Roman",serif'> </span></p>
+
+<p class=MsoNormal style='margin-left:36.0pt;text-indent:-18.0pt'><span
+style='font-size:9.0pt;font-family:"Arial",sans-serif'>•<span style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span><span lang=ZH-CN style='font-size:9.0pt;font-family:等线'>如想直接使用，体验语音功能，请打开</span><span
+style='font-size:9.0pt;font-family:"Times New Roman",serif'>“image_demo/Hummingbird-M-Production-Tool”</span><span
+lang=ZH-CN style='font-size:9.0pt;font-family:等线'>文件夹，双击</span><span
+style='font-size:9.0pt;font-family:"Times New Roman",serif'>“UniOneDownloadTool”</span><span
+lang=ZH-CN style='font-size:9.0pt;font-family:等线'>，运行烧录工具</span></p>
+
+<p class=MsoNormal align=center style='text-align:center'><span
+style='font-size:9.0pt;font-family:"Times New Roman",serif'><img width=366
+height=251 id="图片 14" src="slgj4_image002.png"></span></p>
+
+<p class=MsoNormal style='margin-left:36.0pt;text-indent:-18.0pt'><span
+style='font-size:9.0pt;font-family:"Arial",sans-serif'>•<span style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span><span lang=ZH-CN style='font-size:9.0pt;font-family:等线'>烧录工具配置界面如下图所示：</span></p>
+
+<p class=MsoNormal align=center style='margin-left:18.0pt;text-align:center'><span
+style='font-size:9.0pt;font-family:"Times New Roman",serif'><img width=435
+height=393 id="图片 108" src="slgj4_image003.jpg"></span></p>
+
+<h2 style='margin:0cm;line-height:172%'><a name="_Toc35612014">2. </a><span
+lang=ZH-CN style='font-family:等线'>烧录指南</span></h2>
+
+<h3 style='margin:0cm;line-height:172%'><span style='font-size:10.5pt;
+line-height:172%;font-family:"Times New Roman",serif'>2.1 </span><span
+lang=ZH-CN style='font-size:10.5pt;line-height:172%;font-family:等线'>烧录前介绍</span></h3>
+
+<p class=MsoNormal style='margin-bottom:7.8pt'><b><span lang=ZH-CN
+style='font-size:9.0pt;font-family:等线'>开始烧录之前，需要准备：</span></b></p>
+
+<p class=MsoNormal style='margin-left:21.0pt'><span style='font-size:9.0pt;
+font-family:"Times New Roman",serif'>-  Micro USB</span><span lang=ZH-CN
+style='font-size:9.0pt;font-family:等线'>连接线，用于供电</span></p>
+
+<p class=MsoNormal style='margin-left:21.0pt'><span style='font-size:9.0pt;
+font-family:"Times New Roman",serif'>-  </span><span lang=ZH-CN
+style='font-size:9.0pt;font-family:等线'>烧录器，用于烧录</span></p>
+
+<p class=MsoNormal style='margin-left:21.0pt'><span style='font-size:9.0pt;
+font-family:"Times New Roman",serif'>-  </span><span lang=ZH-CN
+style='font-size:9.0pt;font-family:等线'>蜂鸟</span><span style='font-size:9.0pt;
+font-family:"Times New Roman",serif'>M</span><span lang=ZH-CN style='font-size:
+9.0pt;font-family:等线'>开发板</span></p>
+
+<p class=MsoNormal style='margin-left:21.0pt'><span style='font-size:9.0pt;
+font-family:"Times New Roman",serif'>-  </span><span lang=ZH-CN
+style='font-size:9.0pt;font-family:等线'>固件包</span></p>
+
+<p class=MsoNormal align=center style='margin-left:21.0pt;text-align:center'><span
+style='font-size:9.0pt;font-family:"Times New Roman",serif'><img width=270
+height=86 id="图片 26" src="slgj4_image004.jpg"></span></p>
+
+<p class=MsoNormal align=center style='text-align:center'><span lang=ZH-CN
+style='font-size:6.5pt;font-family:等线'>烧录器</span></p>
+
+<p class=MsoNormal align=center style='margin-left:21.0pt;text-align:center'><span
+style='font-size:9.0pt;font-family:"Times New Roman",serif'><img width=339
+height=245 id="图片 25" src="slgj4_image005.jpg"></span></p>
+
+<p class=MsoNormal align=center style='text-align:center'><span lang=ZH-CN
+style='font-size:6.5pt;font-family:等线'>蜂鸟开发板示例图</span></p>
+
+<p class=MsoNormal style='margin-bottom:7.8pt'><b><span lang=ZH-CN
+style='font-size:9.0pt;font-family:等线'>开始烧录之前，需要准备：</span></b></p>
+
+<p class=MsoNormal align=left style='text-align:left;text-indent:21.0pt'><span
+lang=ZH-CN style='font-size:9.0pt;font-family:等线'>打开烧录包，</span><span
+style='font-size:9.0pt;font-family:"Times New Roman",serif'>Hummingbird-M-Production-Tool</span><span
+lang=ZH-CN style='font-size:9.0pt;font-family:等线'>内，可看到以下目录结构：</span></p>
+
+<p class=MsoNormal align=center style='text-align:center'><span
+style='font-size:9.0pt;font-family:"Times New Roman",serif'><img width=266
+height=217 id="图片 28" src="slgj4_image006.png"></span></p>
+
+<p class=MsoNormal style='margin-bottom:7.8pt'><b><span style='font-size:9.0pt;
+font-family:"Times New Roman",serif'>&nbsp;</span></b></p>
+
+<p class=MsoNormal style='margin-bottom:7.8pt'><b><span style='font-size:9.0pt;
+font-family:"Times New Roman",serif'>&nbsp;</span></b></p>
+
+<p class=MsoNormal style='margin-bottom:7.8pt'><b><span lang=ZH-CN
+style='font-size:9.0pt;font-family:等线'>和用户相关的目录有以下几个：</span></b></p>
+
+<p class=MsoListParagraph align=left style='margin-left:42.0pt;text-align:left;
+text-indent:-21.0pt'><span style='font-size:9.0pt;font-family:Wingdings'><span
+style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp; </span></span><span
+style='font-size:9.0pt;font-family:"Times New Roman",serif'>\bin </span><span
+lang=ZH-CN style='font-size:9.0pt;font-family:等线'>：</span><span lang=ZH-CN
+style='font-size:9.0pt;font-family:"Times New Roman",serif'> </span><span
+lang=ZH-CN style='font-size:9.0pt;font-family:等线'>用户存放</span><span
+style='font-size:9.0pt;font-family:"Times New Roman",serif'>bin/mva </span><span
+lang=ZH-CN style='font-size:9.0pt;font-family:等线'>文件的目录</span></p>
+
+<p class=MsoListParagraph align=left style='margin-left:42.0pt;text-align:left;
+text-indent:-21.0pt'><span style='font-size:9.0pt;font-family:Wingdings'><span
+style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp; </span></span><span
+style='font-size:9.0pt;font-family:"Times New Roman",serif'>\flash_downloader :
+flash downloader </span><span lang=ZH-CN style='font-size:9.0pt;font-family:
+等线'>存放目录，需要提取相应芯片</span><span style='font-size:9.0pt;font-family:"Times New Roman",serif'>SDK
+</span><span lang=ZH-CN style='font-size:9.0pt;font-family:等线'>中提供的</span><span
+style='font-size:9.0pt;font-family:"Times New Roman",serif'>downloader.exe</span></p>
+
+<p class=MsoListParagraph align=left style='margin-left:42.0pt;text-align:left;
+text-indent:-21.0pt'><span style='font-size:9.0pt;font-family:Wingdings'><span
+style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp; </span></span><span
+style='font-size:9.0pt;font-family:"Times New Roman",serif'>\ice\libusb-AICE-driver
+</span><span lang=ZH-CN style='font-size:9.0pt;font-family:等线'>：</span><span
+lang=ZH-CN style='font-size:9.0pt;font-family:"Times New Roman",serif'> </span><span
+lang=ZH-CN style='font-size:9.0pt;font-family:等线'>仿真器驱动</span></p>
+
+<p class=MsoNormal align=center style='text-align:center'><span
+style='font-size:9.0pt;font-family:"Times New Roman",serif'><img width=357
+height=270 id="图片 27" src="slgj4_image007.png"></span></p>
+
+<p class=MsoNormal style='margin-bottom:7.8pt'><b><span lang=ZH-CN
+style='font-size:9.0pt;font-family:等线'>根目录有以下用户相关的文件：</span></b></p>
+
+<p class=MsoListParagraph align=left style='margin-left:42.0pt;text-align:left;
+text-indent:-21.0pt'><span style='font-size:9.0pt;font-family:Wingdings'><span
+style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp; </span></span><span
+style='font-size:9.0pt;font-family:"Times New Roman",serif'>UniOneDownloadTool_x64.exe
+</span><span lang=ZH-CN style='font-size:9.0pt;font-family:等线'>：烧录工具启动</span><span
+style='font-size:9.0pt;font-family:"Times New Roman",serif'>exe</span></p>
+
+<p class=MsoListParagraph align=left style='margin-left:42.0pt;text-align:left;
+text-indent:-21.0pt'><span style='font-size:9.0pt;font-family:Wingdings'><span
+style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp; </span></span><span
+style='font-size:9.0pt;font-family:"Times New Roman",serif'>run_download.bat </span><span
+lang=ZH-CN style='font-size:9.0pt;font-family:等线'>：</span><span lang=ZH-CN
+style='font-size:9.0pt;font-family:"Times New Roman",serif'> </span><span
+lang=ZH-CN style='font-size:9.0pt;font-family:等线'>批量执行脚本例程</span></p>
+
+<h3 style='margin:0cm;line-height:172%'><span style='font-size:10.5pt;
+line-height:172%;font-family:"Times New Roman",serif'>2.2 </span><span
+lang=ZH-CN style='font-size:10.5pt;line-height:172%;font-family:等线'>安装驱动（如已安装，可跳过）</span></h3>
+
+<p class=MsoNormal style='text-indent:18.0pt'><span lang=ZH-CN
+style='font-size:9.0pt;font-family:等线'>插入烧录器，如在设备管理器看到未知设备，则需要安装驱动。</span></p>
+
+<p class=MsoNormal align=center style='text-align:center;text-indent:18.0pt'><span
+style='font-size:9.0pt;font-family:"Times New Roman",serif'><img width=520
+height=386 id="图片 16" src="slgj4_image008.png"></span></p>
+
+<p class=MsoNormal align=center style='text-align:center'><span
+style='font-size:9.0pt;font-family:"Times New Roman",serif'>&nbsp;</span></p>
+
+<p class=MsoListParagraph align=left style='margin-left:18.0pt;text-align:left;
+text-indent:-18.0pt'><span style='font-size:9.0pt;font-family:"Times New Roman",serif'>1、<span
+style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp; </span></span><span
+lang=ZH-CN style='font-size:9.0pt;font-family:等线'>准备固件：发布的固件包，如</span><span
+style='font-size:9.0pt;font-family:"Times New Roman",serif'>Hummingbird-M-Production-Tool</span></p>
+
+<p class=MsoListParagraph align=left style='margin-left:18.0pt;text-align:left;
+text-indent:-18.0pt'><span style='font-size:9.0pt;font-family:"Times New Roman",serif'>2、<span
+style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp; </span></span><span
+lang=ZH-CN style='font-size:9.0pt;font-family:等线'>打开</span><span
+style='font-size:9.0pt;font-family:"Times New Roman",serif'>Hummingbird-M-Production-Tool\ice\libusb-AICE-driver</span><span
+lang=ZH-CN style='font-size:9.0pt;font-family:等线'>，双击</span><span
+style='font-size:9.0pt;font-family:"Times New Roman",serif'>Install_driver.exe</span><span
+lang=ZH-CN style='font-size:9.0pt;font-family:等线'>，点击同意安装</span></p>
+
+<p class=MsoNormal align=center style='text-align:center'><span
+style='font-size:9.0pt;font-family:"Times New Roman",serif'><img width=400
+height=318 id="图片 51" src="slgj4_image009.jpg"></span></p>
+
+<p class=MsoListParagraph style='margin-left:18.0pt;text-indent:-18.0pt'><span
+style='font-size:9.0pt;font-family:"Times New Roman",serif'>3、<span
+style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp; </span></span><span
+lang=ZH-CN style='font-size:9.0pt;font-family:等线'>处于设备管理器页面，右击</span><span
+style='font-size:9.0pt;font-family:"Times New Roman",serif'>AICE</span><span
+lang=ZH-CN style='font-size:9.0pt;font-family:等线'>（未知设备），更新驱动程序</span></p>
+
+<p class=MsoNormal align=center style='text-align:center'><span
+style='font-size:9.0pt;font-family:"Times New Roman",serif'><img width=220
+height=276 id="图片 29" src="slgj4_image010.png"></span></p>
+
+<p class=MsoNormal align=center style='text-align:center'><span
+style='font-size:9.0pt;font-family:"Times New Roman",serif'>&nbsp;</span></p>
+
+<p class=MsoListParagraph style='margin-left:18.0pt;text-indent:-18.0pt'><span
+style='font-size:9.0pt;font-family:"Times New Roman",serif'>4、<span
+style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp; </span></span><span
+lang=ZH-CN style='font-size:9.0pt;font-family:等线'>选择浏览计算机查找驱动</span></p>
+
+<p class=MsoListParagraph align=left style='margin-left:18.0pt;text-align:left;
+text-indent:0cm'><span lang=ZH-CN style='font-size:9.0pt;font-family:等线'>驱动路径：</span><span
+style='font-size:9.0pt;font-family:"Times New Roman",serif'>
+Hummingbird-M-Production-Tool\ice\libusb-AICE-driver</span></p>
+
+<p class=MsoListParagraph align=center style='margin-left:18.0pt;text-align:
+center;text-indent:0cm'><span style='font-size:9.0pt;font-family:"Times New Roman",serif'><img
+width=357 height=220 id="图片 31" src="slgj4_image011.jpg"></span></p>
+
+<p class=MsoListParagraph align=center style='margin-left:18.0pt;text-align:
+center;text-indent:0cm'><span style='font-size:9.0pt;font-family:"Times New Roman",serif'><img
+width=259 height=279 id="图片 32" src="slgj4_image012.jpg"></span></p>
+
+<p class=MsoListParagraph align=center style='margin-left:18.0pt;text-align:
+center;text-indent:0cm'><span style='font-size:9.0pt;font-family:"Times New Roman",serif'>&nbsp;</span></p>
+
+<p class=MsoListParagraph style='margin-left:18.0pt;text-indent:-18.0pt'><span
+style='font-size:9.0pt;font-family:"Times New Roman",serif'>5、<span
+style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp; </span></span><span
+lang=ZH-CN style='font-size:9.0pt;font-family:等线'>点击确定后，回到更新驱动程序页面，点击下一步，等待驱动安装成功。</span></p>
+
+<p class=MsoNormal align=center style='text-align:center'><span
+style='font-size:9.0pt;font-family:"Times New Roman",serif'><img width=282
+height=226 id="图片 33" src="slgj4_image013.png"></span></p>
+
+<h3 style='margin:0cm;line-height:172%'><span style='font-size:10.5pt;
+line-height:172%;font-family:"Times New Roman",serif'>2.3 </span><span
+lang=ZH-CN style='font-size:10.5pt;line-height:172%;font-family:等线'>进入烧录模式</span></h3>
+
+<p class=MsoNormal align=center style='margin-left:21.0pt;text-align:center'><span
+style='font-size:9.0pt;font-family:"Times New Roman",serif'><img width=256
+height=230 id="图片 4" src="slgj4_image014.jpg"></span></p>
+
+<h4 style='margin:0cm;line-height:157%'><span style='font-size:10.0pt;
+line-height:157%;font-family:"Times New Roman",serif'>2.3.1 </span><span
+lang=ZH-CN style='font-size:10.0pt;line-height:157%;font-family:等线'>接入烧录器</span></h4>
+
+<p class=MsoNormal style='text-indent:18.0pt'><span lang=ZH-CN
+style='font-size:9.0pt;font-family:等线'>在开发板上找到</span><span style='font-size:
+9.0pt;font-family:"Times New Roman",serif'>“Debug”</span><span lang=ZH-CN
+style='font-size:9.0pt;font-family:等线'>接口，该接口有三根信号线，按开发板上丝印分别为</span><span
+style='font-size:9.0pt;font-family:"Times New Roman",serif'>GND</span><span
+lang=ZH-CN style='font-size:9.0pt;font-family:等线'>、</span><span
+style='font-size:9.0pt;font-family:"Times New Roman",serif'>RX</span><span
+lang=ZH-CN style='font-size:9.0pt;font-family:等线'>、</span><span
+style='font-size:9.0pt;font-family:"Times New Roman",serif'>TX.</span></p>
+
+<p class=MsoNormal align=center style='text-align:center;text-indent:18.0pt'><span
+style='font-size:9.0pt;font-family:"Times New Roman",serif'><img width=554
+height=372 id="图片 5" src="slgj4_image015.jpg"></span></p>
+
+<p class=MsoNormal style='text-indent:13.0pt'><span style='font-size:6.5pt;
+font-family:"Times New Roman",serif'>&nbsp;</span></p>
+
+<p class=MsoNormal style='text-indent:18.0pt'><span lang=ZH-CN
+style='font-size:9.0pt;font-family:等线'>三个接口分别对应烧录器上</span><span
+style='font-size:9.0pt;font-family:"Times New Roman",serif'>GND</span><span
+lang=ZH-CN style='font-size:9.0pt;font-family:等线'>（</span><span
+style='font-size:9.0pt;font-family:"Times New Roman",serif'>3</span><span
+lang=ZH-CN style='font-size:9.0pt;font-family:等线'>号脚）、</span><span
+style='font-size:9.0pt;font-family:"Times New Roman",serif'>TMS</span><span
+lang=ZH-CN style='font-size:9.0pt;font-family:等线'>（</span><span
+style='font-size:9.0pt;font-family:"Times New Roman",serif'>4</span><span
+lang=ZH-CN style='font-size:9.0pt;font-family:等线'>号脚）、</span><span
+style='font-size:9.0pt;font-family:"Times New Roman",serif'>TCK(6</span><span
+lang=ZH-CN style='font-size:9.0pt;font-family:等线'>号脚</span><span
+style='font-size:9.0pt;font-family:"Times New Roman",serif'>)</span><span
+lang=ZH-CN style='font-size:9.0pt;font-family:等线'>，接线示意图如下所示：</span><span
+lang=ZH-CN style='font-size:9.0pt;font-family:"Times New Roman",serif'> </span></p>
+
+<p class=MsoNormal style='text-indent:18.0pt'><span style='font-size:9.0pt;
+font-family:"Times New Roman",serif'>&nbsp;</span></p>
+
+<p class=MsoNormal align=center style='text-align:center'><span
+style='font-size:9.0pt;font-family:"Times New Roman",serif'><img width=386
+height=257 id="图片 34" src="slgj4_image016.png"></span></p>
+
+<h4 style='margin:0cm;line-height:157%'><span style='font-size:10.0pt;
+line-height:157%;font-family:"Times New Roman",serif'>2.3.2 </span><span
+lang=ZH-CN style='font-size:10.0pt;line-height:157%;font-family:等线'>开发板供电，开始烧录</span></h4>
+
+<p class=MsoNormal style='text-indent:24.0pt'><span lang=ZH-CN
+style='font-size:9.0pt;font-family:等线'>使用</span><span style='font-size:9.0pt;
+font-family:"Times New Roman",serif'>USB</span><span lang=ZH-CN
+style='font-size:9.0pt;font-family:等线'>连接线给开发板上电，即接入电源。可直接接电脑，或者任意</span><span
+style='font-size:9.0pt;font-family:"Times New Roman",serif'>5V</span><span
+lang=ZH-CN style='font-size:9.0pt;font-family:等线'>电源适配器（如手机充电器）。</span></p>
+
+<p class=MsoNormal style='text-indent:21.0pt'><span lang=ZH-CN
+style='font-size:9.0pt;font-family:等线'>点击烧录工具界面</span><span style='font-size:
+9.0pt;font-family:"Times New Roman",serif'>“BIN File”</span><span lang=ZH-CN
+style='font-size:9.0pt;font-family:等线'>按钮，选择待烧录</span><span style='font-size:
+9.0pt;font-family:"Times New Roman",serif'>bin</span><span lang=ZH-CN
+style='font-size:9.0pt;font-family:等线'>文件：</span></p>
+
+<p class=MsoNormal align=center style='text-align:center;text-indent:24.0pt'><span
+style='font-size:9.0pt;font-family:"Times New Roman",serif'><img width=467
+height=421 id="图片 24" src="slgj4_image017.jpg"></span></p>
+
+<p class=MsoNormal style='text-indent:21.0pt'><span lang=ZH-CN
+style='font-size:9.0pt;font-family:等线'>默认选择路径为</span><span style='font-size:
+9.0pt;font-family:"Times New Roman",serif'>“image_demo/
+Hummingbird-M-Production-Tool /bin”</span><span lang=ZH-CN style='font-size:
+9.0pt;font-family:等线'>，也可通过文件浏览器选择其他路径：</span><span lang=ZH-CN
+style='font-size:9.0pt;font-family:"Times New Roman",serif'> </span></p>
+
+<p class=MsoNormal style='text-indent:21.0pt'><span lang=ZH-CN
+style='font-size:9.0pt;font-family:等线;color:red'>注：目前发布包中同时包含</span><span
+style='font-size:9.0pt;font-family:"Times New Roman",serif;color:red'>uni_app_debug.bin</span><span
+lang=ZH-CN style='font-size:9.0pt;font-family:等线;color:red'>和</span><span
+style='font-size:9.0pt;font-family:"Times New Roman",serif;color:red'>uni_app_release.bin</span><span
+lang=ZH-CN style='font-size:9.0pt;font-family:等线;color:red'>两个版本，其中</span><span
+style='font-size:9.0pt;font-family:"Times New Roman",serif;color:red'>release</span><span
+lang=ZH-CN style='font-size:9.0pt;font-family:等线;color:red'>为正式版本，</span><span
+style='font-size:9.0pt;font-family:"Times New Roman",serif;color:red'>debug</span><span
+lang=ZH-CN style='font-size:9.0pt;font-family:等线;color:red'>为带</span><span
+style='font-size:9.0pt;font-family:"Times New Roman",serif;color:red'>log</span><span
+lang=ZH-CN style='font-size:9.0pt;font-family:等线;color:red'>调试版本，与</span><span
+style='font-size:9.0pt;font-family:"Times New Roman",serif;color:red'>release</span><span
+lang=ZH-CN style='font-size:9.0pt;font-family:等线;color:red'>版本相比响应速度较慢，仅用于调试使用。</span></p>
+
+<p class=MsoNormal align=center style='text-align:center'><span
+style='font-size:9.0pt;font-family:"Times New Roman",serif'><img width=424
+height=238 id="图片 109" src="slgj4_image018.jpg"></span></p>
+
+<p class=MsoNormal style='text-indent:21.0pt'><span lang=ZH-CN
+style='font-size:9.0pt;font-family:等线'>选择烧录</span><span style='font-size:9.0pt;
+font-family:"Times New Roman",serif'>bin</span><span lang=ZH-CN
+style='font-size:9.0pt;font-family:等线'>文件后，点击烧录工具界面</span><span
+style='font-size:9.0pt;font-family:"Times New Roman",serif'>“DOWNLOAD”</span><span
+lang=ZH-CN style='font-size:9.0pt;font-family:等线'>按钮，开始烧录：</span></p>
+
+<p class=MsoNormal align=center style='text-align:center;text-indent:18.0pt'><span
+style='font-size:9.0pt;font-family:"Times New Roman",serif'><img width=390
+height=353 id="图片 110" src="slgj4_image019.jpg"></span></p>
+
+<p class=MsoNormal align=left style='text-align:left;text-indent:21.0pt'><span
+lang=ZH-CN style='font-size:9.0pt;font-family:等线'>烧录成功则烧录工具界面打印烧录进度，直到打印</span><span
+style='font-size:9.0pt;font-family:"Times New Roman",serif'>“Verify success”</span><span
+lang=ZH-CN style='font-size:9.0pt;font-family:等线'>信息：</span></p>
+
+<p class=MsoNormal align=center style='text-align:center;text-indent:18.0pt'><span
+style='font-size:9.0pt;font-family:"Times New Roman",serif'><img width=375
+height=268 id="图片 111" src="slgj4_image020.png"></span></p>
+
+<p class=MsoNormal align=left style='text-align:left;text-indent:18.0pt'><span
+lang=ZH-CN style='font-size:9.0pt;font-family:等线'>如未显示则表示未识别到</span><span
+style='font-size:9.0pt;font-family:"Times New Roman",serif'>COM</span><span
+lang=ZH-CN style='font-size:9.0pt;font-family:等线'>口，请检查：</span></p>
+
+<p class=MsoListParagraph align=left style='margin-left:39.0pt;text-align:left;
+text-indent:-18.0pt'><span style='font-size:9.0pt;font-family:"Times New Roman",serif'>①<span
+style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp; </span></span><span
+lang=ZH-CN style='font-size:9.0pt;font-family:等线'>串口线是否接好</span></p>
+
+<p class=MsoListParagraph align=left style='margin-left:39.0pt;text-align:left;
+text-indent:-18.0pt'><span style='font-size:9.0pt;font-family:"Times New Roman",serif'>②<span
+style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp; </span></span><span
+lang=ZH-CN style='font-size:9.0pt;font-family:等线'>串口线是否反接</span><span
+lang=ZH-CN style='font-size:9.0pt;font-family:"Times New Roman",serif'> </span></p>
+
+<p class=MsoListParagraph align=left style='margin-left:39.0pt;text-align:left;
+text-indent:-18.0pt'><span style='font-size:9.0pt;font-family:"Times New Roman",serif'>③<span
+style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp; </span></span><span
+lang=ZH-CN style='font-size:9.0pt;font-family:等线'>是否安装</span><span
+style='font-size:9.0pt;font-family:"Times New Roman",serif'>UART</span><span
+lang=ZH-CN style='font-size:9.0pt;font-family:等线'>对应驱动。</span></p>
+
+<p class=MsoNormal align=left style='text-align:left;text-indent:21.0pt'><span
+lang=ZH-CN style='font-size:9.0pt;font-family:等线'>而烧录失败界面将输出错误信息，如下图：</span></p>
+
+<p class=MsoNormal align=center style='text-align:center;text-indent:18.0pt'><span
+style='font-size:9.0pt;font-family:"Times New Roman",serif'><img width=414
+height=296 id="图片 112" src="slgj4_image021.png"></span></p>
+
+<p class=MsoNormal align=left style='text-align:left;text-indent:21.0pt'><span
+lang=ZH-CN style='font-size:9.0pt;font-family:等线'>如烧录失败，请检查：</span></p>
+
+<p class=MsoListParagraph align=left style='margin-left:60.0pt;text-align:left;
+text-indent:-18.0pt'><span style='font-size:9.0pt;font-family:宋体'>①<span
+style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp; </span></span><span
+lang=ZH-CN style='font-size:9.0pt;font-family:等线'>开发板是否供电</span></p>
+
+<p class=MsoListParagraph align=left style='margin-left:60.0pt;text-align:left;
+text-indent:-18.0pt'><span style='font-size:9.0pt;font-family:宋体'>②<span
+style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp; </span></span><span
+lang=ZH-CN style='font-size:9.0pt;font-family:等线'>开发板</span><span
+style='font-size:9.0pt;font-family:"Times New Roman",serif'>SW Debug</span><span
+lang=ZH-CN style='font-size:9.0pt;font-family:等线'>接口是否接好</span><span
+lang=ZH-CN style='font-size:9.0pt;font-family:"Times New Roman",serif'> </span></p>
+
+<p class=MsoListParagraph align=left style='margin-left:60.0pt;text-align:left;
+text-indent:-18.0pt'><span style='font-size:9.0pt;font-family:宋体'>③<span
+style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp; </span></span><span
+style='font-size:9.0pt;font-family:"Times New Roman",serif'>SW</span><span
+lang=ZH-CN style='font-size:9.0pt;font-family:等线'>线是否按照要求反接，确认后请回到步骤</span><span
+style='font-size:9.0pt;font-family:"Times New Roman",serif'>1</span><span
+lang=ZH-CN style='font-size:9.0pt;font-family:等线'>重新短接上电，重新进入烧录模式</span></p>
+
+<p class=MsoListParagraph align=left style='margin-left:60.0pt;text-align:left;
+text-indent:-18.0pt'><span style='font-size:9.0pt;font-family:宋体'>④<span
+style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp; </span></span><span
+lang=ZH-CN style='font-size:9.0pt;font-family:等线'>其他错误，请按照烧录界面提示信息排查问题</span></p>
+
+<p class=MsoNormal><span style='font-size:9.0pt;font-family:"Times New Roman",serif'>&nbsp;</span></p>
+
+<h2 style='margin:0cm;line-height:172%'>3. USB<span lang=ZH-CN
+style='font-family:等线'>升级方法</span></h2>
+
+<p class=MsoNormal style='text-indent:14.2pt'><span lang=ZH-CN
+style='font-size:9.0pt;font-family:等线'>具体详见《蜂鸟</span><span style='font-size:
+9.0pt;font-family:"Times New Roman",serif'>M</span><span lang=ZH-CN
+style='font-size:9.0pt;font-family:等线'>芯片方案</span><span style='font-size:9.0pt;
+font-family:"Times New Roman",serif'>USB</span><span lang=ZH-CN
+style='font-size:9.0pt;font-family:等线'>升级工具使用指南》，文档位于固件包目录下</span><span
+style='font-size:9.0pt;font-family:"Times New Roman",serif'>unione_lite_app_hb_m\tools\Hummingbird-M-Update-Tool\USB_Update_Tool_User_Guide.pdf</span><span
+lang=ZH-CN style='font-size:9.0pt;font-family:等线'>文件。</span></p>
+
+</div>
+
+</body>
+
+</html>
+ </div></div><!-- contents -->
+</div><!-- PageDoc -->
+</body>
+</html>

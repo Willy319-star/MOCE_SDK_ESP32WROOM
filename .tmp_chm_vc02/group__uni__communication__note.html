@@ -1,0 +1,2531 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "https://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=9"/>
+<meta name="generator" content="Doxygen 1.8.18"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>蜂鸟M离线方案开发指导手册: 云知声标准协议数据通讯</title>
+<link href="tabs.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="jquery.js"></script>
+<script type="text/javascript" src="dynsections.js"></script>
+<link href="doxygen.css" rel="stylesheet" type="text/css" />
+</head>
+<body>
+<div id="top"><!-- do not remove this div, it is closed by doxygen! -->
+<div id="titlearea">
+<table cellspacing="0" cellpadding="0">
+ <tbody>
+ <tr style="height: 56px;">
+  <td id="projectalign" style="padding-left: 0.5em;">
+   <div id="projectname">蜂鸟M离线方案开发指导手册
+   &#160;<span id="projectnumber">v1.0.4</span>
+   </div>
+  </td>
+ </tr>
+ </tbody>
+</table>
+</div>
+<!-- end header part -->
+<!-- 制作者 Doxygen 1.8.18 -->
+<script type="text/javascript" src="menudata.js"></script>
+<script type="text/javascript" src="menu.js"></script>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:cf05388f2679ee054f2beb29a391d25f4e673ac3&amp;dn=gpl-2.0.txt GPL-v2 */
+$(function() {
+  initMenu('',false,false,'search.php','搜索');
+});
+/* @license-end */</script>
+<div id="main-nav"></div>
+</div><!-- top -->
+<div class="header">
+  <div class="headertitle">
+<div class="title">云知声标准协议数据通讯<div class="ingroups"><a class="el" href="group__uni__communication.html">云知声数据通讯协议</a></div></div>  </div>
+</div><!--header-->
+<div class="contents">
+<dl class="section user"><dt>云知声标准协议数据通讯说明:</dt><dd></dd></dl>
+<ol type="1">
+<li>可通过定义user/inc/user_config.h中的宏<a class="el" href="group__uni__config__communication__macro.html#ga4e8e1ce809fd83e0fcc1df4ef5053e3e">USE_UNIONE_PROTOCOL</a> 设为1来启用此功能</li>
+</ol>
+<dl class="section user"><dt>协议说明:</dt><dd></dd></dl>
+<html>
+
+<head>
+<meta http-equiv=Content-Type content="text/html; charset=utf-8">
+<meta name=Generator content="Microsoft Word 15 (filtered)">
+<style>
+<!--
+ /* Font Definitions */
+ @font-face
+	{font-family:宋体;
+	panose-1:2 1 6 0 3 1 1 1 1 1;}
+@font-face
+	{font-family:黑体;
+	panose-1:2 1 6 9 6 1 1 1 1 1;}
+@font-face
+	{font-family:"Cambria Math";
+	panose-1:2 4 5 3 5 4 6 3 2 4;}
+@font-face
+	{font-family:等线;
+	panose-1:2 1 6 0 3 1 1 1 1 1;}
+@font-face
+	{font-family:Calibri;
+	panose-1:2 15 5 2 2 2 4 3 2 4;}
+@font-face
+	{font-family:"\@等线";
+	panose-1:2 1 6 0 3 1 1 1 1 1;}
+@font-face
+	{font-family:"\@宋体";
+	panose-1:2 1 6 0 3 1 1 1 1 1;}
+@font-face
+	{font-family:"\@黑体";
+	panose-1:2 1 6 9 6 1 1 1 1 1;}
+ /* Style Definitions */
+ p.MsoNormal, li.MsoNormal, div.MsoNormal
+	{margin:0cm;
+	margin-bottom:.0001pt;
+	text-align:justify;
+	text-justify:inter-ideograph;
+	font-size:10.5pt;
+	font-family:"Calibri",sans-serif;}
+h1
+	{margin-top:17.0pt;
+	margin-right:0cm;
+	margin-bottom:16.5pt;
+	margin-left:21.6pt;
+	text-align:justify;
+	text-justify:inter-ideograph;
+	text-indent:-21.6pt;
+	line-height:240%;
+	page-break-after:avoid;
+	font-size:16.0pt;
+	font-family:"Calibri",sans-serif;
+	font-weight:bold;}
+h2
+	{margin-top:13.0pt;
+	margin-right:0cm;
+	margin-bottom:13.0pt;
+	margin-left:28.75pt;
+	text-align:justify;
+	text-justify:inter-ideograph;
+	text-indent:-28.75pt;
+	line-height:172%;
+	page-break-after:avoid;
+	font-size:14.0pt;
+	font-family:"Arial",sans-serif;
+	font-weight:bold;}
+h3
+	{margin-top:13.0pt;
+	margin-right:0cm;
+	margin-bottom:13.0pt;
+	margin-left:36.0pt;
+	text-align:justify;
+	text-justify:inter-ideograph;
+	text-indent:-36.0pt;
+	line-height:172%;
+	page-break-after:avoid;
+	font-size:10.5pt;
+	font-family:"Calibri",sans-serif;
+	font-weight:bold;}
+h4
+	{margin-top:14.0pt;
+	margin-right:0cm;
+	margin-bottom:14.5pt;
+	margin-left:43.2pt;
+	text-align:justify;
+	text-justify:inter-ideograph;
+	text-indent:-43.2pt;
+	line-height:155%;
+	page-break-after:avoid;
+	font-size:9.0pt;
+	font-family:"Arial",sans-serif;
+	font-weight:bold;}
+h5
+	{margin-top:14.0pt;
+	margin-right:0cm;
+	margin-bottom:14.5pt;
+	margin-left:50.4pt;
+	text-align:justify;
+	text-justify:inter-ideograph;
+	text-indent:-50.4pt;
+	line-height:155%;
+	page-break-after:avoid;
+	font-size:9.0pt;
+	font-family:"Calibri",sans-serif;
+	font-weight:bold;}
+h6
+	{margin-top:12.0pt;
+	margin-right:0cm;
+	margin-bottom:3.2pt;
+	margin-left:57.55pt;
+	text-align:justify;
+	text-justify:inter-ideograph;
+	text-indent:-57.55pt;
+	line-height:132%;
+	page-break-after:avoid;
+	font-size:9.0pt;
+	font-family:"Arial",sans-serif;
+	font-weight:bold;}
+p.MsoHeading7, li.MsoHeading7, div.MsoHeading7
+	{margin-top:12.0pt;
+	margin-right:0cm;
+	margin-bottom:3.2pt;
+	margin-left:64.8pt;
+	text-align:justify;
+	text-justify:inter-ideograph;
+	text-indent:-64.8pt;
+	line-height:132%;
+	page-break-after:avoid;
+	font-size:12.0pt;
+	font-family:"Calibri",sans-serif;
+	font-weight:bold;}
+p.MsoHeading8, li.MsoHeading8, div.MsoHeading8
+	{margin-top:12.0pt;
+	margin-right:0cm;
+	margin-bottom:3.2pt;
+	margin-left:72.0pt;
+	text-align:justify;
+	text-justify:inter-ideograph;
+	text-indent:-72.0pt;
+	line-height:132%;
+	page-break-after:avoid;
+	font-size:12.0pt;
+	font-family:"Arial",sans-serif;}
+p.MsoHeading9, li.MsoHeading9, div.MsoHeading9
+	{margin-top:12.0pt;
+	margin-right:0cm;
+	margin-bottom:3.2pt;
+	margin-left:79.15pt;
+	text-align:justify;
+	text-justify:inter-ideograph;
+	text-indent:-79.15pt;
+	line-height:132%;
+	page-break-after:avoid;
+	font-size:10.5pt;
+	font-family:"Arial",sans-serif;}
+p.MsoToc1, li.MsoToc1, div.MsoToc1
+	{margin:0cm;
+	margin-bottom:.0001pt;
+	text-align:justify;
+	text-justify:inter-ideograph;
+	font-size:10.5pt;
+	font-family:"Calibri",sans-serif;}
+p.MsoToc2, li.MsoToc2, div.MsoToc2
+	{margin-top:0cm;
+	margin-right:0cm;
+	margin-bottom:0cm;
+	margin-left:21.0pt;
+	margin-bottom:.0001pt;
+	text-align:justify;
+	text-justify:inter-ideograph;
+	font-size:10.5pt;
+	font-family:"Calibri",sans-serif;}
+p.MsoToc3, li.MsoToc3, div.MsoToc3
+	{margin-top:0cm;
+	margin-right:0cm;
+	margin-bottom:0cm;
+	margin-left:42.0pt;
+	margin-bottom:.0001pt;
+	text-align:justify;
+	text-justify:inter-ideograph;
+	font-size:10.5pt;
+	font-family:"Calibri",sans-serif;}
+p.MsoToc4, li.MsoToc4, div.MsoToc4
+	{margin-top:0cm;
+	margin-right:0cm;
+	margin-bottom:0cm;
+	margin-left:63.0pt;
+	margin-bottom:.0001pt;
+	text-align:justify;
+	text-justify:inter-ideograph;
+	font-size:10.5pt;
+	font-family:"Calibri",sans-serif;}
+p.MsoHeader, li.MsoHeader, div.MsoHeader
+	{mso-style-link:"页眉 字符";
+	margin:0cm;
+	margin-bottom:.0001pt;
+	text-align:justify;
+	text-justify:inter-ideograph;
+	layout-grid-mode:char;
+	border:none;
+	padding:0cm;
+	font-size:9.0pt;
+	font-family:"Calibri",sans-serif;}
+p.MsoFooter, li.MsoFooter, div.MsoFooter
+	{margin:0cm;
+	margin-bottom:.0001pt;
+	layout-grid-mode:char;
+	font-size:9.0pt;
+	font-family:"Calibri",sans-serif;}
+a:link, span.MsoHyperlink
+	{color:#0563C1;
+	text-decoration:underline;}
+a:visited, span.MsoHyperlinkFollowed
+	{color:#954F72;
+	text-decoration:underline;}
+p
+	{margin-right:0cm;
+	margin-left:0cm;
+	font-size:12.0pt;
+	font-family:宋体;}
+code
+	{font-family:"Courier New";}
+p.MsoAcetate, li.MsoAcetate, div.MsoAcetate
+	{mso-style-link:"批注框文本 字符";
+	margin:0cm;
+	margin-bottom:.0001pt;
+	text-align:justify;
+	text-justify:inter-ideograph;
+	font-size:9.0pt;
+	font-family:"Calibri",sans-serif;}
+span.apple-converted-space
+	{mso-style-name:apple-converted-space;}
+span.a
+	{mso-style-name:"批注框文本 字符";
+	mso-style-link:批注框文本;
+	font-family:"Calibri",sans-serif;}
+span.a0
+	{mso-style-name:"页眉 字符";
+	mso-style-link:页眉;
+	font-family:"Calibri",sans-serif;}
+.MsoChpDefault
+	{font-size:10.0pt;}
+ /* Page Definitions */
+ @page WordSection1
+	{size:595.3pt 841.9pt;
+	margin:72.0pt 90.0pt 72.0pt 90.0pt;
+	layout-grid:15.6pt;}
+div.WordSection1
+	{page:WordSection1;}
+ /* List Definitions */
+ ol
+	{margin-bottom:0cm;}
+ul
+	{margin-bottom:0cm;}
+-->
+</style>
+
+</head>
+
+<body lang=EN-US link="#0563C1" vlink="#954F72" style='text-justify-trim:punctuation'>
+
+<div class=WordSection1 style='layout-grid:15.6pt'>
+
+<p class=MsoNormal align=center style='text-align:center'><b><span lang=ZH-CN
+style='font-size:22.0pt;font-family:等线'>云知声蜂鸟</span></b><b><span
+style='font-size:22.0pt;font-family:"Times New Roman",serif'>UART</span></b><b><span
+lang=ZH-CN style='font-size:22.0pt;font-family:等线'>可靠通信协议接口文档</span></b></p>
+
+<p class=MsoNormal align=center style='text-align:center'><span
+style='font-size:18.0pt;font-family:"Times New Roman",serif'>V3.0</span></p>
+
+<p class=MsoNormal align=center style='text-align:center'><b><span lang=ZH-CN
+style='font-size:14.0pt;font-family:等线'>修改记录</span></b></p>
+
+<div align=center>
+
+<table class=MsoTableGrid border=1 cellspacing=0 cellpadding=0 width=568
+ style='border-collapse:collapse;border:none'>
+ <tr>
+  <td width=76 valign=top style='width:57.25pt;border:solid #4F81BD 1.0pt;
+  border-right:solid #5B9BD5 1.0pt;background:#4F81BD;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=MsoNormal><span lang=ZH-CN style='font-size:9.0pt;font-family:等线;
+  color:white'>版本</span></p>
+  </td>
+  <td width=102 valign=top style='width:76.5pt;border-top:solid #4F81BD 1.0pt;
+  border-left:none;border-bottom:solid #4F81BD 1.0pt;border-right:solid #5B9BD5 1.0pt;
+  background:#4F81BD;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=MsoNormal><span lang=ZH-CN style='font-size:9.0pt;font-family:等线;
+  color:white'>修订日期</span></p>
+  </td>
+  <td width=107 valign=top style='width:80.25pt;border-top:solid #4F81BD 1.0pt;
+  border-left:none;border-bottom:solid #4F81BD 1.0pt;border-right:solid #5B9BD5 1.0pt;
+  background:#4F81BD;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=MsoNormal><span lang=ZH-CN style='font-size:9.0pt;font-family:等线;
+  color:white'>修订人员</span></p>
+  </td>
+  <td width=283 valign=top style='width:212.1pt;border:solid #4F81BD 1.0pt;
+  border-left:none;background:#4F81BD;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=MsoNormal><span lang=ZH-CN style='font-size:9.0pt;font-family:等线;
+  color:white'>修订纪要</span></p>
+  </td>
+ </tr>
+ <tr>
+  <td width=76 valign=top style='width:57.25pt;border-top:none;border-left:
+  solid #4F81BD 1.0pt;border-bottom:solid #4F81BD 1.0pt;border-right:solid #5B9BD5 1.0pt;
+  background:white;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=MsoNormal><span style='font-size:9.0pt;font-family:"Times New Roman",serif;
+  color:black'>V2.0</span></p>
+  </td>
+  <td width=102 valign=top style='width:76.5pt;border-top:none;border-left:
+  none;border-bottom:solid #4F81BD 1.0pt;border-right:solid #5B9BD5 1.0pt;
+  background:white;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=MsoNormal><span style='font-size:9.0pt;font-family:"Times New Roman",serif;
+  color:black'>2019.12.30</span></p>
+  </td>
+  <td width=107 valign=top style='width:80.25pt;border-top:none;border-left:
+  none;border-bottom:solid #4F81BD 1.0pt;border-right:solid #5B9BD5 1.0pt;
+  background:white;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=MsoNormal><span lang=ZH-CN style='font-size:9.0pt;font-family:等线;
+  color:black'>尚金龙</span></p>
+  </td>
+  <td width=283 valign=top style='width:212.1pt;border-top:none;border-left:
+  none;border-bottom:solid #4F81BD 1.0pt;border-right:solid #4F81BD 1.0pt;
+  background:white;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=MsoNormal><span style='font-size:9.0pt;font-family:"Times New Roman",serif;
+  color:black'>Release 2.0</span></p>
+  </td>
+ </tr>
+ <tr>
+  <td width=76 valign=top style='width:57.25pt;border-top:none;border-left:
+  solid #4F81BD 1.0pt;border-bottom:solid #4F81BD 1.0pt;border-right:solid #5B9BD5 1.0pt;
+  background:white;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=MsoNormal><span style='font-size:9.0pt;font-family:"Times New Roman",serif;
+  color:black'>V2.1</span></p>
+  </td>
+  <td width=102 valign=top style='width:76.5pt;border-top:none;border-left:
+  none;border-bottom:solid #4F81BD 1.0pt;border-right:solid #5B9BD5 1.0pt;
+  background:white;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=MsoNormal><span style='font-size:9.0pt;font-family:"Times New Roman",serif;
+  color:black'>2020.01.06</span></p>
+  </td>
+  <td width=107 valign=top style='width:80.25pt;border-top:none;border-left:
+  none;border-bottom:solid #4F81BD 1.0pt;border-right:solid #5B9BD5 1.0pt;
+  background:white;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=MsoNormal><span lang=ZH-CN style='font-size:9.0pt;font-family:等线;
+  color:black'>尚金龙</span></p>
+  </td>
+  <td width=283 valign=top style='width:212.1pt;border-top:none;border-left:
+  none;border-bottom:solid #4F81BD 1.0pt;border-right:solid #4F81BD 1.0pt;
+  background:white;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=MsoNormal><span lang=ZH-CN style='font-size:9.0pt;font-family:等线;
+  color:black'>协议栈自动处理</span><span style='font-size:9.0pt;font-family:"Times New Roman",serif;
+  color:black'>ack</span><span lang=ZH-CN style='font-size:9.0pt;font-family:
+  等线;color:black'>、</span><span style='font-size:9.0pt;font-family:"Times New Roman",serif;
+  color:black'>resend</span><span lang=ZH-CN style='font-size:9.0pt;font-family:
+  等线;color:black'>、去除重复帧</span></p>
+  </td>
+ </tr>
+ <tr>
+  <td width=76 valign=top style='width:57.25pt;border-top:none;border-left:
+  solid #4F81BD 1.0pt;border-bottom:solid #4F81BD 1.0pt;border-right:solid #5B9BD5 1.0pt;
+  background:white;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=MsoNormal><span style='font-size:9.0pt;font-family:"Times New Roman",serif;
+  color:black'>V3.0</span></p>
+  </td>
+  <td width=102 valign=top style='width:76.5pt;border-top:none;border-left:
+  none;border-bottom:solid #4F81BD 1.0pt;border-right:solid #5B9BD5 1.0pt;
+  background:white;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=MsoNormal><span style='font-size:9.0pt;font-family:"Times New Roman",serif;
+  color:black'>2020.04.27</span></p>
+  </td>
+  <td width=107 valign=top style='width:80.25pt;border-top:none;border-left:
+  none;border-bottom:solid #4F81BD 1.0pt;border-right:solid #5B9BD5 1.0pt;
+  background:white;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=MsoNormal><span lang=ZH-CN style='font-size:9.0pt;font-family:等线;
+  color:black'>尚金龙</span></p>
+  </td>
+  <td width=283 valign=top style='width:212.1pt;border-top:none;border-left:
+  none;border-bottom:solid #4F81BD 1.0pt;border-right:solid #4F81BD 1.0pt;
+  background:white;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=MsoNormal><span lang=ZH-CN style='font-size:9.0pt;font-family:等线;
+  color:black'>支持跨平台移植</span></p>
+  </td>
+ </tr>
+ <tr>
+  <td width=76 valign=top style='width:57.25pt;border-top:none;border-left:
+  solid #4F81BD 1.0pt;border-bottom:solid #4F81BD 1.0pt;border-right:solid #5B9BD5 1.0pt;
+  background:white;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=MsoNormal><span style='font-family:"Times New Roman",serif;
+  color:black'>&nbsp;</span></p>
+  </td>
+  <td width=102 valign=top style='width:76.5pt;border-top:none;border-left:
+  none;border-bottom:solid #4F81BD 1.0pt;border-right:solid #5B9BD5 1.0pt;
+  background:white;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=MsoNormal><span style='font-family:"Times New Roman",serif;
+  color:black'>&nbsp;</span></p>
+  </td>
+  <td width=107 valign=top style='width:80.25pt;border-top:none;border-left:
+  none;border-bottom:solid #4F81BD 1.0pt;border-right:solid #5B9BD5 1.0pt;
+  background:white;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=MsoNormal><span style='font-family:"Times New Roman",serif;
+  color:black'>&nbsp;</span></p>
+  </td>
+  <td width=283 valign=top style='width:212.1pt;border-top:none;border-left:
+  none;border-bottom:solid #4F81BD 1.0pt;border-right:solid #4F81BD 1.0pt;
+  background:white;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=MsoNormal><span style='font-family:"Times New Roman",serif;
+  color:black'>&nbsp;</span></p>
+  </td>
+ </tr>
+ <tr>
+  <td width=76 valign=top style='width:57.25pt;border-top:none;border-left:
+  solid #4F81BD 1.0pt;border-bottom:solid #4F81BD 1.0pt;border-right:solid #5B9BD5 1.0pt;
+  background:white;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=MsoNormal><span style='font-family:"Times New Roman",serif;
+  color:black'>&nbsp;</span></p>
+  </td>
+  <td width=102 valign=top style='width:76.5pt;border-top:none;border-left:
+  none;border-bottom:solid #4F81BD 1.0pt;border-right:solid #5B9BD5 1.0pt;
+  background:white;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=MsoNormal><span style='font-family:"Times New Roman",serif;
+  color:black'>&nbsp;</span></p>
+  </td>
+  <td width=107 valign=top style='width:80.25pt;border-top:none;border-left:
+  none;border-bottom:solid #4F81BD 1.0pt;border-right:solid #5B9BD5 1.0pt;
+  background:white;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=MsoNormal><span style='font-family:"Times New Roman",serif;
+  color:black'>&nbsp;</span></p>
+  </td>
+  <td width=283 valign=top style='width:212.1pt;border-top:none;border-left:
+  none;border-bottom:solid #4F81BD 1.0pt;border-right:solid #4F81BD 1.0pt;
+  background:white;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=MsoNormal><span style='font-family:"Times New Roman",serif;
+  color:black'>&nbsp;</span></p>
+  </td>
+ </tr>
+</table>
+
+</div>
+
+<p class=MsoNormal align=center style='text-align:center'><b><span lang=ZH-CN
+style='font-size:14.0pt;font-family:等线;color:white'>文档目录</span></b></p>
+
+<p class=MsoToc1 align=center style='text-align:center'><a
+href="#_Toc1031986883"><span style='font-family:"Times New Roman",serif;
+color:windowtext;text-decoration:none'>1. </span><span lang=ZH-CN
+style='font-family:等线;color:windowtext;text-decoration:none'>概述</span><span
+style='font-family:"Times New Roman",serif;color:windowtext;text-decoration:
+none'>............................................................................................................................ </span><span
+style='font-family:"Times New Roman",serif;color:windowtext;text-decoration:
+none'>4</span></a></p>
+
+<p class=MsoToc2 align=center style='text-align:center'><a
+href="#_Toc1525609409"><span style='font-family:"Times New Roman",serif;
+color:windowtext;text-decoration:none'>1.1. </span><span lang=ZH-CN
+style='font-family:等线;color:windowtext;text-decoration:none'>目的与受众</span><span
+style='font-family:"Times New Roman",serif;color:windowtext;text-decoration:
+none'>........................................................................................................ </span><span
+style='font-family:"Times New Roman",serif;color:windowtext;text-decoration:
+none'>4</span></a></p>
+
+<p class=MsoToc2 align=center style='text-align:center'><a
+href="#_Toc2110075530"><span style='font-family:"Times New Roman",serif;
+color:windowtext;text-decoration:none'>1.2. </span><span lang=ZH-CN
+style='font-family:等线;color:windowtext;text-decoration:none'>简介</span><span
+style='font-family:"Times New Roman",serif;color:windowtext;text-decoration:
+none'>................................................................................................................... </span><span
+style='font-family:"Times New Roman",serif;color:windowtext;text-decoration:
+none'>4</span></a></p>
+
+<p class=MsoToc1 align=center style='text-align:center'><a href="#_Toc494486152"><span
+style='font-family:"Times New Roman",serif;color:windowtext;text-decoration:
+none'>2. </span><span lang=ZH-CN style='font-family:等线;color:windowtext;
+text-decoration:none'>接口定义</span><span style='font-family:"Times New Roman",serif;
+color:windowtext;text-decoration:none'>..................................................................................................................... </span><span
+style='font-family:"Times New Roman",serif;color:windowtext;text-decoration:
+none'>5</span></a></p>
+
+<p class=MsoToc2 align=center style='text-align:center'><a href="#_Toc67042774"><span
+style='font-family:"Times New Roman",serif;color:windowtext;text-decoration:
+none'>2.1. UART</span><span lang=ZH-CN style='font-family:等线;color:windowtext;
+text-decoration:none'>底层</span><span style='font-family:"Times New Roman",serif;
+color:windowtext;text-decoration:none'>API................................................................................................... </span><span
+style='font-family:"Times New Roman",serif;color:windowtext;text-decoration:
+none'>5</span></a></p>
+
+<p class=MsoToc3 align=center style='text-align:center'><a
+href="#_Toc1506471590"><span style='font-family:"Times New Roman",serif;
+color:windowtext;text-decoration:none'>2.1.1. UartInitialize</span><span
+style='font-family:"Times New Roman",serif;color:windowtext;text-decoration:
+none'>.............................................................................................. </span><span
+style='font-family:"Times New Roman",serif;color:windowtext;text-decoration:
+none'>5</span></a></p>
+
+<p class=MsoToc3 align=center style='text-align:center'><a href="#_Toc435815000"><span
+style='font-family:"Times New Roman",serif;color:windowtext;text-decoration:
+none'>2.1.2. UartFinalize</span><span style='font-family:"Times New Roman",serif;
+color:windowtext;text-decoration:none'>................................................................................................ </span><span
+style='font-family:"Times New Roman",serif;color:windowtext;text-decoration:
+none'>6</span></a></p>
+
+<p class=MsoToc3 align=center style='text-align:center'><a
+href="#_Toc1823468730"><span style='font-family:"Times New Roman",serif;
+color:windowtext;text-decoration:none'>2.1.3. UartWrite</span><span
+style='font-family:"Times New Roman",serif;color:windowtext;text-decoration:
+none'>................................................................................................... </span><span
+style='font-family:"Times New Roman",serif;color:windowtext;text-decoration:
+none'>6</span></a></p>
+
+<p class=MsoToc2 align=center style='text-align:center'><a href="#_Toc299818773"><span
+style='font-family:"Times New Roman",serif;color:windowtext;text-decoration:
+none'>2.2. UART protocol API............................................................................................... </span><span
+style='font-family:"Times New Roman",serif;color:windowtext;text-decoration:
+none'>7</span></a></p>
+
+<p class=MsoToc3 align=center style='text-align:center'><a
+href="#_Toc1057481949"><span style='font-family:"Times New Roman",serif;
+color:windowtext;text-decoration:none'>2.2.1. CommProtocolInit</span><span
+style='font-family:"Times New Roman",serif;color:windowtext;text-decoration:
+none'>....................................................................................... </span><span
+style='font-family:"Times New Roman",serif;color:windowtext;text-decoration:
+none'>7</span></a></p>
+
+<p class=MsoToc3 align=center style='text-align:center'><a href="#_Toc524454271"><span
+style='font-family:"Times New Roman",serif;color:windowtext;text-decoration:
+none'>2.2.2. CommProtocolFinal</span><span style='font-family:"Times New Roman",serif;
+color:windowtext;text-decoration:none'>..................................................................................... </span><span
+style='font-family:"Times New Roman",serif;color:windowtext;text-decoration:
+none'>7</span></a></p>
+
+<p class=MsoToc3 align=center style='text-align:center'><a
+href="#_Toc1230045409"><span style='font-family:"Times New Roman",serif;
+color:windowtext;text-decoration:none'>2.2.3. </span><span style='font-family:
+"Times New Roman",serif;color:windowtext;text-decoration:none'>CommProtocolPacketAssembleAndSend</span><span
+style='font-family:"Times New Roman",serif;color:windowtext;text-decoration:
+none'>........................................................ </span><span
+style='font-family:"Times New Roman",serif;color:windowtext;text-decoration:
+none'>7</span></a></p>
+
+<p class=MsoToc3 align=center style='text-align:center'><a
+href="#_Toc1695603041"><span style='font-family:"Times New Roman",serif;
+color:windowtext;text-decoration:none'>2.2.4. </span><span style='font-family:
+"Times New Roman",serif;color:windowtext;text-decoration:none'>CommProtocolReceiveUartData</span><span
+style='font-family:"Times New Roman",serif;color:windowtext;text-decoration:
+none'>.................................................................... </span><span
+style='font-family:"Times New Roman",serif;color:windowtext;text-decoration:
+none'>8</span></a></p>
+
+<p class=MsoToc1 align=center style='text-align:center'><a href="#_Toc892314397"><span
+style='font-family:"Times New Roman",serif;color:windowtext;text-decoration:
+none'>3. Protocol</span><span lang=ZH-CN style='font-family:等线;color:windowtext;
+text-decoration:none'>帧结构</span><span style='font-family:"Times New Roman",serif;
+color:windowtext;text-decoration:none'>............................................................................................................. </span><span
+style='font-family:"Times New Roman",serif;color:windowtext;text-decoration:
+none'>9</span></a></p>
+
+<p class=MsoToc3 align=center style='text-align:center'><a
+href="#_Toc1249763378"><span style='font-family:"Times New Roman",serif;
+color:windowtext;text-decoration:none'>3.1.1. Protocol layout............................................................................................ </span><span
+style='font-family:"Times New Roman",serif;color:windowtext;text-decoration:
+none'>9</span></a></p>
+
+<p class=MsoToc3 align=center style='text-align:center'><a href="#_Toc235542739"><span
+style='font-family:"Times New Roman",serif;color:windowtext;text-decoration:
+none'>3.1.2. Protocol struct............................................................................................. </span><span
+style='font-family:"Times New Roman",serif;color:windowtext;text-decoration:
+none'>9</span></a></p>
+
+<p class=MsoToc3 align=center style='text-align:center'><a href="#_Toc954452952"><span
+style='font-family:"Times New Roman",serif;color:windowtext;text-decoration:
+none'>3.1.3. Protocol ACK............................................................................................. </span><span
+style='font-family:"Times New Roman",serif;color:windowtext;text-decoration:
+none'>9</span></a></p>
+
+<p class=MsoToc3 align=center style='text-align:center'><a
+href="#_Toc1935404821"><span style='font-family:"Times New Roman",serif;
+color:windowtext;text-decoration:none'>3.1.4. Protocol</span><span lang=ZH-CN
+style='font-family:等线;color:windowtext;text-decoration:none'>重要参数指标</span><span
+style='font-family:"Times New Roman",serif;color:windowtext;text-decoration:
+none'>.............................................................................. </span><span
+style='font-family:"Times New Roman",serif;color:windowtext;text-decoration:
+none'>10</span></a></p>
+
+<p class=MsoToc1 align=center style='text-align:center'><a href="#_Toc414025438"><span
+style='font-family:"Times New Roman",serif;color:windowtext;text-decoration:
+none'>4. </span><span lang=ZH-CN style='font-family:等线;color:windowtext;
+text-decoration:none'>接口调用流程</span><span style='font-family:"Times New Roman",serif;
+color:windowtext;text-decoration:none'>............................................................................................................. </span><span
+style='font-family:"Times New Roman",serif;color:windowtext;text-decoration:
+none'>10</span></a></p>
+
+<p class=MsoToc2 align=center style='text-align:center'><a href="#_Toc678520186"><span
+style='font-family:"Times New Roman",serif;color:windowtext;text-decoration:
+none'>4.1. </span><span lang=ZH-CN style='font-family:等线;color:windowtext;
+text-decoration:none'>已有自定义协议调用过程</span><span style='font-family:"Times New Roman",serif;
+color:windowtext;text-decoration:none'>.................................................................................. </span><span
+style='font-family:"Times New Roman",serif;color:windowtext;text-decoration:
+none'>10</span></a></p>
+
+<p class=MsoToc2 align=center style='text-align:center'><a href="#_Toc750600532"><span
+style='font-family:"Times New Roman",serif;color:windowtext;text-decoration:
+none'>4.2. </span><span lang=ZH-CN style='font-family:等线;color:windowtext;
+text-decoration:none'>蜂鸟</span><span style='font-family:"Times New Roman",serif;
+color:windowtext;text-decoration:none'>UART</span><span lang=ZH-CN
+style='font-family:等线;color:windowtext;text-decoration:none'>协议调用过程</span><span
+style='font-family:"Times New Roman",serif;color:windowtext;text-decoration:
+none'>................................................................................. </span><span
+style='font-family:"Times New Roman",serif;color:windowtext;text-decoration:
+none'>11</span></a></p>
+
+<p class=MsoToc1 align=center style='text-align:center'><a
+href="#_Toc1024198846"><span style='font-family:"Times New Roman",serif;
+color:windowtext;text-decoration:none'>5. </span><span lang=ZH-CN
+style='font-family:等线;color:windowtext;text-decoration:none'>移植协议栈到任意平台</span><span
+style='font-family:"Times New Roman",serif;color:windowtext;text-decoration:
+none'>............................................................................................... </span><span
+style='font-family:"Times New Roman",serif;color:windowtext;text-decoration:
+none'>13</span></a></p>
+
+<p class=MsoToc2 align=center style='text-align:center'><a
+href="#_Toc1628574017"><span style='font-family:"Times New Roman",serif;
+color:windowtext;text-decoration:none'>5.1. </span><span lang=ZH-CN
+style='font-family:等线;color:windowtext;text-decoration:none'>注册跨平台</span><span
+style='font-family:"Times New Roman",serif;color:windowtext;text-decoration:
+none'>Hooks............................................................................................. </span><span
+style='font-family:"Times New Roman",serif;color:windowtext;text-decoration:
+none'>13</span></a></p>
+
+<p class=MsoToc2 align=center style='text-align:center'><a
+href="#_Toc1764422704"><span style='font-family:"Times New Roman",serif;
+color:windowtext;text-decoration:none'>5.2. Porting demo...................................................................................................... </span><span
+style='font-family:"Times New Roman",serif;color:windowtext;text-decoration:
+none'>13</span></a></p>
+
+<p class=MsoToc1 align=center style='text-align:center'><a href="#_Toc50704705"><span
+style='font-family:"Times New Roman",serif;color:windowtext;text-decoration:
+none'>6. </span><span lang=ZH-CN style='font-family:等线;color:windowtext;
+text-decoration:none'>附录</span><span style='font-family:"Times New Roman",serif;
+color:windowtext;text-decoration:none'>........................................................................................................................... </span><span
+style='font-family:"Times New Roman",serif;color:windowtext;text-decoration:
+none'>14</span></a></p>
+
+<p class=MsoToc2 align=center style='text-align:center'><a
+href="#_Toc1790452723"><span style='font-family:"Times New Roman",serif;
+color:windowtext;text-decoration:none'>6.1. </span><span lang=ZH-CN
+style='font-family:等线;color:windowtext;text-decoration:none'>错误码</span><span
+style='font-family:"Times New Roman",serif;color:windowtext;text-decoration:
+none'>.............................................................................................................. </span><span
+style='font-family:"Times New Roman",serif;color:windowtext;text-decoration:
+none'>14</span></a></p>
+
+<p class=MsoNormal><span style='font-family:"Times New Roman",serif'>&nbsp;</span></p>
+
+<span style='font-size:10.5pt;font-family:"Times New Roman",serif'><br
+clear=all style='page-break-before:always'>
+</span>
+
+<p class=MsoNormal><span style='font-family:"Times New Roman",serif'>&nbsp;</span></p>
+
+<h1><a name="_Toc1031986883"><span style='font-family:"Times New Roman",serif'>1.<span
+style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span></span><span
+lang=ZH-CN style='font-family:等线'>概述</span></a></h1>
+
+<h2><span style='font-family:"Times New Roman",serif'>1.1.<span
+style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp; </span></span><span
+style='font-family:"Times New Roman",serif'> </span><a name="_Toc1525609409"><span
+lang=ZH-CN style='font-family:等线'>目的与受众</span></a></h2>
+
+<p class=MsoNormal style='text-indent:18.0pt'><span lang=ZH-CN
+style='font-size:9.0pt;font-family:等线'>本文系云知声蜂鸟芯片</span><span style='font-size:
+9.0pt;font-family:"Times New Roman",serif'>UART</span><span lang=ZH-CN
+style='font-size:9.0pt;font-family:等线'>应用层可靠通信串口协议，供内部开发人员和获授权客户开发使用，旨在为客户提供简单、通用的</span><span
+style='font-size:9.0pt;font-family:"Times New Roman",serif'>UART</span><span
+lang=ZH-CN style='font-size:9.0pt;font-family:等线'>可靠通信协议规范。</span></p>
+
+<h2><span style='font-family:"Times New Roman",serif'>1.2.<span
+style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp; </span></span><span
+style='font-family:"Times New Roman",serif'> </span><a name="_Toc2110075530"><span
+lang=ZH-CN style='font-family:等线'>简介</span></a></h2>
+
+<p class=MsoNormal style='text-indent:21.0pt'><span lang=ZH-CN
+style='font-size:9.0pt;font-family:等线'>目标客户：</span></p>
+
+<p class=MsoNormal style='margin-left:0cm;text-indent:21.0pt'><span
+style='font-size:9.0pt;font-family:"Times New Roman",serif'>一、</span><span
+lang=ZH-CN style='font-size:9.0pt;font-family:等线'>已有自定义</span><span
+style='font-size:9.0pt;font-family:"Times New Roman",serif'>UART</span><span
+lang=ZH-CN style='font-size:9.0pt;font-family:等线'>通信协议客户，对此类型客户，开放</span><span
+style='font-size:9.0pt;font-family:"Times New Roman",serif'>UART</span><span
+lang=ZH-CN style='font-size:9.0pt;font-family:等线'>读写</span><span
+style='font-size:9.0pt;font-family:"Times New Roman",serif'>API</span><span
+lang=ZH-CN style='font-size:9.0pt;font-family:等线'>，客户可自行定制基于</span><span
+style='font-size:9.0pt;font-family:"Times New Roman",serif'>UART</span><span
+lang=ZH-CN style='font-size:9.0pt;font-family:等线'>的各类传输特性。</span></p>
+
+<p class=MsoNormal style='margin-left:0cm;text-indent:21.0pt'><span
+style='font-size:9.0pt;font-family:"Times New Roman",serif'>二、</span><span
+lang=ZH-CN style='font-size:9.0pt;font-family:等线'>尚未自定义</span><span
+style='font-size:9.0pt;font-family:"Times New Roman",serif'>UART</span><span
+lang=ZH-CN style='font-size:9.0pt;font-family:等线'>通信协议客户，对此类客户，开放一套完整的</span><span
+style='font-size:9.0pt;font-family:"Times New Roman",serif'>UART</span><span
+lang=ZH-CN style='font-size:9.0pt;font-family:等线'>通信协议，提供</span><span
+style='font-size:9.0pt;font-family:"Times New Roman",serif'>API</span><span
+lang=ZH-CN style='font-size:9.0pt;font-family:等线'>，实现串口通信。</span></p>
+
+<p class=MsoNormal><span style='font-size:9.0pt;font-family:"Times New Roman",serif'>&nbsp;</span></p>
+
+<p class=MsoNormal style='text-indent:21.0pt'><span style='font-size:9.0pt;
+font-family:"Times New Roman",serif'>UART</span><span lang=ZH-CN
+style='font-size:9.0pt;font-family:等线'>协议特性：</span></p>
+
+<p class=MsoNormal style='margin-left:0cm;text-indent:21.0pt'><span
+style='font-size:9.0pt;font-family:"Times New Roman",serif'>一、</span><span
+lang=ZH-CN style='font-size:9.0pt;font-family:等线'>类</span><span
+style='font-size:9.0pt;font-family:"Times New Roman",serif'>TCP</span><span
+lang=ZH-CN style='font-size:9.0pt;font-family:等线'>可靠传输模式。</span></p>
+
+<p class=MsoNormal style='margin-left:0cm;text-indent:21.0pt'><span
+style='font-size:9.0pt;font-family:"Times New Roman",serif'>二、</span><span
+lang=ZH-CN style='font-size:9.0pt;font-family:等线'>类</span><span
+style='font-size:9.0pt;font-family:"Times New Roman",serif'>UDP</span><span
+lang=ZH-CN style='font-size:9.0pt;font-family:等线'>不可靠传输模式。</span></p>
+
+<p class=MsoNormal style='margin-left:0cm;text-indent:21.0pt'><span
+style='font-size:9.0pt;font-family:"Times New Roman",serif'>三、</span><span
+lang=ZH-CN style='font-size:9.0pt;font-family:等线'>自动过滤重复帧。</span></p>
+
+<p class=MsoNormal style='margin-left:0cm;text-indent:21.0pt'><span
+style='font-size:9.0pt;font-family:"Times New Roman",serif'>四、</span><span
+lang=ZH-CN style='font-size:9.0pt;font-family:等线'>自动重传。</span></p>
+
+<p class=MsoNormal style='margin-left:0cm;text-indent:21.0pt'><span
+style='font-size:9.0pt;font-family:"Times New Roman",serif'>五、</span><span
+lang=ZH-CN style='font-size:9.0pt;font-family:等线'>自动组装数据帧，自动拆解数据帧。</span></p>
+
+<p class=MsoNormal style='margin-left:0cm;text-indent:21.0pt'><span
+style='font-size:9.0pt;font-family:"Times New Roman",serif'>六、</span><span
+lang=ZH-CN style='font-size:9.0pt;font-family:等线'>最大帧长检测设置。</span></p>
+
+<p class=MsoNormal style='margin-left:0cm;text-indent:21.0pt'><span
+style='font-size:9.0pt;font-family:"Times New Roman",serif'>七、</span><span
+lang=ZH-CN style='font-size:9.0pt;font-family:等线'>支持控制命令类型定制，命令参数定制。</span></p>
+
+<p class=MsoNormal style='margin-left:0cm;text-indent:21.0pt'><span
+style='font-size:9.0pt;font-family:"Times New Roman",serif'>八、</span><span
+lang=ZH-CN style='font-size:9.0pt;font-family:等线'>支持极低内存限制下，自适应内存垃圾回收功能。</span></p>
+
+<p class=MsoNormal style='margin-left:0cm;text-indent:21.0pt'><span
+style='font-size:9.0pt;font-family:"Times New Roman",serif'>九、</span><span
+style='font-size:9.0pt;font-family:"Times New Roman",serif'>crc16</span><span
+lang=ZH-CN style='font-size:9.0pt;font-family:等线'>校验和。</span></p>
+
+<span style='font-size:9.0pt;font-family:"Times New Roman",serif'><br
+clear=all style='page-break-before:always'>
+</span>
+
+<p class=MsoNormal><span style='font-size:9.0pt;font-family:"Times New Roman",serif'>&nbsp;</span></p>
+
+<h1><a name="_Toc494486152"><span style='font-family:"Times New Roman",serif'>2.<span
+style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span></span><span
+lang=ZH-CN style='font-family:等线'>接口定义</span></a></h1>
+
+<h2><a name="_Toc67042774"><span style='font-family:"Times New Roman",serif'>2.1.<span
+style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp; </span></span><span
+style='font-family:"Times New Roman",serif'>UART</span></a><span lang=ZH-CN
+style='font-family:等线'>底层</span><span style='font-family:"Times New Roman",serif'>API</span></h2>
+
+<p class=MsoNormal><span lang=ZH-CN style='font-size:9.0pt;font-family:等线'>用于</span><span
+style='font-size:9.0pt;font-family:"Times New Roman",serif'>uart</span><span
+lang=ZH-CN style='font-size:9.0pt;font-family:等线'>底层驱动初始化，数据发送、接收</span></p>
+
+<h3><a name="_Toc1506471590"><span style='font-family:"Times New Roman",serif'>2.1.1.<span
+style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span><span style='font-family:"Times New Roman",serif'>UartInitialize</span></a></h3>
+
+<table class=MsoNormalTable border=0 cellspacing=0 cellpadding=0 width=541>
+ <tr>
+  <td width=541 valign=top style='width:405.75pt;padding:0cm 0cm 0cm 6.45pt'>
+  <p class=MsoNormal align=left style='text-align:left;line-height:18.0pt;
+  background:#1E1E1E'><span style='font-size:9.0pt;font-family:"Times New Roman",serif;
+  color:#569CD6;background:#1E1E1E'>typedef</span><span style='font-size:9.0pt;
+  font-family:"Times New Roman",serif;color:#D4D4D4;background:#1E1E1E'> </span><span
+  style='font-size:9.0pt;font-family:"Times New Roman",serif;color:#569CD6;
+  background:#1E1E1E'>enum</span><span style='font-size:9.0pt;font-family:"Times New Roman",serif;
+  color:#D4D4D4;background:#1E1E1E'> {</span></p>
+  <p class=MsoNormal align=left style='text-align:left;text-indent:9.0pt;
+  line-height:18.0pt;background:#1E1E1E'><span style='font-size:9.0pt;
+  font-family:"Times New Roman",serif;color:#B5CEA8;background:#1E1E1E'>UNI_UART1</span><span
+  style='font-size:9.0pt;font-family:"Times New Roman",serif;color:#D4D4D4;
+  background:#1E1E1E'>,</span></p>
+  <p class=MsoNormal align=left style='text-align:left;text-indent:9.0pt;
+  line-height:18.0pt;background:#1E1E1E'><span style='font-size:9.0pt;
+  font-family:"Times New Roman",serif;color:#B5CEA8;background:#1E1E1E'>UNI_UART2</span><span
+  style='font-size:9.0pt;font-family:"Times New Roman",serif;color:#D4D4D4;
+  background:#1E1E1E'>,</span></p>
+  <p class=MsoNormal align=left style='text-align:left;text-indent:9.0pt;
+  line-height:18.0pt;background:#1E1E1E'><span style='font-size:9.0pt;
+  font-family:"Times New Roman",serif;color:#B5CEA8;background:#1E1E1E'>UNI_UART3</span><span
+  style='font-size:9.0pt;font-family:"Times New Roman",serif;color:#D4D4D4;
+  background:#1E1E1E'>,</span></p>
+  <p class=MsoNormal align=left style='text-align:left;line-height:18.0pt;
+  background:#1E1E1E'><span style='font-size:9.0pt;font-family:"Times New Roman",serif;
+  color:#D4D4D4;background:#1E1E1E'>} UartDeviceName;</span></p>
+  <p class=MsoNormal align=left style='text-align:left;line-height:18.0pt;
+  background:#1E1E1E'><span style='font-size:9.0pt;font-family:"Times New Roman",serif;
+  color:#569CD6;background:#1E1E1E'>typedef</span><span style='font-size:9.0pt;
+  font-family:"Times New Roman",serif;color:#D4D4D4;background:#1E1E1E'> </span><span
+  style='font-size:9.0pt;font-family:"Times New Roman",serif;color:#569CD6;
+  background:#1E1E1E'>enum</span><span style='font-size:9.0pt;font-family:"Times New Roman",serif;
+  color:#D4D4D4;background:#1E1E1E'> {</span></p>
+  <p class=MsoNormal align=left style='text-align:left;text-indent:9.0pt;
+  line-height:18.0pt;background:#1E1E1E'><span style='font-size:9.0pt;
+  font-family:"Times New Roman",serif;color:#B5CEA8;background:#1E1E1E'>UNI_B_1200</span><span
+  style='font-size:9.0pt;font-family:"Times New Roman",serif;color:#D4D4D4;
+  background:#1E1E1E'>,</span></p>
+  <p class=MsoNormal align=left style='text-align:left;text-indent:9.0pt;
+  line-height:18.0pt;background:#1E1E1E'><span style='font-size:9.0pt;
+  font-family:"Times New Roman",serif;color:#B5CEA8;background:#1E1E1E'>UNI_B_2400</span><span
+  style='font-size:9.0pt;font-family:"Times New Roman",serif;color:#D4D4D4;
+  background:#1E1E1E'>,</span></p>
+  <p class=MsoNormal align=left style='text-align:left;text-indent:9.0pt;
+  line-height:18.0pt;background:#1E1E1E'><span style='font-size:9.0pt;
+  font-family:"Times New Roman",serif;color:#B5CEA8;background:#1E1E1E'>UNI_B_4800</span><span
+  style='font-size:9.0pt;font-family:"Times New Roman",serif;color:#D4D4D4;
+  background:#1E1E1E'>,</span></p>
+  <p class=MsoNormal align=left style='text-align:left;text-indent:9.0pt;
+  line-height:18.0pt;background:#1E1E1E'><span style='font-size:9.0pt;
+  font-family:"Times New Roman",serif;color:#B5CEA8;background:#1E1E1E'>UNI_B_9600</span><span
+  style='font-size:9.0pt;font-family:"Times New Roman",serif;color:#D4D4D4;
+  background:#1E1E1E'>,</span></p>
+  <p class=MsoNormal align=left style='text-align:left;text-indent:9.0pt;
+  line-height:18.0pt;background:#1E1E1E'><span style='font-size:9.0pt;
+  font-family:"Times New Roman",serif;color:#B5CEA8;background:#1E1E1E'>UNI_B_14400</span><span
+  style='font-size:9.0pt;font-family:"Times New Roman",serif;color:#D4D4D4;
+  background:#1E1E1E'>,</span></p>
+  <p class=MsoNormal align=left style='text-align:left;text-indent:9.0pt;
+  line-height:18.0pt;background:#1E1E1E'><span style='font-size:9.0pt;
+  font-family:"Times New Roman",serif;color:#B5CEA8;background:#1E1E1E'>UNI_B_19200</span><span
+  style='font-size:9.0pt;font-family:"Times New Roman",serif;color:#D4D4D4;
+  background:#1E1E1E'>,</span></p>
+  <p class=MsoNormal align=left style='text-align:left;text-indent:9.0pt;
+  line-height:18.0pt;background:#1E1E1E'><span style='font-size:9.0pt;
+  font-family:"Times New Roman",serif;color:#B5CEA8;background:#1E1E1E'>UNI_B_38400</span><span
+  style='font-size:9.0pt;font-family:"Times New Roman",serif;color:#D4D4D4;
+  background:#1E1E1E'>,</span></p>
+  <p class=MsoNormal align=left style='text-align:left;text-indent:9.0pt;
+  line-height:18.0pt;background:#1E1E1E'><span style='font-size:9.0pt;
+  font-family:"Times New Roman",serif;color:#B5CEA8;background:#1E1E1E'>UNI_B_57600</span><span
+  style='font-size:9.0pt;font-family:"Times New Roman",serif;color:#D4D4D4;
+  background:#1E1E1E'>,</span></p>
+  <p class=MsoNormal align=left style='text-align:left;text-indent:9.0pt;
+  line-height:18.0pt;background:#1E1E1E'><span style='font-size:9.0pt;
+  font-family:"Times New Roman",serif;color:#B5CEA8;background:#1E1E1E'>UNI_B_115200</span><span
+  style='font-size:9.0pt;font-family:"Times New Roman",serif;color:#D4D4D4;
+  background:#1E1E1E'>,</span></p>
+  <p class=MsoNormal align=left style='text-align:left;line-height:18.0pt;
+  background:#1E1E1E'><span style='font-size:9.0pt;font-family:"Times New Roman",serif;
+  color:#D4D4D4;background:#1E1E1E'>} UartSpeed; </span></p>
+  <p class=MsoNormal align=left style='text-align:left;line-height:18.0pt;
+  background:#1E1E1E'><span style='font-size:9.0pt;font-family:"Times New Roman",serif;
+  color:#569CD6;background:#1E1E1E'>typedef</span><span style='font-size:9.0pt;
+  font-family:"Times New Roman",serif;color:#D4D4D4;background:#1E1E1E'> </span><span
+  style='font-size:9.0pt;font-family:"Times New Roman",serif;color:#569CD6;
+  background:#1E1E1E'>enum</span><span style='font-size:9.0pt;font-family:"Times New Roman",serif;
+  color:#D4D4D4;background:#1E1E1E'> {</span></p>
+  <p class=MsoNormal align=left style='text-align:left;text-indent:9.0pt;
+  line-height:18.0pt;background:#1E1E1E'><span style='font-size:9.0pt;
+  font-family:"Times New Roman",serif;color:#B5CEA8;background:#1E1E1E'>UNI_PARITY_ODD</span><span
+  style='font-size:9.0pt;font-family:"Times New Roman",serif;color:#D4D4D4;
+  background:#1E1E1E'>,</span></p>
+  <p class=MsoNormal align=left style='text-align:left;text-indent:9.0pt;
+  line-height:18.0pt;background:#1E1E1E'><span style='font-size:9.0pt;
+  font-family:"Times New Roman",serif;color:#B5CEA8;background:#1E1E1E'>UNI_PARITY_EVEN</span><span
+  style='font-size:9.0pt;font-family:"Times New Roman",serif;color:#D4D4D4;
+  background:#1E1E1E'>,</span></p>
+  <p class=MsoNormal align=left style='text-align:left;text-indent:9.0pt;
+  line-height:18.0pt;background:#1E1E1E'><span style='font-size:9.0pt;
+  font-family:"Times New Roman",serif;color:#B5CEA8;background:#1E1E1E'>UNI_PARITY_NONE</span><span
+  style='font-size:9.0pt;font-family:"Times New Roman",serif;color:#D4D4D4;
+  background:#1E1E1E'>,</span></p>
+  <p class=MsoNormal align=left style='text-align:left;text-indent:9.0pt;
+  line-height:18.0pt;background:#1E1E1E'><span style='font-size:9.0pt;
+  font-family:"Times New Roman",serif;color:#B5CEA8;background:#1E1E1E'>UNI_PARITY_MARK</span><span
+  style='font-size:9.0pt;font-family:"Times New Roman",serif;color:#D4D4D4;
+  background:#1E1E1E'>,</span></p>
+  <p class=MsoNormal align=left style='text-align:left;text-indent:9.0pt;
+  line-height:18.0pt;background:#1E1E1E'><span style='font-size:9.0pt;
+  font-family:"Times New Roman",serif;color:#B5CEA8;background:#1E1E1E'>UNI_PARITY_SPACE</span><span
+  style='font-size:9.0pt;font-family:"Times New Roman",serif;color:#D4D4D4;
+  background:#1E1E1E'>,</span></p>
+  <p class=MsoNormal align=left style='text-align:left;line-height:18.0pt;
+  background:#1E1E1E'><span style='font-size:9.0pt;font-family:"Times New Roman",serif;
+  color:#D4D4D4;background:#1E1E1E'>} UartParity; </span></p>
+  <p class=MsoNormal align=left style='text-align:left;line-height:18.0pt;
+  background:#1E1E1E'><span style='font-size:9.0pt;font-family:"Times New Roman",serif;
+  color:#569CD6;background:#1E1E1E'>typedef</span><span style='font-size:9.0pt;
+  font-family:"Times New Roman",serif;color:#D4D4D4;background:#1E1E1E'> </span><span
+  style='font-size:9.0pt;font-family:"Times New Roman",serif;color:#569CD6;
+  background:#1E1E1E'>enum</span><span style='font-size:9.0pt;font-family:"Times New Roman",serif;
+  color:#D4D4D4;background:#1E1E1E'> {</span></p>
+  <p class=MsoNormal align=left style='text-align:left;text-indent:9.0pt;
+  line-height:18.0pt;background:#1E1E1E'><span style='font-size:9.0pt;
+  font-family:"Times New Roman",serif;color:#B5CEA8;background:#1E1E1E'>UNI_ONE_STOP_BIT</span><span
+  style='font-size:9.0pt;font-family:"Times New Roman",serif;color:#D4D4D4;
+  background:#1E1E1E'>,</span></p>
+  <p class=MsoNormal align=left style='text-align:left;text-indent:9.0pt;
+  line-height:18.0pt;background:#1E1E1E'><span style='font-size:9.0pt;
+  font-family:"Times New Roman",serif;color:#B5CEA8;background:#1E1E1E'>UNI_ONE_5_STOP_BIT</span><span
+  style='font-size:9.0pt;font-family:"Times New Roman",serif;color:#D4D4D4;
+  background:#1E1E1E'>,</span></p>
+  <p class=MsoNormal align=left style='text-align:left;text-indent:9.0pt;
+  line-height:18.0pt;background:#1E1E1E'><span style='font-size:9.0pt;
+  font-family:"Times New Roman",serif;color:#B5CEA8;background:#1E1E1E'>UNI_TWO_STOP_BIT</span><span
+  style='font-size:9.0pt;font-family:"Times New Roman",serif;color:#D4D4D4;
+  background:#1E1E1E'>,</span></p>
+  <p class=MsoNormal align=left style='text-align:left;line-height:18.0pt;
+  background:#1E1E1E'><span style='font-size:9.0pt;font-family:"Times New Roman",serif;
+  color:#D4D4D4;background:#1E1E1E'>} UartStop;</span></p>
+  <p class=MsoNormal align=left style='text-align:left;line-height:18.0pt;
+  background:#1E1E1E'><span style='font-size:9.0pt;font-family:"Times New Roman",serif;
+  color:#D4D4D4;background:#1E1E1E'>&nbsp;</span></p>
+  <p class=MsoNormal align=left style='text-align:left;line-height:18.0pt;
+  background:#1E1E1E'><span style='font-size:9.0pt;font-family:"Times New Roman",serif;
+  color:#6A9955;background:#1E1E1E'>/**</span></p>
+  <p class=MsoNormal align=left style='text-align:left;text-indent:4.5pt;
+  line-height:18.0pt;background:#1E1E1E'><span style='font-size:9.0pt;
+  font-family:"Times New Roman",serif;color:#6A9955;background:#1E1E1E'>* uart
+  init configure parameter</span></p>
+  <p class=MsoNormal align=left style='text-align:left;text-indent:4.5pt;
+  line-height:18.0pt;background:#1E1E1E'><span style='font-size:9.0pt;
+  font-family:"Times New Roman",serif;color:#6A9955;background:#1E1E1E'>*/</span><span
+  style='font-size:9.0pt;font-family:"Times New Roman",serif;color:#D4D4D4;
+  background:#1E1E1E'> </span></p>
+  <p class=MsoNormal align=left style='text-align:left;line-height:18.0pt;
+  background:#1E1E1E'><span style='font-size:9.0pt;font-family:"Times New Roman",serif;
+  color:#569CD6;background:#1E1E1E'>typedef</span><span style='font-size:9.0pt;
+  font-family:"Times New Roman",serif;color:#D4D4D4;background:#1E1E1E'> </span><span
+  style='font-size:9.0pt;font-family:"Times New Roman",serif;color:#569CD6;
+  background:#1E1E1E'>struct</span><span style='font-size:9.0pt;font-family:
+  "Times New Roman",serif;color:#D4D4D4;background:#1E1E1E'> {</span></p>
+  <p class=MsoNormal align=left style='text-align:left;text-indent:9.0pt;
+  line-height:18.0pt;background:#1E1E1E'><span style='font-size:9.0pt;
+  font-family:"Times New Roman",serif;color:#D4D4D4;background:#1E1E1E'>UartDeviceName
+  device;</span><span style='font-size:9.0pt;font-family:"Times New Roman",serif;
+  color:#6A9955;background:#1E1E1E'> /* device name */</span></p>
+  <p class=MsoNormal align=left style='text-align:left;text-indent:9.0pt;
+  line-height:18.0pt;background:#1E1E1E'><span style='font-size:9.0pt;
+  font-family:"Times New Roman",serif;color:#D4D4D4;background:#1E1E1E'>UartSpeed
+  speed;</span><span style='font-size:9.0pt;font-family:"Times New Roman",serif;
+  color:#6A9955;background:#1E1E1E'> /* baudrate */</span></p>
+  <p class=MsoNormal align=left style='text-align:left;text-indent:9.0pt;
+  line-height:18.0pt;background:#1E1E1E'><span style='font-size:9.0pt;
+  font-family:"Times New Roman",serif;color:#D4D4D4;background:#1E1E1E'>UartParity
+  parity;</span><span style='font-size:9.0pt;font-family:"Times New Roman",serif;
+  color:#6A9955;background:#1E1E1E'> /* parity check */</span></p>
+  <p class=MsoNormal align=left style='text-align:left;text-indent:9.0pt;
+  line-height:18.0pt;background:#1E1E1E'><span style='font-size:9.0pt;
+  font-family:"Times New Roman",serif;color:#D4D4D4;background:#1E1E1E'>UartStop
+  stop;</span><span style='font-size:9.0pt;font-family:"Times New Roman",serif;
+  color:#6A9955;background:#1E1E1E'> /* stop bit */</span></p>
+  <p class=MsoNormal align=left style='text-align:left;text-indent:9.0pt;
+  line-height:18.0pt;background:#1E1E1E'><span style='font-size:9.0pt;
+  font-family:"Times New Roman",serif;color:#569CD6;background:#1E1E1E'>int</span><span
+  style='font-size:9.0pt;font-family:"Times New Roman",serif;color:#D4D4D4;
+  background:#1E1E1E'> data_bit;</span><span style='font-size:9.0pt;font-family:
+  "Times New Roman",serif;color:#6A9955;background:#1E1E1E'> /* data bit */</span></p>
+  <p class=MsoNormal align=left style='text-align:left;line-height:18.0pt;
+  background:#1E1E1E'><span style='font-size:9.0pt;font-family:"Times New Roman",serif;
+  color:#D4D4D4;background:#1E1E1E'>} </span><span style='font-size:9.0pt;
+  font-family:"Times New Roman",serif;color:#4EC9B0;background:#1E1E1E'>UartConfig</span><span
+  style='font-size:9.0pt;font-family:"Times New Roman",serif;color:#D4D4D4;
+  background:#1E1E1E'>;</span></p>
+  <p class=MsoNormal align=left style='text-align:left;line-height:18.0pt;
+  background:#1E1E1E'><span style='font-size:9.0pt;font-family:"Times New Roman",serif;
+  color:#569CD6;background:#1E1E1E'>typedef</span><span style='font-size:9.0pt;
+  font-family:"Times New Roman",serif;color:#D4D4D4;background:#1E1E1E'> </span><span
+  style='font-size:9.0pt;font-family:"Times New Roman",serif;color:#569CD6;
+  background:#1E1E1E'>void</span><span style='font-size:9.0pt;font-family:"Times New Roman",serif;
+  color:#D4D4D4;background:#1E1E1E'> (*RecvUartDataHandler)(</span><span
+  style='font-size:9.0pt;font-family:"Times New Roman",serif;color:#569CD6;
+  background:#1E1E1E'>char</span><span style='font-size:9.0pt;font-family:"Times New Roman",serif;
+  color:#D4D4D4;background:#1E1E1E'> *buf, </span><span style='font-size:9.0pt;
+  font-family:"Times New Roman",serif;color:#569CD6;background:#1E1E1E'>int</span><span
+  style='font-size:9.0pt;font-family:"Times New Roman",serif;color:#D4D4D4;
+  background:#1E1E1E'> len);</span></p>
+  <p class=MsoNormal align=left style='text-align:left;line-height:18.0pt;
+  background:#1E1E1E'><span style='font-size:9.0pt;font-family:"Times New Roman",serif;
+  color:#6A9955;background:#1E1E1E'>/**</span></p>
+  <p class=MsoNormal align=left style='text-align:left;text-indent:4.5pt;
+  line-height:18.0pt;background:#1E1E1E'><span style='font-size:9.0pt;
+  font-family:"Times New Roman",serif;color:#6A9955;background:#1E1E1E'>* </span><span
+  style='font-size:9.0pt;font-family:"Times New Roman",serif;color:#569CD6;
+  background:#1E1E1E'>@brief</span><span style='font-size:9.0pt;font-family:
+  "Times New Roman",serif;color:#6A9955;background:#1E1E1E'> uart init</span></p>
+  <p class=MsoNormal align=left style='text-align:left;text-indent:4.5pt;
+  line-height:18.0pt;background:#1E1E1E'><span style='font-size:9.0pt;
+  font-family:"Times New Roman",serif;color:#6A9955;background:#1E1E1E'>* </span><span
+  style='font-size:9.0pt;font-family:"Times New Roman",serif;color:#569CD6;
+  background:#1E1E1E'>@param</span><span style='font-size:9.0pt;font-family:
+  "Times New Roman",serif;color:#6A9955;background:#1E1E1E'> </span><span
+  style='font-size:9.0pt;font-family:"Times New Roman",serif;color:#9CDCFE;
+  background:#1E1E1E'>config</span><span style='font-size:9.0pt;font-family:
+  "Times New Roman",serif;color:#6A9955;background:#1E1E1E'> uart configure
+  parameter</span></p>
+  <p class=MsoNormal align=left style='text-align:left;text-indent:4.5pt;
+  line-height:18.0pt;background:#1E1E1E'><span style='font-size:9.0pt;
+  font-family:"Times New Roman",serif;color:#6A9955;background:#1E1E1E'>* </span><span
+  style='font-size:9.0pt;font-family:"Times New Roman",serif;color:#569CD6;
+  background:#1E1E1E'>@param</span><span style='font-size:9.0pt;font-family:
+  "Times New Roman",serif;color:#6A9955;background:#1E1E1E'> </span><span
+  style='font-size:9.0pt;font-family:"Times New Roman",serif;color:#9CDCFE;
+  background:#1E1E1E'>handler</span><span style='font-size:9.0pt;font-family:
+  "Times New Roman",serif;color:#6A9955;background:#1E1E1E'> handle uart
+  receive data hook</span></p>
+  <p class=MsoNormal align=left style='text-align:left;text-indent:4.5pt;
+  line-height:18.0pt;background:#1E1E1E'><span style='font-size:9.0pt;
+  font-family:"Times New Roman",serif;color:#6A9955;background:#1E1E1E'>* </span><span
+  style='font-size:9.0pt;font-family:"Times New Roman",serif;color:#569CD6;
+  background:#1E1E1E'>@return</span><span style='font-size:9.0pt;font-family:
+  "Times New Roman",serif;color:#6A9955;background:#1E1E1E'> 0 means success,
+  -1 means failed</span></p>
+  <p class=MsoNormal align=left style='text-align:left;text-indent:4.5pt;
+  line-height:18.0pt;background:#1E1E1E'><span style='font-size:9.0pt;
+  font-family:"Times New Roman",serif;color:#6A9955;background:#1E1E1E'>*/</span></p>
+  <p class=MsoNormal align=left style='text-align:left;line-height:18.0pt;
+  background:#1E1E1E'><span style='font-size:9.0pt;font-family:"Times New Roman",serif;
+  color:#569CD6;background:#1E1E1E'>int</span><span style='font-size:9.0pt;
+  font-family:"Times New Roman",serif;color:#D4D4D4;background:#1E1E1E'> </span><span
+  style='font-size:9.0pt;font-family:"Times New Roman",serif;color:#DCDCAA;
+  background:#1E1E1E'>UartInitialize</span><span style='font-size:9.0pt;
+  font-family:"Times New Roman",serif;color:#D4D4D4;background:#1E1E1E'>(</span><span
+  style='font-size:9.0pt;font-family:"Times New Roman",serif;color:#4EC9B0;
+  background:#1E1E1E'>UartConfig</span><span style='font-size:9.0pt;font-family:
+  "Times New Roman",serif;color:#D4D4D4;background:#1E1E1E'> </span><span
+  style='font-size:9.0pt;font-family:"Times New Roman",serif;color:#569CD6;
+  background:#1E1E1E'>*</span><span style='font-size:9.0pt;font-family:"Times New Roman",serif;
+  color:#9CDCFE;background:#1E1E1E'>config</span><span style='font-size:9.0pt;
+  font-family:"Times New Roman",serif;color:#D4D4D4;background:#1E1E1E'>,
+  RecvUartDataHandler </span><span style='font-size:9.0pt;font-family:"Times New Roman",serif;
+  color:#9CDCFE;background:#1E1E1E'>handler</span><span style='font-size:9.0pt;
+  font-family:"Times New Roman",serif;color:#D4D4D4;background:#1E1E1E'>);</span></p>
+  </td>
+ </tr>
+</table>
+
+<h3><a name="_Toc435815000"><span style='font-family:"Times New Roman",serif'>2.1.2.<span
+style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span><span style='font-family:"Times New Roman",serif;color:black'>UartFinalize</span></a></h3>
+
+<table class=MsoNormalTable border=0 cellspacing=0 cellpadding=0 width=541>
+ <tr>
+  <td width=541 valign=top style='width:405.75pt;padding:0cm 0cm 0cm 6.45pt'>
+  <p class=MsoNormal align=left style='text-align:left;line-height:18.0pt;
+  background:#1E1E1E'><span style='font-size:9.0pt;font-family:"Times New Roman",serif;
+  color:#6A9955;background:#1E1E1E'>/**</span></p>
+  <p class=MsoNormal align=left style='text-align:left;text-indent:4.5pt;
+  line-height:18.0pt;background:#1E1E1E'><span style='font-size:9.0pt;
+  font-family:"Times New Roman",serif;color:#6A9955;background:#1E1E1E'>* </span><span
+  style='font-size:9.0pt;font-family:"Times New Roman",serif;color:#569CD6;
+  background:#1E1E1E'>@brief</span><span style='font-size:9.0pt;font-family:
+  "Times New Roman",serif;color:#6A9955;background:#1E1E1E'> uart finalize</span></p>
+  <p class=MsoNormal align=left style='text-align:left;text-indent:4.5pt;
+  line-height:18.0pt;background:#1E1E1E'><span style='font-size:9.0pt;
+  font-family:"Times New Roman",serif;color:#6A9955;background:#1E1E1E'>* </span><span
+  style='font-size:9.0pt;font-family:"Times New Roman",serif;color:#569CD6;
+  background:#1E1E1E'>@param</span><span style='font-size:9.0pt;font-family:
+  "Times New Roman",serif;color:#6A9955;background:#1E1E1E'> </span><span
+  style='font-size:9.0pt;font-family:"Times New Roman",serif;color:#9CDCFE;
+  background:#1E1E1E'>void</span></p>
+  <p class=MsoNormal align=left style='text-align:left;text-indent:4.5pt;
+  line-height:18.0pt;background:#1E1E1E'><span style='font-size:9.0pt;
+  font-family:"Times New Roman",serif;color:#6A9955;background:#1E1E1E'>* </span><span
+  style='font-size:9.0pt;font-family:"Times New Roman",serif;color:#569CD6;
+  background:#1E1E1E'>@return</span><span style='font-size:9.0pt;font-family:
+  "Times New Roman",serif;color:#6A9955;background:#1E1E1E'> void</span></p>
+  <p class=MsoNormal align=left style='text-align:left;text-indent:4.5pt;
+  line-height:18.0pt;background:#1E1E1E'><span style='font-size:9.0pt;
+  font-family:"Times New Roman",serif;color:#6A9955;background:#1E1E1E'>*/</span></p>
+  <p class=MsoNormal align=left style='text-align:left;line-height:18.0pt;
+  background:#1E1E1E'><span style='font-size:9.0pt;font-family:"Times New Roman",serif;
+  color:#569CD6;background:#1E1E1E'>void</span><span style='font-size:9.0pt;
+  font-family:"Times New Roman",serif;color:#D4D4D4;background:#1E1E1E'> </span><span
+  style='font-size:9.0pt;font-family:"Times New Roman",serif;color:#DCDCAA;
+  background:#1E1E1E'>UartFinalize</span><span style='font-size:9.0pt;
+  font-family:"Times New Roman",serif;color:#D4D4D4;background:#1E1E1E'>(</span><span
+  style='font-size:9.0pt;font-family:"Times New Roman",serif;color:#569CD6;
+  background:#1E1E1E'>void</span><span style='font-size:9.0pt;font-family:"Times New Roman",serif;
+  color:#D4D4D4;background:#1E1E1E'>);</span></p>
+  </td>
+ </tr>
+</table>
+
+<h3><a name="_Toc1823468730"><span style='font-family:"Times New Roman",serif'>2.1.3.<span
+style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span><span style='font-family:"Times New Roman",serif;color:black'>UartWrite</span></a></h3>
+
+<table class=MsoNormalTable border=0 cellspacing=0 cellpadding=0 width=541>
+ <tr>
+  <td width=541 valign=top style='width:405.75pt;padding:0cm 0cm 0cm 6.45pt'>
+  <p class=MsoNormal align=left style='text-align:left;line-height:18.0pt;
+  background:#1E1E1E'><span style='font-size:9.0pt;font-family:"Times New Roman",serif;
+  color:#6A9955;background:#1E1E1E'>/**</span></p>
+  <p class=MsoNormal align=left style='text-align:left;text-indent:4.5pt;
+  line-height:18.0pt;background:#1E1E1E'><span style='font-size:9.0pt;
+  font-family:"Times New Roman",serif;color:#6A9955;background:#1E1E1E'>* </span><span
+  style='font-size:9.0pt;font-family:"Times New Roman",serif;color:#569CD6;
+  background:#1E1E1E'>@brief</span><span style='font-size:9.0pt;font-family:
+  "Times New Roman",serif;color:#6A9955;background:#1E1E1E'> write data by
+  UART, multi-thread unsafe, please write in sync mode</span></p>
+  <p class=MsoNormal align=left style='text-align:left;text-indent:4.5pt;
+  line-height:18.0pt;background:#1E1E1E'><span style='font-size:9.0pt;
+  font-family:"Times New Roman",serif;color:#6A9955;background:#1E1E1E'>* </span><span
+  style='font-size:9.0pt;font-family:"Times New Roman",serif;color:#569CD6;
+  background:#1E1E1E'>@param</span><span style='font-size:9.0pt;font-family:
+  "Times New Roman",serif;color:#6A9955;background:#1E1E1E'> </span><span
+  style='font-size:9.0pt;font-family:"Times New Roman",serif;color:#9CDCFE;
+  background:#1E1E1E'>buf</span><span style='font-size:9.0pt;font-family:"Times New Roman",serif;
+  color:#6A9955;background:#1E1E1E'> the data buffer to write</span></p>
+  <p class=MsoNormal align=left style='text-align:left;text-indent:4.5pt;
+  line-height:18.0pt;background:#1E1E1E'><span style='font-size:9.0pt;
+  font-family:"Times New Roman",serif;color:#6A9955;background:#1E1E1E'>* </span><span
+  style='font-size:9.0pt;font-family:"Times New Roman",serif;color:#569CD6;
+  background:#1E1E1E'>@param</span><span style='font-size:9.0pt;font-family:
+  "Times New Roman",serif;color:#6A9955;background:#1E1E1E'> </span><span
+  style='font-size:9.0pt;font-family:"Times New Roman",serif;color:#9CDCFE;
+  background:#1E1E1E'>len</span><span style='font-size:9.0pt;font-family:"Times New Roman",serif;
+  color:#6A9955;background:#1E1E1E'> the data length</span></p>
+  <p class=MsoNormal align=left style='text-align:left;text-indent:4.5pt;
+  line-height:18.0pt;background:#1E1E1E'><span style='font-size:9.0pt;
+  font-family:"Times New Roman",serif;color:#6A9955;background:#1E1E1E'>* </span><span
+  style='font-size:9.0pt;font-family:"Times New Roman",serif;color:#569CD6;
+  background:#1E1E1E'>@return</span><span style='font-size:9.0pt;font-family:
+  "Times New Roman",serif;color:#6A9955;background:#1E1E1E'> the actual write
+  length by UART</span></p>
+  <p class=MsoNormal align=left style='text-align:left;text-indent:4.5pt;
+  line-height:18.0pt;background:#1E1E1E'><span style='font-size:9.0pt;
+  font-family:"Times New Roman",serif;color:#6A9955;background:#1E1E1E'>*/</span></p>
+  <p class=MsoNormal align=left style='text-align:left;line-height:18.0pt;
+  background:#1E1E1E'><span style='font-size:9.0pt;font-family:"Times New Roman",serif;
+  color:#569CD6;background:#1E1E1E'>int</span><span style='font-size:9.0pt;
+  font-family:"Times New Roman",serif;color:#D4D4D4;background:#1E1E1E'> </span><span
+  style='font-size:9.0pt;font-family:"Times New Roman",serif;color:#DCDCAA;
+  background:#1E1E1E'>UartWrite</span><span style='font-size:9.0pt;font-family:
+  "Times New Roman",serif;color:#D4D4D4;background:#1E1E1E'>(</span><span
+  style='font-size:9.0pt;font-family:"Times New Roman",serif;color:#569CD6;
+  background:#1E1E1E'>char</span><span style='font-size:9.0pt;font-family:"Times New Roman",serif;
+  color:#D4D4D4;background:#1E1E1E'> *</span><span style='font-size:9.0pt;
+  font-family:"Times New Roman",serif;color:#9CDCFE;background:#1E1E1E'>buf</span><span
+  style='font-size:9.0pt;font-family:"Times New Roman",serif;color:#D4D4D4;
+  background:#1E1E1E'>, </span><span style='font-size:9.0pt;font-family:"Times New Roman",serif;
+  color:#569CD6;background:#1E1E1E'>int</span><span style='font-size:9.0pt;
+  font-family:"Times New Roman",serif;color:#D4D4D4;background:#1E1E1E'> </span><span
+  style='font-size:9.0pt;font-family:"Times New Roman",serif;color:#9CDCFE;
+  background:#1E1E1E'>len</span><span style='font-size:9.0pt;font-family:"Times New Roman",serif;
+  color:#D4D4D4;background:#1E1E1E'>);</span></p>
+  </td>
+ </tr>
+</table>
+
+<p class=MsoNormal><b><span style='font-family:"Times New Roman",serif'>&nbsp;</span></b></p>
+
+<h2><span style='font-family:"Times New Roman",serif'>2.2.<span
+style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp; </span></span><span
+style='font-family:"Times New Roman",serif'> <a name="_Toc299818773">UART
+protocol API</a></span></h2>
+
+<p class=MsoNormal style='text-indent:18.0pt'><span lang=ZH-CN
+style='font-size:9.0pt;font-family:等线'>用于串口数据封装、解包</span></p>
+
+<h3><a name="_Toc1057481949"><span style='font-family:"Times New Roman",serif'>2.2.1.<span
+style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span><span style='font-family:"Times New Roman",serif'>CommProtocolInit</span></a></h3>
+
+<table class=MsoNormalTable border=0 cellspacing=0 cellpadding=0 width=541>
+ <tr>
+  <td width=541 valign=top style='width:405.75pt;padding:0cm 0cm 0cm 6.45pt'>
+  <p class=MsoNormal align=left style='text-align:left;line-height:18.0pt;
+  background:#1E1E1E'><span style='font-size:9.0pt;font-family:"Times New Roman",serif;
+  color:#569CD6;background:#1E1E1E'>typedef</span><span style='font-size:9.0pt;
+  font-family:"Times New Roman",serif;color:#D4D4D4;background:#1E1E1E'> </span><span
+  style='font-size:9.0pt;font-family:"Times New Roman",serif;color:#569CD6;
+  background:#1E1E1E'>struct</span><span style='font-size:9.0pt;font-family:
+  "Times New Roman",serif;color:#D4D4D4;background:#1E1E1E'> {</span></p>
+  <p class=MsoNormal align=left style='text-align:left;text-indent:9.0pt;
+  line-height:18.0pt;background:#1E1E1E'><span style='font-size:9.0pt;
+  font-family:"Times New Roman",serif;color:#D4D4D4;background:#1E1E1E'>CommCmd
+  cmd;</span><span style='font-size:9.0pt;font-family:"Times New Roman",serif;
+  color:#6A9955;background:#1E1E1E'> /* command, such as power_on, power_off */</span></p>
+  <p class=MsoNormal align=left style='text-align:left;text-indent:9.0pt;
+  line-height:18.0pt;background:#1E1E1E'><span style='font-size:9.0pt;
+  font-family:"Times New Roman",serif;color:#D4D4D4;background:#1E1E1E'>CommPayloadLen
+  payload_len;</span><span style='font-size:9.0pt;font-family:"Times New Roman",serif;
+  color:#6A9955;background:#1E1E1E'> /* parameter length of command */</span></p>
+  <p class=MsoNormal align=left style='text-align:left;text-indent:9.0pt;
+  line-height:18.0pt;background:#1E1E1E'><span style='font-size:9.0pt;
+  font-family:"Times New Roman",serif;color:#569CD6;background:#1E1E1E'>char</span><span
+  style='font-size:9.0pt;font-family:"Times New Roman",serif;color:#D4D4D4;
+  background:#1E1E1E'> </span><span style='font-size:9.0pt;font-family:"Times New Roman",serif;
+  color:#9CDCFE;background:#1E1E1E'>payload</span><span style='font-size:9.0pt;
+  font-family:"Times New Roman",serif;color:#D4D4D4;background:#1E1E1E'>[</span><span
+  style='font-size:9.0pt;font-family:"Times New Roman",serif;color:#B5CEA8;
+  background:#1E1E1E'>0</span><span style='font-size:9.0pt;font-family:"Times New Roman",serif;
+  color:#D4D4D4;background:#1E1E1E'>];</span><span style='font-size:9.0pt;
+  font-family:"Times New Roman",serif;color:#6A9955;background:#1E1E1E'> /*
+  parameter of command */</span></p>
+  <p class=MsoNormal align=left style='text-align:left;line-height:18.0pt;
+  background:#1E1E1E'><span style='font-size:9.0pt;font-family:"Times New Roman",serif;
+  color:#D4D4D4;background:#1E1E1E'>} </span><span style='font-size:9.0pt;
+  font-family:"Times New Roman",serif;color:#4EC9B0;background:#1E1E1E'>PACKED</span><span
+  style='font-size:9.0pt;font-family:"Times New Roman",serif;color:#D4D4D4;
+  background:#1E1E1E'> </span><span style='font-size:9.0pt;font-family:"Times New Roman",serif;
+  color:#4EC9B0;background:#1E1E1E'>CommPacket</span><span style='font-size:
+  9.0pt;font-family:"Times New Roman",serif;color:#D4D4D4;background:#1E1E1E'>;</span></p>
+  <p class=MsoNormal align=left style='text-align:left;line-height:18.0pt;
+  background:#1E1E1E'><span style='font-size:9.0pt;font-family:"Times New Roman",serif;
+  color:#569CD6;background:#1E1E1E'>typedef</span><span style='font-size:9.0pt;
+  font-family:"Times New Roman",serif;color:#D4D4D4;background:#1E1E1E'> </span><span
+  style='font-size:9.0pt;font-family:"Times New Roman",serif;color:#569CD6;
+  background:#1E1E1E'>void</span><span style='font-size:9.0pt;font-family:"Times New Roman",serif;
+  color:#D4D4D4;background:#1E1E1E'> (*</span><span style='font-size:9.0pt;
+  font-family:"Times New Roman",serif;color:#9CDCFE;background:#1E1E1E'>CommRecvPacketHandler</span><span
+  style='font-size:9.0pt;font-family:"Times New Roman",serif;color:#D4D4D4;
+  background:#1E1E1E'>)(</span><span style='font-size:9.0pt;font-family:"Times New Roman",serif;
+  color:#4EC9B0;background:#1E1E1E'>CommPacket</span><span style='font-size:
+  9.0pt;font-family:"Times New Roman",serif;color:#D4D4D4;background:#1E1E1E'> </span><span
+  style='font-size:9.0pt;font-family:"Times New Roman",serif;color:#569CD6;
+  background:#1E1E1E'>*</span><span style='font-size:9.0pt;font-family:"Times New Roman",serif;
+  color:#9CDCFE;background:#1E1E1E'>packet</span><span style='font-size:9.0pt;
+  font-family:"Times New Roman",serif;color:#D4D4D4;background:#1E1E1E'>);</span></p>
+  <p class=MsoNormal align=left style='text-align:left;line-height:18.0pt;
+  background:#1E1E1E'><span style='font-size:9.0pt;font-family:"Times New Roman",serif;
+  color:#D4D4D4'>&nbsp;</span></p>
+  <p class=MsoNormal align=left style='text-align:left;line-height:18.0pt;
+  background:#1E1E1E'><span style='font-size:9.0pt;font-family:"Times New Roman",serif;
+  color:#6A9955;background:#1E1E1E'>/**</span></p>
+  <p class=MsoNormal align=left style='text-align:left;text-indent:4.5pt;
+  line-height:18.0pt;background:#1E1E1E'><span style='font-size:9.0pt;
+  font-family:"Times New Roman",serif;color:#6A9955;background:#1E1E1E'>* </span><span
+  style='font-size:9.0pt;font-family:"Times New Roman",serif;color:#569CD6;
+  background:#1E1E1E'>@brief</span><span style='font-size:9.0pt;font-family:
+  "Times New Roman",serif;color:#6A9955;background:#1E1E1E'> communication
+  protocol init</span></p>
+  <p class=MsoNormal align=left style='text-align:left;text-indent:4.5pt;
+  line-height:18.0pt;background:#1E1E1E'><span style='font-size:9.0pt;
+  font-family:"Times New Roman",serif;color:#6A9955;background:#1E1E1E'>* </span><span
+  style='font-size:9.0pt;font-family:"Times New Roman",serif;color:#569CD6;
+  background:#1E1E1E'>@param</span><span style='font-size:9.0pt;font-family:
+  "Times New Roman",serif;color:#6A9955;background:#1E1E1E'> </span><span
+  style='font-size:9.0pt;font-family:"Times New Roman",serif;color:#9CDCFE;
+  background:#1E1E1E'>write_handler</span><span style='font-size:9.0pt;
+  font-family:"Times New Roman",serif;color:#6A9955;background:#1E1E1E'> the
+  write handler, such as UartWrite int uni_uart.h</span></p>
+  <p class=MsoNormal align=left style='text-align:left;text-indent:4.5pt;
+  line-height:18.0pt;background:#1E1E1E'><span style='font-size:9.0pt;
+  font-family:"Times New Roman",serif;color:#6A9955;background:#1E1E1E'>* </span><span
+  style='font-size:9.0pt;font-family:"Times New Roman",serif;color:#569CD6;
+  background:#1E1E1E'>@param</span><span style='font-size:9.0pt;font-family:
+  "Times New Roman",serif;color:#6A9955;background:#1E1E1E'> </span><span
+  style='font-size:9.0pt;font-family:"Times New Roman",serif;color:#9CDCFE;
+  background:#1E1E1E'>recv_handler</span><span style='font-size:9.0pt;
+  font-family:"Times New Roman",serif;color:#6A9955;background:#1E1E1E'> when
+  uart data disassemble as communication protocol frame, the frame will be
+  translate to struct CommPacket, then the CommPacket will callback to user</span></p>
+  <p class=MsoNormal align=left style='text-align:left;text-indent:4.5pt;
+  line-height:18.0pt;background:#1E1E1E'><span style='font-size:9.0pt;
+  font-family:"Times New Roman",serif;color:#6A9955;background:#1E1E1E'>* </span><span
+  style='font-size:9.0pt;font-family:"Times New Roman",serif;color:#569CD6;
+  background:#1E1E1E'>@return</span><span style='font-size:9.0pt;font-family:
+  "Times New Roman",serif;color:#6A9955;background:#1E1E1E'> 0 means success,
+  -1 means failed</span></p>
+  <p class=MsoNormal align=left style='text-align:left;text-indent:4.5pt;
+  line-height:18.0pt;background:#1E1E1E'><span style='font-size:9.0pt;
+  font-family:"Times New Roman",serif;color:#6A9955;background:#1E1E1E'>*/</span></p>
+  <p class=MsoNormal align=left style='text-align:left;line-height:18.0pt;
+  background:#1E1E1E'><span style='font-size:9.0pt;font-family:"Times New Roman",serif;
+  color:#569CD6;background:#1E1E1E'>int</span><span style='font-size:9.0pt;
+  font-family:"Times New Roman",serif;color:#D4D4D4;background:#1E1E1E'> </span><span
+  style='font-size:9.0pt;font-family:"Times New Roman",serif;color:#DCDCAA;
+  background:#1E1E1E'>CommProtocolInit</span><span style='font-size:9.0pt;
+  font-family:"Times New Roman",serif;color:#D4D4D4;background:#1E1E1E'>(</span><span
+  style='font-size:9.0pt;font-family:"Times New Roman",serif;color:#4EC9B0;
+  background:#1E1E1E'>CommWriteHandler</span><span style='font-size:9.0pt;
+  font-family:"Times New Roman",serif;color:#D4D4D4;background:#1E1E1E'> </span><span
+  style='font-size:9.0pt;font-family:"Times New Roman",serif;color:#9CDCFE;
+  background:#1E1E1E'>write_handler</span><span style='font-size:9.0pt;
+  font-family:"Times New Roman",serif;color:#D4D4D4;background:#1E1E1E'>,</span></p>
+  <p class=MsoNormal align=left style='text-align:left;text-indent:112.5pt;
+  line-height:18.0pt;background:#1E1E1E'><span style='font-size:9.0pt;
+  font-family:"Times New Roman",serif;color:#4EC9B0;background:#1E1E1E'>CommRecvPacketHandler</span><span
+  style='font-size:9.0pt;font-family:"Times New Roman",serif;color:#D4D4D4;
+  background:#1E1E1E'> </span><span style='font-size:9.0pt;font-family:"Times New Roman",serif;
+  color:#9CDCFE;background:#1E1E1E'>recv_handler</span><span style='font-size:
+  9.0pt;font-family:"Times New Roman",serif;color:#D4D4D4;background:#1E1E1E'>);</span></p>
+  </td>
+ </tr>
+</table>
+
+<h3><a name="_Toc524454271"><span style='font-family:"Times New Roman",serif'>2.2.2.<span
+style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span><span style='font-family:"Times New Roman",serif;color:black'>CommProtocolFinal</span></a></h3>
+
+<table class=MsoNormalTable border=0 cellspacing=0 cellpadding=0 width=541>
+ <tr>
+  <td width=541 valign=top style='width:405.75pt;padding:0cm 0cm 0cm 6.45pt'>
+  <p class=MsoNormal align=left style='text-align:left;line-height:18.0pt;
+  background:#1E1E1E'><span style='font-size:12.0pt;font-family:"Times New Roman",serif;
+  color:#6A9955;background:#1E1E1E'>/</span><span style='font-size:9.0pt;
+  font-family:"Times New Roman",serif;color:#6A9955;background:#1E1E1E'>**</span></p>
+  <p class=MsoNormal align=left style='text-align:left;text-indent:4.5pt;
+  line-height:18.0pt;background:#1E1E1E'><span style='font-size:9.0pt;
+  font-family:"Times New Roman",serif;color:#6A9955;background:#1E1E1E'>* </span><span
+  style='font-size:9.0pt;font-family:"Times New Roman",serif;color:#569CD6;
+  background:#1E1E1E'>@brief</span><span style='font-size:9.0pt;font-family:
+  "Times New Roman",serif;color:#6A9955;background:#1E1E1E'> communication
+  protocol finalize</span></p>
+  <p class=MsoNormal align=left style='text-align:left;text-indent:4.5pt;
+  line-height:18.0pt;background:#1E1E1E'><span style='font-size:9.0pt;
+  font-family:"Times New Roman",serif;color:#6A9955;background:#1E1E1E'>* </span><span
+  style='font-size:9.0pt;font-family:"Times New Roman",serif;color:#569CD6;
+  background:#1E1E1E'>@param</span><span style='font-size:9.0pt;font-family:
+  "Times New Roman",serif;color:#6A9955;background:#1E1E1E'> </span><span
+  style='font-size:9.0pt;font-family:"Times New Roman",serif;color:#9CDCFE;
+  background:#1E1E1E'>void</span></p>
+  <p class=MsoNormal align=left style='text-align:left;text-indent:4.5pt;
+  line-height:18.0pt;background:#1E1E1E'><span style='font-size:9.0pt;
+  font-family:"Times New Roman",serif;color:#6A9955;background:#1E1E1E'>* </span><span
+  style='font-size:9.0pt;font-family:"Times New Roman",serif;color:#569CD6;
+  background:#1E1E1E'>@return</span><span style='font-size:9.0pt;font-family:
+  "Times New Roman",serif;color:#6A9955;background:#1E1E1E'> void</span></p>
+  <p class=MsoNormal align=left style='text-align:left;text-indent:4.5pt;
+  line-height:18.0pt;background:#1E1E1E'><span style='font-size:9.0pt;
+  font-family:"Times New Roman",serif;color:#6A9955;background:#1E1E1E'>*/</span></p>
+  <p class=MsoNormal align=left style='text-align:left;line-height:18.0pt;
+  background:#1E1E1E'><span style='font-size:9.0pt;font-family:"Times New Roman",serif;
+  color:#569CD6;background:#1E1E1E'>void</span><span style='font-size:9.0pt;
+  font-family:"Times New Roman",serif;color:#D4D4D4;background:#1E1E1E'> </span><span
+  style='font-size:9.0pt;font-family:"Times New Roman",serif;color:#DCDCAA;
+  background:#1E1E1E'>CommProtocolFinal</span><span style='font-size:9.0pt;
+  font-family:"Times New Roman",serif;color:#D4D4D4;background:#1E1E1E'>(</span><span
+  style='font-size:9.0pt;font-family:"Times New Roman",serif;color:#569CD6;
+  background:#1E1E1E'>void</span><span style='font-size:9.0pt;font-family:"Times New Roman",serif;
+  color:#D4D4D4;background:#1E1E1E'>);</span></p>
+  </td>
+ </tr>
+</table>
+
+<p class=MsoNormal><span style='font-family:"Times New Roman",serif'>&nbsp;</span></p>
+
+<h3><a name="_Toc1230045409"><span style='font-family:"Times New Roman",serif'>2.2.3.<span
+style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span><span style='font-family:"Times New Roman",serif'>CommProtocolPacketAssembleAndSend</span></a></h3>
+
+<table class=MsoNormalTable border=0 cellspacing=0 cellpadding=0 width=541>
+ <tr>
+  <td width=541 valign=top style='width:405.75pt;padding:0cm 0cm 0cm 6.45pt'>
+  <p class=MsoNormal align=left style='text-align:left;line-height:18.0pt;
+  background:#1E1E1E'><span style='font-size:9.0pt;font-family:"Times New Roman",serif;
+  color:#6A9955;background:#1E1E1E'>/**</span></p>
+  <p class=MsoNormal align=left style='text-align:left;line-height:18.0pt;
+  background:#1E1E1E'><span style='font-size:9.0pt;font-family:"Times New Roman",serif;
+  color:#6A9955;background:#1E1E1E'>* </span><span style='font-size:9.0pt;
+  font-family:"Times New Roman",serif;color:#569CD6;background:#1E1E1E'>@brief</span><span
+  style='font-size:9.0pt;font-family:"Times New Roman",serif;color:#6A9955;
+  background:#1E1E1E'> send one packet(communication protocol frame format)</span></p>
+  <p class=MsoNormal align=left style='text-align:left;line-height:18.0pt;
+  background:#1E1E1E'><span style='font-size:9.0pt;font-family:"Times New Roman",serif;
+  color:#6A9955;background:#1E1E1E'>* </span><span style='font-size:9.0pt;
+  font-family:"Times New Roman",serif;color:#569CD6;background:#1E1E1E'>@param</span><span
+  style='font-size:9.0pt;font-family:"Times New Roman",serif;color:#6A9955;
+  background:#1E1E1E'> </span><span style='font-size:9.0pt;font-family:"Times New Roman",serif;
+  color:#9CDCFE;background:#1E1E1E'>type</span><span style='font-size:9.0pt;
+  font-family:"Times New Roman",serif;color:#6A9955;background:#1E1E1E'>
+  customer type, 0 means Unisound</span></p>
+  <p class=MsoNormal align=left style='text-align:left;line-height:18.0pt;
+  background:#1E1E1E'><span style='font-size:9.0pt;font-family:"Times New Roman",serif;
+  color:#6A9955;background:#1E1E1E'>* </span><span style='font-size:9.0pt;
+  font-family:"Times New Roman",serif;color:#569CD6;background:#1E1E1E'>@param</span><span
+  style='font-size:9.0pt;font-family:"Times New Roman",serif;color:#6A9955;
+  background:#1E1E1E'> </span><span style='font-size:9.0pt;font-family:"Times New Roman",serif;
+  color:#9CDCFE;background:#1E1E1E'>cmd</span><span style='font-size:9.0pt;
+  font-family:"Times New Roman",serif;color:#6A9955;background:#1E1E1E'>
+  command type, should define as enum (such as power_on</span><span lang=ZH-CN
+  style='font-size:9.0pt;font-family:等线;color:#6A9955;background:#1E1E1E'>、</span><span
+  style='font-size:9.0pt;font-family:"Times New Roman",serif;color:#6A9955;
+  background:#1E1E1E'>power_off)</span></p>
+  <p class=MsoNormal align=left style='text-align:left;line-height:18.0pt;
+  background:#1E1E1E'><span style='font-size:9.0pt;font-family:"Times New Roman",serif;
+  color:#6A9955;background:#1E1E1E'>* </span><span style='font-size:9.0pt;
+  font-family:"Times New Roman",serif;color:#569CD6;background:#1E1E1E'>@param</span><span
+  style='font-size:9.0pt;font-family:"Times New Roman",serif;color:#6A9955;
+  background:#1E1E1E'> </span><span style='font-size:9.0pt;font-family:"Times New Roman",serif;
+  color:#9CDCFE;background:#1E1E1E'>payload</span><span style='font-size:9.0pt;
+  font-family:"Times New Roman",serif;color:#6A9955;background:#1E1E1E'> the
+  payload of cmd, can set as NULL</span></p>
+  <p class=MsoNormal align=left style='text-align:left;line-height:18.0pt;
+  background:#1E1E1E'><span style='font-size:9.0pt;font-family:"Times New Roman",serif;
+  color:#6A9955;background:#1E1E1E'>* </span><span style='font-size:9.0pt;
+  font-family:"Times New Roman",serif;color:#569CD6;background:#1E1E1E'>@param</span><span
+  style='font-size:9.0pt;font-family:"Times New Roman",serif;color:#6A9955;
+  background:#1E1E1E'> </span><span style='font-size:9.0pt;font-family:"Times New Roman",serif;
+  color:#9CDCFE;background:#1E1E1E'>payload_len</span><span style='font-size:
+  9.0pt;font-family:"Times New Roman",serif;color:#6A9955;background:#1E1E1E'>
+  the payload length</span></p>
+  <p class=MsoNormal align=left style='text-align:left;line-height:18.0pt;
+  background:#1E1E1E'><span style='font-size:9.0pt;font-family:"Times New Roman",serif;
+  color:#6A9955;background:#1E1E1E'>* </span><span style='font-size:9.0pt;
+  font-family:"Times New Roman",serif;color:#569CD6;background:#1E1E1E'>@param</span><span
+  style='font-size:9.0pt;font-family:"Times New Roman",serif;color:#6A9955;
+  background:#1E1E1E'> </span><span style='font-size:9.0pt;font-family:"Times New Roman",serif;
+  color:#9CDCFE;background:#1E1E1E'>attribute</span><span style='font-size:
+  9.0pt;font-family:"Times New Roman",serif;color:#6A9955;background:#1E1E1E'>
+  the attribute for this packet, such as packet need ACK</span></p>
+  <p class=MsoNormal align=left style='text-align:left;line-height:18.0pt;
+  background:#1E1E1E'><span style='font-size:9.0pt;font-family:"Times New Roman",serif;
+  color:#6A9955;background:#1E1E1E'>* </span><span style='font-size:9.0pt;
+  font-family:"Times New Roman",serif;color:#569CD6;background:#1E1E1E'>@return</span><span
+  style='font-size:9.0pt;font-family:"Times New Roman",serif;color:#6A9955;
+  background:#1E1E1E'> 0 means success, other means failed</span></p>
+  <p class=MsoNormal align=left style='text-align:left;line-height:18.0pt;
+  background:#1E1E1E'><span style='font-size:9.0pt;font-family:"Times New Roman",serif;
+  color:#6A9955;background:#1E1E1E'>*/</span></p>
+  <p class=MsoNormal align=left style='text-align:left;line-height:18.0pt;
+  background:#1E1E1E'><span style='font-size:9.0pt;font-family:"Times New Roman",serif;
+  color:#569CD6;background:#1E1E1E'>int</span><span style='font-size:9.0pt;
+  font-family:"Times New Roman",serif;color:#D4D4D4;background:#1E1E1E'> </span><span
+  style='font-size:9.0pt;font-family:"Times New Roman",serif;color:#DCDCAA;
+  background:#1E1E1E'>CommProtocolPacketAssembleAndSend</span><span
+  style='font-size:9.0pt;font-family:"Times New Roman",serif;color:#D4D4D4;
+  background:#1E1E1E'>(</span><span style='font-size:9.0pt;font-family:"Times New Roman",serif;
+  color:#4EC9B0;background:#1E1E1E'>CommType</span><span style='font-size:9.0pt;
+  font-family:"Times New Roman",serif;color:#D4D4D4;background:#1E1E1E'> </span><span
+  style='font-size:9.0pt;font-family:"Times New Roman",serif;color:#9CDCFE;
+  background:#1E1E1E'>type</span><span style='font-size:9.0pt;font-family:"Times New Roman",serif;
+  color:#D4D4D4;background:#1E1E1E'>, </span></p>
+  <p class=MsoNormal align=left style='text-align:left;text-indent:207.0pt;
+  line-height:18.0pt;background:#1E1E1E'><span style='font-size:9.0pt;
+  font-family:"Times New Roman",serif;color:#4EC9B0;background:#1E1E1E'>CommCmd</span><span
+  style='font-size:9.0pt;font-family:"Times New Roman",serif;color:#D4D4D4;
+  background:#1E1E1E'> </span><span style='font-size:9.0pt;font-family:"Times New Roman",serif;
+  color:#9CDCFE;background:#1E1E1E'>cmd</span><span style='font-size:9.0pt;
+  font-family:"Times New Roman",serif;color:#D4D4D4;background:#1E1E1E'>,</span></p>
+  <p class=MsoNormal align=left style='text-align:left;text-indent:207.0pt;
+  line-height:18.0pt;background:#1E1E1E'><span style='font-size:9.0pt;
+  font-family:"Times New Roman",serif;color:#569CD6;background:#1E1E1E'>char</span><span
+  style='font-size:9.0pt;font-family:"Times New Roman",serif;color:#D4D4D4;
+  background:#1E1E1E'> </span><span style='font-size:9.0pt;font-family:"Times New Roman",serif;
+  color:#569CD6;background:#1E1E1E'>*</span><span style='font-size:9.0pt;
+  font-family:"Times New Roman",serif;color:#9CDCFE;background:#1E1E1E'>payload</span><span
+  style='font-size:9.0pt;font-family:"Times New Roman",serif;color:#D4D4D4;
+  background:#1E1E1E'>,</span></p>
+  <p class=MsoNormal align=left style='text-align:left;text-indent:207.0pt;
+  line-height:18.0pt;background:#1E1E1E'><span style='font-size:9.0pt;
+  font-family:"Times New Roman",serif;color:#4EC9B0;background:#1E1E1E'>CommPayloadLen</span><span
+  style='font-size:9.0pt;font-family:"Times New Roman",serif;color:#D4D4D4;
+  background:#1E1E1E'> </span><span style='font-size:9.0pt;font-family:"Times New Roman",serif;
+  color:#9CDCFE;background:#1E1E1E'>payload_len</span><span style='font-size:
+  9.0pt;font-family:"Times New Roman",serif;color:#D4D4D4;background:#1E1E1E'>,</span></p>
+  <p class=MsoNormal align=left style='text-align:left;text-indent:207.0pt;
+  line-height:18.0pt;background:#1E1E1E'><span style='font-size:9.0pt;
+  font-family:"Times New Roman",serif;color:#4EC9B0;background:#1E1E1E'>CommAttribute</span><span
+  style='font-size:9.0pt;font-family:"Times New Roman",serif;color:#D4D4D4;
+  background:#1E1E1E'> </span><span style='font-size:9.0pt;font-family:"Times New Roman",serif;
+  color:#569CD6;background:#1E1E1E'>*</span><span style='font-size:9.0pt;
+  font-family:"Times New Roman",serif;color:#9CDCFE;background:#1E1E1E'>attribute</span><span
+  style='font-size:9.0pt;font-family:"Times New Roman",serif;color:#D4D4D4;
+  background:#1E1E1E'>);</span></p>
+  </td>
+ </tr>
+</table>
+
+<p class=MsoNormal><span style='font-family:"Times New Roman",serif'>&nbsp;</span></p>
+
+<h3><a name="_Toc1695603041"><span style='font-family:"Times New Roman",serif'>2.2.4.<span
+style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span><span style='font-family:"Times New Roman",serif'>CommProtocolReceiveUartData</span></a></h3>
+
+<table class=MsoNormalTable border=0 cellspacing=0 cellpadding=0 width=541>
+ <tr>
+  <td width=541 valign=top style='width:405.75pt;padding:0cm 0cm 0cm 6.45pt'>
+  <p class=MsoNormal align=left style='text-align:left;line-height:18.0pt;
+  background:#1E1E1E'><span style='font-size:9.0pt;font-family:"Times New Roman",serif;
+  color:#6A9955;background:#1E1E1E'>/**</span></p>
+  <p class=MsoNormal align=left style='text-align:left;line-height:18.0pt;
+  background:#1E1E1E'><span style='font-size:9.0pt;font-family:"Times New Roman",serif;
+  color:#6A9955;background:#1E1E1E'>* </span><span style='font-size:9.0pt;
+  font-family:"Times New Roman",serif;color:#569CD6;background:#1E1E1E'>@brief</span><span
+  style='font-size:9.0pt;font-family:"Times New Roman",serif;color:#6A9955;
+  background:#1E1E1E'> receive orignial uart data</span></p>
+  <p class=MsoNormal align=left style='text-align:left;line-height:18.0pt;
+  background:#1E1E1E'><span style='font-size:9.0pt;font-family:"Times New Roman",serif;
+  color:#6A9955;background:#1E1E1E'>* </span><span style='font-size:9.0pt;
+  font-family:"Times New Roman",serif;color:#569CD6;background:#1E1E1E'>@param</span><span
+  style='font-size:9.0pt;font-family:"Times New Roman",serif;color:#6A9955;
+  background:#1E1E1E'> </span><span style='font-size:9.0pt;font-family:"Times New Roman",serif;
+  color:#9CDCFE;background:#1E1E1E'>buf</span><span style='font-size:9.0pt;
+  font-family:"Times New Roman",serif;color:#6A9955;background:#1E1E1E'> the
+  uart data buffer pointer</span></p>
+  <p class=MsoNormal align=left style='text-align:left;line-height:18.0pt;
+  background:#1E1E1E'><span style='font-size:9.0pt;font-family:"Times New Roman",serif;
+  color:#6A9955;background:#1E1E1E'>* </span><span style='font-size:9.0pt;
+  font-family:"Times New Roman",serif;color:#569CD6;background:#1E1E1E'>@param</span><span
+  style='font-size:9.0pt;font-family:"Times New Roman",serif;color:#6A9955;
+  background:#1E1E1E'> </span><span style='font-size:9.0pt;font-family:"Times New Roman",serif;
+  color:#9CDCFE;background:#1E1E1E'>len</span><span style='font-size:9.0pt;
+  font-family:"Times New Roman",serif;color:#6A9955;background:#1E1E1E'> the
+  uart data length</span></p>
+  <p class=MsoNormal align=left style='text-align:left;line-height:18.0pt;
+  background:#1E1E1E'><span style='font-size:9.0pt;font-family:"Times New Roman",serif;
+  color:#6A9955;background:#1E1E1E'>* </span><span style='font-size:9.0pt;
+  font-family:"Times New Roman",serif;color:#569CD6;background:#1E1E1E'>@return</span><span
+  style='font-size:9.0pt;font-family:"Times New Roman",serif;color:#6A9955;
+  background:#1E1E1E'> void</span></p>
+  <p class=MsoNormal align=left style='text-align:left;line-height:18.0pt;
+  background:#1E1E1E'><span style='font-size:9.0pt;font-family:"Times New Roman",serif;
+  color:#6A9955;background:#1E1E1E'>*/</span></p>
+  <p class=MsoNormal align=left style='text-align:left;line-height:18.0pt;
+  background:#1E1E1E'><span style='font-size:9.0pt;font-family:"Times New Roman",serif;
+  color:#569CD6;background:#1E1E1E'>void</span><span style='font-size:9.0pt;
+  font-family:"Times New Roman",serif;color:#D4D4D4;background:#1E1E1E'> </span><span
+  style='font-size:9.0pt;font-family:"Times New Roman",serif;color:#DCDCAA;
+  background:#1E1E1E'>CommProtocolReceiveUartData</span><span style='font-size:
+  9.0pt;font-family:"Times New Roman",serif;color:#D4D4D4;background:#1E1E1E'>(</span><span
+  style='font-size:9.0pt;font-family:"Times New Roman",serif;color:#569CD6;
+  background:#1E1E1E'>char</span><span style='font-size:9.0pt;font-family:"Times New Roman",serif;
+  color:#D4D4D4;background:#1E1E1E'> </span><span style='font-size:9.0pt;
+  font-family:"Times New Roman",serif;color:#569CD6;background:#1E1E1E'>*</span><span
+  style='font-size:9.0pt;font-family:"Times New Roman",serif;color:#9CDCFE;
+  background:#1E1E1E'>buf</span><span style='font-size:9.0pt;font-family:"Times New Roman",serif;
+  color:#D4D4D4;background:#1E1E1E'>, </span><span style='font-size:9.0pt;
+  font-family:"Times New Roman",serif;color:#569CD6;background:#1E1E1E'>int</span><span
+  style='font-size:9.0pt;font-family:"Times New Roman",serif;color:#D4D4D4;
+  background:#1E1E1E'> </span><span style='font-size:9.0pt;font-family:"Times New Roman",serif;
+  color:#9CDCFE;background:#1E1E1E'>len</span><span style='font-size:9.0pt;
+  font-family:"Times New Roman",serif;color:#D4D4D4;background:#1E1E1E'>);</span></p>
+  </td>
+ </tr>
+</table>
+
+<p class=MsoNormal align=left style='text-align:left'><span style='font-family:
+"Times New Roman",serif'>&nbsp;</span></p>
+
+<p class=MsoNormal align=left style='text-align:left'><span style='font-family:
+"Times New Roman",serif'>&nbsp;</span></p>
+
+<p class=MsoNormal align=left style='text-align:left'><span style='font-family:
+"Times New Roman",serif'>&nbsp;</span></p>
+
+<h1><a name="_Toc892314397"><span style='font-family:"Times New Roman",serif'>3.<span
+style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span></span><span
+style='font-family:"Times New Roman",serif'>Protocol</span></a><span
+lang=ZH-CN style='font-family:等线'>帧结构</span></h1>
+
+<h2><a name="_Toc1249763378"><span style='font-family:"Times New Roman",serif'>3.1.<span
+style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp; </span></span><span
+style='font-family:"Times New Roman",serif'>Protocol layout</span></a></h2>
+
+<p class=MsoNormal><span style='font-family:"Times New Roman",serif'><img
+width=553 height=259 id="图片 3" src="uart_protocol_image001.jpg"></span></p>
+
+<h2><a name="_Toc235542739"><span style='font-family:"Times New Roman",serif'>3.2.<span
+style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp; </span></span><span
+style='font-family:"Times New Roman",serif'>Protocol struct</span></a></h2>
+
+<p class=MsoNormal align=left style='text-align:left'><span style='font-family:
+"Times New Roman",serif'><img width=553 height=142 id="图片 4"
+src="uart_protocol_image002.jpg"></span></p>
+
+<h2><a name="_Toc954452952"><span style='font-family:"Times New Roman",serif'>3.3.<span
+style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp; </span></span><span
+style='font-family:"Times New Roman",serif'>Protocol ACK</span></a></h2>
+
+<p class=MsoNormal style='text-indent:18.0pt'><span lang=ZH-CN
+style='font-size:9.0pt;font-family:等线'>通过</span><span style='font-size:9.0pt;
+font-family:"Times New Roman",serif'>CommProtocolPacketAssembleAndSend</span><span
+lang=ZH-CN style='font-size:9.0pt;font-family:等线'>接口参数</span><span
+style='font-size:9.0pt;font-family:"Times New Roman",serif'>attribute</span><span
+lang=ZH-CN style='font-size:9.0pt;font-family:等线'>配置是否启用可靠传输，可靠传输时，需接收方协议栈回复</span><span
+style='font-size:9.0pt;font-family:"Times New Roman",serif'>ACK</span><span
+lang=ZH-CN style='font-size:9.0pt;font-family:等线'>信息，实现可靠传输。</span></p>
+
+<p class=MsoNormal style='text-indent:18.0pt'><span style='font-size:9.0pt;
+font-family:"Times New Roman",serif'>ACK</span><span lang=ZH-CN
+style='font-size:9.0pt;font-family:等线'>为协议栈内部逻辑，当配置为可靠传输时，协议栈自动回复</span><span
+style='font-size:9.0pt;font-family:"Times New Roman",serif'>ACK</span><span
+lang=ZH-CN style='font-size:9.0pt;font-family:等线'>信息，上层应用无需关注。</span></p>
+
+<p class=MsoNormal style='text-indent:18.0pt'><span style='font-size:9.0pt;
+font-family:"Times New Roman",serif'>ACK</span><span lang=ZH-CN
+style='font-size:9.0pt;font-family:等线'>帧格式详情可参阅</span><span style='font-size:
+9.0pt;font-family:"Times New Roman",serif'>3.1.1 protocol ack frame</span><span
+lang=ZH-CN style='font-size:9.0pt;font-family:等线'>。</span></p>
+
+<p class=MsoNormal style='text-indent:21.0pt'><span style='font-family:"Times New Roman",serif'>&nbsp;</span></p>
+
+<p class=MsoNormal style='text-indent:21.0pt'><span style='font-family:"Times New Roman",serif'>&nbsp;</span></p>
+
+<p class=MsoNormal><span style='font-family:"Times New Roman",serif'>&nbsp;</span></p>
+
+<h2><a name="_Toc1935404821"><span style='font-family:"Times New Roman",serif'>3.4.<span
+style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp; </span></span><span
+style='font-family:"Times New Roman",serif'>Protocol</span></a><span
+lang=ZH-CN style='font-family:等线'>重要参数指标</span></h2>
+
+<p class=MsoNormal style='margin-left:0cm;text-indent:0cm'><span
+style='font-size:9.0pt;font-family:"Times New Roman",serif'>1、</span><span
+lang=ZH-CN style='font-size:9.0pt;font-family:等线'>最大</span><span
+style='font-size:9.0pt;font-family:"Times New Roman",serif'>payload</span><span
+lang=ZH-CN style='font-size:9.0pt;font-family:等线'>：</span><span
+style='font-size:9.0pt;font-family:"Times New Roman",serif'>8182</span><span
+lang=ZH-CN style='font-size:9.0pt;font-family:等线'>字节。即超过</span><span
+style='font-size:9.0pt;font-family:"Times New Roman",serif'>8182</span><span
+lang=ZH-CN style='font-size:9.0pt;font-family:等线'>字节将被拒绝发送、拒绝拆包解析。</span></p>
+
+<p class=MsoNormal style='margin-left:0cm;text-indent:0cm'><span
+style='font-size:9.0pt;font-family:"Times New Roman",serif'>2、</span><span
+lang=ZH-CN style='font-size:9.0pt;font-family:等线'>自动内存回收阈值：</span><span
+style='font-size:9.0pt;font-family:"Times New Roman",serif'>1024</span><span
+lang=ZH-CN style='font-size:9.0pt;font-family:等线'>字节。由于接收到的数据长度不确定（即每一个</span><span
+style='font-size:9.0pt;font-family:"Times New Roman",serif'>command</span><span
+lang=ZH-CN style='font-size:9.0pt;font-family:等线'>帧字节可不同），接收解析器会对</span><span
+style='font-size:9.0pt;font-family:"Times New Roman",serif'>protocol buffer</span><span
+lang=ZH-CN style='font-size:9.0pt;font-family:等线'>自动扩容、收缩，以此来减少内存开销，</span><span
+style='font-size:9.0pt;font-family:"Times New Roman",serif'>protocol buffer</span><span
+lang=ZH-CN style='font-size:9.0pt;font-family:等线'>初始长度</span><span
+style='font-size:9.0pt;font-family:"Times New Roman",serif'>16</span><span
+lang=ZH-CN style='font-size:9.0pt;font-family:等线'>字节，扩容策略为当前长度的</span><span
+style='font-size:9.0pt;font-family:"Times New Roman",serif'>2</span><span
+lang=ZH-CN style='font-size:9.0pt;font-family:等线'>倍（即</span><span
+style='font-size:9.0pt;font-family:"Times New Roman",serif'>16</span><span
+lang=ZH-CN style='font-size:9.0pt;font-family:等线'>、</span><span
+style='font-size:9.0pt;font-family:"Times New Roman",serif'>32</span><span
+lang=ZH-CN style='font-size:9.0pt;font-family:等线'>、</span><span
+style='font-size:9.0pt;font-family:"Times New Roman",serif'>64</span><span
+lang=ZH-CN style='font-size:9.0pt;font-family:等线'>、</span><span
+style='font-size:9.0pt;font-family:"Times New Roman",serif'>128...</span><span
+lang=ZH-CN style='font-size:9.0pt;font-family:等线'>）当解析出一帧有效数据后，会自动回收大于等于</span><span
+style='font-size:9.0pt;font-family:"Times New Roman",serif'>1024</span><span
+lang=ZH-CN style='font-size:9.0pt;font-family:等线'>字节的</span><span
+style='font-size:9.0pt;font-family:"Times New Roman",serif'>heap</span><span
+lang=ZH-CN style='font-size:9.0pt;font-family:等线'>内存；小于</span><span
+style='font-size:9.0pt;font-family:"Times New Roman",serif'>1024</span><span
+lang=ZH-CN style='font-size:9.0pt;font-family:等线'>字节选择常驻内存，以此优化内存分配性能，直到调用</span><span
+style='font-size:9.0pt;font-family:"Times New Roman",serif'>CommProtocolFinal</span><span
+lang=ZH-CN style='font-size:9.0pt;font-family:等线'>销毁。</span></p>
+
+<p class=MsoNormal style='margin-left:0cm;text-indent:0cm'><span
+style='font-size:9.0pt;font-family:"Times New Roman",serif'>3、</span><span
+style='font-size:9.0pt;font-family:"Times New Roman",serif'>ack</span><span
+lang=ZH-CN style='font-size:9.0pt;font-family:等线'>超时：目前设定</span><span
+style='font-size:9.0pt;font-family:"Times New Roman",serif'>200ms</span><span
+lang=ZH-CN style='font-size:9.0pt;font-family:等线'>。</span></p>
+
+<p class=MsoNormal style='margin-left:0cm;text-indent:0cm'><span
+style='font-size:9.0pt;font-family:"Times New Roman",serif'>4、</span><span
+lang=ZH-CN style='font-size:9.0pt;font-family:等线'>自动重传：可靠传输发送方</span><span
+style='font-size:9.0pt;font-family:"Times New Roman",serif'>200ms</span><span
+lang=ZH-CN style='font-size:9.0pt;font-family:等线'>未收到</span><span
+style='font-size:9.0pt;font-family:"Times New Roman",serif'>ack</span><span
+lang=ZH-CN style='font-size:9.0pt;font-family:等线'>帧，会自动重发</span><span
+style='font-size:9.0pt;font-family:"Times New Roman",serif'>5</span><span
+lang=ZH-CN style='font-size:9.0pt;font-family:等线'>次（即最多发</span><span
+style='font-size:9.0pt;font-family:"Times New Roman",serif'>6</span><span
+lang=ZH-CN style='font-size:9.0pt;font-family:等线'>次），仍等不到</span><span
+style='font-size:9.0pt;font-family:"Times New Roman",serif'>ack</span><span
+lang=ZH-CN style='font-size:9.0pt;font-family:等线'>则返回错误码</span><span
+style='font-size:9.0pt;font-family:"Times New Roman",serif'>E_UNI_COMM_PAYLOAD_ACK_TIMEOUT</span><span
+lang=ZH-CN style='font-size:9.0pt;font-family:等线'>。</span></p>
+
+<h1><a name="_Toc414025438"><span style='font-family:"Times New Roman",serif'>4.<span
+style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span></span><span
+lang=ZH-CN style='font-family:等线'>接口调用流程</span></a></h1>
+
+<h2><span style='font-family:"Times New Roman",serif'>4.1.<span
+style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp; </span></span><span
+style='font-family:"Times New Roman",serif'> </span><a name="_Toc678520186"><span
+lang=ZH-CN style='font-family:等线'>已有自定义协议调用过程</span></a></h2>
+
+<table class=MsoNormalTable border=0 cellspacing=0 cellpadding=0 width=541>
+ <tr>
+  <td width=541 valign=top style='width:405.75pt;padding:0cm 0cm 0cm 6.45pt'>
+  <p class=MsoNormal align=left style='text-align:left;line-height:18.0pt;
+  background:#1E1E1E'><span style='font-size:9.0pt;font-family:"Times New Roman",serif;
+  color:#C586C0;background:#1E1E1E'>#include</span><span style='font-size:9.0pt;
+  font-family:"Times New Roman",serif;color:#569CD6;background:#1E1E1E'> </span><span
+  style='font-size:9.0pt;font-family:"Times New Roman",serif;color:#CE9178;
+  background:#1E1E1E'>&quot;uni_uart.h&quot;</span></p>
+  <p class=MsoNormal align=left style='text-align:left;line-height:18.0pt;
+  background:#1E1E1E'><span style='font-size:9.0pt;font-family:"Times New Roman",serif;
+  color:#C586C0;background:#1E1E1E'>#include</span><span style='font-size:9.0pt;
+  font-family:"Times New Roman",serif;color:#569CD6;background:#1E1E1E'> </span><span
+  style='font-size:9.0pt;font-family:"Times New Roman",serif;color:#CE9178;
+  background:#1E1E1E'>&quot;uni_log.h&quot;</span></p>
+  <p class=MsoNormal align=left style='text-align:left;line-height:18.0pt;
+  background:#1E1E1E'><span style='font-size:9.0pt;font-family:"Times New Roman",serif;
+  color:#C586C0;background:#1E1E1E'>#define</span><span style='font-size:9.0pt;
+  font-family:"Times New Roman",serif;color:#569CD6;background:#1E1E1E'>
+  MAIN_TAG </span><span style='font-size:9.0pt;font-family:"Times New Roman",serif;
+  color:#CE9178;background:#1E1E1E'>&quot;main&quot;</span></p>
+  <p class=MsoNormal align=left style='text-align:left;line-height:18.0pt;
+  background:#1E1E1E'><span style='font-size:9.0pt;font-family:"Times New Roman",serif;
+  color:#569CD6;background:#1E1E1E'>static</span><span style='font-size:9.0pt;
+  font-family:"Times New Roman",serif;color:#D4D4D4;background:#1E1E1E'> </span><span
+  style='font-size:9.0pt;font-family:"Times New Roman",serif;color:#569CD6;
+  background:#1E1E1E'>void</span><span style='font-size:9.0pt;font-family:"Times New Roman",serif;
+  color:#D4D4D4;background:#1E1E1E'> </span><span style='font-size:9.0pt;
+  font-family:"Times New Roman",serif;color:#DCDCAA;background:#1E1E1E'>__recv_uart_data</span><span
+  style='font-size:9.0pt;font-family:"Times New Roman",serif;color:#D4D4D4;
+  background:#1E1E1E'>(</span><span style='font-size:9.0pt;font-family:"Times New Roman",serif;
+  color:#569CD6;background:#1E1E1E'>char</span><span style='font-size:9.0pt;
+  font-family:"Times New Roman",serif;color:#D4D4D4;background:#1E1E1E'> *</span><span
+  style='font-size:9.0pt;font-family:"Times New Roman",serif;color:#9CDCFE;
+  background:#1E1E1E'>buf</span><span style='font-size:9.0pt;font-family:"Times New Roman",serif;
+  color:#D4D4D4;background:#1E1E1E'>, </span><span style='font-size:9.0pt;
+  font-family:"Times New Roman",serif;color:#569CD6;background:#1E1E1E'>int</span><span
+  style='font-size:9.0pt;font-family:"Times New Roman",serif;color:#D4D4D4;
+  background:#1E1E1E'> </span><span style='font-size:9.0pt;font-family:"Times New Roman",serif;
+  color:#9CDCFE;background:#1E1E1E'>len</span><span style='font-size:9.0pt;
+  font-family:"Times New Roman",serif;color:#D4D4D4;background:#1E1E1E'>) {</span></p>
+  <p class=MsoNormal align=left style='text-align:left;text-indent:9.0pt;
+  line-height:18.0pt;background:#1E1E1E'><span style='font-size:9.0pt;
+  font-family:"Times New Roman",serif;color:#DCDCAA;background:#1E1E1E'>LOGT</span><span
+  style='font-size:9.0pt;font-family:"Times New Roman",serif;color:#D4D4D4;
+  background:#1E1E1E'>(MAIN_TAG, </span><span style='font-size:9.0pt;
+  font-family:"Times New Roman",serif;color:#CE9178;background:#1E1E1E'>&quot;receive
+  uart data&quot;</span><span style='font-size:9.0pt;font-family:"Times New Roman",serif;
+  color:#D4D4D4;background:#1E1E1E'>);</span></p>
+  <p class=MsoNormal align=left style='text-align:left;text-indent:9.0pt;
+  line-height:18.0pt;background:#1E1E1E'><span style='font-size:9.0pt;
+  font-family:"Times New Roman",serif;color:#6A9955;background:#1E1E1E'>/**</span></p>
+  <p class=MsoNormal align=left style='text-align:left;text-indent:13.5pt;
+  line-height:18.0pt;background:#1E1E1E'><span style='font-size:9.0pt;
+  font-family:"Times New Roman",serif;color:#6A9955;background:#1E1E1E'>* </span><span
+  lang=ZH-CN style='font-size:9.0pt;font-family:等线;color:#6A9955;background:
+  #1E1E1E'>接收到</span><span style='font-size:9.0pt;font-family:"Times New Roman",serif;
+  color:#6A9955;background:#1E1E1E'>uart</span><span lang=ZH-CN
+  style='font-size:9.0pt;font-family:等线;color:#6A9955;background:#1E1E1E'>数据，在此进行处理，数据可能是</span><span
+  style='font-size:9.0pt;font-family:"Times New Roman",serif;color:#6A9955;
+  background:#1E1E1E'>byte by byte</span><span lang=ZH-CN style='font-size:
+  9.0pt;font-family:等线;color:#6A9955;background:#1E1E1E'>形式，不能假设发送方发送了</span></p>
+  <p class=MsoNormal align=left style='text-align:left;text-indent:13.5pt;
+  line-height:18.0pt;background:#1E1E1E'><span style='font-size:9.0pt;
+  font-family:"Times New Roman",serif;color:#6A9955;background:#1E1E1E'>* 32</span><span
+  lang=ZH-CN style='font-size:9.0pt;font-family:等线;color:#6A9955;background:
+  #1E1E1E'>字节，本次回调出来就是</span><span style='font-size:9.0pt;font-family:"Times New Roman",serif;
+  color:#6A9955;background:#1E1E1E'>32</span><span lang=ZH-CN style='font-size:
+  9.0pt;font-family:等线;color:#6A9955;background:#1E1E1E'>字节，只能保证多次回调后，最终</span><span
+  style='font-size:9.0pt;font-family:"Times New Roman",serif;color:#6A9955;
+  background:#1E1E1E'>32</span><span lang=ZH-CN style='font-size:9.0pt;
+  font-family:等线;color:#6A9955;background:#1E1E1E'>字节</span><span lang=ZH-CN
+  style='font-size:9.0pt;font-family:"Times New Roman",serif;color:#6A9955;
+  background:#1E1E1E'> </span></p>
+  <p class=MsoNormal align=left style='text-align:left;text-indent:13.5pt;
+  line-height:18.0pt;background:#1E1E1E'><span style='font-size:9.0pt;
+  font-family:"Times New Roman",serif;color:#6A9955;background:#1E1E1E'>*/</span></p>
+  <p class=MsoNormal align=left style='text-align:left;line-height:18.0pt;
+  background:#1E1E1E'><span style='font-size:9.0pt;font-family:"Times New Roman",serif;
+  color:#D4D4D4;background:#1E1E1E'>}</span></p>
+  <p class=MsoNormal align=left style='text-align:left;line-height:18.0pt;
+  background:#1E1E1E'><span style='font-size:9.0pt;font-family:"Times New Roman",serif;
+  color:#569CD6;background:#1E1E1E'>int</span><span style='font-size:9.0pt;
+  font-family:"Times New Roman",serif;color:#D4D4D4;background:#1E1E1E'> </span><span
+  style='font-size:9.0pt;font-family:"Times New Roman",serif;color:#DCDCAA;
+  background:#1E1E1E'>main</span><span style='font-size:9.0pt;font-family:"Times New Roman",serif;
+  color:#D4D4D4;background:#1E1E1E'>() {</span></p>
+  <p class=MsoNormal align=left style='text-align:left;text-indent:9.0pt;
+  line-height:18.0pt;background:#1E1E1E'><span style='font-size:9.0pt;
+  font-family:"Times New Roman",serif;color:#6A9955;background:#1E1E1E'>/**</span></p>
+  <p class=MsoNormal align=left style='text-align:left;text-indent:13.5pt;
+  line-height:18.0pt;background:#1E1E1E'><span style='font-size:9.0pt;
+  font-family:"Times New Roman",serif;color:#6A9955;background:#1E1E1E'>* step
+  1. </span><span lang=ZH-CN style='font-size:9.0pt;font-family:等线;color:#6A9955;
+  background:#1E1E1E'>初始化</span><span style='font-size:9.0pt;font-family:"Times New Roman",serif;
+  color:#6A9955;background:#1E1E1E'>UART</span><span lang=ZH-CN
+  style='font-size:9.0pt;font-family:等线;color:#6A9955;background:#1E1E1E'>。</span></p>
+  <p class=MsoNormal align=left style='text-align:left;text-indent:13.5pt;
+  line-height:18.0pt;background:#1E1E1E'><span style='font-size:9.0pt;
+  font-family:"Times New Roman",serif;color:#6A9955;background:#1E1E1E'>* </span><span
+  lang=ZH-CN style='font-size:9.0pt;font-family:等线;color:#6A9955;background:
+  #1E1E1E'>初始化完成后，即可以实现串口数据的读写操作。</span></p>
+  <p class=MsoNormal align=left style='text-align:left;text-indent:13.5pt;
+  line-height:18.0pt;background:#1E1E1E'><span style='font-size:9.0pt;
+  font-family:"Times New Roman",serif;color:#6A9955;background:#1E1E1E'>*/</span></p>
+  <p class=MsoNormal align=left style='text-align:left;text-indent:9.0pt;
+  line-height:18.0pt;background:#1E1E1E'><span style='font-size:9.0pt;
+  font-family:"Times New Roman",serif;color:#D4D4D4;background:#1E1E1E'>UartConfig
+  config;</span></p>
+  <p class=MsoNormal align=left style='text-align:left;text-indent:9.0pt;
+  line-height:18.0pt;background:#1E1E1E'><span style='font-size:9.0pt;
+  font-family:"Times New Roman",serif;color:#9CDCFE;background:#1E1E1E'>config</span><span
+  style='font-size:9.0pt;font-family:"Times New Roman",serif;color:#D4D4D4;
+  background:#1E1E1E'>.</span><span style='font-size:9.0pt;font-family:"Times New Roman",serif;
+  color:#9CDCFE;background:#1E1E1E'>device</span><span style='font-size:9.0pt;
+  font-family:"Times New Roman",serif;color:#D4D4D4;background:#1E1E1E'> =
+  UNI_UART1;</span></p>
+  <p class=MsoNormal align=left style='text-align:left;text-indent:9.0pt;
+  line-height:18.0pt;background:#1E1E1E'><span style='font-size:9.0pt;
+  font-family:"Times New Roman",serif;color:#9CDCFE;background:#1E1E1E'>config</span><span
+  style='font-size:9.0pt;font-family:"Times New Roman",serif;color:#D4D4D4;
+  background:#1E1E1E'>.</span><span style='font-size:9.0pt;font-family:"Times New Roman",serif;
+  color:#9CDCFE;background:#1E1E1E'>parity</span><span style='font-size:9.0pt;
+  font-family:"Times New Roman",serif;color:#D4D4D4;background:#1E1E1E'> =
+  UNI_PARITY_NONE;</span></p>
+  <p class=MsoNormal align=left style='text-align:left;text-indent:9.0pt;
+  line-height:18.0pt;background:#1E1E1E'><span style='font-size:9.0pt;
+  font-family:"Times New Roman",serif;color:#9CDCFE;background:#1E1E1E'>config</span><span
+  style='font-size:9.0pt;font-family:"Times New Roman",serif;color:#D4D4D4;
+  background:#1E1E1E'>.</span><span style='font-size:9.0pt;font-family:"Times New Roman",serif;
+  color:#9CDCFE;background:#1E1E1E'>speed</span><span style='font-size:9.0pt;
+  font-family:"Times New Roman",serif;color:#D4D4D4;background:#1E1E1E'> =
+  UNI_B_115200;</span></p>
+  <p class=MsoNormal align=left style='text-align:left;text-indent:9.0pt;
+  line-height:18.0pt;background:#1E1E1E'><span style='font-size:9.0pt;
+  font-family:"Times New Roman",serif;color:#9CDCFE;background:#1E1E1E'>config</span><span
+  style='font-size:9.0pt;font-family:"Times New Roman",serif;color:#D4D4D4;
+  background:#1E1E1E'>.</span><span style='font-size:9.0pt;font-family:"Times New Roman",serif;
+  color:#9CDCFE;background:#1E1E1E'>stop</span><span style='font-size:9.0pt;
+  font-family:"Times New Roman",serif;color:#D4D4D4;background:#1E1E1E'> =
+  UNI_ONE_STOP_BIT;</span></p>
+  <p class=MsoNormal align=left style='text-align:left;text-indent:9.0pt;
+  line-height:18.0pt;background:#1E1E1E'><span style='font-size:9.0pt;
+  font-family:"Times New Roman",serif;color:#9CDCFE;background:#1E1E1E'>config</span><span
+  style='font-size:9.0pt;font-family:"Times New Roman",serif;color:#D4D4D4;
+  background:#1E1E1E'>.</span><span style='font-size:9.0pt;font-family:"Times New Roman",serif;
+  color:#9CDCFE;background:#1E1E1E'>data_bit</span><span style='font-size:9.0pt;
+  font-family:"Times New Roman",serif;color:#D4D4D4;background:#1E1E1E'> = </span><span
+  style='font-size:9.0pt;font-family:"Times New Roman",serif;color:#B5CEA8;
+  background:#1E1E1E'>8</span><span style='font-size:9.0pt;font-family:"Times New Roman",serif;
+  color:#D4D4D4;background:#1E1E1E'>;</span></p>
+  <p class=MsoNormal align=left style='text-align:left;text-indent:9.0pt;
+  line-height:18.0pt;background:#1E1E1E'><span style='font-size:9.0pt;
+  font-family:"Times New Roman",serif;color:#DCDCAA;background:#1E1E1E'>UartInitialize</span><span
+  style='font-size:9.0pt;font-family:"Times New Roman",serif;color:#D4D4D4;
+  background:#1E1E1E'>(&amp;config, __recv_uart_data);</span></p>
+  <p class=MsoNormal align=left style='text-align:left;text-indent:9.0pt;
+  line-height:18.0pt;background:#1E1E1E'><span style='font-size:9.0pt;
+  font-family:"Times New Roman",serif;color:#6A9955;background:#1E1E1E'>/**</span></p>
+  <p class=MsoNormal align=left style='text-align:left;text-indent:13.5pt;
+  line-height:18.0pt;background:#1E1E1E'><span style='font-size:9.0pt;
+  font-family:"Times New Roman",serif;color:#6A9955;background:#1E1E1E'>* step
+  2. </span><span lang=ZH-CN style='font-size:9.0pt;font-family:等线;color:#6A9955;
+  background:#1E1E1E'>写数据</span></p>
+  <p class=MsoNormal align=left style='text-align:left;text-indent:13.5pt;
+  line-height:18.0pt;background:#1E1E1E'><span style='font-size:9.0pt;
+  font-family:"Times New Roman",serif;color:#6A9955;background:#1E1E1E'>* </span><span
+  lang=ZH-CN style='font-size:9.0pt;font-family:等线;color:#6A9955;background:
+  #1E1E1E'>向</span><span style='font-size:9.0pt;font-family:"Times New Roman",serif;
+  color:#6A9955;background:#1E1E1E'>UART</span><span lang=ZH-CN
+  style='font-size:9.0pt;font-family:等线;color:#6A9955;background:#1E1E1E'>写数据，请调用</span><span
+  style='font-size:9.0pt;font-family:"Times New Roman",serif;color:#6A9955;
+  background:#1E1E1E'>UartWrite</span><span lang=ZH-CN style='font-size:9.0pt;
+  font-family:等线;color:#6A9955;background:#1E1E1E'>接口</span></p>
+  <p class=MsoNormal align=left style='text-align:left;text-indent:13.5pt;
+  line-height:18.0pt;background:#1E1E1E'><span style='font-size:9.0pt;
+  font-family:"Times New Roman",serif;color:#6A9955;background:#1E1E1E'>*/</span></p>
+  <p class=MsoNormal align=left style='text-align:left;text-indent:9.0pt;
+  line-height:18.0pt;background:#1E1E1E'><span style='font-size:9.0pt;
+  font-family:"Times New Roman",serif;color:#569CD6;background:#1E1E1E'>char</span><span
+  style='font-size:9.0pt;font-family:"Times New Roman",serif;color:#D4D4D4;
+  background:#1E1E1E'> </span><span style='font-size:9.0pt;font-family:"Times New Roman",serif;
+  color:#9CDCFE;background:#1E1E1E'>buf</span><span style='font-size:9.0pt;
+  font-family:"Times New Roman",serif;color:#D4D4D4;background:#1E1E1E'>[</span><span
+  style='font-size:9.0pt;font-family:"Times New Roman",serif;color:#B5CEA8;
+  background:#1E1E1E'>32</span><span style='font-size:9.0pt;font-family:"Times New Roman",serif;
+  color:#D4D4D4;background:#1E1E1E'>];</span></p>
+  <p class=MsoNormal align=left style='text-align:left;text-indent:9.0pt;
+  line-height:18.0pt;background:#1E1E1E'><span style='font-size:9.0pt;
+  font-family:"Times New Roman",serif;color:#DCDCAA;background:#1E1E1E'>UartWrite</span><span
+  style='font-size:9.0pt;font-family:"Times New Roman",serif;color:#D4D4D4;
+  background:#1E1E1E'>(buf, </span><span style='font-size:9.0pt;font-family:
+  "Times New Roman",serif;color:#569CD6;background:#1E1E1E'>sizeof</span><span
+  style='font-size:9.0pt;font-family:"Times New Roman",serif;color:#D4D4D4;
+  background:#1E1E1E'>(buf));</span></p>
+  <p class=MsoNormal align=left style='text-align:left;text-indent:9.0pt;
+  line-height:18.0pt;background:#1E1E1E'><span style='font-size:9.0pt;
+  font-family:"Times New Roman",serif;color:#DCDCAA;background:#1E1E1E'>LOGT</span><span
+  style='font-size:9.0pt;font-family:"Times New Roman",serif;color:#D4D4D4;
+  background:#1E1E1E'>(MAIN_TAG, </span><span style='font-size:9.0pt;
+  font-family:"Times New Roman",serif;color:#CE9178;background:#1E1E1E'>&quot;write
+  random data to UART&quot;</span><span style='font-size:9.0pt;font-family:
+  "Times New Roman",serif;color:#D4D4D4;background:#1E1E1E'>);</span></p>
+  <p class=MsoNormal align=left style='text-align:left;text-indent:9.0pt;
+  line-height:18.0pt;background:#1E1E1E'><span style='font-size:9.0pt;
+  font-family:"Times New Roman",serif;color:#6A9955;background:#1E1E1E'>/**</span></p>
+  <p class=MsoNormal align=left style='text-align:left;text-indent:13.5pt;
+  line-height:18.0pt;background:#1E1E1E'><span style='font-size:9.0pt;
+  font-family:"Times New Roman",serif;color:#6A9955;background:#1E1E1E'>* step
+  3. </span><span lang=ZH-CN style='font-size:9.0pt;font-family:等线;color:#6A9955;
+  background:#1E1E1E'>反初始化</span><span style='font-size:9.0pt;font-family:"Times New Roman",serif;
+  color:#6A9955;background:#1E1E1E'>UART</span><span lang=ZH-CN
+  style='font-size:9.0pt;font-family:等线;color:#6A9955;background:#1E1E1E'>。</span></p>
+  <p class=MsoNormal align=left style='text-align:left;text-indent:13.5pt;
+  line-height:18.0pt;background:#1E1E1E'><span style='font-size:9.0pt;
+  font-family:"Times New Roman",serif;color:#6A9955;background:#1E1E1E'>*/</span></p>
+  <p class=MsoNormal align=left style='text-align:left;text-indent:9.0pt;
+  line-height:18.0pt;background:#1E1E1E'><span style='font-size:9.0pt;
+  font-family:"Times New Roman",serif;color:#DCDCAA;background:#1E1E1E'>UartFinalize</span><span
+  style='font-size:9.0pt;font-family:"Times New Roman",serif;color:#D4D4D4;
+  background:#1E1E1E'>();</span></p>
+  <p class=MsoNormal align=left style='text-align:left;text-indent:9.0pt;
+  line-height:18.0pt;background:#1E1E1E'><span style='font-size:9.0pt;
+  font-family:"Times New Roman",serif;color:#C586C0;background:#1E1E1E'>return</span><span
+  style='font-size:9.0pt;font-family:"Times New Roman",serif;color:#D4D4D4;
+  background:#1E1E1E'> </span><span style='font-size:9.0pt;font-family:"Times New Roman",serif;
+  color:#B5CEA8;background:#1E1E1E'>0</span><span style='font-size:9.0pt;
+  font-family:"Times New Roman",serif;color:#D4D4D4;background:#1E1E1E'>;</span></p>
+  <p class=MsoNormal align=left style='text-align:left;line-height:18.0pt;
+  background:#1E1E1E'><span style='font-size:9.0pt;font-family:"Times New Roman",serif;
+  color:#D4D4D4;background:#1E1E1E'>}</span></p>
+  </td>
+ </tr>
+</table>
+
+<p class=MsoNormal align=left style='text-align:left'><span style='font-family:
+"Times New Roman",serif'>&nbsp;</span></p>
+
+<h2><span style='font-family:"Times New Roman",serif'>4.2.<span
+style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp; </span></span><span
+style='font-family:"Times New Roman",serif'> </span><a name="_Toc750600532"><span
+lang=ZH-CN style='font-family:等线'>蜂鸟</span></a><span style='font-family:"Times New Roman",serif'>UART</span><span
+lang=ZH-CN style='font-family:等线'>协议调用过程</span></h2>
+
+<table class=MsoNormalTable border=0 cellspacing=0 cellpadding=0 width=541>
+ <tr>
+  <td width=541 valign=top style='width:405.75pt;padding:0cm 0cm 0cm 6.45pt'>
+  <p class=MsoNormal align=left style='text-align:left;line-height:18.0pt;
+  background:#1E1E1E'><span style='font-size:9.0pt;font-family:"Times New Roman",serif;
+  color:#C586C0;background:#1E1E1E'>#include</span><span style='font-size:9.0pt;
+  font-family:"Times New Roman",serif;color:#569CD6;background:#1E1E1E'> </span><span
+  style='font-size:9.0pt;font-family:"Times New Roman",serif;color:#CE9178;
+  background:#1E1E1E'>&quot;uni_uart.h&quot;</span></p>
+  <p class=MsoNormal align=left style='text-align:left;line-height:18.0pt;
+  background:#1E1E1E'><span style='font-size:9.0pt;font-family:"Times New Roman",serif;
+  color:#C586C0;background:#1E1E1E'>#include</span><span style='font-size:9.0pt;
+  font-family:"Times New Roman",serif;color:#569CD6;background:#1E1E1E'> </span><span
+  style='font-size:9.0pt;font-family:"Times New Roman",serif;color:#CE9178;
+  background:#1E1E1E'>&quot;uni_communication.h&quot;</span></p>
+  <p class=MsoNormal align=left style='text-align:left;line-height:18.0pt;
+  background:#1E1E1E'><span style='font-size:9.0pt;font-family:"Times New Roman",serif;
+  color:#C586C0;background:#1E1E1E'>#include</span><span style='font-size:9.0pt;
+  font-family:"Times New Roman",serif;color:#569CD6;background:#1E1E1E'> </span><span
+  style='font-size:9.0pt;font-family:"Times New Roman",serif;color:#CE9178;
+  background:#1E1E1E'>&quot;uni_log.h&quot;</span></p>
+  <p class=MsoNormal align=left style='text-align:left;line-height:18.0pt;
+  background:#1E1E1E'><span style='font-size:9.0pt;font-family:"Times New Roman",serif;
+  color:#C586C0;background:#1E1E1E'>#define</span><span style='font-size:9.0pt;
+  font-family:"Times New Roman",serif;color:#569CD6;background:#1E1E1E'>
+  MAIN_TAG </span><span style='font-size:9.0pt;font-family:"Times New Roman",serif;
+  color:#CE9178;background:#1E1E1E'>&quot;main&quot;</span></p>
+  <p class=MsoNormal align=left style='text-align:left;line-height:18.0pt;
+  background:#1E1E1E'><span style='font-size:9.0pt;font-family:"Times New Roman",serif;
+  color:#569CD6;background:#1E1E1E'>typedef</span><span style='font-size:9.0pt;
+  font-family:"Times New Roman",serif;color:#D4D4D4;background:#1E1E1E'> </span><span
+  style='font-size:9.0pt;font-family:"Times New Roman",serif;color:#569CD6;
+  background:#1E1E1E'>enum</span><span style='font-size:9.0pt;font-family:"Times New Roman",serif;
+  color:#D4D4D4;background:#1E1E1E'> {</span></p>
+  <p class=MsoNormal align=left style='text-align:left;text-indent:9.0pt;
+  line-height:18.0pt;background:#1E1E1E'><span style='font-size:9.0pt;
+  font-family:"Times New Roman",serif;color:#D4D4D4;background:#1E1E1E'>POWER_ON
+  = </span><span style='font-size:9.0pt;font-family:"Times New Roman",serif;
+  color:#B5CEA8;background:#1E1E1E'>0</span><span style='font-size:9.0pt;
+  font-family:"Times New Roman",serif;color:#D4D4D4;background:#1E1E1E'>,</span></p>
+  <p class=MsoNormal align=left style='text-align:left;text-indent:9.0pt;
+  line-height:18.0pt;background:#1E1E1E'><span style='font-size:9.0pt;
+  font-family:"Times New Roman",serif;color:#D4D4D4;background:#1E1E1E'>POWER_FF,</span></p>
+  <p class=MsoNormal align=left style='text-align:left;line-height:18.0pt;
+  background:#1E1E1E'><span style='font-size:9.0pt;font-family:"Times New Roman",serif;
+  color:#D4D4D4;background:#1E1E1E'>} CommandType;</span></p>
+  <p class=MsoNormal align=left style='text-align:left;line-height:18.0pt;
+  background:#1E1E1E'><span style='font-size:9.0pt;font-family:"Times New Roman",serif;
+  color:#569CD6;background:#1E1E1E'>static</span><span style='font-size:9.0pt;
+  font-family:"Times New Roman",serif;color:#D4D4D4;background:#1E1E1E'> </span><span
+  style='font-size:9.0pt;font-family:"Times New Roman",serif;color:#569CD6;
+  background:#1E1E1E'>void</span><span style='font-size:9.0pt;font-family:"Times New Roman",serif;
+  color:#D4D4D4;background:#1E1E1E'> </span><span style='font-size:9.0pt;
+  font-family:"Times New Roman",serif;color:#DCDCAA;background:#1E1E1E'>__recv_customer_packet</span><span
+  style='font-size:9.0pt;font-family:"Times New Roman",serif;color:#D4D4D4;
+  background:#1E1E1E'>(CommPacket *</span><span style='font-size:9.0pt;
+  font-family:"Times New Roman",serif;color:#9CDCFE;background:#1E1E1E'>packet</span><span
+  style='font-size:9.0pt;font-family:"Times New Roman",serif;color:#D4D4D4;
+  background:#1E1E1E'>) {</span></p>
+  <p class=MsoNormal align=left style='text-align:left;text-indent:9.0pt;
+  line-height:18.0pt;background:#1E1E1E'><span style='font-size:9.0pt;
+  font-family:"Times New Roman",serif;color:#DCDCAA;background:#1E1E1E'>LOGT</span><span
+  style='font-size:9.0pt;font-family:"Times New Roman",serif;color:#D4D4D4;
+  background:#1E1E1E'>(MAIN_TAG, </span><span style='font-size:9.0pt;
+  font-family:"Times New Roman",serif;color:#CE9178;background:#1E1E1E'>&quot;receive
+  packet, cmd=%d, payload_len=%d&quot;</span><span style='font-size:9.0pt;
+  font-family:"Times New Roman",serif;color:#D4D4D4;background:#1E1E1E'>,</span></p>
+  <p class=MsoNormal align=left style='text-align:left;text-indent:36.0pt;
+  line-height:18.0pt;background:#1E1E1E'><span style='font-size:9.0pt;
+  font-family:"Times New Roman",serif;color:#9CDCFE;background:#1E1E1E'>packet</span><span
+  style='font-size:9.0pt;font-family:"Times New Roman",serif;color:#D4D4D4;
+  background:#1E1E1E'>-&gt;</span><span style='font-size:9.0pt;font-family:
+  "Times New Roman",serif;color:#9CDCFE;background:#1E1E1E'>cmd</span><span
+  style='font-size:9.0pt;font-family:"Times New Roman",serif;color:#D4D4D4;
+  background:#1E1E1E'>, </span><span style='font-size:9.0pt;font-family:"Times New Roman",serif;
+  color:#9CDCFE;background:#1E1E1E'>packet</span><span style='font-size:9.0pt;
+  font-family:"Times New Roman",serif;color:#D4D4D4;background:#1E1E1E'>-&gt;</span><span
+  style='font-size:9.0pt;font-family:"Times New Roman",serif;color:#9CDCFE;
+  background:#1E1E1E'>payload_len</span><span style='font-size:9.0pt;
+  font-family:"Times New Roman",serif;color:#D4D4D4;background:#1E1E1E'>);</span></p>
+  <p class=MsoNormal align=left style='text-align:left;line-height:18.0pt;
+  background:#1E1E1E'><span style='font-size:9.0pt;font-family:"Times New Roman",serif;
+  color:#D4D4D4;background:#1E1E1E'>}</span></p>
+  <p class=MsoNormal align=left style='text-align:left;line-height:18.0pt;
+  background:#1E1E1E'><span style='font-size:9.0pt;font-family:"Times New Roman",serif;
+  color:#569CD6;background:#1E1E1E'>int</span><span style='font-size:9.0pt;
+  font-family:"Times New Roman",serif;color:#D4D4D4;background:#1E1E1E'> </span><span
+  style='font-size:9.0pt;font-family:"Times New Roman",serif;color:#DCDCAA;
+  background:#1E1E1E'>main</span><span style='font-size:9.0pt;font-family:"Times New Roman",serif;
+  color:#D4D4D4;background:#1E1E1E'>() {</span></p>
+  <p class=MsoNormal align=left style='text-align:left;text-indent:9.0pt;
+  line-height:18.0pt;background:#1E1E1E'><span style='font-size:9.0pt;
+  font-family:"Times New Roman",serif;color:#6A9955;background:#1E1E1E'>/**</span></p>
+  <p class=MsoNormal align=left style='text-align:left;text-indent:13.5pt;
+  line-height:18.0pt;background:#1E1E1E'><span style='font-size:9.0pt;
+  font-family:"Times New Roman",serif;color:#6A9955;background:#1E1E1E'>* step
+  1. </span><span lang=ZH-CN style='font-size:9.0pt;font-family:等线;color:#6A9955;
+  background:#1E1E1E'>初始化</span><span style='font-size:9.0pt;font-family:"Times New Roman",serif;
+  color:#6A9955;background:#1E1E1E'>UART</span><span lang=ZH-CN
+  style='font-size:9.0pt;font-family:等线;color:#6A9955;background:#1E1E1E'>。</span></p>
+  <p class=MsoNormal align=left style='text-align:left;text-indent:13.5pt;
+  line-height:18.0pt;background:#1E1E1E'><span style='font-size:9.0pt;
+  font-family:"Times New Roman",serif;color:#6A9955;background:#1E1E1E'>* </span><span
+  lang=ZH-CN style='font-size:9.0pt;font-family:等线;color:#6A9955;background:
+  #1E1E1E'>初始化完成后，即可以实现串口数据的读写操作。</span></p>
+  <p class=MsoNormal align=left style='text-align:left;text-indent:13.5pt;
+  line-height:18.0pt;background:#1E1E1E'><span style='font-size:9.0pt;
+  font-family:"Times New Roman",serif;color:#6A9955;background:#1E1E1E'>*/</span></p>
+  <p class=MsoNormal align=left style='text-align:left;text-indent:9.0pt;
+  line-height:18.0pt;background:#1E1E1E'><span style='font-size:9.0pt;
+  font-family:"Times New Roman",serif;color:#D4D4D4;background:#1E1E1E'>UartConfig
+  config;</span></p>
+  <p class=MsoNormal align=left style='text-align:left;text-indent:9.0pt;
+  line-height:18.0pt;background:#1E1E1E'><span style='font-size:9.0pt;
+  font-family:"Times New Roman",serif;color:#9CDCFE;background:#1E1E1E'>config</span><span
+  style='font-size:9.0pt;font-family:"Times New Roman",serif;color:#D4D4D4;
+  background:#1E1E1E'>.</span><span style='font-size:9.0pt;font-family:"Times New Roman",serif;
+  color:#9CDCFE;background:#1E1E1E'>device</span><span style='font-size:9.0pt;
+  font-family:"Times New Roman",serif;color:#D4D4D4;background:#1E1E1E'> =
+  UNI_UART1;</span></p>
+  <p class=MsoNormal align=left style='text-align:left;text-indent:9.0pt;
+  line-height:18.0pt;background:#1E1E1E'><span style='font-size:9.0pt;
+  font-family:"Times New Roman",serif;color:#9CDCFE;background:#1E1E1E'>config</span><span
+  style='font-size:9.0pt;font-family:"Times New Roman",serif;color:#D4D4D4;
+  background:#1E1E1E'>.</span><span style='font-size:9.0pt;font-family:"Times New Roman",serif;
+  color:#9CDCFE;background:#1E1E1E'>parity</span><span style='font-size:9.0pt;
+  font-family:"Times New Roman",serif;color:#D4D4D4;background:#1E1E1E'> =
+  UNI_PARITY_NONE;</span></p>
+  <p class=MsoNormal align=left style='text-align:left;text-indent:9.0pt;
+  line-height:18.0pt;background:#1E1E1E'><span style='font-size:9.0pt;
+  font-family:"Times New Roman",serif;color:#9CDCFE;background:#1E1E1E'>config</span><span
+  style='font-size:9.0pt;font-family:"Times New Roman",serif;color:#D4D4D4;
+  background:#1E1E1E'>.</span><span style='font-size:9.0pt;font-family:"Times New Roman",serif;
+  color:#9CDCFE;background:#1E1E1E'>speed</span><span style='font-size:9.0pt;
+  font-family:"Times New Roman",serif;color:#D4D4D4;background:#1E1E1E'> =
+  UNI_B_115200;</span></p>
+  <p class=MsoNormal align=left style='text-align:left;text-indent:9.0pt;
+  line-height:18.0pt;background:#1E1E1E'><span style='font-size:9.0pt;
+  font-family:"Times New Roman",serif;color:#9CDCFE;background:#1E1E1E'>config</span><span
+  style='font-size:9.0pt;font-family:"Times New Roman",serif;color:#D4D4D4;
+  background:#1E1E1E'>.</span><span style='font-size:9.0pt;font-family:"Times New Roman",serif;
+  color:#9CDCFE;background:#1E1E1E'>stop</span><span style='font-size:9.0pt;
+  font-family:"Times New Roman",serif;color:#D4D4D4;background:#1E1E1E'> =
+  UNI_ONE_STOP_BIT;</span></p>
+  <p class=MsoNormal align=left style='text-align:left;text-indent:9.0pt;
+  line-height:18.0pt;background:#1E1E1E'><span style='font-size:9.0pt;
+  font-family:"Times New Roman",serif;color:#9CDCFE;background:#1E1E1E'>config</span><span
+  style='font-size:9.0pt;font-family:"Times New Roman",serif;color:#D4D4D4;
+  background:#1E1E1E'>.</span><span style='font-size:9.0pt;font-family:"Times New Roman",serif;
+  color:#9CDCFE;background:#1E1E1E'>data_bit</span><span style='font-size:9.0pt;
+  font-family:"Times New Roman",serif;color:#D4D4D4;background:#1E1E1E'> = </span><span
+  style='font-size:9.0pt;font-family:"Times New Roman",serif;color:#B5CEA8;
+  background:#1E1E1E'>8</span><span style='font-size:9.0pt;font-family:"Times New Roman",serif;
+  color:#D4D4D4;background:#1E1E1E'>;</span></p>
+  <p class=MsoNormal align=left style='text-align:left;text-indent:9.0pt;
+  line-height:18.0pt;background:#1E1E1E'><span style='font-size:9.0pt;
+  font-family:"Times New Roman",serif;color:#DCDCAA;background:#1E1E1E'>UartInitialize</span><span
+  style='font-size:9.0pt;font-family:"Times New Roman",serif;color:#D4D4D4;
+  background:#1E1E1E'>(&amp;config, CommProtocolReceiveUartData);</span></p>
+  <p class=MsoNormal align=left style='text-align:left;text-indent:9.0pt;
+  line-height:18.0pt;background:#1E1E1E'><span style='font-size:9.0pt;
+  font-family:"Times New Roman",serif;color:#6A9955;background:#1E1E1E'>/**</span></p>
+  <p class=MsoNormal align=left style='text-align:left;text-indent:13.5pt;
+  line-height:18.0pt;background:#1E1E1E'><span style='font-size:9.0pt;
+  font-family:"Times New Roman",serif;color:#6A9955;background:#1E1E1E'>* step
+  2. </span><span lang=ZH-CN style='font-size:9.0pt;font-family:等线;color:#6A9955;
+  background:#1E1E1E'>初始化</span><span style='font-size:9.0pt;font-family:"Times New Roman",serif;
+  color:#6A9955;background:#1E1E1E'>protocol</span></p>
+  <p class=MsoNormal align=left style='text-align:left;text-indent:13.5pt;
+  line-height:18.0pt;background:#1E1E1E'><span style='font-size:9.0pt;
+  font-family:"Times New Roman",serif;color:#6A9955;background:#1E1E1E'>* </span><span
+  lang=ZH-CN style='font-size:9.0pt;font-family:等线;color:#6A9955;background:
+  #1E1E1E'>向</span><span style='font-size:9.0pt;font-family:"Times New Roman",serif;
+  color:#6A9955;background:#1E1E1E'>protocol</span><span lang=ZH-CN
+  style='font-size:9.0pt;font-family:等线;color:#6A9955;background:#1E1E1E'>注册</span><span
+  style='font-size:9.0pt;font-family:"Times New Roman",serif;color:#6A9955;
+  background:#1E1E1E'>UART</span><span lang=ZH-CN style='font-size:9.0pt;
+  font-family:等线;color:#6A9955;background:#1E1E1E'>写方法、接收拆包后结构信息回调</span></p>
+  <p class=MsoNormal align=left style='text-align:left;text-indent:13.5pt;
+  line-height:18.0pt;background:#1E1E1E'><span style='font-size:9.0pt;
+  font-family:"Times New Roman",serif;color:#6A9955;background:#1E1E1E'>*/</span></p>
+  <p class=MsoNormal align=left style='text-align:left;text-indent:9.0pt;
+  line-height:18.0pt;background:#1E1E1E'><span style='font-size:9.0pt;
+  font-family:"Times New Roman",serif;color:#DCDCAA;background:#1E1E1E'>CommProtocolInit</span><span
+  style='font-size:9.0pt;font-family:"Times New Roman",serif;color:#D4D4D4;
+  background:#1E1E1E'>(UartWrite, __recv_customer_packet);</span></p>
+  <p class=MsoNormal align=left style='text-align:left;text-indent:9.0pt;
+  line-height:18.0pt;background:#1E1E1E'><span style='font-size:9.0pt;
+  font-family:"Times New Roman",serif;color:#6A9955;background:#1E1E1E'>/**</span></p>
+  <p class=MsoNormal align=left style='text-align:left;text-indent:13.5pt;
+  line-height:18.0pt;background:#1E1E1E'><span style='font-size:9.0pt;
+  font-family:"Times New Roman",serif;color:#6A9955;background:#1E1E1E'>* step
+  3. </span><span lang=ZH-CN style='font-size:9.0pt;font-family:等线;color:#6A9955;
+  background:#1E1E1E'>写数据</span></p>
+  <p class=MsoNormal align=left style='text-align:left;text-indent:13.5pt;
+  line-height:18.0pt;background:#1E1E1E'><span style='font-size:9.0pt;
+  font-family:"Times New Roman",serif;color:#6A9955;background:#1E1E1E'>* </span><span
+  lang=ZH-CN style='font-size:9.0pt;font-family:等线;color:#6A9955;background:
+  #1E1E1E'>向</span><span style='font-size:9.0pt;font-family:"Times New Roman",serif;
+  color:#6A9955;background:#1E1E1E'>UART</span><span lang=ZH-CN
+  style='font-size:9.0pt;font-family:等线;color:#6A9955;background:#1E1E1E'>写一帧满足协议格式的数据</span></p>
+  <p class=MsoNormal align=left style='text-align:left;text-indent:13.5pt;
+  line-height:18.0pt;background:#1E1E1E'><span style='font-size:9.0pt;
+  font-family:"Times New Roman",serif;color:#6A9955;background:#1E1E1E'>*/</span></p>
+  <p class=MsoNormal align=left style='text-align:left;text-indent:9.0pt;
+  line-height:18.0pt;background:#1E1E1E'><span style='font-size:9.0pt;
+  font-family:"Times New Roman",serif;color:#569CD6;background:#1E1E1E'>char</span><span
+  style='font-size:9.0pt;font-family:"Times New Roman",serif;color:#D4D4D4;
+  background:#1E1E1E'> </span><span style='font-size:9.0pt;font-family:"Times New Roman",serif;
+  color:#9CDCFE;background:#1E1E1E'>payload</span><span style='font-size:9.0pt;
+  font-family:"Times New Roman",serif;color:#D4D4D4;background:#1E1E1E'>[</span><span
+  style='font-size:9.0pt;font-family:"Times New Roman",serif;color:#B5CEA8;
+  background:#1E1E1E'>32</span><span style='font-size:9.0pt;font-family:"Times New Roman",serif;
+  color:#D4D4D4;background:#1E1E1E'>];</span></p>
+  <p class=MsoNormal align=left style='text-align:left;text-indent:9.0pt;
+  line-height:18.0pt;background:#1E1E1E'><span style='font-size:9.0pt;
+  font-family:"Times New Roman",serif;color:#C586C0;background:#1E1E1E'>for</span><span
+  style='font-size:9.0pt;font-family:"Times New Roman",serif;color:#D4D4D4;
+  background:#1E1E1E'> (</span><span style='font-size:9.0pt;font-family:"Times New Roman",serif;
+  color:#569CD6;background:#1E1E1E'>int</span><span style='font-size:9.0pt;
+  font-family:"Times New Roman",serif;color:#D4D4D4;background:#1E1E1E'> i = </span><span
+  style='font-size:9.0pt;font-family:"Times New Roman",serif;color:#B5CEA8;
+  background:#1E1E1E'>0</span><span style='font-size:9.0pt;font-family:"Times New Roman",serif;
+  color:#D4D4D4;background:#1E1E1E'>; i &lt; </span><span style='font-size:
+  9.0pt;font-family:"Times New Roman",serif;color:#569CD6;background:#1E1E1E'>sizeof</span><span
+  style='font-size:9.0pt;font-family:"Times New Roman",serif;color:#D4D4D4;
+  background:#1E1E1E'>(payload); i++) {</span></p>
+  <p class=MsoNormal align=left style='text-align:left;text-indent:18.0pt;
+  line-height:18.0pt;background:#1E1E1E'><span style='font-size:9.0pt;
+  font-family:"Times New Roman",serif;color:#9CDCFE;background:#1E1E1E'>payload</span><span
+  style='font-size:9.0pt;font-family:"Times New Roman",serif;color:#D4D4D4;
+  background:#1E1E1E'>[i] = (</span><span style='font-size:9.0pt;font-family:
+  "Times New Roman",serif;color:#569CD6;background:#1E1E1E'>char</span><span
+  style='font-size:9.0pt;font-family:"Times New Roman",serif;color:#D4D4D4;
+  background:#1E1E1E'>)i;</span></p>
+  <p class=MsoNormal align=left style='text-align:left;text-indent:9.0pt;
+  line-height:18.0pt;background:#1E1E1E'><span style='font-size:9.0pt;
+  font-family:"Times New Roman",serif;color:#D4D4D4;background:#1E1E1E'>}</span></p>
+  <p class=MsoNormal align=left style='text-align:left;text-indent:9.0pt;
+  line-height:18.0pt;background:#1E1E1E'><span style='font-size:9.0pt;
+  font-family:"Times New Roman",serif;color:#D4D4D4;background:#1E1E1E'>CommAttribute
+  attribute;</span></p>
+  <p class=MsoNormal align=left style='text-align:left;text-indent:9.0pt;
+  line-height:18.0pt;background:#1E1E1E'><span style='font-size:9.0pt;
+  font-family:"Times New Roman",serif;color:#9CDCFE;background:#1E1E1E'>attribute</span><span
+  style='font-size:9.0pt;font-family:"Times New Roman",serif;color:#D4D4D4;
+  background:#1E1E1E'>.</span><span style='font-size:9.0pt;font-family:"Times New Roman",serif;
+  color:#9CDCFE;background:#1E1E1E'>reliable </span><span style='font-size:
+  9.0pt;font-family:"Times New Roman",serif;color:#D4D4D4;background:#1E1E1E'>=
+  </span><span style='font-size:9.0pt;font-family:"Times New Roman",serif;
+  color:#569CD6;background:#1E1E1E'>true</span><span style='font-size:9.0pt;
+  font-family:"Times New Roman",serif;color:#D4D4D4;background:#1E1E1E'>;</span></p>
+  <p class=MsoNormal align=left style='text-align:left;text-indent:9.0pt;
+  line-height:18.0pt;background:#1E1E1E'><span style='font-size:9.0pt;
+  font-family:"Times New Roman",serif;color:#6A9955;background:#1E1E1E'>/**</span></p>
+  <p class=MsoNormal align=left style='text-align:left;text-indent:13.5pt;
+  line-height:18.0pt;background:#1E1E1E'><span style='font-size:9.0pt;
+  font-family:"Times New Roman",serif;color:#6A9955;background:#1E1E1E'>*
+  payload</span><span lang=ZH-CN style='font-size:9.0pt;font-family:等线;
+  color:#6A9955;background:#1E1E1E'>、</span><span style='font-size:9.0pt;
+  font-family:"Times New Roman",serif;color:#6A9955;background:#1E1E1E'>attribute</span><span
+  lang=ZH-CN style='font-size:9.0pt;font-family:等线;color:#6A9955;background:
+  #1E1E1E'>设置为</span><span style='font-size:9.0pt;font-family:"Times New Roman",serif;
+  color:#6A9955;background:#1E1E1E'>NULL</span><span lang=ZH-CN
+  style='font-size:9.0pt;font-family:等线;color:#6A9955;background:#1E1E1E'>则代表无</span><span
+  style='font-size:9.0pt;font-family:"Times New Roman",serif;color:#6A9955;
+  background:#1E1E1E'>payload</span><span lang=ZH-CN style='font-size:9.0pt;
+  font-family:等线;color:#6A9955;background:#1E1E1E'>，不需要</span><span
+  style='font-size:9.0pt;font-family:"Times New Roman",serif;color:#6A9955;
+  background:#1E1E1E'>ack</span></p>
+  <p class=MsoNormal align=left style='text-align:left;text-indent:13.5pt;
+  line-height:18.0pt;background:#1E1E1E'><span style='font-size:9.0pt;
+  font-family:"Times New Roman",serif;color:#6A9955;background:#1E1E1E'>*
+  attribute.reliable = true; </span><span lang=ZH-CN style='font-size:9.0pt;
+  font-family:等线;color:#6A9955;background:#1E1E1E'>则表示接收方必须发送</span><span
+  style='font-size:9.0pt;font-family:"Times New Roman",serif;color:#6A9955;
+  background:#1E1E1E'>ack</span><span lang=ZH-CN style='font-size:9.0pt;
+  font-family:等线;color:#6A9955;background:#1E1E1E'>，否则本次发送失败，</span></p>
+  <p class=MsoNormal align=left style='text-align:left;text-indent:13.5pt;
+  line-height:18.0pt;background:#1E1E1E'><span style='font-size:9.0pt;
+  font-family:"Times New Roman",serif;color:#6A9955;background:#1E1E1E'>* </span><span
+  lang=ZH-CN style='font-size:9.0pt;font-family:等线;color:#6A9955;background:
+  #1E1E1E'>返回</span><span style='font-size:9.0pt;font-family:"Times New Roman",serif;
+  color:#6A9955;background:#1E1E1E'>ack</span><span lang=ZH-CN
+  style='font-size:9.0pt;font-family:等线;color:#6A9955;background:#1E1E1E'>超时错误码</span></p>
+  <p class=MsoNormal align=left style='text-align:left;text-indent:13.5pt;
+  line-height:18.0pt;background:#1E1E1E'><span style='font-size:9.0pt;
+  font-family:"Times New Roman",serif;color:#6A9955;background:#1E1E1E'>*/</span></p>
+  <p class=MsoNormal align=left style='text-align:left;text-indent:9.0pt;
+  line-height:18.0pt;background:#1E1E1E'><span style='font-size:9.0pt;
+  font-family:"Times New Roman",serif;color:#DCDCAA;background:#1E1E1E'>CommProtocolPacketAssembleAndSend</span><span
+  style='font-size:9.0pt;font-family:"Times New Roman",serif;color:#D4D4D4;
+  background:#1E1E1E'>(UNI_CUSTOMER_TYPE, </span></p>
+  <p class=MsoNormal align=left style='text-align:left;text-indent:193.5pt;
+  line-height:18.0pt;background:#1E1E1E'><span style='font-size:9.0pt;
+  font-family:"Times New Roman",serif;color:#D4D4D4;background:#1E1E1E'>POWER_ON,
+  </span></p>
+  <p class=MsoNormal align=left style='text-align:left;text-indent:193.5pt;
+  line-height:18.0pt;background:#1E1E1E'><span style='font-size:9.0pt;
+  font-family:"Times New Roman",serif;color:#D4D4D4;background:#1E1E1E'>payload,
+  </span></p>
+  <p class=MsoNormal align=left style='text-align:left;text-indent:193.5pt;
+  line-height:18.0pt;background:#1E1E1E'><span style='font-size:9.0pt;
+  font-family:"Times New Roman",serif;color:#569CD6;background:#1E1E1E'>sizeof</span><span
+  style='font-size:9.0pt;font-family:"Times New Roman",serif;color:#D4D4D4;
+  background:#1E1E1E'>(payload), </span></p>
+  <p class=MsoNormal align=left style='text-align:left;text-indent:193.5pt;
+  line-height:18.0pt;background:#1E1E1E'><span style='font-size:9.0pt;
+  font-family:"Times New Roman",serif;color:#D4D4D4;background:#1E1E1E'>&amp;attribute);</span></p>
+  <p class=MsoNormal align=left style='text-align:left;text-indent:9.0pt;
+  line-height:18.0pt;background:#1E1E1E'><span style='font-size:9.0pt;
+  font-family:"Times New Roman",serif;color:#6A9955;background:#1E1E1E'>/**</span></p>
+  <p class=MsoNormal align=left style='text-align:left;text-indent:13.5pt;
+  line-height:18.0pt;background:#1E1E1E'><span style='font-size:9.0pt;
+  font-family:"Times New Roman",serif;color:#6A9955;background:#1E1E1E'>* step
+  3. </span><span lang=ZH-CN style='font-size:9.0pt;font-family:等线;color:#6A9955;
+  background:#1E1E1E'>反初始化。</span></p>
+  <p class=MsoNormal align=left style='text-align:left;text-indent:13.5pt;
+  line-height:18.0pt;background:#1E1E1E'><span style='font-size:9.0pt;
+  font-family:"Times New Roman",serif;color:#6A9955;background:#1E1E1E'>*/</span></p>
+  <p class=MsoNormal align=left style='text-align:left;text-indent:9.0pt;
+  line-height:18.0pt;background:#1E1E1E'><span style='font-size:9.0pt;
+  font-family:"Times New Roman",serif;color:#DCDCAA;background:#1E1E1E'>CommProtocolFinal</span><span
+  style='font-size:9.0pt;font-family:"Times New Roman",serif;color:#D4D4D4;
+  background:#1E1E1E'>();</span></p>
+  <p class=MsoNormal align=left style='text-align:left;text-indent:9.0pt;
+  line-height:18.0pt;background:#1E1E1E'><span style='font-size:9.0pt;
+  font-family:"Times New Roman",serif;color:#DCDCAA;background:#1E1E1E'>UartFinalize</span><span
+  style='font-size:9.0pt;font-family:"Times New Roman",serif;color:#D4D4D4;
+  background:#1E1E1E'>();</span></p>
+  <p class=MsoNormal align=left style='text-align:left;text-indent:9.0pt;
+  line-height:18.0pt;background:#1E1E1E'><span style='font-size:9.0pt;
+  font-family:"Times New Roman",serif;color:#C586C0;background:#1E1E1E'>return</span><span
+  style='font-size:9.0pt;font-family:"Times New Roman",serif;color:#D4D4D4;
+  background:#1E1E1E'> </span><span style='font-size:9.0pt;font-family:"Times New Roman",serif;
+  color:#B5CEA8;background:#1E1E1E'>0</span><span style='font-size:9.0pt;
+  font-family:"Times New Roman",serif;color:#D4D4D4;background:#1E1E1E'>;</span></p>
+  <p class=MsoNormal align=left style='text-align:left;line-height:18.0pt;
+  background:#1E1E1E'><span style='font-size:9.0pt;font-family:"Times New Roman",serif;
+  color:#D4D4D4;background:#1E1E1E'>}</span></p>
+  </td>
+ </tr>
+</table>
+
+<p class=MsoNormal><span style='font-family:"Times New Roman",serif'>&nbsp;</span></p>
+
+<h1><a name="_Toc1024198846"><span style='font-family:"Times New Roman",serif'>5.<span
+style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span></span><span
+lang=ZH-CN style='font-family:等线'>移植协议栈到任意平台</span></a></h1>
+
+<h2><span style='font-family:"Times New Roman",serif'>5.1.<span
+style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp; </span></span><span
+style='font-family:"Times New Roman",serif'> </span><a name="_Toc1628574017"><span
+lang=ZH-CN style='font-family:等线'>注册跨平台</span></a><span style='font-family:
+"Times New Roman",serif'>Hooks</span></h2>
+
+<p class=MsoNormal><span lang=ZH-CN style='font-size:9.0pt;font-family:等线'>需要注册的跨平台</span><span
+style='font-size:9.0pt;font-family:"Times New Roman",serif'>Hooks</span><span
+lang=ZH-CN style='font-size:9.0pt;font-family:等线'>分为三类：</span></p>
+
+<p class=MsoNormal style='margin-left:0cm;text-indent:0cm'><span
+style='font-size:9.0pt;font-family:"Times New Roman",serif'>1、</span><span
+lang=ZH-CN style='font-size:9.0pt;font-family:等线'>动态内存分配函数，必备</span><span
+style='font-size:9.0pt;font-family:"Times New Roman",serif'>APIs</span><span
+lang=ZH-CN style='font-size:9.0pt;font-family:等线'>，必须注册，否则协议栈无法运行。</span></p>
+
+<p class=MsoNormal style='margin-left:0cm;text-indent:0cm'><span
+style='font-size:9.0pt;font-family:"Times New Roman",serif'>2、</span><span
+lang=ZH-CN style='font-size:9.0pt;font-family:等线'>信号量函数，可选</span><span
+style='font-size:9.0pt;font-family:"Times New Roman",serif'>APIs</span><span
+lang=ZH-CN style='font-size:9.0pt;font-family:等线'>，建议注册，可有效提升协议栈性能。</span></p>
+
+<p class=MsoNormal style='margin-left:0cm;text-indent:0cm'><span
+style='font-size:9.0pt;font-family:"Times New Roman",serif'>3、</span><span
+lang=ZH-CN style='font-size:9.0pt;font-family:等线'>睡眠函数，必备</span><span
+style='font-size:9.0pt;font-family:"Times New Roman",serif'>API</span><span
+lang=ZH-CN style='font-size:9.0pt;font-family:等线'>，必须注册。</span></p>
+
+<p class=MsoNormal><span style='font-family:"Times New Roman",serif'><img
+width=553 height=379 id="图片 5" src="uart_protocol_image003.jpg"></span></p>
+
+<h2><span style='font-family:"Times New Roman",serif'>5.2.<span
+style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp; </span></span><span
+style='font-family:"Times New Roman",serif'> <a name="_Toc1764422704">Porting
+demo</a></span></h2>
+
+<p class=MsoNormal><span lang=ZH-CN style='font-size:9.0pt;font-family:等线'>在开源代码</span><span
+style='font-size:9.0pt;font-family:"Times New Roman",serif'>example</span><span
+lang=ZH-CN style='font-size:9.0pt;font-family:等线'>目录分别展示了</span><span
+style='font-size:9.0pt;font-family:"Times New Roman",serif'>RT-Thread</span><span
+lang=ZH-CN style='font-size:9.0pt;font-family:等线'>、</span><span
+style='font-size:9.0pt;font-family:"Times New Roman",serif'>Linux</span><span
+lang=ZH-CN style='font-size:9.0pt;font-family:等线'>、</span><span
+style='font-size:9.0pt;font-family:"Times New Roman",serif'>8051</span><span
+lang=ZH-CN style='font-size:9.0pt;font-family:等线'>单片机移植实例。</span></p>
+
+<p class=MsoNormal><span lang=ZH-CN style='font-size:9.0pt;font-family:等线'>需要注意的点，已在</span><span
+style='font-size:9.0pt;font-family:"Times New Roman",serif'>demo</span><span
+lang=ZH-CN style='font-size:9.0pt;font-family:等线'>中详细指出。</span></p>
+
+<p class=MsoNormal><span style='font-family:"Times New Roman",serif'>&nbsp;</span></p>
+
+<h1><a name="_Toc50704705"><span style='font-family:"Times New Roman",serif'>6.<span
+style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span></span><span
+lang=ZH-CN style='font-family:等线'>附录</span></a></h1>
+
+<h2><span style='font-family:"Times New Roman",serif'>6.1.<span
+style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp; </span></span><span
+style='font-family:"Times New Roman",serif'> </span><a name="_Toc1790452723"><span
+lang=ZH-CN style='font-family:等线'>错误码</span></a></h2>
+
+<table class=MsoNormalTable border=0 cellspacing=0 cellpadding=0 width=604
+ style='background:white;border-collapse:collapse'>
+ <thead>
+  <tr>
+   <td width=290 valign=top style='width:217.6pt;border:solid #DDDDDD 1.0pt;
+   background:#F0F0F0;padding:5.25pt 11.25pt 5.25pt 7.5pt'>
+   <p class=MsoNormal align=center style='text-align:center'><b><span
+   lang=ZH-CN style='font-size:9.0pt;font-family:等线'>结果码</span></b></p>
+   </td>
+   <td width=147 valign=top style='width:110.35pt;border:solid #DDDDDD 1.0pt;
+   border-left:none;background:#F0F0F0;padding:5.25pt 11.25pt 5.25pt 7.5pt'>
+   <p class=MsoNormal align=center style='text-align:center'><b><span
+   lang=ZH-CN style='font-size:9.0pt;font-family:等线;color:black'>含义</span></b></p>
+   </td>
+   <td width=167 valign=top style='width:125.05pt;border:solid #DDDDDD 1.0pt;
+   border-left:none;background:#F0F0F0;padding:5.25pt 11.25pt 5.25pt 7.5pt'>
+   <p class=MsoNormal align=center style='text-align:center'><b><span
+   lang=ZH-CN style='font-size:9.0pt;font-family:等线;color:black'>备注</span></b></p>
+   </td>
+  </tr>
+ </thead>
+ <tr>
+  <td width=290 valign=top style='width:217.6pt;border:solid #DDDDDD 1.0pt;
+  border-top:none;padding:5.25pt 7.5pt 5.25pt 7.5pt'>
+  <p class=MsoNormal align=left style='text-align:left'><span style='font-size:
+  9.0pt;font-family:"Times New Roman",serif;color:black'>(0)</span></p>
+  </td>
+  <td width=147 valign=top style='width:110.35pt;border-top:none;border-left:
+  none;border-bottom:solid #DDDDDD 1.0pt;border-right:solid #DDDDDD 1.0pt;
+  padding:5.25pt 7.5pt 5.25pt 7.5pt'>
+  <p class=MsoNormal align=left style='text-align:left'><span lang=ZH-CN
+  style='font-size:9.0pt;font-family:等线;color:black'>成功</span></p>
+  </td>
+  <td width=167 valign=top style='width:125.05pt;border-top:none;border-left:
+  none;border-bottom:solid #DDDDDD 1.0pt;border-right:solid #DDDDDD 1.0pt;
+  padding:5.25pt 7.5pt 5.25pt 7.5pt'>
+  <p class=MsoNormal align=left style='text-align:left'><span lang=ZH-CN
+  style='font-size:9.0pt;font-family:等线;color:black'>通用错误码</span></p>
+  </td>
+ </tr>
+ <tr>
+  <td width=290 valign=top style='width:217.6pt;border:solid #DDDDDD 1.0pt;
+  border-top:none;padding:5.25pt 7.5pt 5.25pt 7.5pt'>
+  <p class=MsoNormal align=left style='text-align:left'><span style='font-size:
+  9.0pt;font-family:"Times New Roman",serif;color:black'>(-1)</span></p>
+  </td>
+  <td width=147 valign=top style='width:110.35pt;border-top:none;border-left:
+  none;border-bottom:solid #DDDDDD 1.0pt;border-right:solid #DDDDDD 1.0pt;
+  padding:5.25pt 7.5pt 5.25pt 7.5pt'>
+  <p class=MsoNormal align=left style='text-align:left'><span lang=ZH-CN
+  style='font-size:9.0pt;font-family:等线;color:black'>错误</span></p>
+  </td>
+  <td width=167 valign=top style='width:125.05pt;border-top:none;border-left:
+  none;border-bottom:solid #DDDDDD 1.0pt;border-right:solid #DDDDDD 1.0pt;
+  padding:5.25pt 7.5pt 5.25pt 7.5pt'>
+  <p class=MsoNormal align=left style='text-align:left'><span lang=ZH-CN
+  style='font-size:9.0pt;font-family:等线;color:black'>通用错误码</span></p>
+  </td>
+ </tr>
+ <tr>
+  <td width=290 valign=top style='width:217.6pt;border:solid #DDDDDD 1.0pt;
+  border-top:none;padding:5.25pt 7.5pt 5.25pt 7.5pt'>
+  <p class=MsoNormal align=left style='text-align:left'><span style='font-size:
+  9.0pt;font-family:"Times New Roman",serif;color:black'>E_UNI_COMM_ALLOC_FAILED
+  </span></p>
+  <p class=MsoNormal align=left style='text-align:left'><span style='font-size:
+  9.0pt;font-family:"Times New Roman",serif;color:black'>(-10001)</span></p>
+  </td>
+  <td width=147 valign=top style='width:110.35pt;border-top:none;border-left:
+  none;border-bottom:solid #DDDDDD 1.0pt;border-right:solid #DDDDDD 1.0pt;
+  padding:5.25pt 7.5pt 5.25pt 7.5pt'>
+  <p class=MsoNormal align=left style='text-align:left'><span lang=ZH-CN
+  style='font-size:9.0pt;font-family:等线;color:black'>申请</span><span
+  style='font-size:9.0pt;font-family:"Times New Roman",serif;color:black'>heap</span><span
+  lang=ZH-CN style='font-size:9.0pt;font-family:等线;color:black'>内存失败</span></p>
+  </td>
+  <td width=167 valign=top style='width:125.05pt;border-top:none;border-left:
+  none;border-bottom:solid #DDDDDD 1.0pt;border-right:solid #DDDDDD 1.0pt;
+  padding:5.25pt 7.5pt 5.25pt 7.5pt'>
+  <p class=MsoNormal align=left style='margin-top:7.5pt;text-align:left'><span
+  lang=ZH-CN style='font-size:9.0pt;font-family:等线;color:black'>内存不足，申请失败</span></p>
+  </td>
+ </tr>
+ <tr>
+  <td width=290 valign=top style='width:217.6pt;border:solid #DDDDDD 1.0pt;
+  border-top:none;padding:5.25pt 7.5pt 5.25pt 7.5pt'>
+  <p class=MsoNormal align=left style='text-align:left'><span style='font-size:
+  9.0pt;font-family:"Times New Roman",serif;color:black'>E_UNI_COMM_PAYLOAD_TOO_LONG
+  (-10000)</span></p>
+  </td>
+  <td width=147 valign=top style='width:110.35pt;border-top:none;border-left:
+  none;border-bottom:solid #DDDDDD 1.0pt;border-right:solid #DDDDDD 1.0pt;
+  padding:5.25pt 7.5pt 5.25pt 7.5pt'>
+  <p class=MsoNormal align=left style='text-align:left'><span lang=ZH-CN
+  style='font-size:9.0pt;font-family:等线;color:black'>发送的</span><span
+  style='font-size:9.0pt;font-family:"Times New Roman",serif;color:black'>payload</span><span
+  lang=ZH-CN style='font-size:9.0pt;font-family:等线;color:black'>太长</span></p>
+  </td>
+  <td width=167 valign=top style='width:125.05pt;border-top:none;border-left:
+  none;border-bottom:solid #DDDDDD 1.0pt;border-right:solid #DDDDDD 1.0pt;
+  padding:5.25pt 7.5pt 5.25pt 7.5pt'>
+  <p class=MsoNormal align=left style='text-align:left'><span lang=ZH-CN
+  style='font-size:9.0pt;font-family:等线;color:black'>当前支持最大</span><span
+  style='font-size:9.0pt;font-family:"Times New Roman",serif;color:black'>payload</span><span
+  lang=ZH-CN style='font-size:9.0pt;font-family:等线;color:black'>为</span><span
+  style='font-size:9.0pt;font-family:"Times New Roman",serif;color:black'>8182</span><span
+  lang=ZH-CN style='font-size:9.0pt;font-family:等线;color:black'>字节</span></p>
+  </td>
+ </tr>
+ <tr>
+  <td width=290 valign=top style='width:217.6pt;border:solid #DDDDDD 1.0pt;
+  border-top:none;padding:5.25pt 7.5pt 5.25pt 7.5pt'>
+  <p class=MsoNormal align=left style='text-align:left'><span style='font-size:
+  9.0pt;font-family:"Times New Roman",serif;color:black'>E_UNI_COMM_PAYLOAD_ACK_TIMEOUT(-9999)</span></p>
+  </td>
+  <td width=147 valign=top style='width:110.35pt;border-top:none;border-left:
+  none;border-bottom:solid #DDDDDD 1.0pt;border-right:solid #DDDDDD 1.0pt;
+  padding:5.25pt 7.5pt 5.25pt 7.5pt'>
+  <p class=MsoNormal align=left style='text-align:left'><span lang=ZH-CN
+  style='font-size:9.0pt;font-family:等线;color:black'>设置接收数据端需</span><span
+  style='font-size:9.0pt;font-family:"Times New Roman",serif;color:black'>ack</span><span
+  lang=ZH-CN style='font-size:9.0pt;font-family:等线;color:black'>属性时，接收数据端</span><span
+  style='font-size:9.0pt;font-family:"Times New Roman",serif;color:black'>ack</span><span
+  lang=ZH-CN style='font-size:9.0pt;font-family:等线;color:black'>超时</span></p>
+  </td>
+  <td width=167 valign=top style='width:125.05pt;border-top:none;border-left:
+  none;border-bottom:solid #DDDDDD 1.0pt;border-right:solid #DDDDDD 1.0pt;
+  padding:5.25pt 7.5pt 5.25pt 7.5pt'>
+  <p class=MsoNormal align=left style='text-align:left'><span lang=ZH-CN
+  style='font-size:9.0pt;font-family:等线;color:black'>目前超时支持</span><span
+  style='font-size:9.0pt;font-family:"Times New Roman",serif;color:black'>[50ms</span><span
+  lang=ZH-CN style='font-size:9.0pt;font-family:等线;color:black'>，</span><span
+  style='font-size:9.0pt;font-family:"Times New Roman",serif;color:black'>2000ms]</span><span
+  lang=ZH-CN style='font-size:9.0pt;font-family:等线;color:black'>区间</span></p>
+  </td>
+ </tr>
+</table>
+
+<p class=MsoNormal align=left style='text-align:left'><span style='font-family:
+"Times New Roman",serif'>&nbsp;</span></p>
+
+</div>
+
+</body>
+
+</html>
+ </div><!-- contents -->
+</body>
+</html>
