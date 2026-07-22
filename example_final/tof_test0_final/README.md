@@ -1,10 +1,10 @@
-﻿# tof_vl53l0x_gateway_test
+﻿# tof_test0_final
 
 Minimal ESP32-WROOM example for reading a VL53L0X laser distance module through a CH32 generic I2C bridge.
 
 ## Burn Targets
 
-- ESP32-WROOM: burn this example, `example_final/tof_vl53l0x_gateway_test`.
+- ESP32-WROOM: burn this example, `example_final/tof_test0_final`.
 - CH32: burn `MOCE_SDK_CH32/examples_final/CH32_I2C_bridge_generic`.
 
 ## Hardware Topology
@@ -32,7 +32,7 @@ Default VL53L0X identity:
 5. ESP32 sends the minimal VL53L0X configuration sequence through CH32.
 6. After initialization succeeds, ESP32 reads distance every 500 ms.
 
-The example intentionally keeps `main.c` thin. Sensor state and CAN bridge operations are kept in `components_esp32wroom/ch32_vl53l0x_gateway`.
+The example intentionally keeps `main.c` thin. Sensor state and CAN bridge operations are kept in `components_esp32wroom/ch32_vl53l0x_gateway_final`.
 
 ## Expected Serial Logs
 

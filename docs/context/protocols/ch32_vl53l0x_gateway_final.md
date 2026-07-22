@@ -1,7 +1,7 @@
 # CH32 I2C Bridge VL53L0X Protocol
 
 ## MOCE_CH32_PROTOCOL_CONTRACT
-protocol_id: ch32_i2c_bridge_vl53l0x
+protocol_id: ch32_vl53l0x_gateway_final
 kit_id: moce_esp32wroom_ch32_i2c_vl53l0x
 gateway_board: ch32_generic_i2c_bridge
 esp_board:

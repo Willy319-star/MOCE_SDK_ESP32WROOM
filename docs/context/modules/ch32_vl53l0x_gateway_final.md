@@ -1,7 +1,7 @@
 ﻿# VL53L0X TOF CH32 Gateway Module
 
 ## MOCE_MODULE_CONTRACT
-module_id: vl53l0x_tof_ch32_gateway
+module_id: ch32_vl53l0x_gateway_final
 display_name: VL53L0X Laser Distance Over CH32 I2C Bridge
 category: sensor
 supported_boards:
@@ -9,11 +9,11 @@ supported_boards:
 architecture: esp32_wroom_to_ch32_gateway
 gateway_required: true
 component_paths:
-  - components_esp32wroom/ch32_vl53l0x_gateway
+  - components_esp32wroom/ch32_vl53l0x_gateway_final
 example_paths:
-  - example_final/tof_vl53l0x_gateway_test
+  - example_final/tof_test0_final
 protocol_contracts:
-  - docs/context/protocols/ch32_i2c_bridge_vl53l0x.md
+  - docs/context/protocols/ch32_vl53l0x_gateway_final.md
 hardware_interface: can_gateway
 downstream_interface: i2c
 required_resources:

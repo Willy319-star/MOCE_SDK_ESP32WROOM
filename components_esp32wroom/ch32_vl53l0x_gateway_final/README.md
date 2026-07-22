@@ -1,4 +1,4 @@
-# ch32_vl53l0x_gateway
+# ch32_vl53l0x_gateway_final
 
 ESP32-WROOM side helper component for a VL53L0X laser distance module connected through a CH32 generic I2C bridge.
 
@@ -42,7 +42,7 @@ For the final multi-module project, keep the common CAN ownership in the project
 
 Related context files:
 
-- `docs/context/protocols/ch32_i2c_bridge_vl53l0x.md`
-- `docs/context/modules/vl53l0x_tof_ch32_gateway.md`
-- `docs/context/examples/tof_vl53l0x_gateway_test.md`
-- `docs/context/validation/tof_vl53l0x_gateway_test.md`
+- `docs/context/protocols/ch32_vl53l0x_gateway_final.md`
+- `docs/context/modules/ch32_vl53l0x_gateway_final.md`
+- `docs/context/examples/tof_test0_final.md`
+- `docs/context/validation/tof_test0_final.md`

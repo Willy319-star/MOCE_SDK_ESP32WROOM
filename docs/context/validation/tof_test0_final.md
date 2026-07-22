@@ -1,8 +1,8 @@
 ﻿# TOF VL53L0X Gateway Test Validation
 
-- Example path: `example_final/tof_vl53l0x_gateway_test`
-- Helper path: `components_esp32wroom/ch32_vl53l0x_gateway`
-- Protocol: `docs/context/protocols/ch32_i2c_bridge_vl53l0x.md`
+- Example path: `example_final/tof_test0_final`
+- Helper path: `components_esp32wroom/ch32_vl53l0x_gateway_final`
+- Protocol: `docs/context/protocols/ch32_vl53l0x_gateway_final.md`
 - Board: `my_board_esp32wroom`
 - Target: `esp32`
 - Required CH32 firmware: `MOCE_SDK_CH32/examples_final/CH32_I2C_bridge_generic`
